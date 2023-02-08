@@ -1,6 +1,6 @@
 <html>
   <title>Home Team Creativity</title>
   <body>
-  <h1>Hello, Welcome to Home Team Creativity!</h1>
+  <h1>Hello, just creating my own branch for now!</h1>
   <body>
 </html>
