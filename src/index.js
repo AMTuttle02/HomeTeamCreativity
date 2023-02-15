@@ -10,4 +10,3 @@ ReactDOM.render(
   </StrictMode>,
   rootElement
 );
-
