@@ -36,7 +36,7 @@ function Homepage() {
         </div>
       </div>
             {isLoginPage ? (
-                <Login /> 
+                <Login />
             ) : (
                 <Index />
             )}
