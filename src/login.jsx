@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Header from "./header"
-
 
 function Login() {
   const [password, setPassword] = useState("");
