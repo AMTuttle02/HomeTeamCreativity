@@ -18,7 +18,7 @@ function Header() {
           <a href="#">Products</a>
           <a href="#">How It Works</a>
           <a href="#">About Us</a>
-          <button onClick={goToLogin}>Login/Sign Up</button>
+          <button onClick={goToLogin} className="loginButton">Login/Sign Up</button>
         </div>
       </div>
     );
