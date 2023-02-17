@@ -64,6 +64,12 @@ body {
   width: 100%;
 }
 
+.row h2 {
+  color: white;
+  text-align: center;
+  padding: 50px;
+}
+
 /* Create two unequal columns that sits next to each other */
 /* Sidebar/left column */
 .side {
