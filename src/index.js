@@ -2,31 +2,13 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-import Login from "./login";
-import Header from "./header"
-
-function Index () {
-  return (
-    <div className="index">
-      <div className="row">
-        <div className="side">
-          <h2>Order Now Button Here</h2>
-        </div>
-        <div className="main">
-          <h2>Featured Products Here</h2>
-        </div>
-  </div>
-    </div>
-  );
-}
-
+import Homepage from "./Homepage";
 
 const rootElement = document.getElementById("root");
 
 ReactDOM.render(
   <StrictMode>
-    <Header/>
-    <Index/>
+    <Homepage />
   </StrictMode>,
   rootElement
 );

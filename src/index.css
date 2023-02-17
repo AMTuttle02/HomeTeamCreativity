@@ -84,8 +84,8 @@ body {
 }
 
 .logo{
-  width: 7%;
-  height: 7%;
+  width: 160px;
+  height: 140px;
   padding: 5px;
 }
 
@@ -99,15 +99,21 @@ body {
 }
 
 /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1300px) {
   .row {   
     flex-direction: column;
   }
 }
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1300px) {
   .navbar a {
+    float: none;
+    width: 100%;
+    display:block;
+    text-align: left;
+  }
+  .navbar button {
     float: none;
     width: 100%;
     display:block;
