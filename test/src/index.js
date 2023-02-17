@@ -10,12 +10,11 @@ function Index () {
     <div className="index">
       <div className="row">
         <div className="side">
-          <h2>Order Now Button Here</h2>
+          <button>Order Now</button>
         </div>
         <div className="main">
-          <h2>Recent Products Here</h2>
         </div>
-      </div>
+  </div>
     </div>
   );
 }
