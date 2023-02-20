@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Login from "./login"
-import logo from "./logo.png"
+import logo from "./assets/logo.png"
 
 function Index () {
     return (
