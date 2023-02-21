@@ -2,6 +2,27 @@
 Database-Driven Website for Home Team Creativity  
 https://www.hometeamcreativity.com  
   
+## How To Run
+Clone the Repo  
+Install Wamp  
+Ensure the following dependencies are installed:  
+- "bootstrap": "^5.2.3",  
+- "jquery": "^3.6.3",  
+- "mysql": "^2.18.1",  
+- "php": "^1.0.2",  
+- "react": "^18.2.0",  
+- "react-dom": "^18.2.0"  
+- Wampserver  
+
+
+Start Wampserver  
+Move PHP folder into wamp www folder  
+Navigate to git repo  
+Run 'npm run dev'  
+For backend functionality - Edit PHP folder
+For frontend functionality - Edit src folder
+
+## Schedule  
 Week 1 (February 6-10): Set up Database. Create an order button on the homepage. Begin Login Access.  
 Week 2 (February 13-17): Complete Login Access. Begin order process. Begin Products page.  
 Week 3 (February 20-24): Continue order process, products page. Start payment API integration.  
