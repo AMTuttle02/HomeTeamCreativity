@@ -21,31 +21,33 @@ function Homepage() {
     const [isLoginPage, setIsLoginPage] = useState(false);
 
     const handleLoginButton = () => {
-        setIsLoginPage(true);
+      setIsLoginPage(true);
+    }
+
+    const handleHomepageButton = () => {
+      setIsLoginPage(false);
     }
 
     return (
-        <div className="HomePage">
-            <div className="App">
-        <div className="navbar">
-          <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
-          <a href="#">Products</a>
-          <a href="#">How It Works</a>
-          <a href="#">About Us</a>
-          <button onClick={handleLoginButton} className="loginButton">Login/Sign Up</button>
+      <div className="HomePage">
+        <div className="App">
+          <div className="navbar">
+          <button onClick={handleHomepageButton} className="homepageButton">
+            <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
+            </button>
+            <a href="#">Products</a>
+            <a href="#">How It Works</a>
+            <a href="#">About Us</a>
+            <button onClick={handleLoginButton} className="loginButton">Login/Sign Up</button>
+          </div>
         </div>
+        { isLoginPage ? (
+          <Login />
+        ) : (
+          <Index />
+        ) }
       </div>
-            {isLoginPage ? (
-                <Login /> 
-            ) : (
-                <Index />
-            )}
-        </div>
-
     );
 }
 
 export default Homepage;
-
-
-
