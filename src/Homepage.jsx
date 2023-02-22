@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Login from "./login"
-import logo from "./assets/logo.png"
+import Login from "./login";
+import Products from "./products";
+import logo from "./assets/logo.png";
 
 function Index () {
   return (
@@ -26,14 +27,35 @@ function Homepage() {
       .then(data => setUsers(data));
   }, []);
 
+  const [isProductsPage, setIsProductsPage] = useState(false);
+
+  const handleProductsButton = () => {
+    setIsProductsPage(true);
+    setIsLoginPage(false);
+  }
+
   const [isLoginPage, setIsLoginPage] = useState(false);
 
   const handleLoginButton = () => {
     setIsLoginPage(true);
+    setIsProductsPage(false);
   }
 
   const handleHomepageButton = () => {
     setIsLoginPage(false);
+    setIsProductsPage(false);
+  }
+
+  let state;
+
+  if (isLoginPage) {
+    state = <Login />
+  }
+  else if (isProductsPage) {
+    state = <Products />
+  }
+  else {
+    state = <Index />
   }
 
   return (
@@ -43,17 +65,13 @@ function Homepage() {
         <button onClick={handleHomepageButton} className="homepageButton">
           <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
           </button>
-          <a href="#">Products</a>
+          <button onClick={handleProductsButton} className="headerButton">Products</button>
           <a href="#">How It Works</a>
           <a href="#">About Us</a>
-          <button onClick={handleLoginButton} className="loginButton">Login/Sign Up</button>
+          <button onClick={handleLoginButton} className="headerButton">Login/Sign Up</button>
         </div>
       </div>
-      { isLoginPage ? (
-        <Login />
-      ) : (
-        <Index />
-      ) }
+      {state}
       <h1>Users</h1>
       <ul>
         {users.map(user => (

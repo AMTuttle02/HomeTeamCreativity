@@ -38,7 +38,7 @@ body {
   color: black;
 }
 
-.loginButton {
+.headerButton {
   background-color: white;
   border: none;
   width: calc(100%/6);
@@ -50,7 +50,7 @@ body {
   font-size: 40px;
 }
 
-.loginButton:hover {
+.headerButton:hover {
   background-color: #ddd;
   color:black;
 }
