@@ -106,6 +106,58 @@ body {
   padding: 5px;
 }
 
+.Products h1 {
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+
+.Products p {
+  color: white;
+  text-align: center;
+  padding:5px;
+}
+
+.productsTable {
+  display: table;
+  width: 100%
+}
+.productsTr {
+  display: table-row;
+}
+.productsTd {
+  display: table-cell;
+  width: 25%;
+  padding-left: 30px;
+}
+.productsTh {
+  display: table-cell;
+  width: 25%;
+}
+
+.fullDesign {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  float: left;
+}
+
+.tshirt {
+  top: 0px;
+  left: 0px;
+  position: relative;
+  width: 440px;
+  height: 440px;
+}
+
+.design {
+  position: absolute;
+  top: 100px;
+  left: 160px;
+  width: 125px;
+  height: 125px;
+}
+
 /* Footer */
 .footer {
   padding: 20px;
@@ -113,13 +165,6 @@ body {
   color: white;
   font-style: italic;
   font-size: 40px;
-}
-
-/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 1300px) {
-  .row {   
-    flex-direction: column;
-  }
 }
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
@@ -136,4 +181,20 @@ body {
     display:block;
     text-align: left;
   }
+  .row {   
+    flex-direction: column;
+  }
+  .productsTr {
+    display: block;
+    float: left;
+  }
+  .productsTd {
+    width: 100%;
+    display: block; 
+  }
+  .productsTh {
+    width:100%;
+    display: block; 
+  }
+  
 }
