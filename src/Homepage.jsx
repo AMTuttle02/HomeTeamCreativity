@@ -4,6 +4,7 @@ import Products from "./products";
 import HowItWorks from "./howItWorks";
 import About from "./aboutUs";
 import logo from "./assets/logo.png";
+import cart from "./assets/cart.png";
 
 function Index () {
   return (
@@ -93,6 +94,12 @@ function Homepage() {
           <button onClick={handleHowItWorksButton} className="headerButton">How It Works</button>
           <button onClick={handleAboutButton} className="headerButton">About Us</button>
           <button onClick={handleLoginButton} className="headerButton">Login/Sign Up</button>
+          <form action="/search" method="get" id="search-form">
+            <input type="text" placeholder="Search..." name="query"/>
+          </form>
+          <button onClick={handleHomepageButton} className="cartButton">
+          <img src={cart} alt="Cart" className="cart"/>
+          </button>
         </div>
       </div>
       {state}

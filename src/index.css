@@ -18,7 +18,7 @@ body {
 
 /* Style the navigation bar links */
 .navbar a {
-  width: calc(100%/6);
+  width: calc(100%/7);
   float: left;
   color: black;
   text-align: center;
@@ -41,11 +41,11 @@ body {
 .headerButton {
   background-color: white;
   border: none;
-  width: calc(100%/6);
+  width: calc(100%/6.5);
   float: left;
   color: black;
   text-align: center;
-  padding: 14px 20px;
+  padding: 14px 10px;
   text-decoration: none;
   font-size: 40px;
 }
@@ -58,11 +58,11 @@ body {
 .homepageButton {
   background-color: white;
   border: none;
-  width: calc(100%/6);
+  width: calc(100%/7);
   float: left;
   color: black;
   text-align: center;
-  padding: 14px 20px;
+  padding: 8px 10px;
   text-decoration: none;
   font-size: 40px;
 }
@@ -70,6 +70,19 @@ body {
 .homepageButton:hover {
   background-color: #ddd;
   color:black;
+}
+
+.cart {
+  width: 100px;
+  height: 100px;
+
+}
+
+.cartButton {
+  background-color: white;
+  border: none;
+  width: calc(100%/15);
+  text-decoration: none;
 }
 
 /* Column container */
@@ -178,6 +191,17 @@ body {
   padding:10px;
 }
 
+input[type=text] {
+  box-sizing: border-box;
+  border: 2px solid black;
+  border-radius: 10px;
+  font-size: 16px;
+  color: black;
+  background-color: #B7C9E2;
+  padding: 12px 20px 12px 40px;
+  transition: width 0.4s ease-in-out;
+}
+
 /* Footer */
 .footer {
   padding: 20px;
@@ -188,7 +212,7 @@ body {
 }
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1600px) {
   .navbar a {
     float: none;
     width: 100%;
