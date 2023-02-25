@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import Login from "./login";
 import Products from "./products";
 import logo from "./assets/logo.png";
@@ -19,14 +20,6 @@ function Index () {
 }
 
 function Homepage() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    fetch('http://localhost:80/PHP/server.php')
-      .then(response => response.json())
-      .then(data => setUsers(data));
-  }, []);
-
   const [isProductsPage, setIsProductsPage] = useState(false);
 
   const handleProductsButton = () => {
@@ -62,7 +55,7 @@ function Homepage() {
     <div className="HomePage">
       <div className="App">
         <div className="navbar">
-        <button onClick={handleHomepageButton} className="homepageButton">
+          <button onClick={handleHomepageButton} className="homepageButton">
           <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
           </button>
           <button onClick={handleProductsButton} className="headerButton">Products</button>
@@ -72,12 +65,6 @@ function Homepage() {
         </div>
       </div>
       {state}
-      <h1>Users</h1>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>{user.email}</li>
-        ))}
-      </ul>
     </div>
   );
 }

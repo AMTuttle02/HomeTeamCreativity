@@ -118,6 +118,10 @@ body {
   padding:5px;
 }
 
+.Products a {
+  color: white;
+}
+
 .productsTable {
   display: table;
   width: 100%
@@ -156,6 +160,10 @@ body {
   left: 160px;
   width: 125px;
   height: 125px;
+}
+
+.fullDesign p {
+  color: white;
 }
 
 /* Footer */
