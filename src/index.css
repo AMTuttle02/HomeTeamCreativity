@@ -166,6 +166,18 @@ body {
   color: white;
 }
 
+.HowItWorks {
+  color: white;
+  text-align: center;
+  padding:10px;
+}
+
+.about {
+  color: white;
+  text-align: center;
+  padding:10px;
+}
+
 /* Footer */
 .footer {
   padding: 20px;

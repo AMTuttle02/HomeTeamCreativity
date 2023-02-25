@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import Login from "./login";
 import Products from "./products";
+import HowItWorks from "./howItWorks";
+import About from "./aboutUs";
 import logo from "./assets/logo.png";
 
 function Index () {
@@ -20,11 +21,31 @@ function Index () {
 }
 
 function Homepage() {
+  const [isAboutPage, setisAboutPage] = useState(false);
+
+  const handleAboutButton = () => {
+    setisHowItWorksPage(false);
+    setIsProductsPage(false);
+    setIsLoginPage(false);
+    setisAboutPage(true);
+  }
+
+  const [isHowItWorksPage, setisHowItWorksPage] = useState(false);
+
+  const handleHowItWorksButton = () => {
+    setisHowItWorksPage(true);
+    setIsProductsPage(false);
+    setIsLoginPage(false);
+    setisAboutPage(false);
+  }
+
   const [isProductsPage, setIsProductsPage] = useState(false);
 
   const handleProductsButton = () => {
     setIsProductsPage(true);
     setIsLoginPage(false);
+    setisHowItWorksPage(false);
+    setisAboutPage(false);
   }
 
   const [isLoginPage, setIsLoginPage] = useState(false);
@@ -32,11 +53,15 @@ function Homepage() {
   const handleLoginButton = () => {
     setIsLoginPage(true);
     setIsProductsPage(false);
+    setisHowItWorksPage(false);
+    setisAboutPage(false);
   }
 
   const handleHomepageButton = () => {
     setIsLoginPage(false);
     setIsProductsPage(false);
+    setisHowItWorksPage(false);
+    setisAboutPage(false);
   }
 
   let state;
@@ -46,6 +71,12 @@ function Homepage() {
   }
   else if (isProductsPage) {
     state = <Products />
+  }
+  else if (isHowItWorksPage) {
+    state = <HowItWorks />
+  }
+  else if (isAboutPage) {
+    state = <About />
   }
   else {
     state = <Index />
@@ -59,8 +90,8 @@ function Homepage() {
           <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
           </button>
           <button onClick={handleProductsButton} className="headerButton">Products</button>
-          <a href="#">How It Works</a>
-          <a href="#">About Us</a>
+          <button onClick={handleHowItWorksButton} className="headerButton">How It Works</button>
+          <button onClick={handleAboutButton} className="headerButton">About Us</button>
           <button onClick={handleLoginButton} className="headerButton">Login/Sign Up</button>
         </div>
       </div>
