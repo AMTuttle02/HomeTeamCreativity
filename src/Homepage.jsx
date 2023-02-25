@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Login from "./login"
-import logo from "./assets/logo.png"
+import Login from "./login";
+import Products from "./products";
+import HowItWorks from "./howItWorks";
+import About from "./aboutUs";
+import logo from "./assets/logo.png";
+import cart from "./assets/cart.png";
 
 function Index () {
   return (
@@ -18,48 +22,87 @@ function Index () {
 }
 
 function Homepage() {
-  const [users, setUsers] = useState([]);
+  const [isAboutPage, setisAboutPage] = useState(false);
 
-  useEffect(() => {
-    fetch('http://localhost:80/PHP/server.php')
-      .then(response => response.json())
-      .then(data => setUsers(data));
-  }, []);
+  const handleAboutButton = () => {
+    setisHowItWorksPage(false);
+    setIsProductsPage(false);
+    setIsLoginPage(false);
+    setisAboutPage(true);
+  }
+
+  const [isHowItWorksPage, setisHowItWorksPage] = useState(false);
+
+  const handleHowItWorksButton = () => {
+    setisHowItWorksPage(true);
+    setIsProductsPage(false);
+    setIsLoginPage(false);
+    setisAboutPage(false);
+  }
+
+  const [isProductsPage, setIsProductsPage] = useState(false);
+
+  const handleProductsButton = () => {
+    setIsProductsPage(true);
+    setIsLoginPage(false);
+    setisHowItWorksPage(false);
+    setisAboutPage(false);
+  }
 
   const [isLoginPage, setIsLoginPage] = useState(false);
 
   const handleLoginButton = () => {
     setIsLoginPage(true);
+    setIsProductsPage(false);
+    setisHowItWorksPage(false);
+    setisAboutPage(false);
   }
 
   const handleHomepageButton = () => {
     setIsLoginPage(false);
+    setIsProductsPage(false);
+    setisHowItWorksPage(false);
+    setisAboutPage(false);
+  }
+
+  let state;
+
+  if (isLoginPage) {
+    state = <Login />
+  }
+  else if (isProductsPage) {
+    state = <Products />
+  }
+  else if (isHowItWorksPage) {
+    state = <HowItWorks />
+  }
+  else if (isAboutPage) {
+    state = <About />
+  }
+  else {
+    state = <Index />
   }
 
   return (
     <div className="HomePage">
       <div className="App">
         <div className="navbar">
-        <button onClick={handleHomepageButton} className="homepageButton">
+          <button onClick={handleHomepageButton} className="homepageButton">
           <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
           </button>
-          <a href="#">Products</a>
-          <a href="#">How It Works</a>
-          <a href="#">About Us</a>
-          <button onClick={handleLoginButton} className="loginButton">Login/Sign Up</button>
+          <button onClick={handleProductsButton} className="headerButton">Products</button>
+          <button onClick={handleHowItWorksButton} className="headerButton">How It Works</button>
+          <button onClick={handleAboutButton} className="headerButton">About Us</button>
+          <button onClick={handleLoginButton} className="headerButton">Login/Sign Up</button>
+          <form action="/search" method="get" id="search-form">
+            <input type="text" placeholder="Search..." name="query"/>
+          </form>
+          <button onClick={handleHomepageButton} className="cartButton">
+          <img src={cart} alt="Cart" className="cart"/>
+          </button>
         </div>
       </div>
-      { isLoginPage ? (
-        <Login />
-      ) : (
-        <Index />
-      ) }
-      <h1>Users</h1>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>{user.email}</li>
-        ))}
-      </ul>
+      {state}
     </div>
   );
 }
