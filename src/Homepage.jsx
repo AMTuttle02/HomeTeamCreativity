@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Login from "./login";
+import Login from "./Login";
 import Products from "./products";
 import HowItWorks from "./howItWorks";
 import About from "./aboutUs";
