@@ -17,7 +17,7 @@ if (!$conn) {
 
 // Get all users
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  $sql = "SELECT * FROM images";
+  $sql = "SELECT * FROM products";
   $result = mysqli_query($conn, $sql);
   $users = [];
   while ($row = mysqli_fetch_assoc($result)) {
