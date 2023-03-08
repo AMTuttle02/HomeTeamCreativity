@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+// import { useActionData } from "react-router-dom";
 
 function Login() {
   const [password, setPassword] = useState("");
@@ -13,10 +14,8 @@ function Login() {
     if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
       formIsValid = false;
       setemailError("Email Not Valid");
-      return false;
     } else {
       setemailError("");
-      formIsValid = true;
     }
 
     if (!password.match(/^[a-zA-Z]{8,22}$/)) {
@@ -24,10 +23,8 @@ function Login() {
       setpasswordError(
         "Only Letters and length must best min 8 Chracters and Max 22 Chracters"
       );
-      return false;
     } else {
       setpasswordError("");
-      formIsValid = true;
     }
 
     return formIsValid;
@@ -38,12 +35,13 @@ function Login() {
     handleValidation();
   };
 
+
   return (
-    <div className="Login">
+    <div className="UpdatedLogin">
       <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="col-md-4">
-          <label>Login Page</label>
+          <label><h1><u>Login Page</u></h1></label>
             <form id="loginform" onSubmit={loginSubmit}>
               <div className="form-group">
                 <label>Email address</label>
@@ -74,7 +72,7 @@ function Login() {
                 </small>
               </div>
               <div className="form-group form-check">
-                
+                <a href="#">Forgot Password?</a>
               </div>
               <button type="submit" className="btn btn-primary">
                 Submit
@@ -87,3 +85,12 @@ function Login() {
   );
 }
 export default Login;
+
+/*
+fetch('login.php', {  
+  method:"POST",
+  body: JSON.stringify(
+    {"email" : email,
+    "password" : password
+}),
+});*/

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Login from "./login";
+import UserAccess from "./userAccess";
 import Products from "./products";
 import HowItWorks from "./howItWorks";
 import About from "./aboutUs";
@@ -68,7 +68,7 @@ function Homepage() {
   let state;
 
   if (isLoginPage) {
-    state = <Login />
+    state = <UserAccess />
   }
   else if (isProductsPage) {
     state = <Products />
