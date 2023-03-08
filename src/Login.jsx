@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SignUp from "./SignUp";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import { useActionData } from "react-router-dom";
 
@@ -8,18 +7,6 @@ function Login() {
   const [email, setEmail] = useState("");
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
-
-  const [isSignUpPage,setisSignUPPage]=useState(false);
-
-  const handleSignUpButton = () => {
-    setisSignUPPage(true);
-  }
-
-  let state;
-  
-  if(isSignUpPage){
-    state = <SignUp />
-  }
 
   const handleValidation = (event) => {
     let formIsValid = true;
@@ -87,11 +74,6 @@ function Login() {
               <div className="form-group form-check">
                 <a href="#">Forgot Password?</a>
               </div>
-              <div className="SignUpButton">
-                <button onClick={handleSignUpButton}>SignUp </button>
-              </div>
-              <br/>
-              {state}
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>
