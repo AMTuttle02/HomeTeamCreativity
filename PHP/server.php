@@ -9,6 +9,7 @@ $username = "root";
 $password = "";
 $dbname = "hometeam";
 $conn = mysqli_connect($servername, $username, $password, $dbname);
+$inputs = json_decode(file_get_contents('php://input'), true);
 
 // Check connection
 if (!$conn) {
@@ -17,7 +18,7 @@ if (!$conn) {
 
 // Get all users
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  $sql = "SELECT * FROM users";
+  $sql = "SELECT * FROM users WHERE email = '" . $inputs["email"] . "' AND pswrd = '" . $inputs["password"] . "';";
   $result = mysqli_query($conn, $sql);
   $users = [];
   while ($row = mysqli_fetch_assoc($result)) {
