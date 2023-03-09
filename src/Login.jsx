@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-// import { useActionData } from "react-router-dom";
 
 function LoginSuccess() {
   return (
@@ -79,52 +77,45 @@ function Login() {
 
   return (
     <div className="UpdatedLogin">
+      <br/>
       {goodLogin ? (
         <LoginSuccess />
       ) : (
       <div className="container">
-        <div className="row d-flex justify-content-center">
-          <div className="col-md-4">
-          <label><h1><u>Login</u></h1></label>
-            {badLogin && <LoginFailed />}
-            <form id="loginform" onSubmit={loginSubmit}>
-              <div className="form-group">
-                <label>Email address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="EmailInput"
-                  name="EmailInput"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                <small id="emailHelp" className="text-danger form-text">
-                  {emailError}
-                </small>
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="exampleInputPassword1"
-                  placeholder="Password"
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-                <small id="passworderror" className="text-danger form-text">
-                  {passwordError}
-                </small>
-              </div>
-              <div className="form-group form-check">
-                <a href="#">Forgot Password?</a>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
+        <h1><u>Login</u></h1>
+        {badLogin && <LoginFailed />}
+        <form id="loginform" onSubmit={loginSubmit}>
+            <label>Email address</label>
+            <input
+              type="email"
+              className="form-control"
+              id="EmailInput"
+              name="EmailInput"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <small id="emailHelp" className="text-danger form-text">
+              {emailError}
+            </small>
+            <label>Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="exampleInputPassword1"
+              placeholder="Password"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <small id="passworderror" className="text-danger form-text">
+              {passwordError}
+            </small>
+            <br/>
+            <a href="#">Forgot Password?</a>
+            <br/>
+          <button type="submit">
+            Log In
+          </button>
+        </form>
       </div>
       )}
     </div>
