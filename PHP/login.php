@@ -22,14 +22,15 @@ if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
 
-// Get all users
+// Get user logging in
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $query = $conn->prepare("SELECT * FROM users WHERE email = ? AND pswrd = ?;");
   $query->bind_param("ss", $inputs["email"], $inputs["password"]);
   $result = mysqli_query($conn, $query);
   $users = [];
   while ($row = mysqli_fetch_assoc($result)) {
-    $users[] = $row;
+    // Get only user email from query (second column of the table)
+    $users[] = $row[1];
   }
   echo json_encode($users);
 }
