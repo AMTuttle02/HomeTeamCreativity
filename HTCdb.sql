@@ -38,6 +38,20 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+/* Each order will have as many associated product_orders as individual products
+in the users cart at the time of purchase */
+/* product_details is to store customization details */
+DROP TABLE IF EXISTS product_orders;
+CREATE TABLE IF NOT EXISTS product_orders (
+    order_id int NOT NULL,
+    product_id int NOT NULL,
+    product_quantity int NOT NULL CHECK (product_quantity > 0),
+    product_details varchar(2047) DEFAULT 'No customization specified',
+    PRIMARY KEY (order_id, product_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
 /* Following lines are dummy data for testing purposes only */
 INSERT INTO users (email, pswrd, admin) VALUES
 ("admin1@hometeam.com", "easilyremembered", 1),
