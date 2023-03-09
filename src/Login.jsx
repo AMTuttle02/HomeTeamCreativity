@@ -2,11 +2,30 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import { useActionData } from "react-router-dom";
 
+function LoginSuccess() {
+  return (
+    <div>
+      <h1>Login Successful!</h1>
+    </div>
+  );
+}
+
+function LoginFailed() {
+  return (
+    <div>
+      <h1>Login Failed!</h1>
+    </div>
+  );
+}
+
 function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
+
+  const [goodLogin, setGoodLogin] = useState(false);
+  const [badLogin, setBadLogin] = useState(false)
 
   const handleValidation = (event) => {
     let formIsValid = true;
@@ -32,16 +51,42 @@ function Login() {
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    handleValidation();
-  };
+    
+    if (handleValidation()) {
+      fetch('http://localhost:80/PHP/login.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password})
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.length > 0) {
+            setGoodLogin(true);
+            setBadLogin(false);
+          } else {
+            setGoodLogin(false)
+            setBadLogin(true);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          setLoginStatus(false);
+        });
+    }
 
+    return loginAccess;
+  };
 
   return (
     <div className="UpdatedLogin">
+      {goodLogin ? (
+        <LoginSuccess />
+      ) : (
       <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="col-md-4">
-          <label><h1><u>Login Page</u></h1></label>
+          <label><h1><u>Login</u></h1></label>
+            {badLogin && <LoginFailed />}
             <form id="loginform" onSubmit={loginSubmit}>
               <div className="form-group">
                 <label>Email address</label>
@@ -81,16 +126,8 @@ function Login() {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
 export default Login;
-
-/*
-fetch('login.php', {  
-  method:"POST",
-  body: JSON.stringify(
-    {"email" : email,
-    "password" : password
-}),
-});*/
