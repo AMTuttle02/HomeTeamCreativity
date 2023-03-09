@@ -215,6 +215,11 @@ input[type=text] {
   color: #3b3b3b;
 }
 
+.container h2 {
+  text-align: center;
+  color: #3b3b3b;
+}
+
 input[type="text"], input[type="password"] {
   width: 100%;
   padding: 12px 20px;

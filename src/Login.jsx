@@ -11,7 +11,7 @@ function LoginSuccess() {
 function LoginFailed() {
   return (
     <div>
-      <h1>Login Failed!</h1>
+      <h2>Incorrect Email or Password</h2>
     </div>
   );
 }
@@ -83,35 +83,36 @@ function Login() {
       ) : (
       <div className="container">
         <h1><u>Login</u></h1>
-        {badLogin && <LoginFailed />}
+        
         <form id="loginform" onSubmit={loginSubmit}>
-            <label>Email address</label>
-            <input
-              type="email"
-              className="form-control"
-              id="EmailInput"
-              name="EmailInput"
-              aria-describedby="emailHelp"
-              placeholder="Enter email"
-              onChange={(event) => setEmail(event.target.value)}
-            />
-            <small id="emailHelp" className="text-danger form-text">
-              {emailError}
-            </small>
-            <label>Password</label>
-            <input
-              type="password"
-              className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Password"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <small id="passworderror" className="text-danger form-text">
-              {passwordError}
-            </small>
-            <br/>
-            <a href="#">Forgot Password?</a>
-            <br/>
+          <label>Email address</label>
+          <input
+            type="email"
+            className="form-control"
+            id="EmailInput"
+            name="EmailInput"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <small id="emailHelp" className="text-danger form-text">
+            {emailError}
+          </small>
+          <label>Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="exampleInputPassword1"
+            placeholder="Password"
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <small id="passworderror" className="text-danger form-text">
+            {passwordError}
+          </small>
+          <br/>
+          {badLogin && <LoginFailed />}
+          <a href="#">Forgot Password?</a>
+          <br/>
           <button type="submit">
             Log In
           </button>
