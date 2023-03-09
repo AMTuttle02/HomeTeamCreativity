@@ -2,7 +2,7 @@
 // Run by fetch in login.jsx to query the database
 // Requires login.jsx to pass it a "JSON.stringify()"-ed form containing variables with these names
 // email, password
-// returns all attributes of the row with a matching email and password
+// returns email of the row with a matching email and password
 // If there is no matching row, returns an empty array
 
 header('Access-Control-Allow-Origin: *');
