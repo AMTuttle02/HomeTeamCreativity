@@ -6,7 +6,7 @@ USE hometeam;
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
-    user_id int auto_increment,
+    user_id int AUTO_INCREMENT,
     email varchar(127) UNIQUE NOT NULL CHECK (email LIKE "_%@_%._%"),
     pswrd varchar(31) NOT NULL,
     admin BOOLEAN DEFAULT 0,
@@ -17,14 +17,25 @@ CREATE TABLE IF NOT EXISTS users (
 /* TODO: Change tag_list type to SET() once a list of tags has been made */
 DROP TABLE IF EXISTS products;
 CREATE TABLE IF NOT EXISTS products (
-  product_id int AUTO_INCREMENT,
-  product_name varchar(255) NOT NULL,
-  price decimal(10,2) NOT NULL,
-  filename varchar(255) NOT NULL,
-  product_desc varchar(2047) DEFAULT 'No description',
-  tag_list varchar(255) DEFAULT 'tagme',
-  is_available BOOLEAN DEFAULT 0,
-  PRIMARY KEY (product_id)
+    product_id int AUTO_INCREMENT,
+    product_name varchar(255) NOT NULL,
+    price decimal(10,2) NOT NULL,
+    filename varchar(255) NOT NULL,
+    product_desc varchar(2047) DEFAULT 'No description',
+    tag_list varchar(255) DEFAULT 'tagme',
+    is_available BOOLEAN DEFAULT 0,
+    PRIMARY KEY (product_id)
+);
+
+DROP TABLE IF EXISTS orders;
+CREATE TABLE IF NOT EXISTS orders (
+    order_id int AUTO_INCREMENT,
+    user_id int NOT NULL,
+    total_cost decimal(10,2) NOT NULL,
+    is_active BOOLEAN DEFAULT 1,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 /* Following lines are dummy data for testing purposes only */
