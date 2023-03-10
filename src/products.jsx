@@ -22,7 +22,7 @@ function Products() {
               <div className="fullDesign">
                 <img src={tshirt} alt="Home Team Creativity Logo" className="tshirt"/>
                 <img src={"src/assets/" + product.filename} alt={product.filename} className="design"/>
-                <p>{product.title}</p>
+                <p>{product.product_name}</p>
                 <p>{"$" + product.price}</p>
               </div>
             ))}

@@ -3,12 +3,14 @@ import SignUp from "./SignUp";
 import Login from "./Login";
 
 function LoginPage ({onSignUpButton}) {
-
     return (
-        <div className = "UserAccess">
-            <Login />
-            <button onClick={onSignUpButton}>SignUp </button>
-        </div>
+            <div className = "UserAccess">
+                <Login />
+                <br/><br/>
+                <p>Don't Have An Account?
+                <button onClick={onSignUpButton} className="signUpButton">Create An Account</button>
+                </p>
+            </div>
     );
 }
 
@@ -16,7 +18,10 @@ function SignUpPage ({onLoginButton}) {
     return (
         <div className = "UserAccess">
             <SignUp />
-            <button onClick={onLoginButton}>Login </button>
+            <br/><br/>
+                <p>Already Have An Account?
+                <button onClick={onLoginButton} className="signUpButton">Login </button>
+                </p>
         </div>
     );
 }
