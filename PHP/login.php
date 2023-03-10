@@ -1,7 +1,7 @@
 <?php
 // Requires login.jsx to pass it a "JSON.stringify()"-ed form containing variables with these names
 // email, password
-// returns all attributes of the row with a matching email and password
+// returns email of the row with a matching email and password
 // If there is no matching row, returns an empty array
 
 header('Access-Control-Allow-Origin: *');
@@ -21,27 +21,15 @@ if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
 
-// Get user by email and password
+// Get user logging in
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $inputs = json_decode(file_get_contents('php://input'), true);
-
-  $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND pswrd = ?");
-  $stmt->bind_param("ss", $inputs["email"], $inputs["password"]);
-  
-  if (!$stmt->execute()) {
-    die("Query failed: " . $stmt->error);
-  }
-
-  $result = $stmt->get_result();
-  
-  if (!$result) {
-    die("Result set failed: " . $conn->error);
-  }
-
+  $query = $conn->prepare("SELECT * FROM users WHERE email = ? AND pswrd = ?;");
+  $query->bind_param("ss", $inputs["email"], $inputs["password"]);
+  $result = mysqli_query($conn, $query);
   $users = [];
-  
-  while ($row = $result->fetch_assoc()) {
-    $users[] = $row;
+  while ($row = mysqli_fetch_assoc($result)) {
+    // Get only user email from query (second column of the table)
+    $users[] = $row[1];
   }
   
   echo json_encode($users);
