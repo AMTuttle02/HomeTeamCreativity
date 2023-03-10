@@ -1,12 +1,29 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-// import { useActionData } from "react-router-dom";
+
+function LoginSuccess() {
+  return (
+    <div>
+      <h1>Login Successful!</h1>
+    </div>
+  );
+}
+
+function LoginFailed() {
+  return (
+    <div>
+      <h2>Incorrect Email or Password</h2>
+    </div>
+  );
+}
 
 function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
+
+  const [goodLogin, setGoodLogin] = useState(false);
+  const [badLogin, setBadLogin] = useState(false)
 
   const handleValidation = (event) => {
     let formIsValid = true;
@@ -32,65 +49,77 @@ function Login() {
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    handleValidation();
-  };
+    
+    if (handleValidation()) {
+      fetch('http://localhost:80/PHP/login.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password})
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.length > 0) {
+            setGoodLogin(true);
+            setBadLogin(false);
+          } else {
+            setGoodLogin(false)
+            setBadLogin(true);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          setLoginStatus(false);
+        });
+    }
 
+    return loginAccess;
+  };
 
   return (
     <div className="UpdatedLogin">
+      <br/>
+      {goodLogin ? (
+        <LoginSuccess />
+      ) : (
       <div className="container">
-        <div className="row d-flex justify-content-center">
-          <div className="col-md-4">
-          <label><h1><u>Login Page</u></h1></label>
-            <form id="loginform" onSubmit={loginSubmit}>
-              <div className="form-group">
-                <label>Email address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="EmailInput"
-                  name="EmailInput"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                <small id="emailHelp" className="text-danger form-text">
-                  {emailError}
-                </small>
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="exampleInputPassword1"
-                  placeholder="Password"
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-                <small id="passworderror" className="text-danger form-text">
-                  {passwordError}
-                </small>
-              </div>
-              <div className="form-group form-check">
-                <a href="#">Forgot Password?</a>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
+        <h1><u>Login</u></h1>
+        
+        <form id="loginform" onSubmit={loginSubmit}>
+          <label>Email address</label>
+          <input
+            type="email"
+            className="form-control"
+            id="EmailInput"
+            name="EmailInput"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <small id="emailHelp" className="text-danger form-text">
+            {emailError}
+          </small>
+          <label>Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="exampleInputPassword1"
+            placeholder="Password"
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <small id="passworderror" className="text-danger form-text">
+            {passwordError}
+          </small>
+          <br/>
+          {badLogin && <LoginFailed />}
+          <a href="#">Forgot Password?</a>
+          <br/>
+          <button type="submit">
+            Log In
+          </button>
+        </form>
       </div>
+      )}
     </div>
   );
 }
 export default Login;
-
-/*
-fetch('login.php', {  
-  method:"POST",
-  body: JSON.stringify(
-    {"email" : email,
-    "password" : password
-}),
-});*/

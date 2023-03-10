@@ -66,72 +66,66 @@ function SignUp() {
 
   return (
     <div className="SignUp">
+      <br/>
       <div className="container">
-        <div className="row d-flex justify-content-center">
-          <div className="col-md-4">
-          <label><h1><u>SignUp Below!</u></h1></label>
-            <form id="signupform" onSubmit={signUpSubmit}>
-            <div className="form-group">
-                <label>First Name</label>
-                <input
-                  type="name"
-                  className="form-control"
-                  id="NameInput"
-                  name="NameInput"
-                  aria-describedby="nameHelp"
-                  placeholder="Enter your first name"
-                  onChange={(event) => setFName(event.target.value)}
-                />
-                <small id="nameHelp" className="text-danger form-text">
-                  {fnameError}
-                </small>
-              </div>
-              <div className="form-group">
-                <label>Last Name</label>
-                <input
-                  type="name"
-                  className="form-control"
-                  id="NameInput"
-                  name="NameInput"
-                  aria-describedby="nameHelp"
-                  placeholder="Enter your last name"
-                  onChange={(event) => setLName(event.target.value)}
-                />
-                <small id="nameHelp" className="text-danger form-text">
-                  {lnameError}
-                </small>
-              </div>
-              <div className="form-group">
-                <label>Email address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="EmailInput"
-                  name="EmailInput"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                <small id="emailHelp" className="text-danger form-text">
-                  {emailError}
-                </small>
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="exampleInputPassword1"
-                  placeholder="Password"
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-                <small id="passworderror" className="text-danger form-text">
-                  {passwordError}
-                </small>
-              </div>
-            </form>
-          </div>
-        </div>
+        <h1><u>Sign Up Below!</u></h1>
+        <form id="signupform" onSubmit={signUpSubmit}>
+          <label>First Name</label>
+          <input
+            type="name"
+            className="form-control"
+            id="NameInput"
+            name="NameInput"
+            aria-describedby="nameHelp"
+            placeholder="Enter your first name"
+            onChange={(event) => setFName(event.target.value)}
+          />
+          <small id="nameHelp" className="text-danger form-text">
+            {fnameError}
+          </small>
+        
+          <label>Last Name</label>
+          <input
+            type="name"
+            className="form-control"
+            id="NameInput"
+            name="NameInput"
+            aria-describedby="nameHelp"
+            placeholder="Enter your last name"
+            onChange={(event) => setLName(event.target.value)}
+          />
+          <small id="nameHelp" className="text-danger form-text">
+            {lnameError}
+          </small>
+          <label>Email address</label>
+          <input
+            type="email"
+            className="form-control"
+            id="EmailInput"
+            name="EmailInput"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <small id="emailHelp" className="text-danger form-text">
+            {emailError}
+          </small>
+          <label>Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="exampleInputPassword1"
+            placeholder="Password"
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <small id="passworderror" className="text-danger form-text">
+            {passwordError}
+          </small>
+          <br/>
+          <button type="submit">
+            Sign In
+          </button>
+        </form>
       </div>
     </div>
   );
