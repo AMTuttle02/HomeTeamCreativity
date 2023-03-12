@@ -9,6 +9,8 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header("Access-Control-Allow-Headers: Content-Type");
 
+session_start();
+
 // Connect to the MySQL database
 $servername = "localhost";
 $username = "root";
@@ -23,15 +25,32 @@ if (!$conn) {
 
 // Get user logging in
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $query = $conn->prepare("SELECT * FROM users WHERE email = ? AND pswrd = ?;");
-  $query->bind_param("ss", $inputs["email"], $inputs["password"]);
-  $result = mysqli_query($conn, $query);
-  $users = [];
-  while ($row = mysqli_fetch_assoc($result)) {
-    // Get only user email from query (second column of the table)
-    $users[] = $row[1];
+  $inputs = json_decode(file_get_contents('php://input'), true);
+  $email = $inputs['email'];
+  $password = $inputs['password'];
+
+  $stmt = $conn->prepare("SELECT first_name FROM users WHERE email = ? AND pswrd = ?");
+  $stmt->bind_param("ss", $inputs["email"], $inputs["password"]);
+
+  if (!$stmt->execute()) {
+    die("Query failed: " . $stmt->error);
   }
+
+  $result = $stmt->get_result();
+
+  if (!$result) {
+    die("Result set failed: " . $conn->error);
+  }
+
+  $users = [];
+
   
+
+  while ($row = $result->fetch_assoc()) {
+    $users[] = $row;
+    $_SESSION['name'] = $row['first_name'];
+  }
+
   echo json_encode($users);
 }
 
