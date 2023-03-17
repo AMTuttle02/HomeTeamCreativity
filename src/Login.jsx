@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-
-function LoginSuccess() {
-  return (
-    <div>
-      <h1>Login Successful!</h1>
-    </div>
-  );
-}
+import { Outlet, Link } from "react-router-dom";
+import LoginSuccess from "./LoginSuccess";
 
 function LoginFailed() {
   return (
@@ -71,8 +65,6 @@ function Login() {
           setLoginStatus(false);
         });
     }
-
-    return loginAccess;
   };
 
   return (
@@ -81,44 +73,55 @@ function Login() {
       {goodLogin ? (
         <LoginSuccess />
       ) : (
-      <div className="container">
-        <h1><u>Login</u></h1>
-        
-        <form id="loginform" onSubmit={loginSubmit}>
-          <label>Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            id="EmailInput"
-            name="EmailInput"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <small id="emailHelp" className="text-danger form-text">
-            {emailError}
-          </small>
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="exampleInputPassword1"
-            placeholder="Password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <small id="passworderror" className="text-danger form-text">
-            {passwordError}
-          </small>
-          <br/>
-          {badLogin && <LoginFailed />}
-          <a href="#">Forgot Password?</a>
-          <br/>
-          <button type="submit">
-            Log In
-          </button>
-        </form>
+      <div className = "LoginPage">
+        <div className="container">
+          <h1><u>Login</u></h1>
+          
+          <form id="loginform" onSubmit={loginSubmit}>
+            <label>Email address</label>
+            <input
+              type="email"
+              className="form-control"
+              id="EmailInput"
+              name="EmailInput"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <small id="emailHelp" className="text-danger form-text">
+              {emailError}
+            </small>
+            <br/>
+            <label>Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="exampleInputPassword1"
+              placeholder="Password"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <small id="passworderror" className="text-danger form-text">
+              {passwordError}
+            </small>
+            <br/>
+            {badLogin && <LoginFailed />}
+            <a href="#">Forgot Password?</a>
+            <br/>
+            <button type="submit">
+              Log In
+            </button>
+          </form>
+        </div>
+        <div className="UserAccess">
+          <br/><br/>
+          <p>Don't Have An Account?
+          <Link to="/signup" className="signUpButton">Create An Account</Link>
+          </p>
+        </div>
+        <Outlet />
       </div>
       )}
+     
     </div>
   );
 }

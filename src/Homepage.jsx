@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Outlet, Link } from "react-router-dom";
 import logo from "./assets/logo.png";
 import cart from "./assets/cart.png";
@@ -21,7 +21,7 @@ function Homepage() {
           <Link to="about">
             About Us
           </Link>
-          <Link to="useraccess">
+          <Link to="login">
             Login
           </Link>
           <form action="/search" method="get" id="search-form">

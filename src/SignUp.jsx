@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Outlet, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function SignUp() {
@@ -83,7 +84,7 @@ function SignUp() {
           <small id="nameHelp" className="text-danger form-text">
             {fnameError}
           </small>
-        
+          <br/>
           <label>Last Name</label>
           <input
             type="name"
@@ -97,6 +98,7 @@ function SignUp() {
           <small id="nameHelp" className="text-danger form-text">
             {lnameError}
           </small>
+          <br/>
           <label>Email address</label>
           <input
             type="email"
@@ -110,6 +112,7 @@ function SignUp() {
           <small id="emailHelp" className="text-danger form-text">
             {emailError}
           </small>
+          <br/>
           <label>Password</label>
           <input
             type="password"
@@ -127,6 +130,13 @@ function SignUp() {
           </button>
         </form>
       </div>
+      <div className="UserAccess">
+        <br/><br/>
+        <p>Already Have An Account?
+        <Link to="/login" className="signUpButton">Login </Link>
+        </p>
+      </div>
+      <Outlet/>
     </div>
   );
 }
