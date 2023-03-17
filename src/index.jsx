@@ -1,8 +1,9 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./Homepage"
-import HomeContents from "./HomeContents"
-import UserAccess from "./userAccess";
+import HomeContents from "./HomeContents.jsx"
+import Login from "./Login";
+import SignUp from "./SignUp";
 import Products from "./products";
 import HowItWorks from "./howItWorks";
 import About from "./aboutUs";
@@ -14,7 +15,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Homepage />}>
           <Route index element={<HomeContents />} />
-          <Route path="useraccess" element={<UserAccess />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
           <Route path="products" element={<Products />} />
           <Route path="howitworks" element={<HowItWorks />} />
           <Route path="about" element={<About />} />
