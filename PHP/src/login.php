@@ -12,9 +12,9 @@ header("Access-Control-Allow-Headers: Content-Type");
 session_start();
 
 // Connect to the MySQL database
-$servername = "localhost";
-$username = "root";
-$password = "";
+$servername = "db";
+$username = "MYSQL_USER";
+$password = "MYSQL_PASSWORD";
 $dbname = "hometeam";
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
