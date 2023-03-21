@@ -45,7 +45,7 @@ function Login() {
     e.preventDefault();
     
     if (handleValidation()) {
-      fetch('http://localhost:80/PHP/login.php', {
+      fetch('http://localhost:8000/login.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, password})

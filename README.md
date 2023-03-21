@@ -4,23 +4,32 @@ https://www.hometeamcreativity.com
   
 ## How To Run
 Clone the Repo  
-Install Wamp  
-Ensure the following dependencies are installed:  
-- "bootstrap": "^5.2.3",  
-- "jquery": "^3.6.3",  
-- "mysql": "^2.18.1",  
-- "php": "^1.0.2",  
-- "react": "^18.2.0",  
-- "react-dom": "^18.2.0"  
-- Wampserver  
+Install Docker https://www.docker.com/products/docker-desktop/  
+Create a Free Docker Account  
+Finish Docker Set up Process  
+In WSL2:  
+Install "Just" using the below commands  
+curl -q 'https://proget.makedeb.org/debian-feeds/prebuilt-mpr.pub' | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null  
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.makedeb.org prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list  
+sudo apt update  
+sudo apt install just  
+Refer to Just Commands
+Open repo in VSCode to edit
 
+## Just Commands
+just up  
+- used to start the project  
+- Front end on localhost:80  
+- PHP on localhost:8000  
+- Database on localhost:8080  
+- Need to add HTCdb.sql into database at localhost:8080
+just stop
+- used to stop docker containers, but keeps database info
+just down
+- used to stop and remove all docker images, volumes, and data  
 
-Start Wampserver  
-Move PHP folder into wamp www folder  
-Navigate to git repo  
-Run 'npm run dev'  
-For backend functionality - Edit PHP folder
-For frontend functionality - Edit src folder
+## Install NodeJS Latest Version (Optional)
+https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-22-04
 
 ## Schedule  
 Week 1 (February 6-10): Set up Database. Create an order button on the homepage. Begin Login Access.  
