@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 
 function HomeContents() {
-    return (
-        <div className="index">
-          <div className="row">
-            <div className="side">
-              <h2>Order Now Button Here</h2>
-            </div>
-            <div className="main">
-              <h2>Featured Products Here</h2>
-            </div>
-          </div>
+  const [firstName, setFirstName] = useState('');
+
+  useEffect(() => {
+    fetch('http://localhost:8000/session.php')
+    .then((response) => response.json())
+    .then((data) => {
+      setFirstName(data.first_name);
+    });
+}, []);
+
+  return (
+    <div className="index">
+      {firstName ? (
+        <h1>Welcome, {firstName}!</h1>
+      ) : (
+        <h1>Welcome!</h1>
+      )}
+      <p>This is the homepage.</p>
+      <div className="row">
+        <div className="side">
+          <h2>Order Now Button Here</h2>
         </div>
-      );
+        <div className="main">
+          <h2>Featured Products Here</h2>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default HomeContents;

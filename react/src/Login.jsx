@@ -16,8 +16,7 @@ function Login() {
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
 
-  const [goodLogin, setGoodLogin] = useState(false);
-  const [badLogin, setBadLogin] = useState(false)
+  const [error, setError] = useState(null);
 
   const handleValidation = (event) => {
     let formIsValid = true;
@@ -50,29 +49,23 @@ function Login() {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, password})
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.length > 0) {
-            setGoodLogin(true);
-            setBadLogin(false);
-          } else {
-            setGoodLogin(false)
-            setBadLogin(true);
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          setLoginStatus(false);
-        });
+      .then((response) => response.json())
+      .then((data) => {
+        // If the email and password are valid, redirect to the homepage
+        if (data.loggedin) {
+          //window.location.href = '/';
+          console.log(data);
+        } else {
+          // If the email and password are not valid, display an error message
+          alert(data.message);
+        }
+      });
     }
-  };
+  }
 
   return (
     <div className="UpdatedLogin">
       <br/>
-      {goodLogin ? (
-        <LoginSuccess />
-      ) : (
       <div className = "LoginPage">
         <div className="container">
           <h1><u>Login</u></h1>
@@ -104,7 +97,6 @@ function Login() {
               {passwordError}
             </small>
             <br/>
-            {badLogin && <LoginFailed />}
             <a href="#">Forgot Password?</a>
             <br/>
             <button type="submit">
@@ -120,8 +112,6 @@ function Login() {
         </div>
         <Outlet />
       </div>
-      )}
-     
     </div>
   );
 }
