@@ -4,6 +4,15 @@ https://www.hometeamcreativity.com
   
 ## How To Run
 ### Clone the Repo  
+
+### Setup .env
+
+The initial `.env` file is called `sample.env`. You should be able to directly copy it to
+`.env`.
+
+- PITFALL! Make sure the file is `.env` and NOT `.env.txt`. On windows, enable "show filetype extensions"
+  and then you can ensure the file is nammed correctly. You can also use `cp sample.env .env` if your on the cli.
+
 ### Install Docker https://www.docker.com/products/docker-desktop/  
 ### Create a Free Docker Account  
 ### Finish Docker Set up Process  
@@ -30,6 +39,7 @@ Refer to Just Commands
 
 ## Install NodeJS Latest Version (Optional)
 https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-22-04
+
 
 ## Schedule  
 Week 1 (February 6-10): Set up Database. Create an order button on the homepage. Begin Login Access.  

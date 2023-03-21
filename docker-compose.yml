@@ -1,33 +1,36 @@
 version: '3.8'
 services:
-    dev:
+    ui:
         build: 
-            context: ./
-            dockerfile: Dockerfile
+            context: ./react
         volumes:
-        - ./:/app
+        - ./react/src:/app/src
+        - ./react/public:/app/public
         ports:
         - '80:80'
-    php-apache-environment:
+    api:
         build:
             context: ./PHP
-            dockerfile: Dockerfile
         depends_on:
             - db
         volumes:
             - ./PHP/src:/var/www/html/
         ports:
             - 8000:80
+        env_file:
+          - .env
     db:
         image: mysql
+        build:
+          context: ./mysql
         restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
-            MYSQL_DATABASE: hometeam
-            MYSQL_USER: MYSQL_USER
-            MYSQL_PASSWORD: MYSQL_PASSWORD
-        ports:
-            - "9906:3306"
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        volumes:
+            - dbdata:/var/lib/mysql
     phpmyadmin:
         image: phpmyadmin
         ports:
@@ -37,7 +40,5 @@ services:
             PMA_HOST: db
         depends_on:
             - db
-        volumes:
-            - dbdata:/var/lib/mysql
 volumes:
     dbdata:

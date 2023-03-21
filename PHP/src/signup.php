@@ -11,18 +11,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
 
-// Connect to the MySQL database
-$servername = "db";
-$username = "MYSQL_USER";
-$password = "MYSQL_PASSWORD";
-$dbname = "hometeam";
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-$inputs = json_decode(file_get_contents('php://input'), true);
-
-// Check connection
-if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
-}
+include 'conn.php';
 
 // Create new user account
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

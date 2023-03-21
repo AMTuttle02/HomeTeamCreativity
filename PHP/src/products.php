@@ -3,17 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 
-// Connect to the MySQL database
-$servername = "db";
-$username = "MYSQL_USER";
-$password = "MYSQL_PASSWORD";
-$dbname = "hometeam";
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
-}
+include 'conn.php';
 
 // Get all users
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
