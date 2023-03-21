@@ -19,14 +19,16 @@ function Products() {
         <div className="productsTr">
           <div className="productsTd">
             {products.map(product => (
-              // You can use this div for order page and cart page
+              <div key={product.filename}>
+              {/* You can use this div for order page and cart page */}
               <div className="fullDesign">
                 <img src={tshirt} alt="Home Team Creativity Logo" className="tshirt"/>
                 <img src={"src/assets/" + product.filename} alt={product.filename} className="design"/>
                 <p>{product.product_name}</p>
                 <p>{"$" + product.price}</p>
               </div>
-              // To here
+              {/* To here */}
+              </div>
             ))}
           </div>
         </div>
