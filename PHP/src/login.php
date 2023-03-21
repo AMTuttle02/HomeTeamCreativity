@@ -11,17 +11,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 session_start();
 
-// Connect to the MySQL database
-$servername = "db";
-$username = "MYSQL_USER";
-$password = "MYSQL_PASSWORD";
-$dbname = "hometeam";
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-  die("Connection failed: " . mysqli_connect_error());
-}
+include 'conn.php';
 
 // Get user logging in
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
