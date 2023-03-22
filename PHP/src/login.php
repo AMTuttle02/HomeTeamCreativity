@@ -39,11 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['email'] = $email;
     $_SESSION['first_name'] = $row['first_name'];
 
-    print_r(json_encode($_SESSION));
+    echo(json_encode($_SESSION));
   } else {
     // If the email and password do not match, display an error message
-    echo "Invalid email or password.";
-  }
+    echo(json_encode("Invalid email or password."));
+  } 
 }
 
 $conn->close();

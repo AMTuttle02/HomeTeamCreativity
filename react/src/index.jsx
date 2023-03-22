@@ -8,6 +8,8 @@ import Products from "./products";
 import HowItWorks from "./howItWorks";
 import About from "./aboutUs";
 import "./index.css";
+import LoginSuccess from "./LoginSuccess";
+import LogOut from "./LogOut";
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
         <Route path="/" element={<Homepage />}>
           <Route index element={<HomeContents />} />
           <Route path="login" element={<Login />} />
+          <Route path="loggedin" element={<LoginSuccess />} />
+          <Route path="loggedout" element={<LogOut />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="products" element={<Products />} />
           <Route path="howitworks" element={<HowItWorks />} />

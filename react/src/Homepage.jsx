@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import logo from "./assets/logo.png";
 import cart from "./assets/cart.png";
 
 function Homepage() {
+  const [firstName, setFirstName] = useState("");
+
+  useEffect(() => {
+    fetch("/api/session.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setFirstName(data.first_name);
+      });
+  }, []);
+
+  let Login = 'Login';
+
+  if (firstName) {
+    Login = 'Log Out';
+  }
 
   return (
     <div className="HomePage">
@@ -22,7 +37,7 @@ function Homepage() {
             About Us
           </Link>
           <Link to="login">
-            Login
+            {Login}
           </Link>
           <form action="/search" method="get" id="search-form">
             <input type="text" placeholder="Search..." name="query"/>

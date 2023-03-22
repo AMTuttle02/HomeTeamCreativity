@@ -13,8 +13,7 @@ function HomeContents() {
 
   return (
     <div className="index">
-      {firstName ? <h1>Welcome, {firstName}!</h1> : <h1>Welcome!</h1>}
-      <p>This is the homepage.</p>
+      {firstName ? <h1>Welcome Back {firstName}!</h1> : <h1><b>Welcome to Home Team Creativity!</b></h1>}
       <div className="row">
         <div className="side">
           <h2>Order Now Button Here</h2>

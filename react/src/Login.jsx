@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
-import LoginSuccess from "./LoginSuccess";
 
 function LoginFailed() {
   return (
-    <div>
+    <div className="incorrectPassword">
       <h2>Incorrect Email or Password</h2>
     </div>
   );
@@ -16,7 +15,7 @@ function Login() {
   const [passwordError, setpasswordError] = useState("");
   const [emailError, setemailError] = useState("");
 
-  const [error, setError] = useState(null);
+  const [badLogin, setBadLogin] = useState("");
 
   const handleValidation = (event) => {
     let formIsValid = true;
@@ -53,16 +52,29 @@ function Login() {
         .then((data) => {
           // If the email and password are valid, redirect to the homepage
           if (data.loggedin) {
-            //window.location.href = '/';
-            console.log(data);
+            window.location.href = '/loggedin';
           } else {
             // If the email and password are not valid, display an error message
-            alert(data.message);
+            setBadLogin(true);
           }
         });
     }
   };
 
+  const [firstName, setFirstName] = useState("");
+
+  useEffect(() => {
+    fetch("/api/session.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setFirstName(data.first_name);
+      });
+  }, []);
+
+  if (firstName) {
+    window.location.href='/loggedin';
+  }
+  else {
   return (
     <div className="UpdatedLogin">
       <br />
@@ -71,7 +83,6 @@ function Login() {
           <h1>
             <u>Login</u>
           </h1>
-
           <form id="loginform" onSubmit={loginSubmit}>
             <label>Email address</label>
             <input
@@ -99,6 +110,7 @@ function Login() {
               {passwordError}
             </small>
             <br />
+            { badLogin && <LoginFailed /> }
             <a href="#">Forgot Password?</a>
             <br />
             <button type="submit">Log In</button>
@@ -118,5 +130,6 @@ function Login() {
       </div>
     </div>
   );
+  }
 }
 export default Login;
