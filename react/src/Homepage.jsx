@@ -48,6 +48,10 @@ function Homepage() {
         </div>
       </div>
       <Outlet/>
+      <footer>
+        <br/>
+        <h1>Thank you for supporting small businesses!</h1>
+      </footer>
     </div>
   );
 }

@@ -120,17 +120,15 @@ body {
 
 .productsTable {
   display: table;
-  width: 100%
-}
-.productsTr {
-  display: table-row;
+  width: 100%;
 }
 .productsTd {
   display: table-cell;
   width: 25%;
-  padding-left: 30px;
+  padding-left: 70px;
 }
-.productsTh {
+
+.productsTdHomepage {
   display: table-cell;
   width: 25%;
 }
@@ -172,6 +170,30 @@ body {
   color: white;
   text-align: center;
   padding:10px;
+}
+
+.orderLinks {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.OrderButton {
+  background-color: white;
+  color: black;
+  padding: 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: xx-large;
+  width: 40%;
+}
+
+.OrderButton:hover {
+  color: black;
+  background-color:rgb(207, 207, 207);
 }
 
 input[type=text] {
@@ -283,7 +305,7 @@ input[type="text"], input[type="password"] {
 }
 
 /* Footer */
-.footer {
+footer {
   padding: 20px;
   text-align: center;
   color: white;
@@ -310,7 +332,7 @@ input[type="text"], input[type="password"] {
   }
   .productsTr {
     display: block;
-    float: left;
+    float: center;
   }
   .productsTd {
     width: 100%;
