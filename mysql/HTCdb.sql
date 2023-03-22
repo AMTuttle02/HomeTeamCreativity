@@ -56,11 +56,11 @@ CREATE TABLE IF NOT EXISTS product_orders (
 
 /* Following lines are dummy data for testing purposes only */
 INSERT INTO users (email, pswrd, admin, first_name, last_name) VALUES
-("admin1@hometeam.com", "easilyremembered", 1, "Alex", "Tuttle"),
-("user1@gmail.com", "pineapplepizza", 0, "First", "Last"),
-("yourcat@hotmail.com", "iliekborgar", 0, "First", "Last"),
-("trolypoly@burner.com", "rudewords", 0, "First", "Last"),
-("elderly@aol.com", "grandkidsbirthdays", 0, "First", "Last");
+("admin1@hometeam.com", "HT1p0CENi0sCU", 1, "Admin", "Account"),
+("user1@gmail.com", "HTElbQN.BtJD2", 0, "First", "User"),
+("yourcat@hotmail.com", "HTKWLMGUdmTrs", 0, "Cat", "Cats"),
+("trolypoly@burner.com", "HTabDDCL7uA5o", 0, "Troly", "Poly"),
+("elderly@aol.com", "HTBYBlPEXF0rA", 0, "Elder", "Old");
 
 INSERT INTO products (product_name, price, filename) VALUES
 ("Be Like Friends", 16.00, "designOne.png"),

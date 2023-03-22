@@ -17,10 +17,16 @@ include 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
   $email = $inputs['email'];
-  $password = $inputs['password'];
+  $cryptid = $inputs["password"];
+
+  // Encrypt the input password
+  // Encryption must always match the encryption used in signup.php
+  if (CRYPT_STD_DES == 1) {
+    $cryptid = crypt($inputs["password"], "HT");
+  }
 
   $stmt = $conn->prepare("SELECT first_name FROM users WHERE email = ? AND pswrd = ?");
-  $stmt->bind_param("ss", $email, $password);
+  $stmt->bind_param("ss", $email, $cryptid);
 
   if (!$stmt->execute()) {
     die("Query failed: " . $stmt->error);

@@ -18,6 +18,14 @@ include 'conn.php';
 // Create new user account
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
+  $cryptid = $inputs["password"];
+
+  // Encrypt the input password
+  // TODO: Research salt strings, potential to increase security
+  if (CRYPT_STD_DES == 1) {
+    $cryptid = crypt($inputs["password"], "HT");
+  }
+
   // Check if email address already exists
   $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
   $stmt->bind_param("s", $inputs["email"]);
@@ -35,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   else {
     // Attempt to insert new user into table
     $query = $conn->prepare("INSERT INTO users (email, pswrd, first_name, last_name) VALUES (?, ?, ?, ?);");
-    $query->bind_param("ssss", $inputs["email"], $inputs["password"], $inputs["fname"], $inputs["lname"]);
+    $query->bind_param("ssss", $inputs["email"], $cryptid, $inputs["fname"], $inputs["lname"]);
 
     if (!$query->execute()) {
       // If insertion fails, return error message
