@@ -11,10 +11,21 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
 
+session_start();
+
 include 'conn.php';
 
 // Create new user account
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $inputs = json_decode(file_get_contents('php://input'), true);
+  $cryptid = $inputs["password"];
+
+  // Encrypt the input password
+  // TODO: Research salt strings, potential to increase security
+  if (CRYPT_STD_DES == 1) {
+    $cryptid = crypt($inputs["password"], "HT");
+  }
+
   // Check if email address already exists
   $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
   $stmt->bind_param("s", $inputs["email"]);
@@ -28,33 +39,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($existing_user) {
     // If email already exists, return error message
     echo json_encode("ERR: Email address already exists");
-  } else {
+  }
+  else {
     // Attempt to insert new user into table
     $query = $conn->prepare("INSERT INTO users (email, pswrd, first_name, last_name) VALUES (?, ?, ?, ?);");
-    $query->bind_param("ssss", $inputs["email"], $inputs["password"], $inputs["fname"], $inputs["lname"]);
+    $query->bind_param("ssss", $inputs["email"], $cryptid, $inputs["fname"], $inputs["lname"]);
 
     if (!$query->execute()) {
       // If insertion fails, return error message
-      echo json_encode("ERR: Insertion failed to execute");
-    } else {
-      // Check that the new user now exists and return email
-      $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
+      echo json_encode("ERR: Insertion failed to execute" . $query->error);
+    }
+    else {
+      // Check that the new user now exists and return first_name
+      $stmt = $conn->prepare("SELECT first_name FROM users WHERE email = ?");
       $stmt->bind_param("s", $inputs["email"]);
 
       if (!$stmt->execute()) {
-        die("Query failed: " . $stmt->error);
+        die(json_encode("Query failed: " . $stmt->error));
       }
-
+    
       $result = $stmt->get_result();
-      $users = [];
-
-      while ($row = $result->fetch_assoc()) {
-        $users[] = $row;
+    
+      if (!$result) {
+        die(json_encode("Result set failed: " . $conn->error));
       }
-
-      echo json_encode($users);
+    
+      if ($result->num_rows > 0) {
+        // Set the session variables
+        $row = $result->fetch_assoc();
+        $_SESSION['loggedin'] = true;
+        $_SESSION['email'] = $inputs["email"];
+        $_SESSION['first_name'] = $row['first_name'];
+    
+        echo(json_encode($_SESSION));
+      } else {
+        // If the email and password do not match, display an error message
+        echo(json_encode("Invalid email or password."));
+      } 
     }
   }
 }
 
 mysqli_close($conn);
+
+?>
