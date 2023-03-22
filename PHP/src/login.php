@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $inputs['password'];
 
   $stmt = $conn->prepare("SELECT first_name FROM users WHERE email = ? AND pswrd = ?");
-  $stmt->bind_param("ss", $inputs["email"], $inputs["password"]);
+  $stmt->bind_param("ss", $email, $password);
 
   if (!$stmt->execute()) {
     die("Query failed: " . $stmt->error);
@@ -32,17 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     die("Result set failed: " . $conn->error);
   }
 
-  $users = [];
+  if ($result->num_rows > 0) {
+    // Set the session variables
+    $row = $result->fetch_assoc();
+    $_SESSION['loggedin'] = true;
+    $_SESSION['email'] = $email;
+    $_SESSION['first_name'] = $row['first_name'];
 
-  
-
-  while ($row = $result->fetch_assoc()) {
-    $users[] = $row;
-    $_SESSION['name'] = $row['first_name'];
-  }
-
-  echo json_encode($users);
+    echo(json_encode($_SESSION));
+  } else {
+    // If the email and password do not match, display an error message
+    echo(json_encode("Invalid email or password."));
+  } 
 }
 
-mysqli_close($conn);
+$conn->close();
 ?>
