@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HomeContents from "./HomeContents";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, Navigate } from "react-router-dom";
 
 function LogOut() {
   const [firstName, setFirstName] = useState("");
@@ -13,25 +13,21 @@ function LogOut() {
       });
   }, []);
 
-  if (firstName) {
-    window.location.href='/loggedin';
-  }
-  else {
-    return (
-        <div className='LogOut'>
+  return (
+      <div className='LogOut'>
+        {firstName && <Navigate to="/loggedin" />}
+        <br />
+        <div className="container">
+          <h1>You Have Successfully Logged Out</h1>
           <br />
-          <div className="container">
-            <h1>You Have Successfully Logged Out</h1>
-            <br />
-            <h1>Come Back Soon!</h1>
-            <br />
-            <center>
-              <Link to="/" className="ReturnHome">Return Home</Link>
-            </center>
-          </div>
-          <Outlet/>
+          <h1>Come Back Soon!</h1>
+          <br />
+          <center>
+            <Link to="/" className="ReturnHome">Return Home</Link>
+          </center>
         </div>
-      );
-  }
+        <Outlet/>
+      </div>
+    );
 }
 export default LogOut;

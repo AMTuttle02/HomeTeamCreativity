@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, Navigate } from "react-router-dom";
 
 function LoginFailed() {
   return (
@@ -71,12 +71,9 @@ function Login() {
       });
   }, []);
 
-  if (firstName) {
-    window.location.href='/loggedin';
-  }
-  else {
   return (
     <div className="UpdatedLogin">
+      {firstName && <Navigate to="/loggedin" />}
       <br />
       <div className="LoginPage">
         <div className="container">
@@ -130,6 +127,5 @@ function Login() {
       </div>
     </div>
   );
-  }
 }
 export default Login;
