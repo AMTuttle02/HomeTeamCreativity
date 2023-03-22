@@ -1,23 +1,19 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 function HomeContents() {
-  const [firstName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
-    fetch('http://localhost:8000/session.php')
-    .then((response) => response.json())
-    .then((data) => {
-      setFirstName(data.first_name);
-    });
-}, []);
+    fetch("/api/session.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setFirstName(data.first_name);
+      });
+  }, []);
 
   return (
     <div className="index">
-      {firstName ? (
-        <h1>Welcome, {firstName}!</h1>
-      ) : (
-        <h1>Welcome!</h1>
-      )}
+      {firstName ? <h1>Welcome, {firstName}!</h1> : <h1>Welcome!</h1>}
       <p>This is the homepage.</p>
       <div className="row">
         <div className="side">

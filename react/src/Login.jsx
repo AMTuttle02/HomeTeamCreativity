@@ -42,34 +42,36 @@ function Login() {
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    
+
     if (handleValidation()) {
-      fetch('http://localhost:8000/login.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email, password})
+      fetch("/api/login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       })
-      .then((response) => response.json())
-      .then((data) => {
-        // If the email and password are valid, redirect to the homepage
-        if (data.loggedin) {
-          //window.location.href = '/';
-          console.log(data);
-        } else {
-          // If the email and password are not valid, display an error message
-          alert(data.message);
-        }
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          // If the email and password are valid, redirect to the homepage
+          if (data.loggedin) {
+            //window.location.href = '/';
+            console.log(data);
+          } else {
+            // If the email and password are not valid, display an error message
+            alert(data.message);
+          }
+        });
     }
-  }
+  };
 
   return (
     <div className="UpdatedLogin">
-      <br/>
-      <div className = "LoginPage">
+      <br />
+      <div className="LoginPage">
         <div className="container">
-          <h1><u>Login</u></h1>
-          
+          <h1>
+            <u>Login</u>
+          </h1>
+
           <form id="loginform" onSubmit={loginSubmit}>
             <label>Email address</label>
             <input
@@ -84,7 +86,7 @@ function Login() {
             <small id="emailHelp" className="text-danger form-text">
               {emailError}
             </small>
-            <br/>
+            <br />
             <label>Password</label>
             <input
               type="password"
@@ -96,18 +98,20 @@ function Login() {
             <small id="passworderror" className="text-danger form-text">
               {passwordError}
             </small>
-            <br/>
+            <br />
             <a href="#">Forgot Password?</a>
-            <br/>
-            <button type="submit">
-              Log In
-            </button>
+            <br />
+            <button type="submit">Log In</button>
           </form>
         </div>
         <div className="UserAccess">
-          <br/><br/>
-          <p>Don't Have An Account?
-          <Link to="/signup" className="signUpButton">Create An Account</Link>
+          <br />
+          <br />
+          <p>
+            Don't Have An Account?
+            <Link to="/signup" className="signUpButton">
+              Create An Account
+            </Link>
           </p>
         </div>
         <Outlet />

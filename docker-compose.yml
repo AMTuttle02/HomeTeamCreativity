@@ -6,8 +6,6 @@ services:
         volumes:
         - ./react/src:/app/src
         - ./react/public:/app/public
-        ports:
-        - '80:80'
     api:
         build:
             context: ./PHP
@@ -15,8 +13,6 @@ services:
             - db
         volumes:
             - ./PHP/src:/var/www/html/
-        ports:
-            - 8000:80
         env_file:
           - .env
     db:
@@ -40,5 +36,14 @@ services:
             PMA_HOST: db
         depends_on:
             - db
+    nginx:
+      ports:
+        - "80:80"
+      depends_on:
+        - api
+        - ui
+      build:
+        context: ./nginx
+
 volumes:
     dbdata:
