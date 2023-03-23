@@ -16,7 +16,7 @@ function Products() {
       <h1>Products</h1>
       <p>
         For custom apparel,{" "}
-        <a href="mailto:hometeamcreativity@gmail.com">send us a message!</a>
+        <a href="https://linktr.ee/hometeamcreativity" target="_blank">send us a message!</a>
       </p>
       <div className="productsTable">
         <div className="productsTr">
