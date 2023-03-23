@@ -122,6 +122,7 @@ body {
   display: table;
   width: 100%;
 }
+
 .productsTd {
   display: table-cell;
   width: 25%;
@@ -336,11 +337,33 @@ footer {
   }
   .productsTd {
     width: 100%;
-    display: block; 
+    display: block;
+    padding-left: 0px;
   }
   .productsTh {
     width:100%;
     display: block; 
   }
-  
+  .tshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 400px;
+    height: 400px;
+  }
+  .design {
+    position: absolute;
+    top: 100px;
+    left: 150px;
+    width: 105px;
+    height: 105px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .orderLinks {
+    display: block;
+    width: 450px;
+  }
+
 }
