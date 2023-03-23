@@ -1,21 +1,9 @@
-import React, { useState, useEffect } from "react";
-import HomeContents from "./HomeContents";
-import { Outlet, Link, Navigate } from "react-router-dom";
+import React from "react";
+import { Outlet, Link } from "react-router-dom";
 
 function LogOut() {
-  const [firstName, setFirstName] = useState("");
-
-  useEffect(() => {
-    fetch("/api/session.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setFirstName(data.first_name);
-      });
-  }, []);
-
   return (
       <div className='LogOut'>
-        {firstName && <Navigate to="/loggedin" />}
         <br />
         <div className="container">
           <h1>You Have Successfully Logged Out</h1>

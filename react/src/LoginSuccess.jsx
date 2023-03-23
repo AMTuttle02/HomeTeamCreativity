@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LoginSuccess() {
+  const navigate = useNavigate();
 
   const logout = (e) => {
     fetch("/api/logout.php")
     .then((response) => response.json())
     .then((data) => {
-      window.location.href='/loggedout';
+      navigate("/loggedout");
+      window.location.reload();
     })
   }
 
@@ -36,6 +38,8 @@ function LoginSuccess() {
       </div>
     );
   }
-  else {}
+  else {
+    navigate("/loggedout")
+  }
 }
 export default LoginSuccess;

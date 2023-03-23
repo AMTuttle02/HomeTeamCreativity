@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link, Navigate } from "react-router-dom";
+import { Outlet, Link, Navigate, useNavigate } from "react-router-dom";
 
 function LoginFailed() {
   return (
@@ -16,6 +16,8 @@ function Login() {
   const [emailError, setemailError] = useState("");
 
   const [badLogin, setBadLogin] = useState("");
+
+  const navigate = useNavigate();
 
   const handleValidation = (event) => {
     let formIsValid = true;
@@ -50,9 +52,10 @@ function Login() {
       })
         .then((response) => response.json())
         .then((data) => {
-          // If the email and password are valid, redirect to the homepage
+          // If the email and password are valid, redirect to the loggedin page
           if (data.loggedin) {
-            window.location.href = '/loggedin';
+            navigate("/loggedin");
+            window.location.reload();
           } else {
             // If the email and password are not valid, display an error message
             setBadLogin(true);
@@ -71,61 +74,65 @@ function Login() {
       });
   }, []);
 
-  return (
-    <div className="UpdatedLogin">
-      {firstName && <Navigate to="/loggedin" />}
-      <br />
-      <div className="LoginPage">
-        <div className="container">
-          <h1>
-            <u>Login</u>
-          </h1>
-          <form id="loginform" onSubmit={loginSubmit}>
-            <label>Email address</label>
-            <input
-              type="email"
-              className="form-control"
-              id="EmailInput"
-              name="EmailInput"
-              aria-describedby="emailHelp"
-              placeholder="Enter email"
-              onChange={(event) => setEmail(event.target.value)}
-            />
-            <small id="emailHelp" className="text-danger form-text">
-              {emailError}
-            </small>
+  if (firstName) {
+    navigate("/loggedin");
+  }
+  else {
+    return (
+      <div className="UpdatedLogin">
+        <br />
+        <div className="LoginPage">
+          <div className="container">
+            <h1>
+              <u>Login</u>
+            </h1>
+            <form id="loginform" onSubmit={loginSubmit}>
+              <label>Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                id="EmailInput"
+                name="EmailInput"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                onChange={(event) => setEmail(event.target.value)}
+              />
+              <small id="emailHelp" className="text-danger form-text">
+                {emailError}
+              </small>
+              <br />
+              <label>Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="exampleInputPassword1"
+                placeholder="Password"
+                onChange={(event) => setPassword(event.target.value)}
+              />
+              <small id="passworderror" className="text-danger form-text">
+                {passwordError}
+              </small>
+              <br />
+              { badLogin && <LoginFailed /> }
+              <a href="#">Forgot Password?</a>
+              <br />
+              <button type="submit">Log In</button>
+            </form>
+          </div>
+          <div className="UserAccess">
             <br />
-            <label>Password</label>
-            <input
-              type="password"
-              className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Password"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <small id="passworderror" className="text-danger form-text">
-              {passwordError}
-            </small>
             <br />
-            { badLogin && <LoginFailed /> }
-            <a href="#">Forgot Password?</a>
-            <br />
-            <button type="submit">Log In</button>
-          </form>
+            <p>
+              Don't Have An Account?
+              <Link to="/signup" className="signUpButton">
+                Create An Account
+              </Link>
+            </p>
+          </div>
+          <Outlet />
         </div>
-        <div className="UserAccess">
-          <br />
-          <br />
-          <p>
-            Don't Have An Account?
-            <Link to="/signup" className="signUpButton">
-              Create An Account
-            </Link>
-          </p>
-        </div>
-        <Outlet />
       </div>
-    </div>
-  );
+    );
+  }
 }
 export default Login;
