@@ -5,23 +5,20 @@ import cart from "./assets/cart.png";
 
 function Homepage() {
   const [firstName, setFirstName] = useState("");
-  const [login, setLogin] = useState("Login");
-  const [loginRoute, setLoginRoute] = useState("/login");
 
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);
-        if (data.first_name) {
-          setLogin("Log Out");
-          setLoginRoute("/loggedin");
-        } else {
-          setLogin("Login");
-          setLoginRoute("/login");
-        }
       });
   }, []);
+
+  let Login = 'Login';
+
+  if (firstName) {
+    Login = 'Log Out';
+  }
 
   return (
     <div className="HomePage">
@@ -39,8 +36,8 @@ function Homepage() {
           <Link to="about">
             About Us
           </Link>
-          <Link to={loginRoute}>
-            {login}
+          <Link to="login">
+            {Login}
           </Link>
           <form action="/search" method="get" id="search-form">
             <input type="text" placeholder="Search..." name="query"/>
@@ -58,5 +55,4 @@ function Homepage() {
     </div>
   );
 }
-
 export default Homepage;

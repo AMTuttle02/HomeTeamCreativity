@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 function LoginSuccess() {
-  const navigate = useNavigate();
 
   const logout = (e) => {
     fetch("/api/logout.php")
     .then((response) => response.json())
     .then((data) => {
-      navigate("/loggedout");
-      window.location.reload();
+      window.location.href='/loggedout';
     })
   }
 
   const [firstName, setFirstName] = useState("");
-
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
@@ -22,7 +19,6 @@ function LoginSuccess() {
         setFirstName(data.first_name);
       });
   }, []);
-
   if (firstName) {
     return (
       <div className='LoginSuccess'>
@@ -38,8 +34,6 @@ function LoginSuccess() {
       </div>
     );
   }
-  else {
-    navigate("/loggedout")
-  }
+  else {}
 }
 export default LoginSuccess;

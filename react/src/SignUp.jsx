@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { Outlet, Link, Navigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function SignUpFailed() {
@@ -9,7 +9,6 @@ function SignUpFailed() {
     </div>
   );
 }
-
 function SignUp() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -19,12 +18,9 @@ function SignUp() {
   const [emailError, setemailError] = useState("");
   const [fnameError, setfnameError] = useState("");
   const [lnameError, setlnameError] = useState("");
-
   const [badLogin, setBadLogin] = useState("");
-
   const handleValidation = (event) => {
     let formIsValid = true;
-
     if (!fname.match(/^[a-zA-Z]{2,22}$/)) {
       formIsValid = false;
       setfnameError(
@@ -55,7 +51,6 @@ function SignUp() {
       setemailError("");
       formIsValid = true;
     }
-
     if (!password.match(/^[a-zA-Z]{8,22}$/)) {
       formIsValid = false;
       setpasswordError(
@@ -66,10 +61,8 @@ function SignUp() {
       setpasswordError("");
       formIsValid = true;
     }
-
     return formIsValid;
   };
-
   const signUpSubmit = (e) => {
     e.preventDefault();
     if (handleValidation()) {
@@ -96,9 +89,7 @@ function SignUp() {
         });
     }
   };
-
   const [firstName, setFirstName] = useState("");
-
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
@@ -107,81 +98,85 @@ function SignUp() {
       });
   }, []);
 
-  return (
-    <div className="SignUp">
-      {firstName && <Navigate to="/loggedin" />}
-      <br/>
-      <div className="container">
-        <h1><u>Sign Up Below!</u></h1>
-        <form id="signupform" onSubmit={signUpSubmit}>
-          <label>First Name</label>
-          <input
-            type="name"
-            className="form-control"
-            id="NameInput"
-            name="NameInput"
-            aria-describedby="nameHelp"
-            placeholder="Enter your first name"
-            onChange={(event) => setFName(event.target.value)}
-          />
-          <small id="nameHelp" className="text-danger form-text">
-            {fnameError}
-          </small>
-          <br/>
-          <label>Last Name</label>
-          <input
-            type="name"
-            className="form-control"
-            id="NameInput"
-            name="NameInput"
-            aria-describedby="nameHelp"
-            placeholder="Enter your last name"
-            onChange={(event) => setLName(event.target.value)}
-          />
-          <small id="nameHelp" className="text-danger form-text">
-            {lnameError}
-          </small>
-          <br/>
-          <label>Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            id="EmailInput"
-            name="EmailInput"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <small id="emailHelp" className="text-danger form-text">
-            {emailError}
-          </small>
-          <br/>
-          <label>Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="exampleInputPassword1"
-            placeholder="Password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <small id="passworderror" className="text-danger form-text">
-            {passwordError}
-          </small>
-          <br/>
-          { badLogin && <SignUpFailed /> }
-          <button type="submit">
-            Sign Up
-          </button>
-        </form>
+  if (firstName) {
+    window.location.href='/loggedin';
+  }
+  else {
+    return (
+      <div className="SignUp">
+        <br/>
+        <div className="container">
+          <h1><u>Sign Up Below!</u></h1>
+          <form id="signupform" onSubmit={signUpSubmit}>
+            <label>First Name</label>
+            <input
+              type="name"
+              className="form-control"
+              id="NameInput"
+              name="NameInput"
+              aria-describedby="nameHelp"
+              placeholder="Enter your first name"
+              onChange={(event) => setFName(event.target.value)}
+            />
+            <small id="nameHelp" className="text-danger form-text">
+              {fnameError}
+            </small>
+            <br/>
+            <label>Last Name</label>
+            <input
+              type="name"
+              className="form-control"
+              id="NameInput"
+              name="NameInput"
+              aria-describedby="nameHelp"
+              placeholder="Enter your last name"
+              onChange={(event) => setLName(event.target.value)}
+            />
+            <small id="nameHelp" className="text-danger form-text">
+              {lnameError}
+            </small>
+            <br/>
+            <label>Email address</label>
+            <input
+              type="email"
+              className="form-control"
+              id="EmailInput"
+              name="EmailInput"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <small id="emailHelp" className="text-danger form-text">
+              {emailError}
+            </small>
+            <br/>
+            <label>Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="exampleInputPassword1"
+              placeholder="Password"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <small id="passworderror" className="text-danger form-text">
+              {passwordError}
+            </small>
+            <br/>
+            { badLogin && <SignUpFailed /> }
+            <button type="submit">
+              Sign Up
+            </button>
+          </form>
+        </div>
+        <div className="UserAccess">
+          <br/><br/>
+          <p>Already Have An Account?
+          <Link to="/login" className="signUpButton">Login </Link>
+          </p>
+        </div>
+        <Outlet/>
       </div>
-      <div className="UserAccess">
-        <br/><br/>
-        <p>Already Have An Account?
-        <Link to="/login" className="signUpButton">Login </Link>
-        </p>
-      </div>
-      <Outlet/>
-    </div>
-  );
+    );
+  }
 }
 export default SignUp;
