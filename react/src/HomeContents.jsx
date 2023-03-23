@@ -28,7 +28,7 @@ function HomeContents() {
             <br /><br /><br /><br /><br />
             <Link to='/about' className="OrderButton">ABOUT US</Link>
             <br /><br /><br /><br /><br />
-            <Link to='mailto:hometeamcreativity@gmail.com' className="OrderButton">CONTACT US</Link>
+            <Link to="https://linktr.ee/hometeamcreativity" target="_blank" className="OrderButton">CONTACT US</Link>
           </div>
         </div>
         <div className="main">
