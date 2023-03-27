@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
 
 function LoginSuccess() {
 
@@ -19,6 +18,7 @@ function LoginSuccess() {
         setFirstName(data.first_name);
       });
   }, []);
+
   if (firstName) {
     return (
       <div className='LoginSuccess'>
