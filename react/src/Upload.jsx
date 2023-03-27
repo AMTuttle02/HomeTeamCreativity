@@ -2,30 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Upload() {
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState("");
-    const [image, setImage] = useState("");
+  const [file, setFile] = useState(null);
 
-    const handleImageChange = e => {
-        let reader = new FileReader() 
-        reader.readAsDataURL(e.target.files[0])
+  const handleFileInputChange = (event) => {
+    setFile(event.target.files[0]);
+  };
 
-        reader.onload = () => {      
-            this.setState({        
-            queryImage: reader.result      
-            })    
-        }
-
-      fetch("/api/upload.php", {
-        method: "POST",  
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(this.state.queryImage)
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-      });
-    };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('image', file);
+  
+    fetch('/api/upload.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); 
+    });
+  };
+  
 
   const [admin, setAdmin] = useState("");
   useEffect(() => {
@@ -39,7 +36,17 @@ function Upload() {
   if (admin) {
     return (
       <div className='Upload'>
-        <br />
+        <form onSubmit={handleSubmit}>
+          <input type="file" onChange={handleFileInputChange} />
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+    );
+  }
+  else {
+    return ( 
+        <div className='Upload'>{/*
+                  <br />
         <div className="container">
           <h1>Upload Designs Below</h1>
           <br />
@@ -67,19 +74,12 @@ function Upload() {
                 id="myFile"
                 name="filename"
                 accept="image/*"
-                onChange={(event) => setImage(event.target.value)}
+                onChange={(event) => handleImageChange(event.target.value)}
             />
             <br /><br />
             <input type="submit" />
           </form>
-          {image && <img src={image} alt="Uploaded Image" />}
-        </div>
-      </div>
-    );
-  }
-  else {
-    return (
-        <div className='Upload'>
+  </div> */}
             <br />
             <div className="container">
             <h1>Sorry, you must be logged in to access this page.</h1>
