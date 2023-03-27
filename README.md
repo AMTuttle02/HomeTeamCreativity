@@ -31,10 +31,6 @@ Refer to Just Commands
 ## Just Commands
 ### just up  
   - used to start the project  
-  - Front end on localhost:80  
-  - PHP on localhost:8000  
-  - Database on localhost:8080  
-  - Need to add HTCdb.sql into database at localhost:8080  
 ### just stop
 - used to stop docker containers, but keeps database info  
 ### just down  
