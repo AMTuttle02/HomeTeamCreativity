@@ -3,6 +3,9 @@ Database-Driven Website for Home Team Creativity
 https://www.hometeamcreativity.com  
   
 ## How To Run
+- UI (frontend): localhost
+- API (backend): localhost/api/
+- PHPMyAdmin (DB): localhost:8080
 ### Clone the Repo  
 
 ### Setup .env
