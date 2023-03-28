@@ -23,7 +23,9 @@ function Upload() {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data); 
+      if(data) {
+        window.location.href="/uploadcomplete";
+      }
     });
   };
   

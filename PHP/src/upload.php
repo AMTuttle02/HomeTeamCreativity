@@ -4,6 +4,8 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 
+session_start();
+
 include 'conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -53,13 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } else {
     if (move_uploaded_file($file["tmp_name"], $targetFile)) {
       echo json_encode("The file has been uploaded with name " . $productName . " and price $" . $price . "with filename: " . $fileName);
-      // Attempt to insert new user into table
+      // Attempt to insert new design into table
       $query = $conn->prepare("INSERT INTO products (product_name, price, filename) VALUES (?, ?, ?);");
       $query->bind_param("sss", $productName, $price, $fileName);
       if (!$query->execute()) {
         // If insertion fails, return error message
         echo json_encode("ERR: Insertion failed to execute" . $query->error);
       }
+      $_SESSION['recentDesign'] = $fileName;
     } else {
       echo json_encode("Sorry, there was an error uploading your file.");
     }
