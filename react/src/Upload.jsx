@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 function Upload() {
   const [file, setFile] = useState(null);
+  const [productName, setName] = useState('');
+  const [price, setPrice] = useState('');
 
   const handleFileInputChange = (event) => {
     setFile(event.target.files[0]);
@@ -12,6 +14,8 @@ function Upload() {
     event.preventDefault();
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('productName', productName);
+    formData.append('price', price);
   
     fetch('/api/upload.php', {
       method: 'POST',
@@ -36,57 +40,46 @@ function Upload() {
   if (admin) {
     return (
       <div className='Upload'>
-        <form onSubmit={handleSubmit}>
-          <input type="file" onChange={handleFileInputChange} />
-          <button type="submit">Upload</button>
-        </form>
-      </div>
-    );
-  }
-  else {
-    return ( 
-        <div className='Upload'>{/*
-                  <br />
+        <br />
         <div className="container">
           <h1>Upload Designs Below</h1>
           <br />
           <h2>Remember: Design must be 500px by 500px</h2>
           <br/>
-          <form onSubmit={ handleImageChange }>
+          <form onSubmit={handleSubmit}>
             <label>Product Display Name</label>
-            <input
+              <input
                 type="text"
                 id="product_name"
                 name="product_name"
                 placeholder="Product Name"
                 onChange={(event) => setName(event.target.value)}
-            />
+              />
             <label>Price (Do Not Include $)</label>
             <input
-                type="text"
-                id="price"
-                name="price"
-                placeholder="Price"
-                onChange={(event) => setPrice(event.target.value)}
+              type="text"
+              id="price"
+              name="price"
+              placeholder="Price"
+              onChange={(event) => setPrice(event.target.value)}
             />
-            <input
-                type="file"
-                id="myFile"
-                name="filename"
-                accept="image/*"
-                onChange={(event) => handleImageChange(event.target.value)}
-            />
-            <br /><br />
-            <input type="submit" />
+            <input type="file" onChange={handleFileInputChange} />
+            <button type="submit">Upload</button>
           </form>
-  </div> */}
-            <br />
-            <div className="container">
-            <h1>Sorry, you must be logged in to access this page.</h1>
-            <br />
-            <h2>Click <Link to="/login">Here</Link> to Login</h2>
-            <br/>
-            </div>
+        </div>
+      </div>
+    );
+  }
+  else {
+    return ( 
+        <div className='Upload'>
+          <br />
+          <div className="container">
+          <h1>Sorry, you must be logged in to access this page.</h1>
+          <br />
+          <h2>Click <Link to="/login">Here</Link> to Login</h2>
+          <br/>
+          </div>
         </div>
     );
   }
