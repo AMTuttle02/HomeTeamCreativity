@@ -31,7 +31,7 @@ function Products() {
                     className="tshirt"
                   />
                   <img
-                    src={"images/" + product.filename}
+                    src={"api/images/" + product.filename}
                     alt={product.filename}
                     className="design"
                   />
