@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function LoginSuccess() {
 
@@ -19,6 +19,16 @@ function LoginSuccess() {
         setFirstName(data.first_name);
       });
   }, []);
+
+  const [admin, setAdmin] = useState("");
+  useEffect(() => {
+    fetch("/api/admin.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAdmin(data.admin);
+      });
+  }, []);
+
   if (firstName) {
     return (
       <div className='LoginSuccess'>
@@ -28,6 +38,7 @@ function LoginSuccess() {
           <br />
           <h2>Welcome Back to Home Team Creativity!</h2>
           <h2>You are currently logged in.</h2>
+          {firstName ? <h2>Upload Designs <Link to="/upload">Here</Link></h2> : <></>}
           <br/>
           <button type="signUpButton" onClick={logout}>Log Out</button>
         </div>

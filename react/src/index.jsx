@@ -10,6 +10,8 @@ import About from "./aboutUs";
 import "./index.css";
 import LoginSuccess from "./LoginSuccess";
 import LogOut from "./LogOut";
+import Upload from "./Upload";
+import UploadSuccess from "./UploadSuccess";
 
 export default function App() {
   return (
@@ -24,6 +26,8 @@ export default function App() {
           <Route path="products" element={<Products />} />
           <Route path="howitworks" element={<HowItWorks />} />
           <Route path="about" element={<About />} />
+          <Route path="upload" element={<Upload />} />
+          <Route path="uploadcomplete" element={<UploadSuccess />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>

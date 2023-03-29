@@ -39,6 +39,8 @@ Refer to Just Commands
 ## Install NodeJS Latest Version (Optional)
 https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-22-04
 
+## Obtain var/www images that have been uploaded
+docker cp hometeamcreativity-api-1:/var/www/images react/
 
 ## Schedule  
 Week 1 (February 6-10): ~~Set up Database. Create an order button on the homepage. Begin Login Access.~~  

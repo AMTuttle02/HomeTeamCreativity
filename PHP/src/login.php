@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cryptid = crypt($inputs["password"], "HT");
   }
 
-  $stmt = $conn->prepare("SELECT first_name FROM users WHERE email = ? AND pswrd = ?");
+  $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND pswrd = ?");
   $stmt->bind_param("ss", $email, $cryptid);
 
   if (!$stmt->execute()) {
@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['loggedin'] = true;
     $_SESSION['email'] = $email;
     $_SESSION['first_name'] = $row['first_name'];
+    $_SESSION['admin'] = $row['admin'];
 
     echo(json_encode($_SESSION));
   } else {

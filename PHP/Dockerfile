@@ -4,3 +4,7 @@ RUN apt-get update && apt-get upgrade -y
 
 # This copies all of ./src to /var/www/html
 COPY src/ /var/www/html
+
+COPY src/images /var/www/images
+
+RUN chown -R www-data:www-data /var/www/images
