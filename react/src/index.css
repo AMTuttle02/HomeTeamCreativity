@@ -305,6 +305,18 @@ input[type="text"], input[type="password"] {
   text-align: left;
 }
 
+.AboutParagraph {
+  padding-left: 80px;
+  padding-top: 20px;
+  text-align: left;
+  
+}
+
+.AboutParagraph h3 {
+  font-size: xx-large;
+  line-height: 1.5;
+}
+
 /* Footer */
 footer {
   padding: 20px;
