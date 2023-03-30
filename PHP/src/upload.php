@@ -11,6 +11,7 @@ include 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $productName = $_POST["productName"];
   $price = $_POST["price"];
+  $tags = $_POST["tags"];
   $file = $_FILES['image'];
   $targetDir = "/var/www/images/";
   $targetFile = $targetDir . basename($file["name"]);
@@ -56,15 +57,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (move_uploaded_file($file["tmp_name"], $targetFile)) {
       echo json_encode("The file has been uploaded with name " . $productName . " and price $" . $price . "with filename: " . $fileName);
       // Attempt to insert new design into table
-      $query = $conn->prepare("INSERT INTO products (product_name, price, filename) VALUES (?, ?, ?);");
-      $query->bind_param("sss", $productName, $price, $fileName);
+      $query = $conn->prepare("INSERT INTO products (product_name, price, filename, tag_list) VALUES (?, ?, ?, ?);");
+      $query->bind_param("ssss", $productName, $price, $fileName, $tags);
       if (!$query->execute()) {
         // If insertion fails, return error message
         echo json_encode("ERR: Insertion failed to execute" . $query->error);
       }
       $_SESSION['recentDesign'] = $fileName;
     } else {
-      echo json_encode("Sorry, there was an error uploading your file.");
+      echo json_encode("Sorry, there was an error uploading your file from " . $file["tmp_name"] . " to " . $targetFile);
     }
   }
 }
