@@ -5,6 +5,7 @@ function Upload() {
   const [file, setFile] = useState(null);
   const [productName, setName] = useState('');
   const [price, setPrice] = useState('');
+  const [tags, setTags] = useState('');
 
   const handleFileInputChange = (event) => {
     setFile(event.target.files[0]);
@@ -16,6 +17,7 @@ function Upload() {
     formData.append('image', file);
     formData.append('productName', productName);
     formData.append('price', price);
+    formData.append('tags', tags);
   
     fetch('/api/upload.php', {
       method: 'POST',
@@ -64,6 +66,14 @@ function Upload() {
               name="price"
               placeholder="Price"
               onChange={(event) => setPrice(event.target.value)}
+            />
+            <label>Tags (Separate By A Space)</label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              placeholder="Tags"
+              onChange={(event) => setTags(event.target.value)}
             />
             <input type="file" onChange={handleFileInputChange} />
             <button type="submit">Upload</button>
