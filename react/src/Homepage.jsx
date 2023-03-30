@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "./assets/logo.png";
 import cart from "./assets/cart.png";
 
 function Homepage() {
+  const navigate = useNavigate();
+
   const [searchContents, setSearchContents] = useState("");
 
   function handleKeyDown(event) {
@@ -15,8 +18,14 @@ function Homepage() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          console.log({searchContents});
+          if (data.length > 0) {
+            navigate('/searchResults', { state: {result: data}}, {search: '?q:'});
+          }
+          else {
+            navigate({
+              pathname: "/noResults"
+            });
+          }
         });
     }
   }
