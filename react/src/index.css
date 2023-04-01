@@ -90,6 +90,18 @@ body {
   flex: 50%;
 }
 
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.orderSide {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+  padding-top: 10px;
+}
+
+.orderSide p {
+  line-height: 0;
+}
+
 /* Main column */
 .main {   
   -ms-flex: 50%; /* IE10 */
@@ -141,12 +153,27 @@ body {
   float: left;
 }
 
+.orderFullDesign {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  float:right;
+}
+
 .tshirt {
   top: 0px;
   left: 0px;
   position: relative;
   width: 440px;
   height: 440px;
+}
+
+.orderTshirt {
+  top: 0px;
+  left: 0px;
+  position: relative;
+  width: 500px;
+  height: 500px;
 }
 
 .design {
@@ -357,6 +384,13 @@ footer {
     display: block; 
   }
   .tshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 400px;
+    height: 400px;
+  }
+  .orderTshirt {
     top: 0px;
     left: 0px;
     position: relative;
