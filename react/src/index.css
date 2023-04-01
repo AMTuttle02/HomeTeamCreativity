@@ -96,6 +96,7 @@ body {
   -ms-flex: 25%; /* IE10 */
   flex: 25%;
   padding-top: 10px;
+  text-align: center;
 }
 
 .orderSide p {
@@ -107,6 +108,15 @@ body {
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
 }
+
+/* Main column */
+.orderMain {   
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+  padding-top: 20px;
+  text-align: center;
+}
+
 
 .logo{
   width: 160px;
@@ -397,6 +407,10 @@ footer {
     width: 400px;
     height: 400px;
   }
+  .orderFullDesign {
+    float: left;
+    padding: 10px;
+  }
   .design {
     position: absolute;
     top: 100px;
@@ -410,6 +424,13 @@ footer {
   .orderLinks {
     display: block;
     width: 450px;
+  }
+  .orderMain {
+    padding: 5%;
+  }
+  .orderFullDesign {
+    padding: 0px;
+    float: right;
   }
 
 }
