@@ -24,7 +24,7 @@ function HomeContents() {
         <div className="side">
           <div className="orderLinks">
             <br /><br /><br />
-            <Link to='/products' className="OrderButton">ORDER NOW</Link>
+            <Link to='/order' className="OrderButton">ORDER NOW</Link>
             <br /><br /><br /><br /><br />
             <Link to='/about' className="OrderButton">ABOUT US</Link>
             <br /><br /><br /><br /><br />
