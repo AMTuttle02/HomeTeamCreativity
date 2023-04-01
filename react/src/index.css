@@ -354,6 +354,27 @@ input[type="text"], input[type="password"] {
   line-height: 1.5;
 }
 
+.typeOptionRow {
+  display: flex;
+  justify-content: center;
+}
+
+.shirtOptions {
+  width: 200px;
+  height: 200px;
+}
+
+.colorOptions {
+  width: 75px;
+  height: 75px;
+  padding: 5px;
+}
+
+.size {
+  padding: 5px;
+  font-size: x-large;
+}
+
 /* Footer */
 footer {
   padding: 20px;
@@ -431,6 +452,9 @@ footer {
   .orderFullDesign {
     padding: 0px;
     float: right;
+  }
+  .typeOptionRow {
+    flex-direction: column;
   }
 
 }
