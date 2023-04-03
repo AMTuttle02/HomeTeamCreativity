@@ -203,6 +203,11 @@ body {
   height: 125px;
 }
 
+.orderHeader{
+  color: black;
+  text-align: center;
+}
+
 .orderDesign {
   position: absolute;
   top: 100px;

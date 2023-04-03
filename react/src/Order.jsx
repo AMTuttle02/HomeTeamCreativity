@@ -19,6 +19,8 @@ function Order() {
 
   return (
     <div className="Order">
+      <br />
+      <h1 className="orderHeader">Order Summary</h1>
       <div className="row">
         <div className="orderSide">
           <div className="orderFullDesign">
@@ -44,7 +46,7 @@ function Order() {
           </div>
         </div>
         <div className="orderMain">
-          <h3>Price calculated after selections</h3>
+          <h3>Design Your Product With The Options Below</h3>
           <h1>Style: {productType.description}</h1>
           <div className="typeOptionRow">
             <button 
