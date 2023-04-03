@@ -55,10 +55,19 @@ body {
   color:black;
 }
 
+.productTypes {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.productTypes:hover {
+  background-color: #858585;
+}
+
 .cart {
   width: 100px;
   height: 100px;
-
 }
 
 .cartButton {
@@ -178,7 +187,7 @@ body {
   height: 440px;
 }
 
-.orderTshirt {
+.ordertshirt {
   top: 0px;
   left: 0px;
   position: relative;
@@ -192,6 +201,14 @@ body {
   left: 160px;
   width: 125px;
   height: 125px;
+}
+
+.orderDesign {
+  position: absolute;
+  top: 100px;
+  left: 150px;
+  width: 140px;
+  height: 140px;
 }
 
 .fullDesign p {
@@ -360,8 +377,8 @@ input[type="text"], input[type="password"] {
 }
 
 .shirtOptions {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 }
 
 .colorOptions {
