@@ -14,8 +14,8 @@ import blue from "./assets/blue.png";
 import designOne from "./assets/designOne.png";
 
 function Order() {
-  const [productType, setProductType] = useState(tshirt);
-
+  const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt"});
+  const [size, setSize] = useState("Adult Medium");
 
   return (
     <div className="Order">
@@ -23,7 +23,7 @@ function Order() {
         <div className="orderSide">
           <div className="orderFullDesign">
             <img
-            src={productType}
+            src={productType.type}
             alt="Home Team Creativity Logo"
             className="tshirt"
             />
@@ -45,10 +45,10 @@ function Order() {
         </div>
         <div className="orderMain">
           <h3>Price calculated after selections</h3>
-          <h1>Style: Short Sleeve T-Shirt</h1>
+          <h1>Style: {productType.description}</h1>
           <div className="typeOptionRow">
             <button 
-              onClick={() => setProductType(tshirt)}
+              onClick={() => setProductType({type: tshirt, description: "Short Sleeve T-Shirt"})}
               className="productTypes">
             <img
               src={transparentTshirt}
@@ -57,7 +57,7 @@ function Order() {
             />
             </button>
             <button 
-              onClick={() => setProductType(longSleeve)}
+              onClick={() => setProductType({type: longSleeve, description: "Long Sleeve T-Shirt"})}
               className="productTypes">
             <img
               src={transparentLongSleeve}
@@ -66,7 +66,7 @@ function Order() {
             />
             </button>
             <button 
-              onClick={() => setProductType(crewneck)}
+              onClick={() => setProductType({type: crewneck, description: "Crewneck Sweatshirt"})}
               className="productTypes">
             <img
               src={transparentCrewneck}
@@ -75,7 +75,7 @@ function Order() {
             />
             </button>
             <button 
-              onClick={() => setProductType(hoodie)}
+              onClick={() => setProductType({type: hoodie, description: "Hooded Sweatshirt"})}
               className="productTypes">
             <img
               src={transparentHoodie}
@@ -109,21 +109,58 @@ function Order() {
             />
           </div>
           <br />
-          <h1>Size: Adult Medium</h1>
+          <h1>Size: {size}</h1>
           <div className="typeOptionRow">
             <p className="size">YOUTH:</p>
-            <p className="size">Small</p>
-            <p className="size">Medium</p>
-            <p className="size">Large</p>
-            <p className="size">X-Large</p>
+            <button 
+              onClick={() => setSize("Youth Small")}
+              className="productTypes">
+              <p className="size">Small</p>
+            </button>
+            <button 
+              onClick={() => setSize("Youth Medium")}
+              className="productTypes">
+              <p className="size">Medium</p>
+            </button>
+            <button 
+              onClick={() => setSize("Youth Large")}
+              className="productTypes">
+              <p className="size">Large</p>
+            </button>
+            <button 
+              onClick={() => setSize("Youth X-Large")}
+              className="productTypes">
+              <p className="size">X-Large</p>
+            </button>
           </div>
           <div className="typeOptionRow">
             <p className="size">ADULT:</p>
-            <p className="size">Small</p>
-            <p className="size">Medium</p>
-            <p className="size">Large</p>
-            <p className="size">X-Large</p>
-            <p className="size">XX-Large</p>
+            <button 
+              onClick={() => setSize("Adult Small")}
+              className="productTypes">
+              <p className="size">Small</p>
+            </button>
+            <button 
+              onClick={() => setSize("Adult Medium")}
+              className="productTypes">
+              <p className="size">Medium</p>
+            </button>
+            <button 
+              onClick={() => setSize("Adult Large")}
+              className="productTypes">
+              <p className="size">Large</p>
+            </button>
+            <button 
+              onClick={() => setSize("Adult X-Large")}
+              className="productTypes">
+              <p className="size">X-Large</p>
+            </button>
+            <button 
+              onClick={() => setSize("Adult XX-Large")}
+              className="productTypes">
+              <p className="size">XX-Large</p>
+            </button>
+
           </div>
           <br />
           <h1>Quantity: 1</h1>
