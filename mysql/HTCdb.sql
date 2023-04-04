@@ -48,6 +48,8 @@ CREATE TABLE IF NOT EXISTS product_orders (
     order_id int NOT NULL,
     product_id int NOT NULL,
     product_quantity int NOT NULL CHECK (product_quantity > 0),
+    color varchar(2047) DEFAULT 'Black',
+    product_type varchar(2047) DEFAULT 'Short Sleeve T-shirt',
     product_details varchar(2047) DEFAULT 'No customization specified',
     PRIMARY KEY (order_id, product_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
