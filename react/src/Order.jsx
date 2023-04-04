@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import tshirt from "./assets/blackTShirt.png";
 import longSleeve from "./assets/blackLongSleeve.png";
 import crewneck from "./assets/blackCrewneck.png";
@@ -13,11 +14,33 @@ import yellow from "./assets/yellow.png";
 import blue from "./assets/blue.png";
 import designOne from "./assets/designOne.png";
 
+function Added() {
+  return (
+    <div className="addedToCart">
+      <h1>Item Added To Cart</h1>
+      <h1>Go To Cart Here!</h1>
+    </div>
+  );
+}
+
+function Failed() {
+  return (
+    <div className="addedToCart">
+      <h1>Sorry Item Could Not Be Added</h1>
+      <h1>Is this already in there?</h1>
+      <h1>Check Your Cart</h1>
+    </div>
+  );
+}
+
+
 function Order() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt"});
   const [size, setSize] = useState("Adult Medium");
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(20.00);
+  const [added, setAdded] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const addToCart = () => {
     fetch("/api/addToCart.php", {
@@ -35,10 +58,12 @@ function Order() {
     .then((response) => response.json())
     .then((data) => {
       if (data == 1) {
-        console.log(data);
+        setFailed(false);
+        setAdded(true);
       }
       else {
-        console.log("Fail");
+        setAdded(false);
+        setFailed(true);
       }
     })
   };
@@ -213,6 +238,8 @@ function Order() {
           </button>
           <br /><br />
           <h1>Price: ${price * quantity}</h1>
+          { added && <Added /> }
+          { failed && <Failed /> }
           </center>
         </div>
       </div>

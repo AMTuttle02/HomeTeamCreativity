@@ -13,7 +13,7 @@ include 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
 
-  // Check if email address already exists
+  // Insert product to users cart
   $query = $conn->prepare(
                         "INSERT INTO 
                         product_orders (order_id, product_id, product_quantity, color, product_type, size, product_details) 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode(0);
     }
     else {
-        echo json_encode(1);
+      echo json_encode(1);
     }
 }
 
