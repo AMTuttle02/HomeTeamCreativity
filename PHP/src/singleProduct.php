@@ -10,11 +10,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Connect to the MySQL database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "hometeam";
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+include 'conn.php';
+
 $inputs = json_decode(file_get_contents('php://input'), true);
 
 // Check connection
@@ -22,7 +19,7 @@ if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
 
-// Get user logging in
+// Get single products
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $query = $conn->prepare("SELECT * FROM products WHERE product_id = ?;");
   $query->bind_param("s", $inputs["product_id"]);
