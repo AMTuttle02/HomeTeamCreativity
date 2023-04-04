@@ -17,6 +17,7 @@ function Order() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt"});
   const [size, setSize] = useState("Adult Medium");
   const [quantity, setQuantity] = useState(1);
+  const [price, setPrice] = useState(20.00);
 
   return (
     <div className="Order">
@@ -186,7 +187,7 @@ function Order() {
             Add to Cart
           </button>
           <br /><br />
-          <h1>Price: $20.00</h1>
+          <h1>Price: ${price * quantity}</h1>
           </center>
         </div>
       </div>
