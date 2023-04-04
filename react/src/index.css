@@ -216,6 +216,10 @@ body {
   height: 140px;
 }
 
+.quantity {
+  width: 40px;
+}
+
 .fullDesign p {
   color: white;
 }

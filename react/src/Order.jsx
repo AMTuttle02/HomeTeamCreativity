@@ -16,6 +16,7 @@ import designOne from "./assets/designOne.png";
 function Order() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt"});
   const [size, setSize] = useState("Adult Medium");
+  const [quantity, setQuantity] = useState(1);
 
   return (
     <div className="Order">
@@ -165,7 +166,19 @@ function Order() {
 
           </div>
           <br />
-          <h1>Quantity: 1</h1>
+          <h1>Quantity: {" "}
+            <button 
+              className="quantity"
+              onClick={() => setQuantity(quantity - 1)}>
+              -
+            </button>
+            {" "}{quantity}{" "}
+            <button
+              className="quantity"
+              onClick={() => setQuantity(quantity + 1)}>
+              +
+            </button>
+          </h1>
           <center>
           <button>Add to Cart</button>
           <h1>Price: $20.00</h1>
