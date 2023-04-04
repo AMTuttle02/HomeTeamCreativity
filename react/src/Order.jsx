@@ -180,7 +180,12 @@ function Order() {
             </button>
           </h1>
           <center>
-          <button>Add to Cart</button>
+          <br />
+          <button
+            className="addToCart">
+            Add to Cart
+          </button>
+          <br /><br />
           <h1>Price: $20.00</h1>
           </center>
         </div>

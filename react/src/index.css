@@ -340,6 +340,22 @@ input[type="text"], input[type="password"] {
   background-color: #45a049;
 }
 
+.addToCart {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  width: 400px;
+  cursor: pointer;
+  margin-left: 15px;
+  font-size: xx-large;
+}
+
+.addToCart:hover {
+  background-color: #45a049;
+}
+
 .ReturnHome {
   background-color: #4c77af;
   color: #fff;
