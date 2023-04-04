@@ -14,24 +14,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
 
   // Check if email address already exists
-  $stmt = $conn->prepare(
+  $query = $conn->prepare(
                         "INSERT INTO 
-                        product_orders (order_id, product_id, product_quantity, color, product_type, product_details) 
-                        VALUES (?, ?, ?, ?, ?, ?)");
+                        product_orders (order_id, product_id, product_quantity, color, product_type, size, product_details) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?)");
   $query->bind_param(
-                    "ssssss", 
+                    "sssssss",
                     $inputs["order_id"], 
                     $inputs["product_id"], 
                     $inputs["quantity"], 
                     $inputs["color"], 
                     $inputs["product_type"], 
+                    $inputs["size"], 
                     $inputs["product_details"]);
   if (!$query->execute()) {
     // If insertion fails, return error message
-    echo json_encode("ERR: Insertion failed to execute" . $query->error);
+    echo json_encode(0);
     }
     else {
-        echo json_encode("Product added to cart");
+        echo json_encode(1);
     }
 }
 

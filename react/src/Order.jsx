@@ -19,6 +19,30 @@ function Order() {
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(20.00);
 
+  const addToCart = () => {
+    fetch("/api/addToCart.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        order_id: 100, 
+        product_id: 1, 
+        quantity: quantity, 
+        color: "Black",
+        product_type: productType.description,
+        size: size,
+        product_details: "No Custom Details"}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data == 1) {
+        console.log(data);
+      }
+      else {
+        console.log("Fail");
+      }
+    })
+  };
+
   return (
     <div className="Order">
       <br />
@@ -183,7 +207,8 @@ function Order() {
           <center>
           <br />
           <button
-            className="addToCart">
+            className="addToCart"
+            onClick={() => addToCart()}>
             Add to Cart
           </button>
           <br /><br />
