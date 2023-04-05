@@ -176,7 +176,7 @@ body {
   position: relative;
   top: 0px;
   left: 0px;
-  float:right;
+  float: right;
 }
 
 .tshirt {
@@ -481,9 +481,17 @@ footer {
     width: 400px;
     height: 400px;
   }
+
+  .orderDesign {
+    position: absolute;
+    top: 100px;
+    left: 135px;
+    width: 140px;
+    height: 140px;
+  }
+
   .orderFullDesign {
     float: left;
-    padding: 10px;
   }
   .design {
     position: absolute;
