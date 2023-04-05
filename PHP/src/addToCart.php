@@ -13,6 +13,30 @@ include 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
 
+  $orderId = 0;
+  // Insert product to users cart
+  $query = $conn->prepare(
+                        "SELECT order_id
+                        FROM orders
+                        WHERE user_id = ? AND is_active = 1");
+  $query->bind_param(
+                    "s",
+                    $_SESSION["userId"]);
+  if (!$query->execute()) {
+    die("Query failed: " . $stmt->error);
+  }
+
+  $result = $query->get_result();
+
+  if (!$result) {
+    die("Result set failed: " . $conn->error);
+  }
+
+  if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $orderId = $row['order_id'];
+  }
+
   // Insert product to users cart
   $query = $conn->prepare(
                         "INSERT INTO 
@@ -20,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         VALUES (?, ?, ?, ?, ?, ?, ?)");
   $query->bind_param(
                     "sssssss",
-                    $inputs["order_id"], 
+                    $orderId, 
                     $inputs["product_id"], 
                     $inputs["quantity"], 
                     $inputs["color"], 
@@ -30,10 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (!$query->execute()) {
     // If insertion fails, return error message
     echo json_encode(0);
-    }
-    else {
-      echo json_encode(1);
-    }
+  }
+  else {
+    echo json_encode(1);
+  }
 }
 
 mysqli_close($conn);

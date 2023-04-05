@@ -164,7 +164,7 @@ function Order() {
                   src={black}
                   alt="Home Team Creativity Logo"
                   className="colorOptions"
-              />
+              /> {/*
               <img
                   src={red}
                   alt="Home Team Creativity Logo"
@@ -179,7 +179,7 @@ function Order() {
                   src={blue}
                   alt="Home Team Creativity Logo"
                   className="colorOptions"
-              />
+              />*/}
             </div>
             <br />
             <h1>Size: {size}</h1>
