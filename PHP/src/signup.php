@@ -73,6 +73,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin'] = $row['admin'];
         $_SESSION['userId'] = $row['user_id'];
     
+        $orderId = 0;
+        // Insert product to users cart
+        $query = $conn->prepare(
+                              "INSERT INTO orders (user_id, total_cost)
+                              VALUES (?, 0);");
+        $query->bind_param(
+                          "s",
+                          $_SESSION["userId"]);
+        if (!$query->execute()) {
+          die("Query failed: " . $stmt->error);
+        }
+
         echo(json_encode($_SESSION));
       } else {
         // If the email and password do not match, display an error message
