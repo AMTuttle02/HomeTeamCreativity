@@ -53,6 +53,7 @@ function Order() {
         color: "Black",
         product_type: productType.description,
         size: size,
+        price: design.price,
         product_details: "No Custom Details"}),
     })
     .then((response) => response.json())

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $orderId = 0;
   // Insert product to users cart
   $query = $conn->prepare(
-                        "SELECT order_id
+                        "SELECT *
                         FROM orders
                         WHERE user_id = ? AND is_active = 1");
   $query->bind_param(
@@ -35,6 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $orderId = $row['order_id'];
+    $totalCost = $row['total_cost'];
+  }
+
+  $productCost = $inputs['price'] * $inputs['quantity'];
+  $totalCost = $totalCost + $productCost;
+
+  $query = $conn->prepare(
+                        "UPDATE orders 
+                        SET total_cost = $totalCost 
+                        WHERE orders.order_id = $orderId");
+  if (!$query->execute()) {
+    // If insertion fails, return error message
+    die(json_encode(0));
   }
 
   // Insert product to users cart
