@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import tshirt from "./assets/blackTShirt.png";
 import longSleeve from "./assets/blackLongSleeve.png";
 import crewneck from "./assets/blackCrewneck.png";
@@ -38,9 +37,9 @@ function Order() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt"});
   const [size, setSize] = useState("Adult Medium");
   const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState(20.00);
   const [added, setAdded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [design, setDesign] = useState({id: 1, filename: "designOne.png", productName: "Be Like Friends", price: "16.00"});
 
   const addToCart = () => {
     fetch("/api/addToCart.php", {
@@ -48,7 +47,7 @@ function Order() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         order_id: 100, 
-        product_id: 1, 
+        product_id: design.id, 
         quantity: quantity, 
         color: "Black",
         product_type: productType.description,
@@ -68,6 +67,17 @@ function Order() {
     })
   };
 
+  useEffect(() => {
+    fetch("/api/singleProduct.php")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          console.log(data.product_id);
+          setDesign({id: data.product_id, filename: data.filename, productName: data.product_name, price: data.price});
+        }
+      });
+  }, []);
+
   return (
     <div className="Order">
       <br />
@@ -81,12 +91,12 @@ function Order() {
             className="tshirt"
             />
             <img
-              src={designOne}
-              alt="Test"
+              src={"api/images/" + design.filename}
+              alt={design.productName}
               className="orderDesign"
             />
             <br /><br />
-            <h3>Product Name</h3>
+            <h3>{design.productName}</h3>
             <br />
             <p>Details:</p>
             <p>100% Cotton</p>
@@ -237,7 +247,7 @@ function Order() {
             Add to Cart
           </button>
           <br /><br />
-          <h1>Price: ${price * quantity}</h1>
+          <h1>Price: ${design.price * quantity}</h1>
           { added && <Added /> }
           { failed && <Failed /> }
           </center>
