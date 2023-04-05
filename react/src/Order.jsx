@@ -12,7 +12,6 @@ import black from "./assets/black.png";
 import red from "./assets/red.png";
 import yellow from "./assets/yellow.png";
 import blue from "./assets/blue.png";
-import designOne from "./assets/designOne.png";
 
 function Added() {
   return (
@@ -41,7 +40,7 @@ function Order() {
   const [added, setAdded] = useState(false);
   const [failed, setFailed] = useState(false);
   const [design, setDesign] = useState({id: 1, filename: "designOne.png", productName: "Be Like Friends", price: "16.00"});
-  const [firstName, setFirstName] = useState("");
+  const [userId, setUserId] = useState("");
 
   const addToCart = () => {
     fetch("/api/addToCart.php", {
@@ -84,7 +83,7 @@ function Order() {
     fetch("/api/session.php")
       .then((response) => response.json())
       .then((data) => {
-        setFirstName(data.first_name);
+        setUserId(data.userId);
       });
   }, []);
 
@@ -116,7 +115,7 @@ function Order() {
             <a href=''>Return Policy</a>
           </div>
         </div>
-        {firstName ?
+        {userId ?
           <div className="orderMain">
             <h3>Design Your Product With The Options Below</h3>
             <h1>Style: {productType.description}</h1>
@@ -271,7 +270,6 @@ function Order() {
             </Link>
           </div>
         }
-          
       </div>
     </div>
   );
