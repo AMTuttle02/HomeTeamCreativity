@@ -361,6 +361,7 @@ input[type="text"], input[type="password"] {
   cursor: pointer;
   margin-left: 15px;
   font-size: xx-large;
+  text-decoration: none;
 }
 
 .addToCart:hover {
