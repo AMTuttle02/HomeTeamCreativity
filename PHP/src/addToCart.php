@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $totalCost = $row['total_cost'];
   }
 
-  $productCost = $inputs['price'] * $inputs['quantity'];
+  $productCost = $inputs['price'];
   $totalCost = $totalCost + $productCost;
 
   $query = $conn->prepare(
