@@ -26,34 +26,25 @@ function Failed() {
   return (
     <div className="addedToCart">
       <h1>Sorry Item Could Not Be Added</h1>
-      <h1>Is this already in there?</h1>
-      <h1>Check Your Cart</h1>
+      <h1>Only One Custom Design Item Per Order</h1>
+      <h1>Review Your Cart Here!</h1>
     </div>
   );
 }
 
-function Order() {
-  useEffect(() => {
-    retrieveProduct();
-  }, []);
-
-  function retrieveProduct() {
-    fetch("/api/singleProduct.php")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          console.log(data.product_id);
-          setDesign({id: data.product_id, filename: data.filename, productName: data.product_name, price: data.price});
-        }
-      });
-  }
+function CustomOrder() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
   const [size, setSize] = useState({description: "Adult Medium", addedCost: 0});
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [design, setDesign] = useState({id: 1, filename: "designOne.png", productName: "Be Like Friends", price: "16.00"});
+  const [design, setDesign] = useState({id: 0, filename: "customDesign.png", productName: "Custom Design", price: "20.00"});
   const [userId, setUserId] = useState("");
+  const [customDetails, setCustomDetails] = useState("");
+
+  function handleOrderDetails(event) {
+    setCustomDetails(event.target.value);
+  }
 
   const addToCart = () => {
     fetch("/api/addToCart.php", {
@@ -67,7 +58,7 @@ function Order() {
         product_type: productType.description,
         size: size.description,
         price: ((design.price * 1) + productType.addedCost + size.addedCost) * quantity,
-        product_details: "No Custom Details"}),
+        product_details: customDetails}),
     })
     .then((response) => response.json())
     .then((data) => {
@@ -116,12 +107,20 @@ function Order() {
             <p>Regular Fit</p>
             <p>Wash Inside Out if possible</p>
             <a href=''>Return Policy</a>
+            <br /><br /><br />
             </div>
         </div>
         {userId ?
           <div className="orderMain">
             <h3>Design Your Product With The Options Below</h3>
-            <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
+            <h3>Click <Link to="/order" className="customDesignButton">Here</Link> To Order a Previously Created Design</h3>
+            <h1>Type Your Desired Design Description Below</h1>
+            <div className="customOrderBox">
+              <textarea 
+                onChange={handleOrderDetails}
+                value={customDetails}
+              />
+            </div>
             <h1>Style: {productType.description}</h1>
             <div className="typeOptionRow">
               <button 
@@ -278,4 +277,4 @@ function Order() {
     </div>
   );
 }
-export default Order;
+export default CustomOrder;

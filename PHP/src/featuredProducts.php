@@ -7,7 +7,7 @@ include 'conn.php';
 
 // Get all users
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  $sql = "SELECT * FROM products WHERE product_id < 3";
+  $sql = "SELECT * FROM products WHERE product_id < 3 AND product_id > 0";
   $result = mysqli_query($conn, $sql);
   $users = [];
   while ($row = mysqli_fetch_assoc($result)) {

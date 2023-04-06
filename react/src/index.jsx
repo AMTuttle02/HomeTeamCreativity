@@ -15,6 +15,7 @@ import UploadSuccess from "./UploadSuccess";
 import SearchResults from "./SearchResults";
 import NoResults from "./NoResults";
 import Order from "./Order";
+import CustomOrder from "./CustomOrder";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="searchResults" element={<SearchResults />} />
           <Route path="noResults" element={<NoResults />} />
           <Route path="order" element={<Order />} />
+          <Route path="customOrder" element={<CustomOrder />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
