@@ -111,7 +111,7 @@ function Order() {
             <p>Details:</p>
             <p>100% Cotton</p>
             <p>True To Size</p>
-            <p>Regualr Fit</p>
+            <p>Regular Fit</p>
             <p>Wash Inside Out if possible</p>
             <a href=''>Return Policy</a>
           </div>
