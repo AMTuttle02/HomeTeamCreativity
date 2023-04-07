@@ -76,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orderId = 0;
         // Insert product to users cart
         $query = $conn->prepare(
-                              "INSERT INTO orders (user_id, total_cost)
-                              VALUES (?, 0);");
+                              "INSERT INTO orders (user_id, total_cost, is_cart)
+                              VALUES (?, 0, 1);");
         $query->bind_param(
                           "s",
                           $_SESSION["userId"]);
