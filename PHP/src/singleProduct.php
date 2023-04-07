@@ -9,6 +9,8 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header("Access-Control-Allow-Headers: Content-Type");
 
+session_start();
+
 // Connect to the MySQL database
 include 'conn.php';
 
@@ -20,16 +22,22 @@ if (!$conn) {
 }
 
 // Get single products
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_SESSION['product_id'])) {
   $query = $conn->prepare("SELECT * FROM products WHERE product_id = ?;");
-  $query->bind_param("s", $inputs["product_id"]);
-  $result = mysqli_query($conn, $query);
-  $productData = [];
-  while ($row = mysqli_fetch_assoc($result)) {
-    $productData[] = $row;
+  $query->bind_param("s", $_SESSION["product_id"]);
+  if (!$query->execute()) {
+    // If insertion fails, return error message
+    echo json_encode("ERR: Insertion failed to execute" . $query->error);
   }
-  
-  echo json_encode($productData);
+  else {
+    $result = $query->get_result();
+    $productData = mysqli_fetch_assoc($result);
+    
+    echo json_encode($productData);
+  }
+}
+else {
+  echo json_encode(0);
 }
 
 mysqli_close($conn);

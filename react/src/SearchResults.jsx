@@ -1,10 +1,28 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import tshirt from "./assets/blackTShirt.png";
 
 function SearchResults() {
   const { state } = useLocation();
   const { result } = state;
+  const navigate = useNavigate();
+
+  const orderProduct = (productId) => {
+    const data = { id: productId };
+    fetch("/api/setCurrentProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          navigate("/order");
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
   if (result) {
   return (
         <div className="Products">
@@ -21,18 +39,20 @@ function SearchResults() {
                 <div key={product.filename}>
                     {/* You can use this div for order page and cart page */}
                     <div className="fullDesign">
-                    <img
-                        src={tshirt}
-                        alt="Home Team Creativity Logo"
-                        className="tshirt"
-                    />
-                    <img
-                        src={"api/images/" + product.filename}
-                        alt={product.filename}
-                        className="design"
-                    />
-                    <p>{product.product_name}</p>
-                    <p>{"$" + product.price}</p>
+                        <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
+                        <img
+                            src={tshirt}
+                            alt="Home Team Creativity Logo"
+                            className="tshirt"
+                        />
+                        <img
+                            src={"api/images/" + product.filename}
+                            alt={product.filename}
+                            className="design"
+                        />
+                        <p>{product.product_name}</p>
+                        <p>{"$" + product.price}</p>
+                        </button>
                     </div>
                     {/* To here */}
                 </div>

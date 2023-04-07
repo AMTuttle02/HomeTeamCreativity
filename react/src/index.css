@@ -55,10 +55,19 @@ body {
   color:black;
 }
 
+.productTypes {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.productTypes:hover {
+  background-color: #858585;
+}
+
 .cart {
   width: 100px;
   height: 100px;
-
 }
 
 .cartButton {
@@ -90,11 +99,33 @@ body {
   flex: 50%;
 }
 
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.orderSide {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+  padding-top: 10px;
+  text-align: center;
+}
+
+.orderSide p {
+  line-height: 0;
+}
+
 /* Main column */
 .main {   
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
 }
+
+/* Main column */
+.orderMain {   
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+  padding-top: 20px;
+  text-align: center;
+}
+
 
 .logo{
   width: 160px;
@@ -141,6 +172,13 @@ body {
   float: left;
 }
 
+.orderFullDesign {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  float: right;
+}
+
 .tshirt {
   top: 0px;
   left: 0px;
@@ -149,12 +187,37 @@ body {
   height: 440px;
 }
 
+.ordertshirt {
+  top: 0px;
+  left: 0px;
+  position: relative;
+  width: 500px;
+  height: 500px;
+}
+
 .design {
   position: absolute;
   top: 100px;
   left: 160px;
   width: 125px;
   height: 125px;
+}
+
+.orderHeader{
+  color: black;
+  text-align: center;
+}
+
+.orderDesign {
+  position: absolute;
+  top: 100px;
+  left: 150px;
+  width: 140px;
+  height: 140px;
+}
+
+.quantity {
+  width: 40px;
 }
 
 .fullDesign p {
@@ -262,6 +325,17 @@ input[type="text"], input[type="password"] {
 
 }
 
+.orderProducts {
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+}
+
+.orderProducts:hover {
+  background-color: #686868;
+  border: none;
+}
+
 .signUpButton {
   background-color: #4c77af;
   color: #fff;
@@ -274,6 +348,23 @@ input[type="text"], input[type="password"] {
 }
 
 .signUpButton:hover {
+  background-color: #45a049;
+}
+
+.addToCart {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  width: 400px;
+  cursor: pointer;
+  margin-left: 15px;
+  font-size: xx-large;
+  text-decoration: none;
+}
+
+.addToCart:hover {
   background-color: #45a049;
 }
 
@@ -315,6 +406,43 @@ input[type="text"], input[type="password"] {
 .AboutParagraph h3 {
   font-size: xx-large;
   line-height: 1.5;
+}
+
+.typeOptionRow {
+  display: flex;
+  justify-content: center;
+}
+
+.shirtOptions {
+  width: 150px;
+  height: 150px;
+}
+
+.colorOptions {
+  width: 75px;
+  height: 75px;
+  padding: 5px;
+}
+
+.size {
+  padding: 5px;
+  font-size: x-large;
+}
+
+.customDesignButton {
+  color: darkblue;
+}
+
+.customOrderBox textarea {
+  width: 70%;
+  height: 100px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
 }
 
 /* Footer */
@@ -363,6 +491,25 @@ footer {
     width: 400px;
     height: 400px;
   }
+  .orderTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 400px;
+    height: 400px;
+  }
+
+  .orderDesign {
+    position: absolute;
+    top: 100px;
+    left: 135px;
+    width: 140px;
+    height: 140px;
+  }
+
+  .orderFullDesign {
+    float: left;
+  }
   .design {
     position: absolute;
     top: 100px;
@@ -376,6 +523,16 @@ footer {
   .orderLinks {
     display: block;
     width: 450px;
+  }
+  .orderMain {
+    padding: 5%;
+  }
+  .orderFullDesign {
+    padding: 0px;
+    float: right;
+  }
+  .typeOptionRow {
+    flex-direction: column;
   }
 
 }
