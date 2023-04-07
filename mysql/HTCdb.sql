@@ -29,12 +29,19 @@ CREATE TABLE IF NOT EXISTS products (
     PRIMARY KEY (product_id)
 );
 
+/* Each user should have exactly one cart. The cart should be created
+as an empty order as soon as an account is created */
+/* When an order is placed, the elements  of the user's cart should be
+copied into a new order, and then erased from the cart. All product_order
+entries with order_id matching the user's cart should have their order_id
+updated to match that of the newly-created order */
 DROP TABLE IF EXISTS orders;
 CREATE TABLE IF NOT EXISTS orders (
     order_id int AUTO_INCREMENT,
     user_id int NOT NULL,
     total_cost decimal(10,2) NOT NULL,
     is_active BOOLEAN DEFAULT 1,
+    is_cart BOOLEAN DEFAULT 0,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (order_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
