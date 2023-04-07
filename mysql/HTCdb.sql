@@ -4,7 +4,12 @@
 CREATE DATABASE IF NOT EXISTS hometeam;
 USE hometeam;
 
+/* Drop old versions of tables in reverse order of dependency */
+DROP TABLE IF EXISTS product_orders;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS users;
+
 CREATE TABLE IF NOT EXISTS users (
     user_id int AUTO_INCREMENT,
     email varchar(255) UNIQUE NOT NULL CHECK (email LIKE "_%@_%._%"),
@@ -17,7 +22,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 /* tag_list should have a csv format */
 /* TODO: Change tag_list type to SET() once a list of tags has been made */
-DROP TABLE IF EXISTS products;
 CREATE TABLE IF NOT EXISTS products (
     product_id int AUTO_INCREMENT,
     product_name varchar(255) NOT NULL,
@@ -35,7 +39,6 @@ as an empty order as soon as an account is created */
 copied into a new order, and then erased from the cart. All product_order
 entries with order_id matching the user's cart should have their order_id
 updated to match that of the newly-created order */
-DROP TABLE IF EXISTS orders;
 CREATE TABLE IF NOT EXISTS orders (
     order_id int AUTO_INCREMENT,
     user_id int NOT NULL,
@@ -50,7 +53,6 @@ CREATE TABLE IF NOT EXISTS orders (
 /* Each order will have as many associated product_orders as individual products
 in the users cart at the time of purchase */
 /* product_details is to store customization details */
-DROP TABLE IF EXISTS product_orders;
 CREATE TABLE IF NOT EXISTS product_orders (
     order_id int NOT NULL,
     product_id int NOT NULL,
@@ -94,8 +96,8 @@ INSERT INTO orders (user_id, total_cost, is_cart) VALUES
 (5, 0, 1);
 
 INSERT INTO product_orders (order_id, product_id, product_quantity, color) VALUES
-(1, 1, 1, Black),
-(1, 2, 1, Black),
-(2, 1, 2, Black),
-(2, 1, 1, Green),
-(2, 3, 1, Black);
+(1, 1, 1, "Black"),
+(1, 2, 1, "Black"),
+(2, 1, 2, "Black"),
+(2, 1, 1, "Green"),
+(2, 3, 1, "Black");
