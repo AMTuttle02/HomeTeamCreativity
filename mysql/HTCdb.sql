@@ -84,9 +84,14 @@ INSERT INTO products (product_name, price, filename) VALUES
 ("Me? Sarcastic? Never", 16.00, "me sarcastic never design.png");
 
 /* Example orders are a full cart and completed order for the admin account */
+/* Also adds dummy carts for all dummy users */
 INSERT INTO orders (user_id, total_cost, is_cart) VALUES
 (1, 34.00, 1),
-(1, 64.00, 0);
+(1, 64.00, 0),
+(2, 0, 1),
+(3, 0, 1),
+(4, 0, 1),
+(5, 0, 1);
 
 INSERT INTO product_orders (order_id, product_id, product_quantity, color) VALUES
 (1, 1, 1, Black),
