@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $query = $conn->prepare(
                         "SELECT *
                         FROM orders
-                        WHERE user_id = ? AND is_active = 1");
+                        WHERE user_id = ? AND is_active = 1 AND is_cart = 1");
   $query->bind_param(
                     "s",
                     $_SESSION["userId"]);
