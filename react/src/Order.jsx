@@ -26,8 +26,8 @@ function Failed() {
   return (
     <div className="addedToCart">
       <h1>Sorry Item Could Not Be Added</h1>
-      <h1>Is this already in there?</h1>
       <h1>Check Your Cart</h1>
+      <h1>Is this already in there?</h1>
     </div>
   );
 }
@@ -120,8 +120,9 @@ function Order() {
         </div>
         {userId ?
           <div className="orderMain">
-            <h3>Design Your Product With The Options Below</h3>
+            <h3>Style Your Product With The Options Below</h3>
             <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
+            <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
             <h1>Style: {productType.description}</h1>
             <div className="typeOptionRow">
               <button 
@@ -190,22 +191,22 @@ function Order() {
             <div className="typeOptionRow">
               <p className="size">YOUTH:</p>
               <button 
-                onClick={() => setSize({description: "Youth Small", addedCost: 0})}
+                onClick={() => setSize({description: "Youth Small", addedCost: -2})}
                 className="productTypes">
                 <p className="size">Small</p>
               </button>
               <button 
-                onClick={() => setSize({description: "Youth Medium", addedCost: 0})}
+                onClick={() => setSize({description: "Youth Medium", addedCost: -2})}
                 className="productTypes">
                 <p className="size">Medium</p>
               </button>
               <button 
-                onClick={() => setSize({description: "Youth Large", addedCost: 0})}
+                onClick={() => setSize({description: "Youth Large", addedCost: -2})}
                 className="productTypes">
                 <p className="size">Large</p>
               </button>
               <button 
-                onClick={() => setSize({description: "Youth X-Large", addedCost: 0})}
+                onClick={() => setSize({description: "Youth X-Large", addedCost: -2})}
                 className="productTypes">
                 <p className="size">X-Large</p>
               </button>
