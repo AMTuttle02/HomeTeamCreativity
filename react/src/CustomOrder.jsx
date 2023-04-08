@@ -38,7 +38,7 @@ function CustomOrder() {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [design, setDesign] = useState({id: 0, filename: "customDesign.png", productName: "Custom Design", price: "20.00"});
+  const [design, setDesign] = useState({id: 0, filename: "customDesign.png", productName: "Custom Design", price: "16.00"});
   const [userId, setUserId] = useState("");
   const [customDetails, setCustomDetails] = useState("");
 
@@ -112,9 +112,11 @@ function CustomOrder() {
         </div>
         {userId ?
           <div className="orderMain">
-            <h3>Design Your Product With The Options Below</h3>
+            <h3>Style Your Product With The Options Below</h3>
             <h3>Click <Link to="/order" className="customDesignButton">Here</Link> To Order a Previously Created Design</h3>
+            <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}+</h1>
             <h1>Type Your Desired Design Description Below</h1>
+            <h3>Please Be As Descriptive As Possible</h3>
             <div className="customOrderBox">
               <textarea 
                 onChange={handleOrderDetails}
@@ -259,7 +261,7 @@ function CustomOrder() {
                 Add to Cart
               </button>
               <br /><br />
-              <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
+              <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}+</h1>
               { added && <Added /> }
               { failed && <Failed /> }
             </center>
