@@ -15,6 +15,8 @@ function Cart() {
           <img src={cart} alt="Cart Image" className="cart"/>
         </center>
         <div className="CartPage"></div>
+         <div className="row">
+        <div className="side">
         <div className="fullDesign">
           <img
             src={tshirt}
@@ -27,11 +29,13 @@ function Cart() {
             alt={product.filename}
             className="design"
           />
-          <p>{product.product_name}</p>
+          <p><b>{product.product_name}</b></p>
           <div className="CartPage"> </div>
           <p>{"Qty:"}</p>
           <p>{"Total: $" + product.price}</p>
           */}
+        </div>
+        </div>
         </div>
         <div className="CartPage"></div>
         <div className="userCheckout"> 
