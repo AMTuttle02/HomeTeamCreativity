@@ -17,14 +17,20 @@ function Cart() {
           </p>
         
         </div>
+        </div>
+        <div className = "CartHeader">
         <img src={cart} alt="Cart Image" className="cart"/>
-        
+        </div>
+        <div className = "CartHeader">
           <div className="CartFont">
           <h1>My Cart</h1>
           </div> 
+           </div>
+        <div className = "CartHeader">
          <img src={cart} alt="Cart Image" className="cart"/>
-          
          </div>
+          
+         
         <div className="CartPage"></div>
          <div className="row">
         <div className="side">
