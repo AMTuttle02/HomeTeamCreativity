@@ -12,6 +12,7 @@ function Cart() {
           <h1>My Cart</h1>
           <img src={cart} alt="Cart Image" className="cart"/>
         </center>
+        <div className="CartPage"></div>
         <div className="fullDesign">
           <img
             src={tshirt}
@@ -25,21 +26,19 @@ function Cart() {
             className="design"
           />
           <p>{product.product_name}</p>
-          <p>{"$" + product.price}</p>
+          <div className="CartPage"> </div>
+          <p>{"Qty:"}</p>
+          <p>{"Total: $" + product.price}</p>
           */}
         </div>
+        <div className="CartPage"></div>
         <div className="userCheckout"> 
           <p>
-            <Link to="/payment" className="checkoutButton">
+            <Link to="/payment" className="CheckoutButton">
               Check Out
             </Link>
           </p>
         </div>
-      </div>
-    );
-
-}
-export default Cart;
       </div>
     );
 
