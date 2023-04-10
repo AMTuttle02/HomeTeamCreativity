@@ -18,7 +18,7 @@ function Cart() {
         
         </div>
         <div className="ItemCount">
-        <h2> item(s)</h2>
+        <h1> item(s)</h1>
         </div>
         
        <center>
