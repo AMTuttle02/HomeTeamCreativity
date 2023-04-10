@@ -8,13 +8,12 @@ function Cart() {
       <div className="mycart">
         <br/>
         <div className="RetunShopping">
-        <div className="CartFont">
         <p>
             <Link to="/products">
-             <- Continue Shopping
+              Continue Shopping
             </Link>
           </p>
-        </div>
+        
         </div>
         <img src={cart} alt="Cart Image" className="cart"/>
         <center>
