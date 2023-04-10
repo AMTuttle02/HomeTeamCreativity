@@ -22,7 +22,7 @@ function Cart() {
           </div> 
         </center>
          <img src={cart} alt="Cart Image" className="cart"/>
-        div className="CartPage"></div>
+        <div className="CartPage"></div>
          <div className="row">
         <div className="side">
         <div className="fullDesign">
