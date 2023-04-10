@@ -17,8 +17,6 @@ function Cart() {
             src={tshirt}
             alt="Home Team Creativity Logo"
             className="tshirt"
-          />
-          {/*
           <img
             src={"api/images/" + product.filename}
             alt={product.filename}
@@ -27,7 +25,7 @@ function Cart() {
           <p>{product.product_name}</p>
 
           <p>{"$" + product.price}</p>
-          */}
+          
         </div>
         <div className="userCheckout"> 
           <p>
