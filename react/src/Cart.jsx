@@ -39,16 +39,7 @@ function Cart() {
             alt="Home Team Creativity Logo"
             className="tshirt"
           />
-          <img
-            src={"api/images/" + product.filename}
-            alt={product.filename}
-            className="design"
-          />
-          /*<p><b>{product.product_name}</b></p>
-          <div className="CartPage"> </div>
-          <p>{"Qty:"}</p>
-          <p>{"Total: $" + product.price}</p>*/
-     
+        
         </div>
         </div>
         </div>
