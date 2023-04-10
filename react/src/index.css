@@ -425,3 +425,7 @@ footer {
   text-align: inline;
   text-align: right;
 }
+
+.CheckoutButtonPlacement{
+  flaot: right;
+}
