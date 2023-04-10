@@ -49,6 +49,7 @@ function Cart() {
         <div className="userCheckout"> 
             <h1> Total: </h1>
             <div className="CartPage"></div>
+            <br/>
           <p>
             <Link to="/payment" className="CheckoutButton">
               Check Out
