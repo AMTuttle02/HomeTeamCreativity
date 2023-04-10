@@ -43,6 +43,17 @@ function Cart() {
         </div>
         </div>
         </div>
+    
+        <center>
+         <div className="ItemDescip">
+            <h2> <b> Product Name </b></h2> 
+            <h2> Style: </h2>
+            <h2> Size: </h2>
+            <h2> Color: </h2>
+         </div>       
+                
+        </center>
+    
         <div className="CartPage"></div>
         <br/>
         <div className = "CheckoutButtonPlacement">
