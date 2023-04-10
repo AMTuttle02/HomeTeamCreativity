@@ -44,10 +44,10 @@ function Cart() {
             alt={product.filename}
             className="design"
           />
-          <p><b>{product.product_name}</b></p>
+          /*<p><b>{product.product_name}</b></p>
           <div className="CartPage"> </div>
           <p>{"Qty:"}</p>
-          <p>{"Total: $" + product.price}</p>
+          <p>{"Total: $" + product.price}</p>*/
      
         </div>
         </div>
