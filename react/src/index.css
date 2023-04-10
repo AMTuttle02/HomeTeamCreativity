@@ -416,3 +416,9 @@ footer {
 .CartHeader{
   display:inline;
 }
+
+
+.ItemCount{
+  color:white;
+  text-align: right;
+}
