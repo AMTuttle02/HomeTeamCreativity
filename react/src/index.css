@@ -33,6 +33,11 @@ body {
   float: right;
 }
 
+
+
+
+
+
 .navbar a:hover {
   color: black;
   background-color: #ddd;
@@ -378,4 +383,22 @@ footer {
     width: 450px;
   }
 
+}
+
+
+.CartPage{
+  border-bottom: 5px solid white;
+}
+
+
+.CheckoutButton {
+  background-color: #B7C9E2;
+  color: black;
+  padding: 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: xx-large;
+  width: 20%;
 }
