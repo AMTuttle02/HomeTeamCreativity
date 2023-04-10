@@ -7,7 +7,7 @@ function Cart() {
     return (
       <div className="mycart">
         <br/>
-        <div className = "CartHeader">
+        
         <div className="RetunShopping">
       
         <p>
@@ -17,19 +17,19 @@ function Cart() {
           </p>
         
         </div>
-        </div>
-        <div className = "CartHeader">
+       
+       <center>
         <img src={cart} alt="Cart Image" className="cart"/>
-        </div>
-        <div className = "CartHeader">
           <div className="CartFont">
           <h1>My Cart</h1>
           </div> 
-           </div>
-        <div className = "CartHeader">
          <img src={cart} alt="Cart Image" className="cart"/>
-         </div>
-          
+         </center>
+
+        <div className="ItemCount">
+        <h2> item(s)</h2>
+        </div>
+        
          
         <div className="CartPage"></div>
          <div className="row">
