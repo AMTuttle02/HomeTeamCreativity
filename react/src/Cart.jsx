@@ -9,7 +9,9 @@ function Cart() {
         <br/>
         <center>
           <img src={cart} alt="Cart Image" className="cart"/>
+          <div className="CartFont">
           <h1>My Cart</h1>
+          </div>
           <img src={cart} alt="Cart Image" className="cart"/>
         </center>
         <div className="CartPage"></div>
