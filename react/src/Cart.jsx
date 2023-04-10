@@ -11,19 +11,19 @@ function Cart() {
         <div className="CartFont">
         <p>
             <Link to="/products">
-              Continue Shopping
+             <- Continue Shopping
             </Link>
           </p>
         </div>
         </div>
+        <img src={cart} alt="Cart Image" className="cart"/>
         <center>
-          <img src={cart} alt="Cart Image" className="cart"/>
           <div className="CartFont">
           <h1>My Cart</h1>
-          </div>
-          <img src={cart} alt="Cart Image" className="cart"/>
+          </div> 
         </center>
-        <div className="CartPage"></div>
+         <img src={cart} alt="Cart Image" className="cart"/>
+        div className="CartPage"></div>
          <div className="row">
         <div className="side">
         <div className="fullDesign">
@@ -47,6 +47,7 @@ function Cart() {
         </div>
         </div>
         <div className="CartPage"></div>
+        <br/>
         <div className="userCheckout"> 
           <p>
             <Link to="/payment" className="CheckoutButton">
