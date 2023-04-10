@@ -15,6 +15,7 @@ function Cart() {
           </p>
         
         </div>
+        <div className = "CartHeader">
         <img src={cart} alt="Cart Image" className="cart"/>
         <center>
           <div className="CartFont">
@@ -22,6 +23,7 @@ function Cart() {
           </div> 
         </center>
          <img src={cart} alt="Cart Image" className="cart"/>
+         </div>
         <div className="CartPage"></div>
          <div className="row">
         <div className="side">
