@@ -55,7 +55,7 @@ function Cart() {
         </div>
         <div className="CartPage"></div>
         <br/>
-        <div className = "CheckoutButtonPlacement"
+        <div className = "CheckoutButtonPlacement">
         <div className="userCheckout"> 
           <p>
             <Link to="/payment" className="CheckoutButton">
