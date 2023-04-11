@@ -104,6 +104,33 @@ body {
   flex: 50%;
 }
 
+.cartSide {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.cartMain {   
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+  color: white;
+}
+
+.myCartSide {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+}
+
+.myCartMain {   
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+  color: white;
+  padding-top: 20px;
+}
+
 /* Create two unequal columns that sits next to each other */
 /* Sidebar/left column */
 .orderSide {
@@ -542,7 +569,6 @@ footer {
 
 }
 
-
 .CartPage{
   border-bottom: 5px solid white;
 }
@@ -561,15 +587,12 @@ footer {
   text-align: right;
 }
 
-.CartFont{
-  color: white;
-}
-
-.RetunShopping{
+.ReturnShopping{
   color:white;
   font-size: 40px;
   text-align: inline;
-  text-align: left;
+  text-align: center;
+  text-decoration: none;
 }
 
 .CartHeader{
@@ -580,9 +603,9 @@ footer {
 .ItemCount{
   color:white;
   text-align: inline;
-  text-align: right;
+  text-align: center;
 }
 
 .CheckoutButtonPlacement{
-  flaot: right;
+  float: right;
 }

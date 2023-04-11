@@ -7,31 +7,32 @@ function Cart() {
     return (
       <div className="mycart">
         <br/>
-        
-        <div className="RetunShopping">
-      
-        <p>
-            <Link to="/products">
+        <div className="row">
+          <div className="cartSide">
+            <Link to="/products" className="ReturnShopping">
               Continue Shopping
             </Link>
-          </p>
-        
+          </div>
+          <div className="cartMain">
+            <div className="row">
+              <div className="myCartSide">
+                <img src={cart} alt="Cart Image" className="cart"/>
+              </div>
+              <div className="myCartMain">
+                <h1>My Cart</h1>
+              </div> 
+              <div className="myCartSide">
+                <img src={cart} alt="Cart Image" className="cart"/>
+              </div>
+            </div>
+          </div>
+          <div className="cartSide">
+            <h1 className="ItemCount"> item(s)</h1>
+          </div>
         </div>
-        <div className="ItemCount">
-        <h1> item(s)</h1>
-        </div>
-        
-       <center>
-        <img src={cart} alt="Cart Image" className="cart"/>
-          <div className="CartFont">
-          <h1>My Cart</h1>
-          </div> 
-         <img src={cart} alt="Cart Image" className="cart"/>
-         </center>
-
-
+        <br />
         <div className="CartPage"></div>
-         <div className="row">
+        <div className="row">
         <div className="side">
         <div className="fullDesign">
           <img
