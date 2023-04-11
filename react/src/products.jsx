@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./index.css";
 import tshirt from "./assets/blackTShirt.png";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+
+  const orderProduct = (productId) => {
+    const data = { id: productId };
+    fetch("/api/setCurrentProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          navigate("/order");
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+  
 
   useEffect(() => {
     fetch("/api/products.php")
@@ -22,9 +41,10 @@ function Products() {
         <div className="productsTr">
           <div className="productsTd">
             {products.map((product) => (
-              <div key={product.filename}>
+              <div key={product.product_id}>
                 {/* You can use this div for order page and cart page */}
                 <div className="fullDesign">
+                <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
                   <img
                     src={tshirt}
                     alt="Home Team Creativity Logo"
@@ -37,6 +57,7 @@ function Products() {
                   />
                   <p>{product.product_name}</p>
                   <p>{"$" + product.price}</p>
+                  </button>
                 </div>
                 {/* To here */}
               </div>

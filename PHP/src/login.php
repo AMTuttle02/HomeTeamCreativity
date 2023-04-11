@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['email'] = $email;
     $_SESSION['first_name'] = $row['first_name'];
     $_SESSION['admin'] = $row['admin'];
+    $_SESSION['userId'] = $row['user_id'];
 
     echo(json_encode($_SESSION));
   } else {

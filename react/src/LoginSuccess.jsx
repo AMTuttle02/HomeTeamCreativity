@@ -38,7 +38,7 @@ function LoginSuccess() {
           <br />
           <h2>Welcome Back to Home Team Creativity!</h2>
           <h2>You are currently logged in.</h2>
-          {firstName ? <h2>Upload Designs <Link to="/upload">Here</Link></h2> : <></>}
+          {admin ? <h2>Upload Designs <Link to="/upload">Here</Link></h2> : <></>}
           <br/>
           <button type="signUpButton" onClick={logout}>Log Out</button>
         </div>

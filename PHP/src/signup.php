@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else {
       // Check that the new user now exists and return first_name
-      $stmt = $conn->prepare("SELECT first_name FROM users WHERE email = ?");
+      $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
       $stmt->bind_param("s", $inputs["email"]);
 
       if (!$stmt->execute()) {
@@ -70,7 +70,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['loggedin'] = true;
         $_SESSION['email'] = $inputs["email"];
         $_SESSION['first_name'] = $row['first_name'];
+        $_SESSION['admin'] = $row['admin'];
+        $_SESSION['userId'] = $row['user_id'];
     
+        $orderId = 0;
+        // Insert product to users cart
+        $query = $conn->prepare(
+                              "INSERT INTO orders (user_id, total_cost, is_cart)
+                              VALUES (?, 0, 1);");
+        $query->bind_param(
+                          "s",
+                          $_SESSION["userId"]);
+        if (!$query->execute()) {
+          die("Query failed: " . $stmt->error);
+        }
+
         echo(json_encode($_SESSION));
       } else {
         // If the email and password do not match, display an error message
