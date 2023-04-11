@@ -32,7 +32,7 @@ function Cart() {
         </div>
         <br />
 
-        <div className="CartPage"></div>
+        <div className="CartPage" />
         <div className="row">
           <div className="productSide">
             <div className="fullDesign">
@@ -61,21 +61,20 @@ function Cart() {
             <h2>$20.00</h2>
           </div>
         </div>
-    
-        <div className="CartPage"></div>
+        <div className="CartPage" />
+
         <br/>
         <div className = "CheckoutButtonPlacement">
-        <div className="userCheckout"> 
-            <h1> Total: </h1>
-            <div className="CartPage"></div>
-            <br/>
-          <p>
-            <Link to="/payment" className="CheckoutButton">
-              Check Out
-            </Link>
-          </p>
+          <h1> Total: </h1>
+          <div className="CartPage" />
+          <br/>
+          <Link to="/payment" className="CheckoutButton">
+            Check Out
+          </Link>
         </div>
-        </div>
+        <br/>
+        <br />
+        <br />
       </div>
     );
 

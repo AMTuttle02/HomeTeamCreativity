@@ -494,6 +494,7 @@ footer {
   color: white;
   font-style: italic;
   font-size: 40px;
+  display: block;
 }
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
@@ -577,6 +578,11 @@ footer {
     flex-direction: column;
   }
 
+  .CheckoutButtonPlacement{
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
 }
 
 .CartPage{
@@ -597,6 +603,11 @@ footer {
   text-align: right;
 }
 
+.CheckoutButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
 .ReturnShopping{
   color:white;
   font-size: 40px;
@@ -609,7 +620,6 @@ footer {
   display:inline;
 }
 
-
 .ItemCount{
   color:white;
   text-align: inline;
@@ -618,4 +628,5 @@ footer {
 
 .CheckoutButtonPlacement{
   float: right;
+  padding-right: 40px;
 }
