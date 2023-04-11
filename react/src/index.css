@@ -104,6 +104,16 @@ body {
   flex: 50%;
 }
 
+.productSide {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+}
+
+.productSide h2 {
+  color: white;
+  padding: 20px;
+}
+
 .cartSide {
   -ms-flex: 33%; /* IE10 */
   flex: 33%;

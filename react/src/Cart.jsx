@@ -31,29 +31,36 @@ function Cart() {
           </div>
         </div>
         <br />
+
         <div className="CartPage"></div>
         <div className="row">
-        <div className="side">
-        <div className="fullDesign">
-          <img
-            src={tshirt}
-            alt="Home Team Creativity Logo"
-            className="tshirt"
-          />
-        
-        </div>
-        </div>
-        </div>
-    
-        <center>
-         <div className="ItemDescip">
+          <div className="productSide">
+            <div className="fullDesign">
+              <img
+                src={tshirt}
+                alt="Home Team Creativity Logo"
+                className="tshirt"
+              />
+            </div>
+          </div>
+          <div className="productSide">
+            <br />
             <h2> <b> Product Name </b></h2> 
             <h2> Style: </h2>
             <h2> Size: </h2>
             <h2> Color: </h2>
-         </div>       
-                
-        </center>
+          </div>
+          <div className="productSide">
+            <br />
+            <h2>$</h2>
+            <br /><br /><br /><br /><br /><br /><br />
+            <h2>Qty: </h2>
+          </div>
+          <div className="productSide">
+            <br /><br /><br /><br /><br /><br />
+            <h2>$20.00</h2>
+          </div>
+        </div>
     
         <div className="CartPage"></div>
         <br/>
