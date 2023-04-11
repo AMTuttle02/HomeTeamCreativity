@@ -14,6 +14,7 @@ import Upload from "./Upload";
 import UploadSuccess from "./UploadSuccess";
 import SearchResults from "./SearchResults";
 import NoResults from "./NoResults";
+import Cart from "./Cart";
 import Order from "./Order";
 import CustomOrder from "./CustomOrder";
 
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="uploadcomplete" element={<UploadSuccess />} />
           <Route path="searchResults" element={<SearchResults />} />
           <Route path="noResults" element={<NoResults />} />
+          <Route path="cart" element={<Cart />} />
           <Route path="order" element={<Order />} />
           <Route path="customOrder" element={<CustomOrder />} />
           <Route path="*" element={<Homepage />} />
