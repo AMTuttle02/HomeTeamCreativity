@@ -92,13 +92,13 @@ function Cart() {
                   </div>
                   <div className="productSide">
                     <br />
-                    <h2>$ {product.price} </h2>
+                    <h2>$ {product.price * product.product_quantity} </h2>
                     <br /><br /><br /><br /><br /><br /><br />
-                    <h2>Qty: {product.product_quantity} </h2>
+                    <h2> Qty: {product.product_quantity} </h2>
                   </div>
                   <div className="productSide">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {product.price}</h2>
+                    <h2>$ {product.price * product.product_quantity}</h2>
                   </div>
                   <div className="CartPage" />
                 </div>
