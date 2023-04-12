@@ -90,23 +90,39 @@ function Cart() {
                     <h2> Size: {product.size} </h2>
                     <h2> Color: {product.color} </h2>
                   </div>
-                  <div className="productSide">
-                    <br />
-                    <h2>$ {product.price * product.product_quantity} </h2>
-                    <br /><br /><br /><br /><br /><br /><br />
-                    <h2> Qty: {product.product_quantity} </h2>
-                  </div>
+                  {product.product_id ?
+                    <div className="productSide">
+                      <br />
+                      <h2>$ {product.price * product.product_quantity} </h2>
+                      <br /><br /><br /><br /><br /><br /><br />
+                      <h2> Qty: {product.product_quantity} </h2>
+                    </div>
+                    :
+                    <div className="productSide">
+                      <br />
+                      <h2>$ {product.price * product.product_quantity}+ </h2>
+                      <br /><br /><br /><br /><br /><br /><br />
+                      <h2> Qty: {product.product_quantity} </h2>
+                    </div>
+                  }
+                  {product.product_id ?
+                    <div className="productSide">
+                      <br /><br /><br /><br /><br /><br />
+                      <h2>$ {product.price * product.product_quantity}</h2>
+                    </div>
+                  :
                   <div className="productSide">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {product.price * product.product_quantity}</h2>
+                    <h2>$ {product.price * product.product_quantity}+</h2>
                   </div>
+                  }
                   <div className="CartPage" />
                 </div>
               </div>
             ))}
           <br/>
           <div className = "CheckoutButtonPlacement">
-            <h1> Total: {order.total_cost}</h1>
+            <h1> Subtotal: {order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
             <Link to="/payment" className="CheckoutButton">

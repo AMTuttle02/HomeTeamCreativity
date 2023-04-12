@@ -13,15 +13,6 @@ import red from "./assets/red.png";
 import yellow from "./assets/yellow.png";
 import blue from "./assets/blue.png";
 
-function Added() {
-  return (
-    <div className="addedToCart">
-      <h1>Item Added To Cart</h1>
-      <h1>Go To Cart Here!</h1>
-    </div>
-  );
-}
-
 function Failed() {
   return (
     <div className="addedToCart">
@@ -36,7 +27,6 @@ function CustomOrder() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
   const [size, setSize] = useState({description: "Adult Medium", addedCost: 0});
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
   const [failed, setFailed] = useState(false);
   const [design, setDesign] = useState({id: 0, filename: "customDesign.png", productName: "Custom Design", price: "16.00"});
   const [userId, setUserId] = useState("");
@@ -63,11 +53,9 @@ function CustomOrder() {
     .then((response) => response.json())
     .then((data) => {
       if (data == 1) {
-        setFailed(false);
-        setAdded(true);
+        window.location.href='/cart';
       }
       else {
-        setAdded(false);
         setFailed(true);
       }
     })
@@ -262,7 +250,6 @@ function CustomOrder() {
               </button>
               <br /><br />
               <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}+</h1>
-              { added && <Added /> }
               { failed && <Failed /> }
             </center>
           </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tshirt from "./assets/blackTShirt.png";
 import longSleeve from "./assets/blackLongSleeve.png";
 import crewneck from "./assets/blackCrewneck.png";
@@ -12,15 +12,6 @@ import black from "./assets/black.png";
 import red from "./assets/red.png";
 import yellow from "./assets/yellow.png";
 import blue from "./assets/blue.png";
-
-function Added() {
-  return (
-    <div className="addedToCart">
-      <h1>Item Added To Cart</h1>
-      <h1>Go To Cart Here!</h1>
-    </div>
-  );
-}
 
 function Failed() {
   return (
@@ -50,7 +41,6 @@ function Order() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
   const [size, setSize] = useState({description: "Adult Medium", addedCost: 0});
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
   const [failed, setFailed] = useState(false);
   const [design, setDesign] = useState({id: 1, filename: "designOne.png", productName: "Be Like Friends", price: "16.00"});
   const [userId, setUserId] = useState("");
@@ -72,11 +62,9 @@ function Order() {
     .then((response) => response.json())
     .then((data) => {
       if (data == 1) {
-        setFailed(false);
-        setAdded(true);
+        window.location.href='/cart';
       }
       else {
-        setAdded(false);
         setFailed(true);
       }
     })
@@ -262,7 +250,6 @@ function Order() {
               </button>
               <br /><br />
               <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
-              { added && <Added /> }
               { failed && <Failed /> }
             </center>
           </div>
