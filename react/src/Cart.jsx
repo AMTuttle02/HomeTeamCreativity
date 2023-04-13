@@ -1,7 +1,26 @@
 import React, { useState, useEffect } from "react";
 import tshirt from "./assets/blackTShirt.png";
+import longSleeve from "./assets/blackLongSleeve.png";
+import crewneck from "./assets/blackCrewneck.png";
+import hoodie from "./assets/blackHoodie.png";
 import { Link } from "react-router-dom";
 import cart from "./assets/cart.png";
+
+
+function setType(type) {
+  if (type == "Crewneck Sweatshirt") {
+    return crewneck;
+  }
+  else if (type == "Hooded Sweatshirt") {
+    return hoodie;
+  }
+  else if (type == "Long Sleeve T-Shirt") {
+    return longSleeve;
+  }
+  else {
+    return tshirt;
+  }
+}
 
 function Cart() {
   const [userId, setUserId] = useState("");
@@ -58,8 +77,17 @@ function Cart() {
               </div>
             </div>
           </div>
-          <div className="cartSide">
+          <div className="cartSideItem">
+            <h1 className="ItemCount"> Total: {order.total_cost}</h1>
             <h1 className="ItemCount"> {products.length} item(s)</h1>
+          </div>
+          <div className="cartSideCheckout">
+            <div className = "CheckoutButtonPlacement">
+              <br/>
+              <Link to="/payment" className="CheckoutButton">
+                Check Out
+              </Link>
+            </div>
           </div>
         </div>
         <br />
@@ -69,10 +97,11 @@ function Cart() {
             {products.map((product) => (
               <div key={product.product_id}>
                 <div className="row">
+                  <div className="productSideLeft" />
                   <div className="productSide">
                     <div className="fullDesign">
                       <img
-                        src={tshirt}
+                        src={setType(product.product_type)}
                         alt="Home Team Creativity Logo"
                         className="tshirt"
                       />
@@ -122,7 +151,7 @@ function Cart() {
             ))}
           <br/>
           <div className = "CheckoutButtonPlacement">
-            <h1> Subtotal: {order.total_cost}</h1>
+            <h1> Total: {order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
             <Link to="/payment" className="CheckoutButton">
