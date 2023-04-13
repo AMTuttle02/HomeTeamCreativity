@@ -22,6 +22,46 @@ function setType(type) {
   }
 }
 
+function setPrice(price, type, size) {
+  price = price * 1;
+  if (type == "Crewneck Sweatshirt") {
+    price += 8;
+    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+      price -= 2;
+    }
+    else if (size == "Adult XX-Large") {
+      price += 2;
+    }
+  }
+  else if (type == "Hooded Sweatshirt") {
+    price += 12;
+    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+      price -= 2;
+    }
+    else if (size == "Adult XX-Large") {
+      price += 2;
+    }
+  }
+  else if (type == "Long Sleeve T-Shirt") {
+    price += 4;
+    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+      price -= 2;
+    }
+    else if (size == "Adult XX-Large") {
+      price += 2;
+    }
+  }
+  else {
+    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+      price -= 2;
+    }
+    else if (size == "Adult XX-Large") {
+      price += 2;
+    }
+  }
+  return price;
+}
+
 function Cart() {
   const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
@@ -78,7 +118,7 @@ function Cart() {
             </div>
           </div>
           <div className="cartSideItem">
-            <h1 className="ItemCount"> Total: {order.total_cost}</h1>
+            <h1 className="ItemCount"> Total: ${order.total_cost}</h1>
             <h1 className="ItemCount"> {products.length} item(s)</h1>
           </div>
           <div className="cartSideCheckout">
@@ -122,14 +162,14 @@ function Cart() {
                   {product.product_id ?
                     <div className="productSide">
                       <br />
-                      <h2>$ {product.price * product.product_quantity} </h2>
+                      <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
                       <br /><br /><br /><br /><br /><br /><br />
                       <h2> Qty: {product.product_quantity} </h2>
                     </div>
                     :
                     <div className="productSide">
                       <br />
-                      <h2>$ {product.price * product.product_quantity}+ </h2>
+                      <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
                       <br /><br /><br /><br /><br /><br /><br />
                       <h2> Qty: {product.product_quantity} </h2>
                     </div>
@@ -137,12 +177,12 @@ function Cart() {
                   {product.product_id ?
                     <div className="productSide">
                       <br /><br /><br /><br /><br /><br />
-                      <h2>$ {product.price * product.product_quantity}</h2>
+                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                     </div>
                   :
                   <div className="productSide">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {product.price * product.product_quantity}+</h2>
+                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                   </div>
                   }
                   <div className="CartPage" />
@@ -151,7 +191,7 @@ function Cart() {
             ))}
           <br/>
           <div className = "CheckoutButtonPlacement">
-            <h1> Total: {order.total_cost}</h1>
+            <h1> Total: ${order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
             <Link to="/payment" className="CheckoutButton">

@@ -120,8 +120,8 @@ body {
 }
 
 .cartSide {
-  -ms-flex: 33%; /* IE10 */
-  flex: 33%;
+  -ms-flex: 23%; /* IE10 */
+  flex: 23%;
   padding-top: 20px;
   text-align: center;
 }
@@ -133,8 +133,8 @@ body {
 }
 
 .cartSideCheckout {
-  -ms-flex: 20%; /* IE10 */
-  flex: 20%;
+  -ms-flex: 22%; /* IE10 */
+  flex: 21%;
   padding-top: 20px;
   text-align: center;
 }
@@ -620,6 +620,7 @@ footer {
   text-align: right;
   padding-left: 100px;
   padding-right: 100px;
+  white-space: nowrap;
 }
 
 .CheckoutButton:hover {
