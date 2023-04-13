@@ -163,14 +163,14 @@ function Cart() {
                     <div className="productSide">
                       <br />
                       <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
-                      <br /><br /><br /><br /><br /><br /><br />
+                      <br /><br /><br /><br />
                       <h2> Qty: {product.product_quantity} </h2>
                     </div>
                     :
                     <div className="productSide">
                       <br />
                       <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
-                      <br /><br /><br /><br /><br /><br /><br />
+                      <br /><br /><br /><br />
                       <h2> Qty: {product.product_quantity} </h2>
                     </div>
                   }

@@ -105,8 +105,8 @@ body {
 }
 
 .productSide {
-  -ms-flex: 20%; /* IE10 */
-  flex: 20%;
+  -ms-flex: 23%; /* IE10 */
+  flex: 23%;
 }
 
 .productSideLeft {
