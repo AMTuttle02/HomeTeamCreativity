@@ -119,6 +119,16 @@ body {
   padding: 20px;
 }
 
+.noDisplay {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.noDisplay:hover {
+  color: darkred;
+}
+
 .cartSide {
   -ms-flex: 23%; /* IE10 */
   flex: 23%;

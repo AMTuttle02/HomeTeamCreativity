@@ -38,6 +38,8 @@ function Order() {
         }
       });
   }
+
+  const navigate = useNavigate();
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
   const [size, setSize] = useState({description: "Adult Medium", addedCost: 0});
   const [quantity, setQuantity] = useState(1);
@@ -62,7 +64,7 @@ function Order() {
     .then((response) => response.json())
     .then((data) => {
       if (data == 1) {
-        window.location.href='/cart';
+        navigate("/cart");;
       }
       else {
         setFailed(true);

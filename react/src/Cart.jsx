@@ -62,6 +62,27 @@ function setPrice(price, type, size) {
   return price;
 }
 
+function deleteFromCart (product, order) {
+  fetch("/api/deleteFromCart.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ 
+      order_id: order.order_id, 
+      product_id: product.product_id, 
+      quantity: product.product_quantity, 
+      color: "Black",
+      product_type: product.product_type,
+      size: product.size,
+      price: setPrice(product.price, product.product_type, product.size) * product.product_quantity}),
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    if (data == 1) {
+      window.location.href='/cart';
+    }
+  })
+}
+
 function Cart() {
   const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
@@ -133,7 +154,6 @@ function Cart() {
         <br />
 
         <div className="CartPage" />
-          
             {products.map((product) => (
               <div key={product.product_id}>
                 <div className="row">
@@ -163,15 +183,27 @@ function Cart() {
                     <div className="productSide">
                       <br />
                       <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
-                      <br /><br /><br /><br />
+                      <br /><br />
                       <h2> Qty: {product.product_quantity} </h2>
+                      <br /><br />
+                      <h2>
+                        <button onClick={deleteFromCart(product, order)} className="noDisplay">
+                          Delete
+                        </button>
+                      </h2>
                     </div>
                     :
                     <div className="productSide">
                       <br />
                       <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
-                      <br /><br /><br /><br />
+                      <br /><br />
                       <h2> Qty: {product.product_quantity} </h2>
+                      <br /><br />
+                      <h2>
+                        <button onClick={deleteFromCart(product, order)} className="noDisplay">
+                          Delete
+                        </button>
+                      </h2>
                     </div>
                   }
                   {product.product_id ?
