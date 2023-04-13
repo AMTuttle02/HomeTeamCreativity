@@ -105,8 +105,13 @@ body {
 }
 
 .productSide {
-  -ms-flex: 25%; /* IE10 */
-  flex: 25%;
+  -ms-flex: 20%; /* IE10 */
+  flex: 20%;
+}
+
+.productSideLeft {
+  -ms-flex: 1%; /* IE10 */
+  flex: 1%;
 }
 
 .productSide h2 {
@@ -117,6 +122,19 @@ body {
 .cartSide {
   -ms-flex: 33%; /* IE10 */
   flex: 33%;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.cartSideItem {
+  -ms-flex: 12%; /* IE10 */
+  flex: 12%;
+  padding-top: 20px;
+}
+
+.cartSideCheckout {
+  -ms-flex: 20%; /* IE10 */
+  flex: 20%;
   padding-top: 20px;
   text-align: center;
 }
@@ -624,7 +642,6 @@ footer {
 .ItemCount{
   color:white;
   text-align: inline;
-  text-align: center;
 }
 
 .CheckoutButtonPlacement{
