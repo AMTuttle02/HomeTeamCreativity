@@ -169,6 +169,12 @@ body {
   padding-top: 20px;
 }
 
+.success {
+  color: white;
+  text-align: center;
+  padding: 50px;
+}
+
 /* Create two unequal columns that sits next to each other */
 /* Sidebar/left column */
 .orderSide {
