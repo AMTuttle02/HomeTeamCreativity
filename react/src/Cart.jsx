@@ -22,50 +22,51 @@ function setType(type) {
   }
 }
 
-function setPrice(price, type, size) {
-  price = price * 1;
-  if (type == "Crewneck Sweatshirt") {
-    price += 8;
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  else if (type == "Hooded Sweatshirt") {
-    price += 12;
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  else if (type == "Long Sleeve T-Shirt") {
-    price += 4;
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  else {
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  return price;
-}
-
 function Cart() {
   const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
   const [order, setOrder] = useState([]);
+  const [addedItems, setAddedItems] = useState(0);
+
+  const setPrice = (price, type, size) => {
+    price = price * 1;
+    if (type == "Crewneck Sweatshirt") {
+      price += 8;
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    else if (type == "Hooded Sweatshirt") {
+      price += 12;
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    else if (type == "Long Sleeve T-Shirt") {
+      price += 4;
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    else {
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    return price;
+  }
 
   const deleteFromCart = (product, order) => {
     fetch("/api/deleteFromCart.php", {
@@ -88,6 +89,80 @@ function Cart() {
     })
   }
 
+  const increaseQuantity = (product, productId, quantity, price) => {
+    fetch("/api/increaseQuantity.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        order_id: order.order_id, 
+        product_id: product.product_id, 
+        quantity: product.product_quantity, 
+        color: "Black",
+        product_type: product.product_type,
+        size: product.size,
+        price: setPrice(product.price, product.product_type, product.size)}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+
+    order['total_cost'] *= 1;
+    order['total_cost'] += (price * 1);
+    setAddedItems((addedItems * 1) + 1);
+    setProducts(prevData => {
+      const updatedData = prevData.map(product => {
+        if (product.product_id === productId) {
+          return {
+            ...product,
+            product_quantity: quantity + 1
+          }
+        } else {
+          return product;
+        }
+      })
+      return updatedData;
+    })
+  }
+
+  const decreaseQuantity = (product, productId, quantity, price) => {
+    if (quantity > 1) {
+      fetch("/api/decreaseQuantity.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          order_id: order.order_id, 
+          product_id: product.product_id, 
+          quantity: product.product_quantity, 
+          color: "Black",
+          product_type: product.product_type,
+          size: product.size,
+          price: setPrice(product.price, product.product_type, product.size)}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+
+      order['total_cost'] *= 1;
+      order['total_cost'] -= (price * 1);
+      setAddedItems(addedItems - 1);
+    }
+    setProducts(prevData => {
+      const updatedData = prevData.map(product => {
+        if (product.product_id === productId && quantity > 1) {
+          return {
+            ...product,
+            product_quantity: quantity - 1
+          }
+        } else {
+          return product;
+        }
+      })
+      return updatedData;
+    })
+  }
+
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
@@ -100,7 +175,7 @@ function Cart() {
     fetch("/api/getOrder.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       setOrder(data);
     });
   }, []);
@@ -109,9 +184,17 @@ function Cart() {
     fetch("/api/getCart.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       setProducts(data);
     });
+  }, []);
+
+  useEffect(() => { 
+    fetch("/api/totalItems.php")
+    .then((response) => response.json())
+    .then((data) => {
+      setAddedItems(data["SUM(product_quantity)"]);
+    })
   }, []);
 
   return (
@@ -140,7 +223,7 @@ function Cart() {
           </div>
           <div className="cartSideItem">
             <h1 className="ItemCount"> Total: ${order.total_cost}</h1>
-            <h1 className="ItemCount"> {products.length} item(s)</h1>
+            <h1 className="ItemCount"> {addedItems} item(s)</h1>
           </div>
           <div className="cartSideCheckout">
             <div className = "CheckoutButtonPlacement">
@@ -184,7 +267,13 @@ function Cart() {
                       <br />
                       <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
                       <br /><br />
-                      <h2> Qty: {product.product_quantity} </h2>
+                      <h2> 
+                      
+                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                        
+                        {product.product_quantity} 
+                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                      </h2>
                       <br /><br />
                       <h2>
                         <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
