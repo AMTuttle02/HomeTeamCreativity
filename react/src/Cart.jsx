@@ -28,6 +28,24 @@ function Cart() {
   const [order, setOrder] = useState([]);
   const [addedItems, setAddedItems] = useState(0);
 
+  const checkout = (order) => {
+    fetch("/api/checkout.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        order_id: order.order_id}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data == 1) {
+        window.location.href='/ordercomplete';
+      }
+      else {
+        window.location.href='/orderFailed';
+      }
+    })
+  }
+
   const setPrice = (price, type, size) => {
     price = price * 1;
     if (type == "Crewneck Sweatshirt") {
@@ -317,7 +335,7 @@ function Cart() {
             <h1> Total: ${order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
-            <button to="/payment" className="CheckoutButton">
+            <button onClick={() => checkout(order)} className="CheckoutButton">
               Check Out
             </button>
           </div>

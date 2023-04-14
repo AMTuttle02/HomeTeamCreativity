@@ -17,6 +17,8 @@ import NoResults from "./NoResults";
 import Cart from "./Cart";
 import Order from "./Order";
 import CustomOrder from "./CustomOrder";
+import Checkout from "./Checkout";
+import CheckoutFailed from "./CheckoutFailed";
 
 export default function App() {
   return (
@@ -38,6 +40,8 @@ export default function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="order" element={<Order />} />
           <Route path="customOrder" element={<CustomOrder />} />
+          <Route path="ordercomplete" element={<Checkout />} />
+          <Route path="orderfailed" element={<CheckoutFailed />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
