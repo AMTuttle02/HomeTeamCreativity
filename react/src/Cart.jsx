@@ -268,9 +268,7 @@ function Cart() {
                       <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
                       <br /><br />
                       <h2> 
-                      
                         Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
-                        
                         {product.product_quantity} 
                         <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
                       </h2>
@@ -286,7 +284,11 @@ function Cart() {
                       <br />
                       <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
                       <br /><br />
-                      <h2> Qty: {product.product_quantity} </h2>
+                      <h2> 
+                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                        {product.product_quantity} 
+                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                      </h2>
                       <br /><br />
                       <h2>
                         <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
@@ -315,9 +317,9 @@ function Cart() {
             <h1> Total: ${order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
-            <Link to="/payment" className="CheckoutButton">
+            <button to="/payment" className="CheckoutButton">
               Check Out
-            </Link>
+            </button>
           </div>
           <br/>
           <br />
