@@ -26,7 +26,7 @@ function Cart() {
   const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
   const [order, setOrder] = useState([]);
-  const [items, setItems] = useState(0);
+  const [addedItems, setAddedItems] = useState(0);
 
   const setPrice = (price, type, size) => {
     price = price * 1;
@@ -92,6 +92,7 @@ function Cart() {
   const increaseQuantity = (productId, quantity, price) => {
     order['total_cost'] *= 1;
     order['total_cost'] += (price * 1);
+    setAddedItems(addedItems + 1);
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
         if (product.product_id === productId) {
@@ -179,7 +180,7 @@ function Cart() {
           </div>
           <div className="cartSideItem">
             <h1 className="ItemCount"> Total: ${order.total_cost}</h1>
-            <h1 className="ItemCount"> {products.length} item(s)</h1>
+            <h1 className="ItemCount"> {products.length + addedItems} item(s)</h1>
           </div>
           <div className="cartSideCheckout">
             <div className = "CheckoutButtonPlacement">
