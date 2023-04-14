@@ -1,4 +1,5 @@
-import React, { useState,useEffect } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import "./index.css";
 
 function HowItWorks() {
@@ -73,7 +74,7 @@ function HowItWorks() {
               <li>Addition of Glitter adds $1-2 per amount used</li>
               <li>Colors vary upon inventory and availability per style</li>
               <li>You can order apparel yourself and ship it/deliver it to Maggie for decorating, please message us for information</li>
-              <li>See Return Policy here</li>
+              <li>See our <Link to='/returnpolicy'>Return Policy</Link>.</li>
             </ul>
           </div>
       </div>

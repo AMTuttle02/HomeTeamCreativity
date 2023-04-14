@@ -136,6 +136,18 @@ body {
   font-size: xx-large;
 }
 
+.ReturnPolicy {
+  text-align: center;
+}
+
+.policy {
+  text-align: left;
+  margin: auto;
+  width: 40%;
+  font-size: x-large;
+}
+
+
 .productSide {
   -ms-flex: 23%; /* IE10 */
   flex: 23%;
@@ -657,6 +669,9 @@ footer {
     width: 100%;
     text-align: center;
     display: block;
+  }
+  .policy {
+    width: 90%;
   }
 }
 
