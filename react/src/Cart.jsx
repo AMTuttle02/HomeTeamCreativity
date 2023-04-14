@@ -62,31 +62,31 @@ function setPrice(price, type, size) {
   return price;
 }
 
-function deleteFromCart (product, order) {
-  fetch("/api/deleteFromCart.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ 
-      order_id: order.order_id, 
-      product_id: product.product_id, 
-      quantity: product.product_quantity, 
-      color: "Black",
-      product_type: product.product_type,
-      size: product.size,
-      price: setPrice(product.price, product.product_type, product.size) * product.product_quantity}),
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    if (data == 1) {
-      window.location.href='/cart';
-    }
-  })
-}
-
 function Cart() {
   const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
   const [order, setOrder] = useState([]);
+
+  const deleteFromCart = (product, order) => {
+    fetch("/api/deleteFromCart.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        order_id: order.order_id, 
+        product_id: product.product_id, 
+        quantity: product.product_quantity, 
+        color: "Black",
+        product_type: product.product_type,
+        size: product.size,
+        price: setPrice(product.price, product.product_type, product.size) * product.product_quantity}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data == 1) {
+        window.location.href='/cart';
+      }
+    })
+  }
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -187,7 +187,7 @@ function Cart() {
                       <h2> Qty: {product.product_quantity} </h2>
                       <br /><br />
                       <h2>
-                        <button onClick={deleteFromCart(product, order)} className="noDisplay">
+                        <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
                           Delete
                         </button>
                       </h2>
@@ -200,7 +200,7 @@ function Cart() {
                       <h2> Qty: {product.product_quantity} </h2>
                       <br /><br />
                       <h2>
-                        <button onClick={deleteFromCart(product, order)} className="noDisplay">
+                        <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
                           Delete
                         </button>
                       </h2>
