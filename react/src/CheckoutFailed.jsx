@@ -13,7 +13,14 @@ function CheckoutFailed() {
 
   return (
     <div className="Checkout">
-      {firstName ? <div /> : <div />}
+      {firstName ? 
+        <div className="success">
+            <h1>Sorry, {firstName}. Something went wrong.</h1>
+            <h1>Please try again.</h1>
+        </div> 
+      : 
+        <div />
+      }
     </div>
   );
 }
