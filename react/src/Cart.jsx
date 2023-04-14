@@ -89,10 +89,27 @@ function Cart() {
     })
   }
 
-  const increaseQuantity = (productId, quantity, price) => {
+  const increaseQuantity = (product, productId, quantity, price) => {
+    fetch("/api/increaseQuantity.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        order_id: order.order_id, 
+        product_id: product.product_id, 
+        quantity: product.product_quantity, 
+        color: "Black",
+        product_type: product.product_type,
+        size: product.size,
+        price: setPrice(product.price, product.product_type, product.size)}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+
     order['total_cost'] *= 1;
     order['total_cost'] += (price * 1);
-    setAddedItems(addedItems + 1);
+    setAddedItems((addedItems * 1) + 1);
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
         if (product.product_id === productId) {
@@ -108,10 +125,28 @@ function Cart() {
     })
   }
 
-  const decreaseQuantity = (productId, quantity, price) => {
+  const decreaseQuantity = (product, productId, quantity, price) => {
     if (quantity > 1) {
+      fetch("/api/decreaseQuantity.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          order_id: order.order_id, 
+          product_id: product.product_id, 
+          quantity: product.product_quantity, 
+          color: "Black",
+          product_type: product.product_type,
+          size: product.size,
+          price: setPrice(product.price, product.product_type, product.size)}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+
       order['total_cost'] *= 1;
       order['total_cost'] -= (price * 1);
+      setAddedItems(addedItems - 1);
     }
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
@@ -140,7 +175,7 @@ function Cart() {
     fetch("/api/getOrder.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       setOrder(data);
     });
   }, []);
@@ -149,9 +184,17 @@ function Cart() {
     fetch("/api/getCart.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       setProducts(data);
     });
+  }, []);
+
+  useEffect(() => { 
+    fetch("/api/totalItems.php")
+    .then((response) => response.json())
+    .then((data) => {
+      setAddedItems(data["SUM(product_quantity)"]);
+    })
   }, []);
 
   return (
@@ -180,7 +223,7 @@ function Cart() {
           </div>
           <div className="cartSideItem">
             <h1 className="ItemCount"> Total: ${order.total_cost}</h1>
-            <h1 className="ItemCount"> {products.length + addedItems} item(s)</h1>
+            <h1 className="ItemCount"> {addedItems} item(s)</h1>
           </div>
           <div className="cartSideCheckout">
             <div className = "CheckoutButtonPlacement">
@@ -226,10 +269,10 @@ function Cart() {
                       <br /><br />
                       <h2> 
                       
-                        Qty: <button onClick={() => decreaseQuantity(product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
                         
                         {product.product_quantity} 
-                        <button onClick={() => increaseQuantity(product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
                       </h2>
                       <br /><br />
                       <h2>
