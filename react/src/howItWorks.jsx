@@ -14,7 +14,7 @@ function HowItWorks() {
         <div className="howItWorksSide">
           <h2>For Custom Designs: </h2>
           <ol> 
-            <li>Send a message explaining what you would like on you design with as much detail as possible.</li>
+            <li>Send a message explaining what you would like on your design with as much detail as possible.</li>
             <li>Follow product ordering steps.</li>
             <li>The designer will send you mockup images for you to choose and adjust to your liking.</li>
             <li>Once the design is approved by you, you can choose your delivery option.</li>
