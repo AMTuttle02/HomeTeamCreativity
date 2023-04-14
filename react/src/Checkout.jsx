@@ -92,7 +92,7 @@ function Checkout() {
             <br />
             <h1>We will reach out soon with order confirmation, payment details, and next steps.</h1>
             <br />
-            <h1>Have a question? Feel Free to Reach Out <a href="" target="_blank">Here</a></h1>
+            <h1>Have a question? Feel Free to Reach Out <a href="https://linktr.ee/hometeamcreativity" target="_blank" className="white">Here</a></h1>
             <br/>
             <div className="CartPage" />
             <br />
