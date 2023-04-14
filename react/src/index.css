@@ -33,6 +33,11 @@ body {
   float: right;
 }
 
+
+
+
+
+
 .navbar a:hover {
   color: black;
   background-color: #ddd;
@@ -97,6 +102,81 @@ body {
 .side {
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
+}
+
+.productSide {
+  -ms-flex: 23%; /* IE10 */
+  flex: 23%;
+}
+
+.productSideLeft {
+  -ms-flex: 1%; /* IE10 */
+  flex: 1%;
+}
+
+.productSide h2 {
+  color: black;
+  padding: 20px;
+}
+
+.noDisplay {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.noDisplay:hover {
+  color: darkred;
+}
+
+.cartSide {
+  -ms-flex: 23%; /* IE10 */
+  flex: 23%;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.cartSideItem {
+  -ms-flex: 12%; /* IE10 */
+  flex: 12%;
+  padding-top: 20px;
+}
+
+.cartSideCheckout {
+  -ms-flex: 22%; /* IE10 */
+  flex: 21%;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.cartMain {   
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+  color: white;
+}
+
+.myCartSide {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+}
+
+.myCartMain {   
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+  color: white;
+  padding-top: 20px;
+}
+
+.success {
+  color: white;
+  text-align: center;
+  padding: 50px;
+}
+
+.white {
+  color: blue;
 }
 
 /* Create two unequal columns that sits next to each other */
@@ -452,6 +532,7 @@ footer {
   color: white;
   font-style: italic;
   font-size: 40px;
+  display: block;
 }
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
@@ -535,4 +616,56 @@ footer {
     flex-direction: column;
   }
 
+  .CheckoutButtonPlacement{
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
+}
+
+.CartPage{
+  border-bottom: 5px solid white;
+}
+
+
+.CheckoutButton {
+  background-color: #B7C9E2;
+  color: black;
+  padding: 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: xx-large;
+  text-align: right;
+  padding-left: 100px;
+  padding-right: 100px;
+  white-space: nowrap;
+}
+
+.CheckoutButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
+.ReturnShopping{
+  color:white;
+  font-size: 40px;
+  text-align: inline;
+  text-align: center;
+  text-decoration: none;
+}
+
+.CartHeader{
+  display:inline;
+}
+
+.ItemCount{
+  color:white;
+  text-align: inline;
+}
+
+.CheckoutButtonPlacement{
+  float: right;
+  padding-right: 40px;
 }

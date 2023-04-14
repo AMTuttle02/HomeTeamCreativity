@@ -9,6 +9,7 @@ session_start();
 
 include 'conn.php';
 
+// Create new user account
 // Obtain cart
 $inputs = json_decode(file_get_contents('php://input'), true);
 
@@ -34,27 +35,23 @@ if (!$result) {
 $orderId = $result['order_id'];
 
 $query = $conn->prepare(
-                        "SELECT *
+                        "SELECT SUM(product_quantity)
                         FROM product_orders
-                        INNER JOIN products ON product_orders.product_id = products.product_id
-                        WHERE product_orders.order_id = ?");
+                        WHERE order_id = ?");
 $query->bind_param(
-                  "s",
-                  $orderId);
-if (!$query->execute()) {
-  die("Query failed: " . $stmt->error);
-}
+                    "s",
+                    $orderId);
 
+if (!$query->execute()) {
+    die("Query failed: " . $stmt->error);
+}
+    
 $result = $query->get_result();
 
-$rows = array();
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $rows[] = $row;
-    }
-}
+$row = $result->fetch_assoc();
 
-echo json_encode($rows);
+echo json_encode($row);
+
 
 mysqli_close($conn);
 

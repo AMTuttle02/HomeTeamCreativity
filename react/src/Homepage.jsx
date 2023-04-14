@@ -68,7 +68,7 @@ function Homepage() {
           <form id="search">
             <input type="text" placeholder="Search..." value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown}/>
           </form>
-          <Link to="/">
+          <Link to="cart">
               <img src={cart} alt="Cart" className="cart"/>
           </Link>
         </div>

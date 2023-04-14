@@ -14,8 +14,11 @@ import Upload from "./Upload";
 import UploadSuccess from "./UploadSuccess";
 import SearchResults from "./SearchResults";
 import NoResults from "./NoResults";
+import Cart from "./Cart";
 import Order from "./Order";
 import CustomOrder from "./CustomOrder";
+import Checkout from "./Checkout";
+import CheckoutFailed from "./CheckoutFailed";
 
 export default function App() {
   return (
@@ -34,8 +37,11 @@ export default function App() {
           <Route path="uploadcomplete" element={<UploadSuccess />} />
           <Route path="searchResults" element={<SearchResults />} />
           <Route path="noResults" element={<NoResults />} />
+          <Route path="cart" element={<Cart />} />
           <Route path="order" element={<Order />} />
           <Route path="customOrder" element={<CustomOrder />} />
+          <Route path="ordercomplete" element={<Checkout />} />
+          <Route path="orderfailed" element={<CheckoutFailed />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
