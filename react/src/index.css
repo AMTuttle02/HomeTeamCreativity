@@ -33,11 +33,6 @@ body {
   float: right;
 }
 
-
-
-
-
-
 .navbar a:hover {
   color: black;
   background-color: #ddd;
@@ -102,6 +97,43 @@ body {
 .side {
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
+}
+
+.HowItWorks h1{
+  color: white;
+}
+
+.howItWorksSide {
+  -ms-flex: 48%; /* IE10 */
+  flex: 48%;
+  text-align: left;
+  padding-left: 50px;
+  border-style: solid;
+  border-color: lightgray;
+  background-color: #fff;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+  color: black;
+  border-radius: 4px;
+}
+
+.howItWorksMiddle {
+  -ms-flex: 1%; /* IE10 */
+  flex: 1%;
+}
+
+.howItWorksRight {
+  -ms-flex: 48%; /* IE10 */
+  flex: 48%;
+}
+
+.howItWorksSide h2 {
+  text-align: center;
+  text-decoration: underline;
+  color: black;
+}
+
+.howItWorksSide li {
+  font-size: xx-large;
 }
 
 .productSide {
@@ -355,6 +387,11 @@ input[type=text] {
   margin: 0 auto;
   width: 50%;
   padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.howContainer {
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
