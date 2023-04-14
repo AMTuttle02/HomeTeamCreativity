@@ -22,50 +22,51 @@ function setType(type) {
   }
 }
 
-function setPrice(price, type, size) {
-  price = price * 1;
-  if (type == "Crewneck Sweatshirt") {
-    price += 8;
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  else if (type == "Hooded Sweatshirt") {
-    price += 12;
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  else if (type == "Long Sleeve T-Shirt") {
-    price += 4;
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  else {
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large") {
-      price += 2;
-    }
-  }
-  return price;
-}
-
 function Cart() {
   const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
   const [order, setOrder] = useState([]);
+  const [items, setItems] = useState(0);
+
+  const setPrice = (price, type, size) => {
+    price = price * 1;
+    if (type == "Crewneck Sweatshirt") {
+      price += 8;
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    else if (type == "Hooded Sweatshirt") {
+      price += 12;
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    else if (type == "Long Sleeve T-Shirt") {
+      price += 4;
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    else {
+      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+        price -= 2;
+      }
+      else if (size == "Adult XX-Large") {
+        price += 2;
+      }
+    }
+    return price;
+  }
 
   const deleteFromCart = (product, order) => {
     fetch("/api/deleteFromCart.php", {
@@ -85,6 +86,44 @@ function Cart() {
       if (data == 1) {
         window.location.href='/cart';
       }
+    })
+  }
+
+  const increaseQuantity = (productId, quantity, price) => {
+    order['total_cost'] *= 1;
+    order['total_cost'] += (price * 1);
+    setProducts(prevData => {
+      const updatedData = prevData.map(product => {
+        if (product.product_id === productId) {
+          return {
+            ...product,
+            product_quantity: quantity + 1
+          }
+        } else {
+          return product;
+        }
+      })
+      return updatedData;
+    })
+  }
+
+  const decreaseQuantity = (productId, quantity, price) => {
+    if (quantity > 1) {
+      order['total_cost'] *= 1;
+      order['total_cost'] -= (price * 1);
+    }
+    setProducts(prevData => {
+      const updatedData = prevData.map(product => {
+        if (product.product_id === productId && quantity > 1) {
+          return {
+            ...product,
+            product_quantity: quantity - 1
+          }
+        } else {
+          return product;
+        }
+      })
+      return updatedData;
     })
   }
 
@@ -184,7 +223,13 @@ function Cart() {
                       <br />
                       <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
                       <br /><br />
-                      <h2> Qty: {product.product_quantity} </h2>
+                      <h2> 
+                      
+                        Qty: <button onClick={() => decreaseQuantity(product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                        
+                        {product.product_quantity} 
+                        <button onClick={() => increaseQuantity(product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                      </h2>
                       <br /><br />
                       <h2>
                         <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
