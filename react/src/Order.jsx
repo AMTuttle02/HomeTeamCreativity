@@ -105,7 +105,7 @@ function Order() {
             <p>True To Size</p>
             <p>Regular Fit</p>
             <p>Wash Inside Out if possible</p>
-            <a href=''>Return Policy</a>
+            <Link to='/returnpolicy'>Return Policy</Link>
             </div>
         </div>
         {userId ?
