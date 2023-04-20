@@ -52,6 +52,6 @@ Week 6 (March 13-17): ~~Prepare for demo and present.~~
 Week 7 (March 20-24): ~~Finish upload images feature. Begin Search bar feature. Begin cart feature.~~  
 Week 8 (March 27-31): ~~Finish search. Continue cart.~~ Begin auto email feature.  
 Week 9 (April 3-7): Finish cart. Finish auto email. ~~Begin static webpages. Begin best seller option.~~  
-Week 10 (April 10-14): Finish static webpages. ~~Finish best seller option.~~  
-Week 11 (April 17-21): Finalize any issues.  
+Week 10 (April 10-14): ~~Finish static webpages. Finish best seller option.~~  
+Week 11 (April 17-21): ~~Finalize any issues.~~  
 Week 12 (April 24): Present website  
