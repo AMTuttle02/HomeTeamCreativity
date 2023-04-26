@@ -214,7 +214,7 @@ function Upload() {
                   <label>&nbsp;Gray</label>
                   <br />
                 <input type="checkbox" id="hRed" name="hRed" value="Red" onChange={(event) => handleHoodieColor(event.target.value)}/>
-                  <label>&nbsp;Pink</label>
+                  <label>&nbsp;Red</label>
                   <br />
                 <input type="checkbox" id="hNavy" name="hNavy" value="Navy" onChange={(event) => handleHoodieColor(event.target.value)}/>
                   <label>&nbsp;Navy</label>
