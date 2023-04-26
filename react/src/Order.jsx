@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import tshirt from "./assets/blackTShirt.png";
-import longSleeve from "./assets/blackLongSleeve.png";
-import crewneck from "./assets/blackCrewneck.png";
-import hoodie from "./assets/blackHoodie.png";
+import blackTshirt from "./assets/blackTShirt.png";
+import blackLongSleeve from "./assets/blackLongSleeve.png";
+import blackCrewneck from "./assets/blackCrewneck.png";
+import blackHoodie from "./assets/blackHoodie.png";
+import grayTshirt from "./assets/GreyTShirt.png";
+import grayLongSleeve from "./assets/GreyLongSleeve.png";
+import grayCrewneck from "./assets/GreyCrewneck.png";
+import grayHoodie from "./assets/GreyHoodie.png";
 import transparentTshirt from "./assets/transparentTshirt.png";
 import transparentLongSleeve from "./assets/transparentLongSleeve.png";
 import transparentCrewneck from "./assets/transparentCrewneck.png";
@@ -24,6 +28,13 @@ function Failed() {
 }
 
 function Order() {
+  const [tshirt, setTshirt] = useState(blackTshirt);
+  const [crewneck, setCrewneck] = useState(blackCrewneck);
+  const [longSleeve, setLongSleeve] = useState(blackLongSleeve);
+  const [hoodie, setHoodie] = useState(blackHoodie);
+  const [currentColor, setCurrentColor] = useState("Black");
+  const [currentStyle, setCurrentStyle] = useState("TShirt");
+
   useEffect(() => {
     retrieveProduct();
   }, []);
@@ -47,6 +58,23 @@ function Order() {
   const [design, setDesign] = useState({id: 1, filename: "designOne.png", productName: "Be Like Friends", price: "16.00"});
   const [userId, setUserId] = useState("");
 
+  const changeColor = (e) => {
+    if (e == red) {
+      setTshirt(grayTshirt);
+      setCrewneck(grayCrewneck);
+      setLongSleeve(grayLongSleeve);
+      setHoodie(grayHoodie);
+      setCurrentColor("Gray");
+    }
+    else if (e == black) {
+      setTshirt(blackTshirt);
+      setCrewneck(blackCrewneck);
+      setLongSleeve(blackLongSleeve);
+      setHoodie(blackHoodie);
+      setCurrentColor("Black");
+    }
+  };
+
   const addToCart = () => {
     fetch("/api/addToCart.php", {
       method: "POST",
@@ -55,7 +83,7 @@ function Order() {
         order_id: 100, 
         product_id: design.id, 
         quantity: quantity, 
-        color: "Black",
+        color: currentColor,
         product_type: productType.description,
         size: size.description,
         price: ((design.price * 1) + productType.addedCost + size.addedCost) * quantity,
@@ -79,6 +107,21 @@ function Order() {
         setUserId(data.userId);
       });
   }, []);
+
+  useEffect(() => {
+    if (currentStyle == "TShirt") {
+      setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+    }
+    else if (currentStyle == "Crewneck") {
+      setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
+    }
+    else if (currentStyle == "Long Sleeve") {
+      setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
+    }
+    else {
+      setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12})
+    }
+  });
 
   return (
     <div className="Order">
@@ -116,7 +159,7 @@ function Order() {
             <h1>Style: {productType.description}</h1>
             <div className="typeOptionRow">
               <button 
-                onClick={() => setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0})}
+                onClick={() => setCurrentStyle("TShirt")}
                 className="productTypes">
               <img
                 src={transparentTshirt}
@@ -125,7 +168,7 @@ function Order() {
               />
               </button>
               <button 
-                onClick={() => setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4})}
+                onClick={() => setCurrentStyle("Long Sleeve")}
                 className="productTypes">
               <img
                 src={transparentLongSleeve}
@@ -134,7 +177,7 @@ function Order() {
               />
               </button>
               <button 
-                onClick={() => setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8})}
+                onClick={() => setCurrentStyle("Crewneck")}
                 className="productTypes">
               <img
                 src={transparentCrewneck}
@@ -143,7 +186,7 @@ function Order() {
               />
               </button>
               <button 
-                onClick={() => setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12})}
+                onClick={() => setCurrentStyle("Hoodie")}
                 className="productTypes">
               <img
                 src={transparentHoodie}
@@ -153,18 +196,24 @@ function Order() {
               </button>
             </div>
             <br />
-            <h1>Color: Black</h1>
+            <h1>Color: {currentColor}</h1>
             <div className="typeOptionRow">
-              <img
+              <button 
+                onClick={() => changeColor(black)}>
+                <img
                   src={black}
-                  alt="Home Team Creativity Logo"
+                  alt="Black"
                   className="colorOptions"
-              /> {/*
-              <img
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(red)}>
+                <img
                   src={red}
-                  alt="Home Team Creativity Logo"
+                  alt="Red"
                   className="colorOptions"
-              />
+                />
+              </button> {/*
               <img
                   src={yellow}
                   alt="Home Team Creativity Logo"
@@ -174,7 +223,7 @@ function Order() {
                   src={blue}
                   alt="Home Team Creativity Logo"
                   className="colorOptions"
-              />*/}
+              /> */}
             </div>
             <br />
             <h1>Size: {size.description}</h1>
