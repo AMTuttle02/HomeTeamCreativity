@@ -574,6 +574,17 @@ input[type="text"], input[type="password"] {
   resize: none;
 }
 
+.uploadSplit {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+  padding-left: 5%;
+  font-size: large;
+}
+
+input[type="checkbox"]{
+  cursor: pointer;
+}
+
 /* Footer */
 footer {
   padding: 20px;
@@ -678,7 +689,6 @@ footer {
 .CartPage{
   border-bottom: 5px solid white;
 }
-
 
 .CheckoutButton {
   background-color: #B7C9E2;
