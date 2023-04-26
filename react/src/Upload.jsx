@@ -78,7 +78,6 @@ function Upload() {
       }
     });
   };
-  
 
   const [admin, setAdmin] = useState("");
   useEffect(() => {

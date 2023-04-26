@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (move_uploaded_file($file["tmp_name"], $targetFile)) {
       echo json_encode("The file has been uploaded with name " . $productName . " and price $" . $price . "with filename: " . $fileName);
       // Attempt to insert new design into table
-      $query = $conn->prepare("INSERT INTO products (product_name, price, filename, tag_list) VALUES (?, ?, ?, ?);");
-      $query->bind_param("ssss", $productName, $price, $fileName, $tags);
+      $query = $conn->prepare("INSERT INTO products (product_name, price, filename, tag_list, tColors, lColors, cColors, hColors) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+      $query->bind_param("ssssssss", $productName, $price, $fileName, $tags, $tColors, $lColors, $cColors, $hColors);
       if (!$query->execute()) {
         // If insertion fails, return error message
         echo json_encode("ERR: Insertion failed to execute" . $query->error);
