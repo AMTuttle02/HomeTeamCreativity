@@ -12,6 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $productName = $_POST["productName"];
   $price = $_POST["price"];
   $tags = $_POST["tags"];
+  $tColors = $_POST["tColors"];
+  $lColors = $_POST["lColors"];
+  $cColors = $_POST["cColors"];
+  $hColors = $_POST["hColors"];
   $file = $_FILES['image'];
   $targetDir = "/var/www/images/";
   $targetFile = $targetDir . basename($file["name"]);
