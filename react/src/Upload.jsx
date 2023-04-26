@@ -6,9 +6,53 @@ function Upload() {
   const [productName, setName] = useState('');
   const [price, setPrice] = useState('');
   const [tags, setTags] = useState('');
+  const [tshirtColors, setTshirtColors] = useState('');
+  const [longSleeveColors, setLongSleeveColors] = useState('');
+  const [crewneckColors, setCrewneckColors] = useState('');
+  const [hoodieColors, setHoodieColors] = useState('');
 
   const handleFileInputChange = (event) => {
     setFile(event.target.files[0]);
+  };
+
+  const handleTshirtColor = (event) => {
+    if (tshirtColors.includes(event)) {
+      const removedColor = tshirtColors.replace(event, "");
+      setTshirtColors(removedColor);
+    }
+    else {
+      setTshirtColors(tshirtColors + ' ' + event);
+    }
+  };
+
+  const handleLongSleeveColor = (event) => {
+    if (longSleeveColors.includes(event)) {
+      const removedColor = longSleeveColors.replace(event, "");
+      setLongSleeveColors(removedColor);
+    }
+    else {
+      setLongSleeveColors(longSleeveColors + ' ' + event);
+    }
+  };
+
+  const handleCrewneckColor = (event) => {
+    if (crewneckColors.includes(event)) {
+      const removedColor = crewneckColors.replace(event, "");
+      setCrewneckColors(removedColor);
+    }
+    else {
+      setCrewneckColors(crewneckColors + ' ' + event);
+    }
+  };
+
+  const handleHoodieColor = (event) => {
+    if (hoodieColors.includes(event)) {
+      const removedColor = hoodieColors.replace(event, "");
+      setHoodieColors(removedColor);
+    }
+    else {
+      setHoodieColors(hoodieColors + ' ' + event);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -18,6 +62,10 @@ function Upload() {
     formData.append('productName', productName);
     formData.append('price', price);
     formData.append('tags', tags);
+    formData.append('tColors', tshirtColors);
+    formData.append('lColors', longSleeveColors);
+    formData.append('cColors', crewneckColors);
+    formData.append('hColors', hoodieColors);
   
     fetch('/api/upload.php', {
       method: 'POST',
@@ -84,95 +132,95 @@ function Upload() {
               <div className="uploadSplit">
                 <label>T-Shirt:</label>
                 <br />
-                <input type="checkbox" id="tBlack" name="tBlack" value="tBlack" />
-                  <label for="black">&nbsp;Black</label>
+                <input type="checkbox" id="tBlack" name="tBlack" value="Black" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Black</label>
                   <br />
-                <input type="checkbox" id="tYellow" name="tYellow" value="tYellow" />
-                  <label for="black">&nbsp;Yellow</label>
+                <input type="checkbox" id="tYellow" name="tYellow" value="Yellow" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Yellow</label>
                   <br />
-                <input type="checkbox" id="tPink" name="tPink" value="tPink" />
-                  <label for="black">&nbsp;Pink</label>
+                <input type="checkbox" id="tPink" name="tPink" value="Pink" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Pink</label>
                   <br />
-                <input type="checkbox" id="tGray" name="tGray" value="tGray" />
-                  <label for="black">&nbsp;Gray</label>
+                <input type="checkbox" id="tGray" name="tGray" value="Gray" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Gray</label>
                   <br />
-                <input type="checkbox" id="tMaroon" name="tMaroon" value="tMaroon" />
-                  <label for="black">&nbsp;Maroon</label>
+                <input type="checkbox" id="tMaroon" name="tMaroon" value="Maroon" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Maroon</label>
                   <br />
-                <input type="checkbox" id="tOrange" name="tOrange" value="tOrange" />
-                  <label for="black">&nbsp;Orange</label>
+                <input type="checkbox" id="tOrange" name="tOrange" value="Orange" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Orange</label>
                   <br />
-                <input type="checkbox" id="tPurple" name="tPurple" value="tPurple" />
-                  <label for="black">&nbsp;Purple</label>
+                <input type="checkbox" id="tPurple" name="tPurple" value="Purple" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Purple</label>
                   <br />
-                <input type="checkbox" id="tRed" name="tRed" value="tRed" />
-                  <label for="black">&nbsp;Red</label>
+                <input type="checkbox" id="tRed" name="tRed" value="Red" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Red</label>
                   <br />
-                <input type="checkbox" id="tRoyal" name="tRoyal" value="tRoyal" />
-                  <label for="black">&nbsp;Royal</label>
+                <input type="checkbox" id="tRoyal" name="tRoyal" value="Royal" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Royal</label>
                   <br />
-                <input type="checkbox" id="tGreen" name="tGreen" value="tGreen" />
-                  <label for="black">&nbsp;Green</label>
+                <input type="checkbox" id="tGreen" name="tGreen" value="Green" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Green</label>
                   <br />
-                <input type="checkbox" id="tWhite" name="tWhite" value="tWhite" />
-                  <label for="black">&nbsp;White</label>
+                <input type="checkbox" id="tWhite" name="tWhite" value="White" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;White</label>
                   <br />
-                <input type="checkbox" id="tNavy" name="tNavy" value="tNavy" />
-                  <label for="black">&nbsp;Navy (Youth Only)</label>
+                <input type="checkbox" id="tNavy" name="tNavy" value="Navy" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Navy (Youth Only)</label>
                   <br />
               </div>
               <div className="uploadSplit">
                 <label>Long Sleeve:</label>
                 <br />
-                <input type="checkbox" id="lBlack" name="lBlack" value="lBlack" />
-                  <label for="black">&nbsp;Black</label>
+                <input type="checkbox" id="lBlack" name="lBlack" value="Black" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                  <label>&nbsp;Black</label>
                   <br />
-                <input type="checkbox" id="lNavy" name="lNavy" value="lNavy" />
-                  <label for="black">&nbsp;Navy</label>
+                <input type="checkbox" id="lNavy" name="lNavy" value="Navy" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                  <label>&nbsp;Navy</label>
                   <br />
-                <input type="checkbox" id="lRed" name="lRed" value="lRed" />
-                  <label for="black">&nbsp;Red</label>
+                <input type="checkbox" id="lRed" name="lRed" value="Red" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                  <label>&nbsp;Red</label>
                   <br />
-                <input type="checkbox" id="lRoyal" name="lRoyal" value="lRoyal" />
-                  <label for="black">&nbsp;Royal</label>
+                <input type="checkbox" id="lRoyal" name="lRoyal" value="Royal" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                  <label>&nbsp;Royal</label>
                   <br />
-                <input type="checkbox" id="lGray" name="lGray" value="lGray" />
-                  <label for="black">&nbsp;Gray</label>
+                <input type="checkbox" id="lGray" name="lGray" value="Gray" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                  <label>&nbsp;Gray</label>
                   <br />
-                <input type="checkbox" id="lWhite" name="lWhite" value="lWhite" />
-                  <label for="black">&nbsp;White</label>
+                <input type="checkbox" id="lWhite" name="lWhite" value="White" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                  <label>&nbsp;White</label>
                   <br />
               </div>
               <div className="uploadSplit">
                 <label>Crewneck:</label>
                 <br />
-                <input type="checkbox" id="cBlack" name="cBlack" value="cBlack" />
-                  <label for="black">&nbsp;Black</label>
+                <input type="checkbox" id="cBlack" name="cBlack" value="Black" onChange={(event) => handleCrewneckColor(event.target.value)}/>
+                  <label>&nbsp;Black</label>
                   <br />
-                <input type="checkbox" id="cGray" name="cGray" value="cGray" />
-                  <label for="black">&nbsp;Gray</label>
+                <input type="checkbox" id="cGray" name="cGray" value="Gray" onChange={(event) => handleCrewneckColor(event.target.value)}/>
+                  <label>&nbsp;Gray</label>
                   <br />
-                <input type="checkbox" id="cWhite" name="cWhite" value="cWhite" />
-                  <label for="black">&nbsp;White</label>
+                <input type="checkbox" id="cWhite" name="cWhite" value="White" onChange={(event) => handleCrewneckColor(event.target.value)}/>
+                  <label>&nbsp;White</label>
                   <br />
               </div>
               <div className="uploadSplit">
                 <label>Hoodie:</label>
                 <br />
-                <input type="checkbox" id="hBlack" name="hBlack" value="hBlack" />
-                  <label for="black">&nbsp;Black</label>
+                <input type="checkbox" id="hBlack" name="hBlack" value="Black" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                  <label>&nbsp;Black</label>
                   <br />
-                <input type="checkbox" id="hGray" name="hGray" value="hGray" />
-                  <label for="black">&nbsp;Gray</label>
+                <input type="checkbox" id="hGray" name="hGray" value="Gray" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                  <label>&nbsp;Gray</label>
                   <br />
-                <input type="checkbox" id="hRed" name="hRed" value="hRed" />
-                  <label for="black">&nbsp;Pink</label>
+                <input type="checkbox" id="hRed" name="hRed" value="Red" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                  <label>&nbsp;Pink</label>
                   <br />
-                <input type="checkbox" id="hNavy" name="hNavy" value="hNavy" />
-                  <label for="black">&nbsp;Navy</label>
+                <input type="checkbox" id="hNavy" name="hNavy" value="Navy" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                  <label>&nbsp;Navy</label>
                   <br />
-                <input type="checkbox" id="hWhite" name="hWhite" value="hWhite" />
-                  <label for="black">&nbsp;White</label>
+                <input type="checkbox" id="hWhite" name="hWhite" value="White" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                  <label>&nbsp;White</label>
                   <br />
               </div>
             </div>
