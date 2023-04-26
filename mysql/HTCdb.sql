@@ -33,6 +33,20 @@ CREATE TABLE IF NOT EXISTS products (
     PRIMARY KEY (product_id)
 );
 
+
+/* Add color options to the products table */
+ALTER TABLE products
+ADD tColors varchar(255)DEFAULT 'None';
+
+ALTER TABLE products
+ADD lColors varchar(255)DEFAULT 'None';
+
+ALTER TABLE products
+ADD cColors varchar(255)DEFAULT 'None';
+
+ALTER TABLE products
+ADD hColors varchar(255)DEFAULT 'None';
+
 /* Each user should have exactly one cart. The cart should be created
 as an empty order as soon as an account is created */
 /* When an order is placed, the elements  of the user's cart should be
