@@ -47,6 +47,12 @@ function Order() {
   const [design, setDesign] = useState({id: 1, filename: "designOne.png", productName: "Be Like Friends", price: "16.00"});
   const [userId, setUserId] = useState("");
 
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   const addToCart = () => {
     fetch("/api/addToCart.php", {
       method: "POST",
@@ -233,7 +239,7 @@ function Order() {
             <h1>Quantity: {" "}
               <button 
                 className="quantity"
-                onClick={() => setQuantity(quantity - 1)}>
+                onClick={() => decreaseQuantity()}>
                 -
               </button>
               {" "}{quantity}{" "}
