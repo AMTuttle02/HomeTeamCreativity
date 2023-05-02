@@ -33,7 +33,7 @@ function Order() {
   const [longSleeve, setLongSleeve] = useState(blackLongSleeve);
   const [hoodie, setHoodie] = useState(blackHoodie);
   const [currentColor, setCurrentColor] = useState("Black");
-  const [currentStyle, setCurrentStyle] = useState("TShirt");
+  const [currentStyle, setCurrentStyle] = useState("Short Sleeve T-Shirt");
 
   useEffect(() => {
     retrieveProduct();
