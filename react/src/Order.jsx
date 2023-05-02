@@ -109,13 +109,13 @@ function Order() {
   }, []);
 
   useEffect(() => {
-    if (currentStyle == "TShirt") {
+    if (currentStyle == "Short Sleeve T-Shirt") {
       setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
     }
-    else if (currentStyle == "Crewneck") {
+    else if (currentStyle == "Crewneck Sweatshirt") {
       setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
     }
-    else if (currentStyle == "Long Sleeve") {
+    else if (currentStyle == "Long Sleeve T-Shirt") {
       setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
     }
     else {
@@ -156,10 +156,10 @@ function Order() {
             <h3>Style Your Product With The Options Below</h3>
             <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
             <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
-            <h1>Style: {productType.description}</h1>
+            <h1>Style: {currentStyle}</h1>
             <div className="typeOptionRow">
               <button 
-                onClick={() => setCurrentStyle("TShirt")}
+                onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
                 className="productTypes">
               <img
                 src={transparentTshirt}
@@ -168,7 +168,7 @@ function Order() {
               />
               </button>
               <button 
-                onClick={() => setCurrentStyle("Long Sleeve")}
+                onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
                 className="productTypes">
               <img
                 src={transparentLongSleeve}
@@ -177,7 +177,7 @@ function Order() {
               />
               </button>
               <button 
-                onClick={() => setCurrentStyle("Crewneck")}
+                onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
                 className="productTypes">
               <img
                 src={transparentCrewneck}
@@ -186,7 +186,7 @@ function Order() {
               />
               </button>
               <button 
-                onClick={() => setCurrentStyle("Hoodie")}
+                onClick={() => setCurrentStyle("Hooded Sweatshirt")}
                 className="productTypes">
               <img
                 src={transparentHoodie}
