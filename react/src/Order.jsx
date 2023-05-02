@@ -16,6 +16,7 @@ import black from "./assets/black.png";
 import red from "./assets/red.png";
 import yellow from "./assets/yellow.png";
 import blue from "./assets/blue.png";
+import gray from "./assets/gray.png";
 
 function Failed() {
   return (
@@ -59,7 +60,7 @@ function Order() {
   const [userId, setUserId] = useState("");
 
   const changeColor = (e) => {
-    if (e == red) {
+    if (e == gray) {
       setTshirt(grayTshirt);
       setCrewneck(grayCrewneck);
       setLongSleeve(grayLongSleeve);
@@ -199,7 +200,8 @@ function Order() {
             <h1>Color: {currentColor}</h1>
             <div className="typeOptionRow">
               <button 
-                onClick={() => changeColor(black)}>
+                onClick={() => changeColor(black)}
+                className="productTypes">
                 <img
                   src={black}
                   alt="Black"
@@ -207,23 +209,14 @@ function Order() {
                 />
               </button>
               <button 
-                onClick={() => changeColor(red)}>
+                onClick={() => changeColor(gray)}
+                className="productTypes">
                 <img
-                  src={red}
-                  alt="Red"
+                  src={gray}
+                  alt="Gray"
                   className="colorOptions"
                 />
-              </button> {/*
-              <img
-                  src={yellow}
-                  alt="Home Team Creativity Logo"
-                  className="colorOptions"
-              />
-              <img
-                  src={blue}
-                  alt="Home Team Creativity Logo"
-                  className="colorOptions"
-              /> */}
+              </button>
             </div>
             <br />
             <h1>Size: {size.description}</h1>
