@@ -59,6 +59,10 @@ function Order() {
   const [longSleeve, setLongSleeve] = useState(blackLongSleeve);
   const [hoodie, setHoodie] = useState(blackHoodie);
   const [currentColor, setCurrentColor] = useState("Black");
+  const [tShirtColor, setTShirtColor] = useState("Black");
+  const [longSleeveColor, setLongSleeveColor] = useState("Black");
+  const [hoodieColor, setHoodieColor] = useState("Black");
+  const [crewneckColor, setCrewneckColor] = useState("Black");
   const [currentStyle, setCurrentStyle] = useState("Short Sleeve T-Shirt");
 
   useEffect(() => {
@@ -90,62 +94,76 @@ function Order() {
       setCrewneck(grayCrewneck);
       setLongSleeve(grayLongSleeve);
       setHoodie(grayHoodie);
-      setCurrentColor("Gray");
+      setTShirtColor("Gray");
+      setLongSleeveColor("Gray");
+      setCrewneckColor("Gray");
+      setHoodieColor("Gray");
     }
     else if (e == black) {
       setTshirt(blackTshirt);
       setCrewneck(blackCrewneck);
       setLongSleeve(blackLongSleeve);
       setHoodie(blackHoodie);
-      setCurrentColor("Black");
+      setTShirtColor("Black");
+      setLongSleeveColor("Black");
+      setCrewneckColor("Black");
+      setHoodieColor("Black");
     }
     else if (e == white) {
       setTshirt(WhiteTshirt);
       setCrewneck(WhiteCrewneck);
       setLongSleeve(WhiteLongSleeve);
       setHoodie(WhiteHoodie);
-      setCurrentColor("White");
+      setTShirtColor("White");
+      setLongSleeveColor("White");
+      setCrewneckColor("White");
+      setHoodieColor("White");
     }
     else if (e == navy) {
       setTshirt(NavyTshirt);
       setLongSleeve(NavyLongSleeve);
       setHoodie(NavyHoodie);
-      setCurrentColor("Navy");
+      setTShirtColor("Navy");
+      setLongSleeveColor("Navy");
+      setHoodieColor("Navy");
     }
     else if (e == red) {
       setTshirt(RedTshirt);
       setLongSleeve(RedLongSleeve);
       setHoodie(RedHoodie);
-      setCurrentColor("Red");
+      setTShirtColor("Red");
+      setLongSleeveColor("Red");
+      setHoodieColor("Red");
     }
     else if (e == royal) {
       setTshirt(RoyalTshirt);
       setLongSleeve(RoyalLongSleeve);
-      setCurrentColor("Royal");
+      setTShirtColor("Royal");
+      setLongSleeveColor("Royal");
     }
     else if (e == yellow) {
       setTshirt(YellowTshirt);
-      setCurrentColor("Yellow");
+      setTShirtColor("Yellow");
     }
     else if (e == pink) {
       setTshirt(PinkTshirt);
-      setCurrentColor("Pink");
+      setTShirtColor("Pink");
     }
     else if (e == green) {
       setTshirt(GreenTshirt);
-      setCurrentColor("Green");
+      setTShirtColor("Green");
     }
     else if (e == maroon) {
       setTshirt(MaroonTshirt);
-      setCurrentColor("Maroon");
+      setTShirtColor("Maroon");
     }
     else if (e == orange) {
       setTshirt(OrangeTshirt);
-      setCurrentColor("Orange");
+      setTShirtColor("Orange");
     }
     else if (e == purple) {
       setTshirt(PurpleTshirt);
-      setCurrentColor("Purple");
+      setTShirtColor("Purple");
     }
   };
 
@@ -185,17 +203,21 @@ function Order() {
   useEffect(() => {
     if (currentStyle == "Short Sleeve T-Shirt") {
       setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+      setCurrentColor(tShirtColor);
     }
     else if (currentStyle == "Crewneck Sweatshirt") {
       setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
+      setCurrentColor(crewneckColor);
     }
     else if (currentStyle == "Long Sleeve T-Shirt") {
       setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
+      setCurrentColor(longSleeveColor);
     }
     else {
-      setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12})
+      setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
+      setCurrentColor(hoodieColor);
     }
-  }, [currentStyle, currentColor]);
+  }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor]);
 
   return (
     <div className="Order">
@@ -299,6 +321,7 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              {currentStyle != "Crewneck Sweatshirt" ?
               <button 
                 onClick={() => changeColor(navy)}
                 className="productTypes">
@@ -307,7 +330,9 @@ function Order() {
                   alt="Navy"
                   className="colorOptions"
                 />
-              </button>
+              </button> 
+              : <div /> }
+              {currentStyle == "Short Sleeve T-Shirt" || currentStyle == "Long Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(royal)}
                 className="productTypes">
@@ -317,6 +342,8 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {currentStyle != "Crewneck Sweatshirt" ?
               <button 
                 onClick={() => changeColor(red)}
                 className="productTypes">
@@ -326,6 +353,8 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(maroon)}
                 className="productTypes">
@@ -335,6 +364,8 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(yellow)}
                 className="productTypes">
@@ -344,6 +375,8 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(pink)}
                 className="productTypes">
@@ -353,6 +386,8 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(green)}
                 className="productTypes">
@@ -362,6 +397,8 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(orange)}
                 className="productTypes">
@@ -371,6 +408,8 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(purple)}
                 className="productTypes">
@@ -380,7 +419,7 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
-              
+              : <div /> }
             </div>
             <br />
             <h1>Size: {size.description}</h1>
