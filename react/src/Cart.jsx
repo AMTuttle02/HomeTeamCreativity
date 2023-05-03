@@ -5,20 +5,117 @@ import crewneck from "./assets/blackCrewneck.png";
 import hoodie from "./assets/blackHoodie.png";
 import { Link } from "react-router-dom";
 import cart from "./assets/cart.png";
+import blackTshirt from "./assets/blackTShirt.png";
+import blackLongSleeve from "./assets/blackLongSleeve.png";
+import blackCrewneck from "./assets/blackCrewneck.png";
+import blackHoodie from "./assets/blackHoodie.png";
+import grayTshirt from "./assets/GreyTShirt.png";
+import grayLongSleeve from "./assets/GreyLongSleeve.png";
+import grayCrewneck from "./assets/GreyCrewneckSS.png";
+import grayHoodie from "./assets/GreyHoodie.png";
+import RedTshirt from "./assets/RedTShirt.png";
+import RedLongSleeve from "./assets/RedLongSleeve.png";
+import RedHoodie from "./assets/RedHoodie.png";
+import YellowTshirt from "./assets/YellowTShirt.png";
+import PinkTshirt from "./assets/PinkTShirt.png";
+import GreenTshirt from "./assets/GreenTShirt.png";
+import MaroonTshirt from "./assets/MaroonTShirt.png";
+import OrangeTshirt from "./assets/OrangeTShirt.png";
+import PurpleTshirt from "./assets/PurpleTShirt.png";
+import RoyalTshirt from "./assets/RoyalTShirt.png";
+import RoyalLongSleeve from "./assets/RoyalLongSleeve.png";
+import NavyTshirt from "./assets/NavyTShirt.png";
+import NavyLongSleeve from "./assets/NavyLongSleece.png";
+import NavyHoodie from "./assets/NavyHoodie.png";
+import WhiteTshirt from "./assets/WhiteTShirt.png";
+import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
+import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
+import WhiteHoodie from "./assets/WhiteHoodie.png";
 
 
-function setType(type) {
+function setType(type, color) {
   if (type == "Crewneck Sweatshirt") {
-    return crewneck;
+    if (color == "Black") {
+      return blackCrewneck;
+    }
+    else if (color == "Gray") {
+      return grayCrewneck;
+    }
+    else if (color == "White") {
+      return WhiteCrewneck;
+    }
   }
   else if (type == "Hooded Sweatshirt") {
-    return hoodie;
+    if (color == "Black") {
+      return blackHoodie;
+    }
+    else if (color == "Gray") {
+      return grayHoodie;
+    }
+    else if (color == "White") {
+      return WhiteHoodie;
+    }
+    else if (color == "Red") {
+      return RedHoodie;
+    }
+    else if (color == "Navy") {
+      return NavyHoodie;
+    }
   }
   else if (type == "Long Sleeve T-Shirt") {
-    return longSleeve;
+    if (color == "Black") {
+      return blackLongSleeve;
+    }
+    else if (color == "Gray") {
+      return grayLongSleeve;
+    }
+    else if (color == "White") {
+      return WhiteLongSleeve;
+    }
+    else if (color == "Navy") {
+      return NavyLongSleeve;
+    }
+    else if (color == "Red") {
+      return RedLongSleeve;
+    }
+    else if (color == "Royal") {
+      return RoyalLongSleeve;
+    }
   }
   else {
-    return tshirt;
+    if (color == "Black") {
+      return blackTshirt;
+    }
+    else if (color == "Gray") {
+      return grayTshirt;
+    }
+    else if (color == "White") {
+      return WhiteTshirt;
+    }
+    else if (color == "Yellow") {
+      return YellowTshirt;
+    }
+    else if (color == "Pink") {
+      return PinkTshirt;
+    }
+    else if (color == "Green") {
+      return GreenTshirt;
+    }
+    else if (color == "Maroon") {
+      return MaroonTshirt;
+    }
+    else if (color == "Orange") {
+      return OrangeTshirt;
+    }
+    else if (color == "Purple") {
+      return PurpleTshirt;
+    }
+    else if (color == "Red") {
+      return RedTshirt;
+    }
+    else if (color == "Royal") {
+      return RoyalTshirt;
+    }
   }
 }
 
@@ -94,7 +191,7 @@ function Cart() {
         order_id: order.order_id, 
         product_id: product.product_id, 
         quantity: product.product_quantity, 
-        color: "Black",
+        color: product.color,
         product_type: product.product_type,
         size: product.size,
         price: setPrice(product.price, product.product_type, product.size) * product.product_quantity}),
@@ -115,7 +212,7 @@ function Cart() {
         order_id: order.order_id, 
         product_id: product.product_id, 
         quantity: product.product_quantity, 
-        color: "Black",
+        color: product.color,
         product_type: product.product_type,
         size: product.size,
         price: setPrice(product.price, product.product_type, product.size)}),
@@ -152,7 +249,7 @@ function Cart() {
           order_id: order.order_id, 
           product_id: product.product_id, 
           quantity: product.product_quantity, 
-          color: "Black",
+          color: product.color,
           product_type: product.product_type,
           size: product.size,
           price: setPrice(product.price, product.product_type, product.size)}),
@@ -193,7 +290,7 @@ function Cart() {
     fetch("/api/getOrder.php")
     .then((response) => response.json())
     .then((data) => {
-      //console.log(data);
+      console.log(data);
       setOrder(data);
     });
   }, []);
@@ -202,7 +299,7 @@ function Cart() {
     fetch("/api/getCart.php")
     .then((response) => response.json())
     .then((data) => {
-      //console.log(data);
+      console.log(data);
       setProducts(data);
     });
   }, []);
@@ -246,9 +343,9 @@ function Cart() {
           <div className="cartSideCheckout">
             <div className = "CheckoutButtonPlacement">
               <br/>
-              <Link to="/payment" className="CheckoutButton">
+              <button onClick={() => checkout(order)} className="CheckoutButton">
                 Check Out
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -262,7 +359,7 @@ function Cart() {
                   <div className="productSide">
                     <div className="fullDesign">
                       <img
-                        src={setType(product.product_type)}
+                        src={setType(product.product_type, product.color)}
                         alt="Home Team Creativity Logo"
                         className="tshirt"
                       />
