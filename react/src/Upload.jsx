@@ -165,7 +165,7 @@ function Upload() {
                   <label>&nbsp;White</label>
                   <br />
                 <input type="checkbox" id="tNavy" name="tNavy" value="Navy" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Navy (Youth Only)</label>
+                  <label>&nbsp;Navy (Adult Only)</label>
                   <br />
               </div>
               <div className="uploadSplit">
