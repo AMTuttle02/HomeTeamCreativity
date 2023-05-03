@@ -193,8 +193,8 @@ function Checkout() {
             <div className="CartPage" />
             <br />
             <div className="cartMain">
-                <br />
-                <h1>{name}'s Order Details</h1>
+              <br />
+              <h1>{name}'s Order Details</h1>
             </div>
             <br />
 
@@ -206,14 +206,14 @@ function Checkout() {
                     <div className="productSide">
                         <div className="fullDesign">
                         <img
-                            src={setType(product.product_type, product.color)}
-                            alt="Home Team Creativity Logo"
-                            className="tshirt"
+                          src={setType(product.product_type, product.color)}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
                         />
                         <img
-                            src={"api/images/" + product.filename}
-                            alt={product.filename}
-                            className="design"
+                          src={"api/images/" + product.filename}
+                          alt={product.filename}
+                          className="design"
                         />
                         </div>
                     </div>
@@ -230,8 +230,8 @@ function Checkout() {
                         <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
                         <br /><br />
                         <h2> 
-                            Qty: 
-                            {product.product_quantity} 
+                          Qty: 
+                          {product.product_quantity} 
                         </h2>
                         </div>
                         :
@@ -240,21 +240,21 @@ function Checkout() {
                         <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
                         <br /><br />
                         <h2> 
-                            Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
-                            {product.product_quantity} 
-                            <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                          Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                          {product.product_quantity} 
+                          <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
                         </h2>
                         </div>
                     }
                     {product.product_id ?
-                        <div className="productSide">
-                        <br /><br /><br /><br /><br /><br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                        </div>
+                      <div className="productSide">
+                      <br /><br /><br /><br /><br /><br />
+                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                      </div>
                     :
                     <div className="productSide">
-                        <br /><br /><br /><br /><br /><br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                      <br /><br /><br /><br /><br /><br />
+                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                     </div>
                     }
                     <div className="CartPage" />
