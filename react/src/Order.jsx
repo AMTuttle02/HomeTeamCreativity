@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import blackTshirt from "./assets/blackTShirt.png";
-import blackLongSleeve from "./assets/blackLongSleeve.png";
-import blackCrewneck from "./assets/blackCrewneck.png";
-import blackHoodie from "./assets/blackHoodie.png";
-import grayTshirt from "./assets/GreyTShirt.png";
-import grayLongSleeve from "./assets/GreyLongSleeve.png";
-import grayCrewneck from "./assets/GreyCrewneckSS.png";
-import grayHoodie from "./assets/GreyHoodie.png";
+import BlackTshirt from "./assets/blackTShirt.png";
+import BlackLongSleeve from "./assets/blackLongSleeve.png";
+import BlackCrewneck from "./assets/blackCrewneck.png";
+import BlackHoodie from "./assets/blackHoodie.png";
+import GrayTshirt from "./assets/GreyTShirt.png";
+import GrayLongSleeve from "./assets/GreyLongSleeve.png";
+import GrayCrewneck from "./assets/GreyCrewneckSS.png";
+import GrayHoodie from "./assets/GreyHoodie.png";
 import RedTshirt from "./assets/RedTShirt.png";
 import RedLongSleeve from "./assets/RedLongSleeve.png";
 import RedHoodie from "./assets/RedHoodie.png";
@@ -54,10 +54,10 @@ function Failed() {
 }
 
 function Order() {
-  const [tshirt, setTshirt] = useState(blackTshirt);
-  const [crewneck, setCrewneck] = useState(blackCrewneck);
-  const [longSleeve, setLongSleeve] = useState(blackLongSleeve);
-  const [hoodie, setHoodie] = useState(blackHoodie);
+  const [tshirt, setTshirt] = useState(BlackTshirt);
+  const [crewneck, setCrewneck] = useState(BlackCrewneck);
+  const [longSleeve, setLongSleeve] = useState(BlackLongSleeve);
+  const [hoodie, setHoodie] = useState(BlackHoodie);
   const [currentColor, setCurrentColor] = useState("Black");
   const [tShirtColor, setTShirtColor] = useState("Black");
   const [longSleeveColor, setLongSleeveColor] = useState("Black");
@@ -75,7 +75,59 @@ function Order() {
       .then((data) => {
         if (data) {
           console.log(data.product_id);
-          setDesign({id: data.product_id, filename: data.filename, productName: data.product_name, price: data.price});
+          setDesign({id: data.product_id, 
+                    filename: data.filename, 
+                    productName: data.product_name, 
+                    price: data.price, 
+                    tColors: data.tColors, 
+                    lColors: data.lColors, 
+                    cColors: data.cColors, 
+                    hColors: data.hColors
+          });
+          const tShirtMap = {
+            "Black": BlackTshirt,
+            "Gray": GrayTshirt,
+            "Yellow": YellowTshirt,
+            "Pink": PinkTshirt,
+            "Green": GreenTshirt,
+            "Maroon": MaroonTshirt,
+            "Orange": OrangeTshirt,
+            "Purple": PurpleTshirt,
+            "Red": RedTshirt,
+            "Royal": RoyalTshirt,
+            "White": WhiteTshirt
+          }
+          setTShirtColor(data.tColors.split(" ")[0]);
+          setTshirt(tShirtMap[data.tColors.split(" ")[0]]);
+          
+          const lShirtMap = {
+            "Black": BlackLongSleeve,
+            "Gray": GrayLongSleeve,
+            "Red": RedLongSleeve,
+            "Royal": RoyalLongSleeve,
+            "White": WhiteLongSleeve,
+            "Navy": NavyLongSleeve
+          }
+          setLongSleeveColor(data.lColors.split(" ")[0]);
+          setLongSleeve(lShirtMap[data.lColors.split(" ")[0]]);
+
+          const crewMap = {
+            "Black": BlackCrewneck,
+            "Gray": GrayCrewneck,
+            "White": WhiteCrewneck
+          }
+          setCrewneckColor(data.cColors.split(" ")[0]);
+          setCrewneck(crewMap[data.cColors.split(" ")[0]]);
+
+          const hoodieMap = {
+            "Black": BlackHoodie,
+            "Gray": GrayHoodie,
+            "Red": RedHoodie,
+            "White": WhiteHoodie,
+            "Navy": NavyHoodie
+          }
+          setHoodieColor(data.hColors.split(" ")[0]);
+          setHoodie(hoodieMap[data.hColors.split(" ")[0]]);
         }
       });
   }
@@ -90,80 +142,132 @@ function Order() {
 
   const changeColor = (e) => {
     if (e == gray) {
-      setTshirt(grayTshirt);
-      setCrewneck(grayCrewneck);
-      setLongSleeve(grayLongSleeve);
-      setHoodie(grayHoodie);
-      setTShirtColor("Gray");
-      setLongSleeveColor("Gray");
-      setCrewneckColor("Gray");
-      setHoodieColor("Gray");
+      if (design.tColors.includes("Gray")) {
+        setTshirt(GrayTshirt);
+        setTShirtColor("Gray");
+      }
+      if (design.cColors.includes("Gray")) {
+        setCrewneck(GrayCrewneck);
+        setCrewneckColor("Gray");
+      }
+      if (design.lColors.includes("Gray")) {
+        setLongSleeve(GrayLongSleeve);
+        setLongSleeveColor("Gray");
+      }
+      if (design.hColors.includes("Gray")) {
+        setHoodie(GrayHoodie);
+        setHoodieColor("Gray");
+      }  
     }
     else if (e == black) {
-      setTshirt(blackTshirt);
-      setCrewneck(blackCrewneck);
-      setLongSleeve(blackLongSleeve);
-      setHoodie(blackHoodie);
-      setTShirtColor("Black");
-      setLongSleeveColor("Black");
-      setCrewneckColor("Black");
-      setHoodieColor("Black");
+      if (design.tColors.includes("Black")) {
+        setTshirt(BlackTshirt);
+        setTShirtColor("Black");
+      }
+      if (design.cColors.includes("Black")) {
+        setCrewneck(BlackCrewneck);
+        setCrewneckColor("Black");
+      }
+      if (design.lColors.includes("Black")) {
+        setLongSleeve(BlackLongSleeve);
+        setLongSleeveColor("Black");
+      }
+      if (design.hColors.includes("Black")) {
+        setHoodie(BlackHoodie);
+        setHoodieColor("Black");
+      } 
     }
     else if (e == white) {
-      setTshirt(WhiteTshirt);
-      setCrewneck(WhiteCrewneck);
-      setLongSleeve(WhiteLongSleeve);
-      setHoodie(WhiteHoodie);
-      setTShirtColor("White");
-      setLongSleeveColor("White");
-      setCrewneckColor("White");
-      setHoodieColor("White");
+      if (design.tColors.includes("White")) {
+        setTshirt(WhiteTshirt);
+        setTShirtColor("White");
+      }
+      if (design.cColors.includes("White")) {
+        setCrewneck(WhiteCrewneck);
+        setCrewneckColor("White");
+      }
+      if (design.lColors.includes("White")) {
+        setLongSleeve(WhiteLongSleeve);
+        setLongSleeveColor("White");
+      }
+      if (design.hColors.includes("White")) {
+        setHoodie(WhiteHoodie);
+        setHoodieColor("White");
+      } 
     }
     else if (e == navy) {
-      setTshirt(NavyTshirt);
-      setLongSleeve(NavyLongSleeve);
-      setHoodie(NavyHoodie);
-      setTShirtColor("Navy");
-      setLongSleeveColor("Navy");
-      setHoodieColor("Navy");
+      if (design.tColors.includes("Navy")) {
+        setTshirt(NavyTshirt);
+        setTShirtColor("Navy");
+      }
+      if (design.lColors.includes("Navy")) {
+        setLongSleeve(NavyLongSleeve);
+        setLongSleeveColor("Navy");
+      }
+      if (design.hColors.includes("Navy")) {
+        setHoodie(NavyHoodie);
+        setHoodieColor("Navy");
+      }
     }
     else if (e == red) {
-      setTshirt(RedTshirt);
-      setLongSleeve(RedLongSleeve);
-      setHoodie(RedHoodie);
-      setTShirtColor("Red");
-      setLongSleeveColor("Red");
-      setHoodieColor("Red");
+      if (design.tColors.includes("Red")) {
+        setTshirt(RedTshirt);
+        setTShirtColor("Red");
+      }
+      if (design.lColors.includes("Red")) {
+        setLongSleeve(RedLongSleeve);
+        setLongSleeveColor("Red");
+      }
+      if (design.hColors.includes("Red")) {
+        setHoodie(RedHoodie);
+        setHoodieColor("Red");
+      }
     }
     else if (e == royal) {
-      setTshirt(RoyalTshirt);
-      setLongSleeve(RoyalLongSleeve);
-      setTShirtColor("Royal");
-      setLongSleeveColor("Royal");
+      if (design.tColors.includes("Royal")) {
+        setTshirt(RoyalTshirt);
+        setTShirtColor("Royal");
+      }
+      if (design.lColors.includes("Royal")) {
+        setLongSleeve(RoyalLongSleeve);
+        setLongSleeveColor("Royal");
+      }
     }
     else if (e == yellow) {
-      setTshirt(YellowTshirt);
-      setTShirtColor("Yellow");
+      if (design.tColors.includes("Yellow")) {
+        setTshirt(YellowTshirt);
+        setTShirtColor("Yellow");
+      }
     }
     else if (e == pink) {
-      setTshirt(PinkTshirt);
-      setTShirtColor("Pink");
+      if (design.tColors.includes("Pink")) {
+        setTshirt(PinkTshirt);
+        setTShirtColor("Pink");
+      }
     }
     else if (e == green) {
-      setTshirt(GreenTshirt);
-      setTShirtColor("Green");
+      if (design.tColors.includes("Green")) {
+        setTshirt(GreenTshirt);
+        setTShirtColor("Green");
+      }
     }
     else if (e == maroon) {
-      setTshirt(MaroonTshirt);
-      setTShirtColor("Maroon");
+      if (design.tColors.includes("Maroon")) {
+        setTshirt(MaroonTshirt);
+        setTShirtColor("Maroon");
+      }
     }
     else if (e == orange) {
-      setTshirt(OrangeTshirt);
-      setTShirtColor("Orange");
+      if (design.tColors.includes("Orange")) {
+        setTshirt(OrangeTshirt);
+        setTShirtColor("Orange");
+      }
     }
     else if (e == purple) {
-      setTshirt(PurpleTshirt);
-      setTShirtColor("Purple");
+      if (design.tColors.includes("Purple")) {
+        setTshirt(PurpleTshirt);
+        setTShirtColor("Purple");
+      }
     }
   };
 
@@ -202,8 +306,29 @@ function Order() {
 
   useEffect(() => {
     if (currentStyle == "Short Sleeve T-Shirt") {
-      setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-      setCurrentColor(tShirtColor);
+      if (size.description.includes("Youth") && tShirtColor == "Navy") {
+        const tShirtMap = {
+          "Black": BlackTshirt,
+          "Gray": GrayTshirt,
+          "Yellow": YellowTshirt,
+          "Pink": PinkTshirt,
+          "Green": GreenTshirt,
+          "Maroon": MaroonTshirt,
+          "Orange": OrangeTshirt,
+          "Purple": PurpleTshirt,
+          "Red": RedTshirt,
+          "Royal": RoyalTshirt,
+          "White": WhiteTshirt
+        }
+        setTShirtColor(design.tColors.split(" ")[0]);
+        setTshirt(tShirtMap[design.tColors.split(" ")[0]]);
+        setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+        setCurrentColor(tShirtColor);
+      }
+      else {
+        setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+        setCurrentColor(tShirtColor);
+      }
     }
     else if (currentStyle == "Crewneck Sweatshirt") {
       setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
@@ -213,11 +338,16 @@ function Order() {
       setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
       setCurrentColor(longSleeveColor);
     }
-    else {
+    else if (currentStyle == "Hooded Sweatshirt") {
       setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
       setCurrentColor(hoodieColor);
     }
-  }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor]);
+
+    if (currentColor == "Navy" && size.description.includes("Youth") && currentStyle == "Short Sleeve T-Shirt") {
+      setCurrentColor(design.tColors.split(" ")[0]);
+      setProductType({type: BlackTshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+    }
+  }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size]);
 
   return (
     <div className="Order">
@@ -243,7 +373,7 @@ function Order() {
             <p>100% Cotton</p>
             <p>True To Size</p>
             <p>Regular Fit</p>
-            <p>Wash Inside Out if possible</p>
+            <p>Wash Inside Out If Possible</p>
             <Link to='/returnpolicy'>Return Policy</Link>
             </div>
         </div>
@@ -294,6 +424,7 @@ function Order() {
             <br />
             <h1>Color: {currentColor}</h1>
             <div className="typeOptionRow">
+              {design.tColors.includes("Black") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(black)}
                 className="productTypes">
@@ -303,6 +434,41 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {design.lColors.includes("Black") && currentStyle == "Long Sleeve T-Shirt" ?
+              <button 
+                onClick={() => changeColor(black)}
+                className="productTypes">
+                <img
+                  src={black}
+                  alt="Black"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.cColors.includes("Black") && currentStyle == "Crewneck Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(black)}
+                className="productTypes">
+                <img
+                  src={black}
+                  alt="Black"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.hColors.includes("Black") && currentStyle == "Hooded Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(black)}
+                className="productTypes">
+                <img
+                  src={black}
+                  alt="Black"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.tColors.includes("Gray") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(gray)}
                 className="productTypes">
@@ -312,6 +478,41 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              : <div /> }
+              {design.lColors.includes("Gray") && currentStyle == "Long Sleeve T-Shirt" ?
+              <button 
+                onClick={() => changeColor(gray)}
+                className="productTypes">
+                <img
+                  src={gray}
+                  alt="Gray"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.cColors.includes("Gray") && currentStyle == "Crewneck Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(gray)}
+                className="productTypes">
+                <img
+                  src={gray}
+                  alt="Gray"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.hColors.includes("Gray") && currentStyle == "Hooded Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(gray)}
+                className="productTypes">
+                <img
+                  src={gray}
+                  alt="Gray"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.tColors.includes("White") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(white)}
                 className="productTypes">
@@ -321,7 +522,41 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
-              {currentStyle != "Crewneck Sweatshirt" ?
+              : <div /> }
+              {design.lColors.includes("White") && currentStyle == "Long Sleeve T-Shirt" ?
+              <button 
+                onClick={() => changeColor(white)}
+                className="productTypes">
+                <img
+                  src={white}
+                  alt="White"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.cColors.includes("White") && currentStyle == "Crewneck Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(white)}
+                className="productTypes">
+                <img
+                  src={white}
+                  alt="White"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.hColors.includes("White") && currentStyle == "Hooded Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(white)}
+                className="productTypes">
+                <img
+                  src={white}
+                  alt="White"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" && !size.description.includes("Youth")?
               <button 
                 onClick={() => changeColor(navy)}
                 className="productTypes">
@@ -332,7 +567,29 @@ function Order() {
                 />
               </button> 
               : <div /> }
-              {currentStyle == "Short Sleeve T-Shirt" || currentStyle == "Long Sleeve T-Shirt" ?
+              {design.lColors.includes("Navy") && currentStyle == "Long Sleeve T-Shirt" ?
+              <button 
+                onClick={() => changeColor(navy)}
+                className="productTypes">
+                <img
+                  src={navy}
+                  alt="Navy"
+                  className="colorOptions"
+                />
+              </button> 
+              : <div /> }
+              {design.hColors.includes("Navy") && currentStyle == "Hooded Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(navy)}
+                className="productTypes">
+                <img
+                  src={navy}
+                  alt="Navy"
+                  className="colorOptions"
+                />
+              </button> 
+              : <div /> }
+              {design.tColors.includes("Royal") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(royal)}
                 className="productTypes">
@@ -343,7 +600,18 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {currentStyle != "Crewneck Sweatshirt" ?
+              {design.lColors.includes("Royal") && currentStyle == "Long Sleeve T-Shirt" ?
+              <button 
+                onClick={() => changeColor(royal)}
+                className="productTypes">
+                <img
+                  src={royal}
+                  alt="Royal"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.tColors.includes("Red") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(red)}
                 className="productTypes">
@@ -354,7 +622,29 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {currentStyle == "Short Sleeve T-Shirt" ?
+              {design.lColors.includes("Red") && currentStyle == "Long Sleeve T-Shirt" ?
+              <button 
+                onClick={() => changeColor(red)}
+                className="productTypes">
+                <img
+                  src={red}
+                  alt="Red"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.hColors.includes("Red") && currentStyle == "Hooded Sweatshirt" ?
+              <button 
+                onClick={() => changeColor(red)}
+                className="productTypes">
+                <img
+                  src={red}
+                  alt="Red"
+                  className="colorOptions"
+                />
+              </button>
+              : <div /> }
+              {design.tColors.includes("Maroon") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(maroon)}
                 className="productTypes">
@@ -365,7 +655,7 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {currentStyle == "Short Sleeve T-Shirt" ?
+              {design.tColors.includes("Yellow") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(yellow)}
                 className="productTypes">
@@ -376,7 +666,7 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {currentStyle == "Short Sleeve T-Shirt" ?
+              {design.tColors.includes("Pink") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(pink)}
                 className="productTypes">
@@ -387,7 +677,7 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {currentStyle == "Short Sleeve T-Shirt" ?
+              {design.tColors.includes("Green") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(green)}
                 className="productTypes">
@@ -398,7 +688,7 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {currentStyle == "Short Sleeve T-Shirt" ?
+              {design.tColors.includes("Orange") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(orange)}
                 className="productTypes">
@@ -409,7 +699,7 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {currentStyle == "Short Sleeve T-Shirt" ?
+              {design.tColors.includes("Purple") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(purple)}
                 className="productTypes">
