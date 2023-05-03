@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import tshirt from "./assets/blackTShirt.png";
-import longSleeve from "./assets/blackLongSleeve.png";
-import crewneck from "./assets/blackCrewneck.png";
-import hoodie from "./assets/blackHoodie.png";
 import { Link } from "react-router-dom";
 import cart from "./assets/cart.png";
 import blackTshirt from "./assets/blackTShirt.png";
@@ -115,6 +111,9 @@ function setType(type, color) {
     }
     else if (color == "Royal") {
       return RoyalTshirt;
+    }
+    else if (color == "Navy") {
+      return NavyTshirt;
     }
   }
 }
