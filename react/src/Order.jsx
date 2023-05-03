@@ -6,8 +6,26 @@ import blackCrewneck from "./assets/blackCrewneck.png";
 import blackHoodie from "./assets/blackHoodie.png";
 import grayTshirt from "./assets/GreyTShirt.png";
 import grayLongSleeve from "./assets/GreyLongSleeve.png";
-import grayCrewneck from "./assets/GreyCrewneck.png";
+import grayCrewneck from "./assets/GreyCrewneckSS.png";
 import grayHoodie from "./assets/GreyHoodie.png";
+import RedTshirt from "./assets/RedTShirt.png";
+import RedLongSleeve from "./assets/RedLongSleeve.png";
+import RedHoodie from "./assets/RedHoodie.png";
+import YellowTshirt from "./assets/YellowTShirt.png";
+import PinkTshirt from "./assets/PinkTShirt.png";
+import GreenTshirt from "./assets/GreenTShirt.png";
+import MaroonTshirt from "./assets/MaroonTShirt.png";
+import OrangeTshirt from "./assets/OrangeTShirt.png";
+import PurpleTshirt from "./assets/PurpleTShirt.png";
+import RoyalTshirt from "./assets/RoyalTShirt.png";
+import RoyalLongSleeve from "./assets/RoyalLongSleeve.png";
+import NavyTshirt from "./assets/NavyTShirt.png";
+import NavyLongSleeve from "./assets/NavyLongSleece.png";
+import NavyHoodie from "./assets/NavyHoodie.png";
+import WhiteTshirt from "./assets/WhiteTShirt.png";
+import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
+import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
+import WhiteHoodie from "./assets/WhiteHoodie.png";
 import transparentTshirt from "./assets/transparentTshirt.png";
 import transparentLongSleeve from "./assets/transparentLongSleeve.png";
 import transparentCrewneck from "./assets/transparentCrewneck.png";
@@ -15,8 +33,15 @@ import transparentHoodie from "./assets/transparentHoodie.png";
 import black from "./assets/black.png";
 import red from "./assets/red.png";
 import yellow from "./assets/yellow.png";
-import blue from "./assets/blue.png";
+import royal from "./assets/royal.png";
 import gray from "./assets/gray.png";
+import pink from "./assets/pink.png";
+import green from "./assets/green.png";
+import maroon from "./assets/maroon.png";
+import orange from "./assets/orange.png";
+import purple from "./assets/purple.png";
+import white from "./assets/white.png";
+import navy from "./assets/navy.png";
 
 function Failed() {
   return (
@@ -74,6 +99,54 @@ function Order() {
       setHoodie(blackHoodie);
       setCurrentColor("Black");
     }
+    else if (e == white) {
+      setTshirt(WhiteTshirt);
+      setCrewneck(WhiteCrewneck);
+      setLongSleeve(WhiteLongSleeve);
+      setHoodie(WhiteHoodie);
+      setCurrentColor("White");
+    }
+    else if (e == navy) {
+      setTshirt(NavyTshirt);
+      setLongSleeve(NavyLongSleeve);
+      setHoodie(NavyHoodie);
+      setCurrentColor("Navy");
+    }
+    else if (e == red) {
+      setTshirt(RedTshirt);
+      setLongSleeve(RedLongSleeve);
+      setHoodie(RedHoodie);
+      setCurrentColor("Red");
+    }
+    else if (e == royal) {
+      setTshirt(RoyalTshirt);
+      setLongSleeve(RoyalLongSleeve);
+      setCurrentColor("Royal");
+    }
+    else if (e == yellow) {
+      setTshirt(YellowTshirt);
+      setCurrentColor("Yellow");
+    }
+    else if (e == pink) {
+      setTshirt(PinkTshirt);
+      setCurrentColor("Pink");
+    }
+    else if (e == green) {
+      setTshirt(GreenTshirt);
+      setCurrentColor("Green");
+    }
+    else if (e == maroon) {
+      setTshirt(MaroonTshirt);
+      setCurrentColor("Maroon");
+    }
+    else if (e == orange) {
+      setTshirt(OrangeTshirt);
+      setCurrentColor("Orange");
+    }
+    else if (e == purple) {
+      setTshirt(PurpleTshirt);
+      setCurrentColor("Purple");
+    }
   };
 
   const addToCart = () => {
@@ -122,7 +195,7 @@ function Order() {
     else {
       setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12})
     }
-  });
+  }, [currentStyle, currentColor]);
 
   return (
     <div className="Order">
@@ -217,6 +290,97 @@ function Order() {
                   className="colorOptions"
                 />
               </button>
+              <button 
+                onClick={() => changeColor(white)}
+                className="productTypes">
+                <img
+                  src={white}
+                  alt="White"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(navy)}
+                className="productTypes">
+                <img
+                  src={navy}
+                  alt="Navy"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(royal)}
+                className="productTypes">
+                <img
+                  src={royal}
+                  alt="Royal"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(red)}
+                className="productTypes">
+                <img
+                  src={red}
+                  alt="Red"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(maroon)}
+                className="productTypes">
+                <img
+                  src={maroon}
+                  alt="Maroon"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(yellow)}
+                className="productTypes">
+                <img
+                  src={yellow}
+                  alt="Yellow"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(pink)}
+                className="productTypes">
+                <img
+                  src={pink}
+                  alt="Pink"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(green)}
+                className="productTypes">
+                <img
+                  src={green}
+                  alt="Green"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(orange)}
+                className="productTypes">
+                <img
+                  src={orange}
+                  alt="Orange"
+                  className="colorOptions"
+                />
+              </button>
+              <button 
+                onClick={() => changeColor(purple)}
+                className="productTypes">
+                <img
+                  src={purple}
+                  alt="Purple"
+                  className="colorOptions"
+                />
+              </button>
+              
             </div>
             <br />
             <h1>Size: {size.description}</h1>
