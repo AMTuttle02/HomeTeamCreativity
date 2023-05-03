@@ -97,8 +97,10 @@ function Order() {
             "Royal": RoyalTshirt,
             "White": WhiteTshirt
           }
-          setTShirtColor(data.tColors.split(" ")[0]);
-          setTshirt(tShirtMap[data.tColors.split(" ")[0]]);
+          const regex = /\S+/;
+          let firstWord = data.tColors.match(regex)[0];
+          setTShirtColor(firstWord);
+          setTshirt(tShirtMap[firstWord]);
           
           const lShirtMap = {
             "Black": BlackLongSleeve,
@@ -108,16 +110,18 @@ function Order() {
             "White": WhiteLongSleeve,
             "Navy": NavyLongSleeve
           }
-          setLongSleeveColor(data.lColors.split(" ")[0]);
-          setLongSleeve(lShirtMap[data.lColors.split(" ")[0]]);
+          firstWord = data.lColors.match(regex)[0];
+          setLongSleeveColor(firstWord);
+          setLongSleeve(lShirtMap[firstWord]);
 
           const crewMap = {
             "Black": BlackCrewneck,
             "Gray": GrayCrewneck,
             "White": WhiteCrewneck
           }
-          setCrewneckColor(data.cColors.split(" ")[0]);
-          setCrewneck(crewMap[data.cColors.split(" ")[0]]);
+          firstWord = data.cColors.match(regex)[0];
+          setCrewneckColor(firstWord);
+          setCrewneck(crewMap[firstWord]);
 
           const hoodieMap = {
             "Black": BlackHoodie,
@@ -126,8 +130,9 @@ function Order() {
             "White": WhiteHoodie,
             "Navy": NavyHoodie
           }
-          setHoodieColor(data.hColors.split(" ")[0]);
-          setHoodie(hoodieMap[data.hColors.split(" ")[0]]);
+          firstWord = data.hColors.match(regex)[0];
+          setHoodieColor(firstWord);
+          setHoodie(hoodieMap[firstWord]);
         }
       });
   }
