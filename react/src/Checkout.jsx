@@ -224,38 +224,35 @@ function Checkout() {
                         <h2> Size: {product.size} </h2>
                         <h2> Color: {product.color} </h2>
                     </div>
-                    {product.product_id ?
-                        <div className="productSide">
-                        <br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
-                        <br /><br />
-                        <h2> 
-                          Qty: 
-                          {product.product_quantity} 
-                        </h2>
-                        </div>
-                        :
-                        <div className="productSide">
-                        <br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
-                        <br /><br />
-                        <h2> 
-                          Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
-                          {product.product_quantity} 
-                          <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
-                        </h2>
-                        </div>
-                    }
+                    <div className="productSide">
+                    <br />
                     {product.product_id ?
                       <div className="productSide">
-                      <br /><br /><br /><br /><br /><br />
-                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                        <br /><br />
+                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                       </div>
                     :
-                    <div className="productSide">
-                      <br /><br /><br /><br /><br /><br />
-                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                      <div className="productSide">
+                        <br /><br />
+                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                      </div>
+                    }
+                    <br /><br />
+                    <h2> 
+                      Qty: 
+                      {product.product_quantity} 
+                    </h2>
                     </div>
+                    {product.product_id ?
+                      <div className="productSide">
+                        <br /><br /><br /><br /><br /><br />
+                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                      </div>
+                    :
+                      <div className="productSide">
+                        <br /><br /><br /><br /><br /><br />
+                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                      </div>
                     }
                     <div className="CartPage" />
                     </div>
