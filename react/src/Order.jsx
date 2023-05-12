@@ -159,23 +159,49 @@ function Order() {
         setTShirtColor("Gray");
       }
       else {
-        const correctDesign = design.find((option) => option.tColors.includes("Gray"));
-        setCurrentDesign(correctDesign);
-        setTshirt(GrayTshirt);
-        setTShirtColor("Gray");
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Gray"));
+          setCurrentDesign(correctDesign);
+          setTshirt(GrayTshirt);
+          setTShirtColor("Gray");
+        }
       }
       if (currentDesign.cColors.includes("Gray")) {
         setCrewneck(GrayCrewneck);
         setCrewneckColor("Gray");
       }
+      else {
+        if (currentStyle == "Crewneck Sweatshirt") {
+          const correctDesign = design.find((option) => option.cColors.includes("Gray"));
+          setCurrentDesign(correctDesign);
+          setCrewneck(GrayCrewneck);
+          setCrewneckColor("Gray");
+        }
+      }
       if (currentDesign.lColors.includes("Gray")) {
         setLongSleeve(GrayLongSleeve);
         setLongSleeveColor("Gray");
+      }
+      else {
+        if (currentStyle == "Long Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.lColors.includes("Gray"));
+          setCurrentDesign(correctDesign);
+          setLongSleeve(GrayLongSleeve);
+          setLongSleeveColor("Gray");
+        }
       }
       if (currentDesign.hColors.includes("Gray")) {
         setHoodie(GrayHoodie);
         setHoodieColor("Gray");
       }  
+      else {
+        if (currentStyle == "Hooded Sweatshirt") {
+          const correctDesign = design.find((option) => option.hColors.includes("Gray"));
+          setCurrentDesign(correctDesign);
+          setHoodie(GrayHoodie);
+          setHoodieColor("Gray");
+        }
+      }
     }
     else if (e == black) {
       if (currentDesign.tColors.includes("Black")) {
@@ -183,54 +209,136 @@ function Order() {
         setTShirtColor("Black");
       }
       else {
-        const correctDesign = design.find((option) => option.tColors.includes("Black"));
-        setCurrentDesign(correctDesign);
-        setTshirt(BlackTshirt);
-        setTShirtColor("Black");
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Black"));
+          setCurrentDesign(correctDesign);
+          setTshirt(BlackTshirt);
+          setTShirtColor("Black");
+        }
       }
       if (currentDesign.cColors.includes("Black")) {
         setCrewneck(BlackCrewneck);
         setCrewneckColor("Black");
       }
+      else {
+        if (currentStyle == "Crewneck Sweatshirt") {
+          const correctDesign = design.find((option) => option.cColors.includes("Black"));
+          setCurrentDesign(correctDesign);
+          setCrewneck(BlackCrewneck);
+          setCrewneckColor("Black");
+        }
+      }
       if (currentDesign.lColors.includes("Black")) {
         setLongSleeve(BlackLongSleeve);
         setLongSleeveColor("Black");
       }
+      else {
+        if (currentStyle == "Long Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.lColors.includes("Black"));
+          setCurrentDesign(correctDesign);
+          setLongSleeve(BlackLongSleeve);
+          setLongSleeveColor("Black");
+        }
+      }
       if (currentDesign.hColors.includes("Black")) {
         setHoodie(BlackHoodie);
         setHoodieColor("Black");
-      } 
+      }
+      else {
+        if (currentStyle == "Hooded Sweatshirt") {
+          const correctDesign = design.find((option) => option.hColors.includes("Black"));
+          setCurrentDesign(correctDesign);
+          setHoodie(BlackLongSleeve);
+          setHoodieColor("Black");
+        }
+      }
     }
     else if (e == white) {
       if (currentDesign.tColors.includes("White")) {
         setTshirt(WhiteTshirt);
         setTShirtColor("White");
       }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("White"));
+          setCurrentDesign(correctDesign);
+          setTshirt(WhiteTshirt);
+          setTShirtColor("White");
+        }
+      }
       if (currentDesign.cColors.includes("White")) {
         setCrewneck(WhiteCrewneck);
         setCrewneckColor("White");
+      }
+      else {
+        if (currentStyle == "Crewneck Sweatshirt") {
+          const correctDesign = design.find((option) => option.cColors.includes("White"));
+          setCurrentDesign(correctDesign);
+          setCrewneck(WhiteCrewneck);
+          setCrewneckColor("White");
+        }
       }
       if (currentDesign.lColors.includes("White")) {
         setLongSleeve(WhiteLongSleeve);
         setLongSleeveColor("White");
       }
+      else {
+        if (currentStyle == "Long Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.lColors.includes("White"));
+          setCurrentDesign(correctDesign);
+          setLongSleeve(WhiteLongSleeve);
+          setLongSleeveColor("White");
+        }
+      }
       if (currentDesign.hColors.includes("White")) {
         setHoodie(WhiteHoodie);
         setHoodieColor("White");
       } 
+      else {
+        if (currentStyle == "Hooded Sweatshirt") {
+          const correctDesign = design.find((option) => option.hColors.includes("White"));
+          setCurrentDesign(correctDesign);
+          setHoodie(WhiteHoodie);
+          setHoodieColor("White");
+        }
+      }
     }
     else if (e == navy) {
       if (currentDesign.tColors.includes("Navy")) {
         setTshirt(NavyTshirt);
         setTShirtColor("Navy");
       }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Navy"));
+          setCurrentDesign(correctDesign);
+          setTshirt(NavyTshirt);
+          setTShirtColor("Navy");
+        }
+      }
       if (currentDesign.lColors.includes("Navy")) {
         setLongSleeve(NavyLongSleeve);
         setLongSleeveColor("Navy");
       }
+      else {
+        if (currentStyle == "Long Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.lColors.includes("Navy"));
+          setCurrentDesign(correctDesign);
+          setLongSleeve(NavyLongSleeve);
+          setLongSleeveColor("Navy");
+        }
+      }
       if (currentDesign.hColors.includes("Navy")) {
         setHoodie(NavyHoodie);
         setHoodieColor("Navy");
+      }
+      else {
+        if (currentStyle == "Hooded Sweatshirt") {
+          const correctDesign = design.find((option) => option.hColors.includes("Navy"));
+          setCurrentDesign(correctDesign);
+          setHoodie(NavyHoodie);
+          setHoodieColor("Navy");
+        }
       }
     }
     else if (e == red) {
@@ -238,13 +346,37 @@ function Order() {
         setTshirt(RedTshirt);
         setTShirtColor("Red");
       }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Red"));
+          setCurrentDesign(correctDesign);
+          setTshirt(RedTshirt);
+          setTShirtColor("Red");
+        }
+      }
       if (currentDesign.lColors.includes("Red")) {
         setLongSleeve(RedLongSleeve);
         setLongSleeveColor("Red");
       }
+      else {
+        if (currentStyle == "Long Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.lColors.includes("Red"));
+          setCurrentDesign(correctDesign);
+          setLongSleeve(RedLongSleeve);
+          setLongSleeveColor("Red");
+        }
+      }
       if (currentDesign.hColors.includes("Red")) {
         setHoodie(RedHoodie);
         setHoodieColor("Red");
+      }
+      else {
+        if (currentStyle == "Hooded Sweatshirt") {
+          const correctDesign = design.find((option) => option.hColors.includes("Red"));
+          setCurrentDesign(correctDesign);
+          setHoodie(RedHoodie);
+          setHoodieColor("Red");
+        }
       }
     }
     else if (e == royal) {
@@ -252,9 +384,25 @@ function Order() {
         setTshirt(RoyalTshirt);
         setTShirtColor("Royal");
       }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Royal"));
+          setCurrentDesign(correctDesign);
+          setTshirt(RoyalTshirt);
+          setTShirtColor("Royal");
+        }
+      }
       if (currentDesign.lColors.includes("Royal")) {
         setLongSleeve(RoyalLongSleeve);
         setLongSleeveColor("Royal");
+      }
+      else {
+        if (currentStyle == "Long Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.lColors.includes("Royal"));
+          setCurrentDesign(correctDesign);
+          setLongSleeve(RoyalLongSleeve);
+          setLongSleeveColor("Royal");
+        }
       }
     }
     else if (e == yellow) {
@@ -262,11 +410,27 @@ function Order() {
         setTshirt(YellowTshirt);
         setTShirtColor("Yellow");
       }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Yellow"));
+          setCurrentDesign(correctDesign);
+          setTshirt(YellowTshirt);
+          setTShirtColor("Yellow");
+        }
+      }
     }
     else if (e == pink) {
       if (currentDesign.tColors.includes("Pink")) {
         setTshirt(PinkTshirt);
         setTShirtColor("Pink");
+      }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Pink"));
+          setCurrentDesign(correctDesign);
+          setTshirt(PinkTshirt);
+          setTShirtColor("Pink");
+        }
       }
     }
     else if (e == green) {
@@ -274,11 +438,27 @@ function Order() {
         setTshirt(GreenTshirt);
         setTShirtColor("Green");
       }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Green"));
+          setCurrentDesign(correctDesign);
+          setTshirt(GreenTshirt);
+          setTShirtColor("Green");
+        }
+      }
     }
     else if (e == maroon) {
       if (currentDesign.tColors.includes("Maroon")) {
         setTshirt(MaroonTshirt);
         setTShirtColor("Maroon");
+      }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Maroon"));
+          setCurrentDesign(correctDesign);
+          setTshirt(MaroonTshirt);
+          setTShirtColor("Maroon");
+        }
       }
     }
     else if (e == orange) {
@@ -286,11 +466,27 @@ function Order() {
         setTshirt(OrangeTshirt);
         setTShirtColor("Orange");
       }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Orange"));
+          setCurrentDesign(correctDesign);
+          setTshirt(OrangeTshirt);
+          setTShirtColor("Orange");
+        }
+      }
     }
     else if (e == purple) {
       if (currentDesign.tColors.includes("Purple")) {
         setTshirt(PurpleTshirt);
         setTShirtColor("Purple");
+      }
+      else {
+        if (currentStyle == "Short Sleeve T-Shirt") {
+          const correctDesign = design.find((option) => option.tColors.includes("Purple"));
+          setCurrentDesign(correctDesign);
+          setTshirt(PurpleTshirt);
+          setTShirtColor("Purple");
+        }
       }
     }
   };
