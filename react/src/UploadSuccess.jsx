@@ -46,7 +46,7 @@ function Upload() {
         }
         const regex = /\S+/;
         let firstWord = data[0].tColors.match(regex)[0];
-        setColor(tShirtMap[firstWord]); 
+        setColor(tShirtMap[firstWord]);
     });
   }, []);
 
