@@ -10,6 +10,10 @@ function Upload() {
   const [longSleeveColors, setLongSleeveColors] = useState('');
   const [crewneckColors, setCrewneckColors] = useState('');
   const [hoodieColors, setHoodieColors] = useState('');
+  const [tColorsPrimary, setTColorPrimary] = useState("None");
+  const [lColorsPrimary, setLColorPrimary] = useState("None");
+  const [cColorsPrimary, setCColorPrimary] = useState("None");
+  const [hColorsPrimary, setHColorPrimary] = useState("None");
 
   const handleFileInputChange = (event) => {
     setFile(event.target.files[0]);
@@ -88,6 +92,42 @@ function Upload() {
       });
   }, []);
 
+  useEffect(() => {
+    const tColors = tshirtColors.trim();
+    const lColors = longSleeveColors.trim();
+    const cColors = crewneckColors.trim();
+    const hColors = hoodieColors.trim();
+
+    if (tColors) {
+      setTColorPrimary(tColors.split(" ")[0]);
+    }
+    else {
+      setTColorPrimary("None");
+    }
+
+    if (lColors) {
+      setLColorPrimary(lColors.split(" ")[0]);
+    }
+    else {
+      setLColorPrimary("None");
+    }
+
+    if (cColors) {
+      setCColorPrimary(cColors.split(" ")[0]);
+    }
+    else {
+      setCColorPrimary("None");
+    }
+
+    if (hColors) {
+      setHColorPrimary(hColors.split(" ")[0]);
+    }
+    else {
+      setHColorPrimary("None");
+    }
+
+  }, [tshirtColors, longSleeveColors, crewneckColors, hoodieColors])
+
   if (admin) {
     return (
       <div className='Upload'>
@@ -129,7 +169,7 @@ function Upload() {
             <br/>
             <div className="row">
               <div className="uploadSplit">
-                <label>T-Shirt:</label>
+                <label>T-Shirt: {tColorsPrimary}</label>
                 <br />
                 <input type="checkbox" id="tBlack" name="tBlack" value="Black" onChange={(event) => handleTshirtColor(event.target.value)}/>
                   <label>&nbsp;Black</label>
@@ -169,7 +209,7 @@ function Upload() {
                   <br />
               </div>
               <div className="uploadSplit">
-                <label>Long Sleeve:</label>
+                <label>Long Sleeve: {lColorsPrimary}</label>
                 <br />
                 <input type="checkbox" id="lBlack" name="lBlack" value="Black" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
                   <label>&nbsp;Black</label>
@@ -191,7 +231,7 @@ function Upload() {
                   <br />
               </div>
               <div className="uploadSplit">
-                <label>Crewneck:</label>
+                <label>Crewneck: {cColorsPrimary}</label>
                 <br />
                 <input type="checkbox" id="cBlack" name="cBlack" value="Black" onChange={(event) => handleCrewneckColor(event.target.value)}/>
                   <label>&nbsp;Black</label>
@@ -204,7 +244,7 @@ function Upload() {
                   <br />
               </div>
               <div className="uploadSplit">
-                <label>Hoodie:</label>
+                <label>Hoodie: {hColorsPrimary}</label>
                 <br />
                 <input type="checkbox" id="hBlack" name="hBlack" value="Black" onChange={(event) => handleHoodieColor(event.target.value)}/>
                   <label>&nbsp;Black</label>
