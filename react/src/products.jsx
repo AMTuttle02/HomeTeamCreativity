@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
-import tshirt from "./assets/blackTShirt.png";
+import BlackTshirt from "./assets/blackTShirt.png";
+import GrayTshirt from "./assets/GreyTShirt.png";
+import RedTshirt from "./assets/RedTShirt.png";
+import YellowTshirt from "./assets/YellowTShirt.png";
+import PinkTshirt from "./assets/PinkTShirt.png";
+import GreenTshirt from "./assets/GreenTShirt.png";
+import MaroonTshirt from "./assets/MaroonTShirt.png";
+import OrangeTshirt from "./assets/OrangeTShirt.png";
+import PurpleTshirt from "./assets/PurpleTShirt.png";
+import RoyalTshirt from "./assets/RoyalTShirt.png";
+import WhiteTshirt from "./assets/WhiteTShirt.png";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -27,8 +37,30 @@ function Products() {
   useEffect(() => {
     fetch("/api/products.php")
       .then((response) => response.json())
-      .then((data) => setProducts(data));
+      .then((data) => {
+        setProducts(data);
+        console.log(data);
+      });
   }, []);
+
+  const currentColor = (product) => {
+    const tShirtMap = {
+      "Black": BlackTshirt,
+      "Gray": GrayTshirt,
+      "Yellow": YellowTshirt,
+      "Pink": PinkTshirt,
+      "Green": GreenTshirt,
+      "Maroon": MaroonTshirt,
+      "Orange": OrangeTshirt,
+      "Purple": PurpleTshirt,
+      "Red": RedTshirt,
+      "Royal": RoyalTshirt,
+      "White": WhiteTshirt
+    }
+    const regex = /\S+/;
+    let firstWord = product.tColors.match(regex)[0];
+    return(tShirtMap[firstWord]);
+  }
 
   return (
     <div className="Products">
@@ -46,7 +78,7 @@ function Products() {
                 <div className="fullDesign">
                 <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
                   <img
-                    src={tshirt}
+                    src={currentColor(product)}
                     alt="Home Team Creativity Logo"
                     className="tshirt"
                   />

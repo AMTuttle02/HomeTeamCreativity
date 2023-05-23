@@ -1,25 +1,121 @@
 import React, { useEffect, useState } from "react";
-import tshirt from "./assets/blackTShirt.png";
-import longSleeve from "./assets/blackLongSleeve.png";
-import crewneck from "./assets/blackCrewneck.png";
-import hoodie from "./assets/blackHoodie.png";
+import blackTshirt from "./assets/blackTShirt.png";
+import blackLongSleeve from "./assets/blackLongSleeve.png";
+import blackCrewneck from "./assets/blackCrewneck.png";
+import blackHoodie from "./assets/blackHoodie.png";
+import grayTshirt from "./assets/GreyTShirt.png";
+import grayLongSleeve from "./assets/GreyLongSleeve.png";
+import grayCrewneck from "./assets/GreyCrewneckSS.png";
+import grayHoodie from "./assets/GreyHoodie.png";
+import RedTshirt from "./assets/RedTShirt.png";
+import RedLongSleeve from "./assets/RedLongSleeve.png";
+import RedHoodie from "./assets/RedHoodie.png";
+import YellowTshirt from "./assets/YellowTShirt.png";
+import PinkTshirt from "./assets/PinkTShirt.png";
+import GreenTshirt from "./assets/GreenTShirt.png";
+import MaroonTshirt from "./assets/MaroonTShirt.png";
+import OrangeTshirt from "./assets/OrangeTShirt.png";
+import PurpleTshirt from "./assets/PurpleTShirt.png";
+import RoyalTshirt from "./assets/RoyalTShirt.png";
+import RoyalLongSleeve from "./assets/RoyalLongSleeve.png";
+import NavyTshirt from "./assets/NavyTShirt.png";
+import NavyLongSleeve from "./assets/NavyLongSleece.png";
+import NavyHoodie from "./assets/NavyHoodie.png";
+import WhiteTshirt from "./assets/WhiteTShirt.png";
+import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
+import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
+import WhiteHoodie from "./assets/WhiteHoodie.png";
 import { Link } from "react-router-dom";
 import cart from "./assets/cart.png";
 
-function setType(type) {
-    if (type == "Crewneck Sweatshirt") {
-      return crewneck;
+function setType(type, color) {
+  if (type == "Crewneck Sweatshirt") {
+    if (color == "Black") {
+      return blackCrewneck;
     }
-    else if (type == "Hooded Sweatshirt") {
-      return hoodie;
+    else if (color == "Gray") {
+      return grayCrewneck;
     }
-    else if (type == "Long Sleeve T-Shirt") {
-      return longSleeve;
-    }
-    else {
-      return tshirt;
+    else if (color == "White") {
+      return WhiteCrewneck;
     }
   }
+  else if (type == "Hooded Sweatshirt") {
+    if (color == "Black") {
+      return blackHoodie;
+    }
+    else if (color == "Gray") {
+      return grayHoodie;
+    }
+    else if (color == "White") {
+      return WhiteHoodie;
+    }
+    else if (color == "Red") {
+      return RedHoodie;
+    }
+    else if (color == "Navy") {
+      return NavyHoodie;
+    }
+  }
+  else if (type == "Long Sleeve T-Shirt") {
+    if (color == "Black") {
+      return blackLongSleeve;
+    }
+    else if (color == "Gray") {
+      return grayLongSleeve;
+    }
+    else if (color == "White") {
+      return WhiteLongSleeve;
+    }
+    else if (color == "Navy") {
+      return NavyLongSleeve;
+    }
+    else if (color == "Red") {
+      return RedLongSleeve;
+    }
+    else if (color == "Royal") {
+      return RoyalLongSleeve;
+    }
+  }
+  else {
+    if (color == "Black") {
+      return blackTshirt;
+    }
+    else if (color == "Gray") {
+      return grayTshirt;
+    }
+    else if (color == "White") {
+      return WhiteTshirt;
+    }
+    else if (color == "Yellow") {
+      return YellowTshirt;
+    }
+    else if (color == "Pink") {
+      return PinkTshirt;
+    }
+    else if (color == "Green") {
+      return GreenTshirt;
+    }
+    else if (color == "Maroon") {
+      return MaroonTshirt;
+    }
+    else if (color == "Orange") {
+      return OrangeTshirt;
+    }
+    else if (color == "Purple") {
+      return PurpleTshirt;
+    }
+    else if (color == "Red") {
+      return RedTshirt;
+    }
+    else if (color == "Royal") {
+      return RoyalTshirt;
+    }
+    else if (color == "Navy") {
+      return NavyTshirt;
+    }
+  }
+}
 
 function Checkout() {
   const [userId, setUserId] = useState("");
@@ -97,8 +193,8 @@ function Checkout() {
             <div className="CartPage" />
             <br />
             <div className="cartMain">
-                <br />
-                <h1>{name}'s Order Details</h1>
+              <br />
+              <h1>{name}'s Order Details</h1>
             </div>
             <br />
 
@@ -110,14 +206,14 @@ function Checkout() {
                     <div className="productSide">
                         <div className="fullDesign">
                         <img
-                            src={setType(product.product_type)}
-                            alt="Home Team Creativity Logo"
-                            className="tshirt"
+                          src={setType(product.product_type, product.color)}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
                         />
                         <img
-                            src={"api/images/" + product.filename}
-                            alt={product.filename}
-                            className="design"
+                          src={"api/images/" + product.filename}
+                          alt={product.filename}
+                          className="design"
                         />
                         </div>
                     </div>
@@ -128,38 +224,35 @@ function Checkout() {
                         <h2> Size: {product.size} </h2>
                         <h2> Color: {product.color} </h2>
                     </div>
+                    <div className="productSide">
+                    <br />
                     {product.product_id ?
-                        <div className="productSide">
-                        <br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
+                      <div className="productSide">
                         <br /><br />
-                        <h2> 
-                            Qty: 
-                            {product.product_quantity} 
-                        </h2>
-                        </div>
-                        :
-                        <div className="productSide">
-                        <br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
+                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                      </div>
+                    :
+                      <div className="productSide">
                         <br /><br />
-                        <h2> 
-                            Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
-                            {product.product_quantity} 
-                            <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
-                        </h2>
-                        </div>
+                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                      </div>
                     }
+                    <br /><br />
+                    <h2> 
+                      Qty: 
+                      {product.product_quantity} 
+                    </h2>
+                    </div>
                     {product.product_id ?
-                        <div className="productSide">
+                      <div className="productSide">
                         <br /><br /><br /><br /><br /><br />
                         <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                        </div>
+                      </div>
                     :
-                    <div className="productSide">
+                      <div className="productSide">
                         <br /><br /><br /><br /><br /><br />
                         <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
-                    </div>
+                      </div>
                     }
                     <div className="CartPage" />
                     </div>

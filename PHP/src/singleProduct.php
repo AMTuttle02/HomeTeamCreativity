@@ -22,6 +22,7 @@ if (!$conn) {
 }
 
 // Get single products
+
 if (isset($_SESSION['product_id'])) {
   $query = $conn->prepare("SELECT * FROM products WHERE product_id = ?;");
   $query->bind_param("s", $_SESSION["product_id"]);
@@ -32,12 +33,47 @@ if (isset($_SESSION['product_id'])) {
   else {
     $result = $query->get_result();
     $productData = mysqli_fetch_assoc($result);
-    
-    echo json_encode($productData);
+    $productName = $productData['product_name'];
+
+    $query = $conn->prepare("SELECT * FROM products WHERE product_name = ?;");
+    $query->bind_param("s", $productName);
+    if (!$query->execute()) {
+      // If insertion fails, return error message
+      echo json_encode("ERR: Insertion failed to execute" . $query->error);
+    }
+    else {
+      $result = $query->get_result();
+      $products = [];
+      while ($row = mysqli_fetch_assoc($result)) {
+        $products[] = $row;
+      }
+
+      $index = array_search($_SESSION['product_id'], array_column($products, 'product_id'));
+
+      if ($index != false) {
+          // Remove the element from its original position
+          $element = array_splice($products, $index, 1);
+  
+          // Prepend the element to the beginning of the array
+          array_unshift($products, $element[0]);
+      }
+
+      echo json_encode($products);
+    }
   }
 }
 else {
-  echo json_encode(0);
+  $query = $conn->prepare("SELECT * FROM products WHERE product_id = 1;");
+  if (!$query->execute()) {
+    // If insertion fails, return error message
+    echo json_encode("ERR: Insertion failed to execute" . $query->error);
+  }
+  else {
+    $result = $query->get_result();
+    $productData = mysqli_fetch_assoc($result);
+    
+    echo json_encode($productData);
+  }
 }
 
 mysqli_close($conn);
