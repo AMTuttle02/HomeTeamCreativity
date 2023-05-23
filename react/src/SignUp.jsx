@@ -51,7 +51,7 @@ function SignUp() {
       setemailError("");
       formIsValid = true;
     }
-    if (!password.match(/^[a-zA-Z]{8,22}$/)) {
+    if (!password.match(/^[\w\S]{8,}$/)) {
       formIsValid = false;
       setpasswordError(
         "Only Letters and length must best min 8 Chracters and Max 22 Chracters"

@@ -22,10 +22,10 @@ function Login() {
     } else {
       setemailError("");
     }
-    if (!password.match(/^[a-zA-Z]{8,22}$/)) {
+    if (!password.match(/^[\w\S]{8,}$/)) {
       formIsValid = false;
       setpasswordError(
-        "Only Letters and length must best min 8 Chracters and Max 22 Chracters"
+        "Length must best min 8 Chracters and Max 22 Chracters"
       );
     } else {
       setpasswordError("");
@@ -99,9 +99,7 @@ function Login() {
             <small id="passworderror" className="text-danger form-text">
               {passwordError}
             </small>
-            <br />
             { badLogin && <LoginFailed /> }
-            <a href="#">Forgot Password?</a>
             <br />
             <button type="submit">Log In</button>
           </form>
