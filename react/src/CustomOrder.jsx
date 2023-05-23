@@ -85,6 +85,12 @@ function CustomOrder() {
     setCustomDetails(event.target.value);
   }
 
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   const addToCart = () => {
     fetch("/api/addToCart.php", {
       method: "POST",
@@ -722,7 +728,7 @@ function CustomOrder() {
             <h1>Quantity: {" "}
               <button 
                 className="quantity"
-                onClick={() => setQuantity(quantity - 1)}>
+                onClick={() => decreaseQuantity()}>
                 -
               </button>
               {" "}{quantity}{" "}

@@ -1049,7 +1049,7 @@ function Order() {
             <h1>Quantity: {" "}
               <button 
                 className="quantity"
-                onClick={() => setQuantity(quantity - 1)}>
+                onClick={() => decreaseQuantity()}>
                 -
               </button>
               {" "}{quantity}{" "}
