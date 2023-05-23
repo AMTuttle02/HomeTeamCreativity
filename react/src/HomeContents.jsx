@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import tshirt from "./assets/blackTShirt.png";
+import BlackTshirt from "./assets/blackTShirt.png";
+import GrayTshirt from "./assets/GreyTShirt.png";
+import RedTshirt from "./assets/RedTShirt.png";
+import YellowTshirt from "./assets/YellowTShirt.png";
+import PinkTshirt from "./assets/PinkTShirt.png";
+import GreenTshirt from "./assets/GreenTShirt.png";
+import MaroonTshirt from "./assets/MaroonTShirt.png";
+import OrangeTshirt from "./assets/OrangeTShirt.png";
+import PurpleTshirt from "./assets/PurpleTShirt.png";
+import RoyalTshirt from "./assets/RoyalTShirt.png";
+import WhiteTshirt from "./assets/WhiteTShirt.png";
 import { Outlet, Link } from "react-router-dom";
 
 function HomeContents() {
@@ -23,6 +33,25 @@ function HomeContents() {
       })
       .catch((error) => console.error(error));
   };
+
+  const currentColor = (product) => {
+    const tShirtMap = {
+      "Black": BlackTshirt,
+      "Gray": GrayTshirt,
+      "Yellow": YellowTshirt,
+      "Pink": PinkTshirt,
+      "Green": GreenTshirt,
+      "Maroon": MaroonTshirt,
+      "Orange": OrangeTshirt,
+      "Purple": PurpleTshirt,
+      "Red": RedTshirt,
+      "Royal": RoyalTshirt,
+      "White": WhiteTshirt
+    }
+    const regex = /\S+/;
+    let firstWord = product.tColors.match(regex)[0];
+    return(tShirtMap[firstWord]);
+  }
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -58,7 +87,7 @@ function HomeContents() {
                   <div className="fullDesign">
                     <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
                     <img
-                      src={tshirt}
+                      src={currentColor(product)}
                       alt="Home Team Creativity Logo"
                       className="tshirt"
                     />
