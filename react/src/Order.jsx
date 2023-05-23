@@ -248,7 +248,7 @@ function Order() {
         if (currentStyle == "Hooded Sweatshirt") {
           const correctDesign = design.find((option) => option.hColors.includes("Black"));
           setCurrentDesign(correctDesign);
-          setHoodie(BlackLongSleeve);
+          setHoodie(BlackHoodie);
           setHoodieColor("Black");
         }
       }
