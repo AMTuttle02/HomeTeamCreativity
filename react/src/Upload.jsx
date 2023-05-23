@@ -146,7 +146,7 @@ function Upload() {
                 placeholder="Product Name"
                 onChange={(event) => setName(event.target.value)}
               />
-            <label>Price (Do Not Include $)</label>
+            <label>Price (Do Not Include $) (Pricing Default is for an Adult Medium)</label>
             <input
               type="text"
               id="price"
