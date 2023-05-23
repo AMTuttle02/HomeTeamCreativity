@@ -47,6 +47,17 @@ if (isset($_SESSION['product_id'])) {
       while ($row = mysqli_fetch_assoc($result)) {
         $products[] = $row;
       }
+
+      $index = array_search($_SESSION['product_id'], array_column($products, 'product_id'));
+
+      if ($index != false) {
+          // Remove the element from its original position
+          $element = array_splice($products, $index, 1);
+  
+          // Prepend the element to the beginning of the array
+          array_unshift($products, $element[0]);
+      }
+
       echo json_encode($products);
     }
   }
