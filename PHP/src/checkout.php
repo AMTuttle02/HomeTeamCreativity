@@ -32,8 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Query failed: " . $query->error);
     }
 
-    echo(1);
+    include 'orderConfirmation.php';
 
+    echo(1);
 }
 mysqli_close($conn);
 

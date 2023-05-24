@@ -9,7 +9,10 @@ require 'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 $mail = new PHPMailer;
 
-session_start();
+if (session_status() === PHP_SESSION_ACTIVE) {
+} else {
+    session_start();
+}
 
 include 'conn.php';
 
@@ -72,6 +75,7 @@ $result = mysqli_fetch_assoc($query->get_result());
 
 $first = $result['first_name'];
 $last = $result['last_name'];
+$email = $result['email'];
 
 $userId = $_SESSION["userId"];
 
@@ -238,7 +242,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <h1>Order summary</h1>
+                                                                                        <h1>Order Summary</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -264,7 +268,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                     <td width="345" align="left" class="esd-container-frame">';
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $price = setPrice($row['price'], $row['product_type'], $row['size']);
+        $price = setPrice($row['price'], $row['product_type'], $row['size']) * $row['product_quantity'];
         $productHTML.='                                                 <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
                                                                             <tbody>
                                                                                 <tr>
@@ -300,7 +304,7 @@ $productHTML.='                                                      </td>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <h1>Order total</h1>
+                                                                                        <h1>Order Total</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -446,7 +450,7 @@ $productHTML.='                                                      </td>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <h1>Billing and shipping</h1>
+                                                                                        <h1>Billing and Shipping</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -594,7 +598,7 @@ $productHTML.='                                                      </td>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <h1>Shop information</h1>
+                                                                                        <h1>Shop Information</h1>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -746,7 +750,7 @@ $productHTML.='                                                      </td>
 
 
 $mail->isSMTP();
-$mail->SMTPDebug = 2;
+$mail->SMTPDebug = 0;
 $mail->Host = 'smtp.titan.email';
 $mail->Port = 587;
 $mail->SMTPAuth = true;
@@ -754,14 +758,13 @@ $mail->Username = 'orderconfirmation@hometeamcreativity.com';
 $mail->Password = 'ConfirmationOfOrder1!';
 $mail->setFrom('orderconfirmation@hometeamcreativity.com', 'HomeTeam Creativity Order Confirmation');
 $mail->addReplyTo('IT@hometeamcreativity.com', 'HomeTeam Creativity IT');
-$mail->addAddress('alexmtuttle@gmail.com', 'Alex Tuttle');
+$mail->addAddress($email, $first .' '. $last);
+$mail->addBCC('admin@hometeamcreativity.com', 'Admin');
 $mail->Subject = 'HomeTeam Creativity Order Confirmation';
 //$mail->msgHTML(file_get_contents('message.html'), __DIR__);
 $mail->isHTML(true);
 $mail->Body = $productHTML;
 if (!$mail->send()) {
     echo json_encode('Mailer Error: ' . $mail->ErrorInfo);
-} else {
-    echo json_encode('The email message was sent.');
 }
 ?>

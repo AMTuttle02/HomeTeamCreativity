@@ -125,21 +125,23 @@ function Cart() {
   const [addedItems, setAddedItems] = useState(0);
 
   const checkout = (order) => {
-    fetch("/api/checkout.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        order_id: order.order_id}),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data == 1) {
-        window.location.href='/ordercomplete';
-      }
-      else {
-        window.location.href='/orderFailed';
-      }
-    })
+    if (order['total_cost'] > 0) {
+      fetch("/api/checkout.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          order_id: order.order_id}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data == 1) {
+          window.location.href='/ordercomplete';
+        }
+        else {
+          window.location.href='/orderFailed';
+        }
+      })
+    }
   }
 
   const setPrice = (price, type, size) => {
