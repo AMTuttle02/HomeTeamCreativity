@@ -30,29 +30,6 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
     <!--[if !mso]><!-- -->
     <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
     <!--<![endif]-->
-
-    <style>
-        .fullDesign {
-            position: relative;
-            top: 0px;
-            left: 0px;
-            float: left;
-        }
-        .tshirt {
-            top: 0px;
-            left: 0px;
-            position: relative;
-            width: 440px;
-            height: 440px;
-        }
-        .design {
-            position: absolute;
-            top: 100px;
-            left: 160px;
-            width: 125px;
-            height: 125px;
-        }
-    </style>
 </head>
 
 <body>
