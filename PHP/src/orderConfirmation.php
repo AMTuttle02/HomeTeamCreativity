@@ -16,6 +16,46 @@ include 'conn.php';
 // Obtain cart
 $inputs = json_decode(file_get_contents('php://input'), true);
 
+function setPrice ($price, $type, $size) {
+    $price = $price * 1;
+    if ($type == "Crewneck Sweatshirt") {
+      $price += 8;
+      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+        $price -= 2;
+      }
+      else if ($size == "Adult XX-Large") {
+        $price += 2;
+      }
+    }
+    else if ($type == "Hooded Sweatshirt") {
+      $price += 12;
+      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+        $price -= 2;
+      }
+      else if ($size == "Adult XX-Large") {
+        $price += 2;
+      }
+    }
+    else if ($type == "Long Sleeve T-Shirt") {
+      $price += 4;
+      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+        $price -= 2;
+      }
+      else if ($size == "Adult XX-Large") {
+        $price += 2;
+      }
+    }
+    else {
+      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+        $price -= 2;
+      }
+      else if ($size == "Adult XX-Large") {
+        $price += 2;
+      }
+    }
+    return $price;
+  }
+
 $query = $conn->prepare(
                         "SELECT *
                         FROM users
@@ -70,13 +110,6 @@ if (!$query->execute()) {
 }
 
 $result = $query->get_result();
-
-$rows = array();
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $rows[] = $row;
-    }
-}
 
 $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -228,35 +261,29 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                         <table cellpadding="0" cellspacing="0" class="es-right" align="center">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td width="345" align="left" class="esd-container-frame">
-                                                                        <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
+                                                                    <td width="345" align="left" class="esd-container-frame">';
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $price = setPrice($row['price'], $row['product_type'], $row['size']);
+        $productHTML.='                                                 <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p25t es-p25b es-p20r es-p20l es-m-txt-c">
-                                                                                        <h3 class="p_name" style="line-height: 150%;">Be Like Friends</h3>
-                                                                                        <p class="p_description" style="line-height: 150%;">COLOR: Black</p>
-                                                                                        <p style="line-height: 150%;">SIZE: Adult Medium</p>
-                                                                                        <p style="line-height: 150%;">QTY:&nbsp;1</p>
-                                                                                        <h3 style="line-height: 150%;" class="p_price">$16.00</h3>
+                                                                                        <h3 class="p_name" style="line-height: 150%;">'.$row['product_name'].'</h3>
+                                                                                        <p style="line-height: 150%;">Style: '.$row['product_type'].'</p>
+                                                                                        <p class="p_description" style="line-height: 150%;">Color: '.$row['color'].'</p>
+                                                                                        <p style="line-height: 150%;">Size: '.$row['size'].'</p>
+                                                                                        <p style="line-height: 150%;">Additional Details: '.$row['product_details'].'</p>
+                                                                                        <p style="line-height: 150%;">Quantity:&nbsp;'.$row['product_quantity'].'</p>
+                                                                                        <h3 style="line-height: 150%;" class="p_price">$'.$price.'</h3>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
-                                                                        <br>
-                                                                        <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td align="center" class="esd-block-text es-p25t es-p25b es-p20r es-p20l es-m-txt-c">
-                                                                                    <h3 class="p_name" style="line-height: 150%;">Be Like Friends</h3>
-                                                                                    <p class="p_description" style="line-height: 150%;">COLOR: Black</p>
-                                                                                    <p style="line-height: 150%;">SIZE: Adult Medium</p>
-                                                                                    <p style="line-height: 150%;">QTY:&nbsp;1</p>
-                                                                                    <h3 style="line-height: 150%;" class="p_price">$16.00</h3>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                    </td>
+                                                                        <br>';
+    }
+}
+$productHTML.='                                                      </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
