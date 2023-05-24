@@ -1,7 +1,82 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+header("Access-Control-Allow-Headers: X-Requested-With");
+header('Access-Control-Allow-Headers: Origin, Content-Type');
+header('Content-Type: application/json');
+
 require 'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 $mail = new PHPMailer;
+
+session_start();
+
+include 'conn.php';
+
+// Obtain cart
+$inputs = json_decode(file_get_contents('php://input'), true);
+
+$query = $conn->prepare(
+                        "SELECT *
+                        FROM users
+                        WHERE user_id = ?");
+$query->bind_param(
+        "s",
+        $_SESSION["userId"]
+    );
+if (!$query->execute()) {
+    die("Query failed: " . $stmt->error);
+}
+
+$result = mysqli_fetch_assoc($query->get_result());
+
+$first = $result['first_name'];
+$last = $result['last_name'];
+
+$userId = $_SESSION["userId"];
+
+// Obtain order details
+$query = $conn->prepare(
+    "SELECT *
+    FROM orders
+    WHERE user_id = ? AND is_active = 1 AND is_cart = 0 AND order_date = 
+        (SELECT MAX(order_date)
+        FROM orders
+        WHERE user_id = ? AND is_active = 1 AND is_cart = 0)"
+);
+$query->bind_param("ss", $userId, $userId);
+if (!$query->execute()) {
+    die("Query failed: " . $query->error);
+}
+
+$result = mysqli_fetch_assoc($query->get_result());
+
+if (!$result) {
+    die("Result set failed: " . $conn->error);
+}
+
+$orderId = $result['order_id'];
+$total_cost = $result['total_cost'];
+
+$query = $conn->prepare(
+    "SELECT *
+    FROM product_orders
+    JOIN products ON product_orders.product_id = products.product_id
+    WHERE product_orders.order_id = ?"
+);
+$query->bind_param("i", $orderId);
+if (!$query->execute()) {
+    die("Query failed: " . $query->error);
+}
+
+$result = $query->get_result();
+
+$rows = array();
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $rows[] = $row;
+    }
+}
 
 $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -79,7 +154,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p10 es-m-txt-c">
-                                                                                        <h3 style="color: #ffffff;">Hello Maggie,</h3>
+                                                                                        <h3 style="color: #ffffff;">Hello '.$first.',</h3>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -135,7 +210,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p40t es-p20r es-p20l es-m-p10t">
-                                                                                        <h3 class="b_title">ORDER NO.&nbsp;1234<br>05/23/2023</h3>
+                                                                                        <h3 class="b_title">ORDER NO.&nbsp;'.$orderId.'<br>'.date("m/d/Y").'</h3>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -167,6 +242,20 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
+                                                                        <br>
+                                                                        <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td align="center" class="esd-block-text es-p25t es-p25b es-p20r es-p20l es-m-txt-c">
+                                                                                    <h3 class="p_name" style="line-height: 150%;">Be Like Friends</h3>
+                                                                                    <p class="p_description" style="line-height: 150%;">COLOR: Black</p>
+                                                                                    <p style="line-height: 150%;">SIZE: Adult Medium</p>
+                                                                                    <p style="line-height: 150%;">QTY:&nbsp;1</p>
+                                                                                    <h3 style="line-height: 150%;" class="p_price">$16.00</h3>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -229,7 +318,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$16.00<br>$00.00<br>$00.00</p>
+                                                                                                        <p>$'.$total_cost.'<br>$00.00<br>$00.00</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -305,7 +394,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text es-m-txt-r">
-                                                                                                        <h3>$16.00</h3>
+                                                                                                        <h3>$'.$total_cost.'</h3>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -353,7 +442,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text">
                                                                                         <h3>Billing</h3>
-                                                                                        <p>Jess Lowmiller<br>9618 Cinder Turnabout,<br>Jenny Lind,<br>Northwest Territories</p>
+                                                                                        <p>'.$first.' '.$last.'<br>Blah,<br>Blah,<br>Blah</p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -372,7 +461,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text">
                                                                                         <h3>Shipping</h3>
-                                                                                        <p>Jess Lowmiller<br>9618 Cinder Turnabout,<br>Jenny Lind,<br>Northwest Territories</p>
+                                                                                        <p>'.$first.' '.$last.'<br>Blah,<br>Blah,<br>Blah</p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -396,7 +485,7 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
                                                                                 <tr>
                                                                                     <td align="left" class="esd-block-text">
                                                                                         <h3>Payment&nbsp;Method</h3>
-                                                                                        <p>Mastercard&nbsp;(••••••••••••1234)</p>
+                                                                                        <p>None&nbsp;(••••••••••••1234)</p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -644,8 +733,8 @@ $mail->Subject = 'HomeTeam Creativity Order Confirmation';
 $mail->isHTML(true);
 $mail->Body = $productHTML;
 if (!$mail->send()) {
-    echo 'Mailer Error: ' . $mail->ErrorInfo;
+    echo json_encode('Mailer Error: ' . $mail->ErrorInfo);
 } else {
-    echo 'The email message was sent.';
+    echo json_encode('The email message was sent.');
 }
 ?>
