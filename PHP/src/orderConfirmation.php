@@ -12,9 +12,9 @@
    $mail->setFrom('orderconfirmation@hometeamcreativity.com', 'HomeTeam Creativity Order Confirmation');
    $mail->addReplyTo('IT@hometeamcreativity.com', 'HomeTeam Creativity IT');
    $mail->addAddress('alexmtuttle@gmail.com', 'Alex Tuttle');
-   $mail->Subject = 'WooWoo, Auto Emails!';
+   $mail->Subject = 'HomeTeam Creativity Order Confirmation';
    $mail->msgHTML(file_get_contents('message.html'), __DIR__);
-   $mail->Body = 'test!';
+   //$mail->Body = 'Hi';
    //$mail->addAttachment('attachment.txt');
    if (!$mail->send()) {
        echo 'Mailer Error: ' . $mail->ErrorInfo;
