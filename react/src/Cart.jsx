@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import cart from "./assets/cart.png";
 import blackTshirt from "./assets/blackTShirt.png";
 import blackLongSleeve from "./assets/blackLongSleeve.png";
@@ -123,23 +123,28 @@ function Cart() {
   const [products, setProducts] = useState([]);
   const [order, setOrder] = useState([]);
   const [addedItems, setAddedItems] = useState(0);
+  const navigate = useNavigate();
 
   const checkout = (order) => {
-    fetch("/api/checkout.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        order_id: order.order_id}),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data == 1) {
-        window.location.href='/ordercomplete';
-      }
-      else {
-        window.location.href='/orderFailed';
-      }
-    })
+    if (order['total_cost'] > 0) {
+      window.location.href="/api/stripeCheckout.php";
+      /*
+      fetch("/api/checkout.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          order_id: order.order_id}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data == 1) {
+          window.location.href='/api/orderComplete';
+        }
+        else {
+          window.location.href='/orderFailed';
+        }
+      })*/
+    }
   }
 
   const setPrice = (price, type, size) => {

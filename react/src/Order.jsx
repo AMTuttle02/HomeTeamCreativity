@@ -492,12 +492,13 @@ function Order() {
   };
 
   const addToCart = () => {
+    console.log(currentDesign);
     fetch("/api/addToCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         order_id: 100, 
-        product_id: currentDesign.id, 
+        product_id: currentDesign.product_id, 
         quantity: quantity, 
         color: currentColor,
         product_type: productType.description,
@@ -511,6 +512,7 @@ function Order() {
         navigate("/cart");;
       }
       else {
+        console.log(data);
         setFailed(true);
       }
     })

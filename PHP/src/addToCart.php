@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $inputs["product_details"]);
   if (!$query->execute()) {
     // If insertion fails, return error message
-    echo json_encode(0);
+    echo json_encode("Result set failed: " . $conn->error);
   }
   else {
     echo json_encode(1);
