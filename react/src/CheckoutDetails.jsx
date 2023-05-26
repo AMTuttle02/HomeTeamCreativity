@@ -99,7 +99,7 @@ function CheckoutDetails() {
                         <div className = "PaymentButtonPlacement">
                             <h1 className="ItemCount"> Total: ${order.total_cost}</h1>
                             <br/>
-                            <button type="submit" className="CheckoutButton">
+                            <button type="submit" className="PaymentButton">
                             Continue To Payment
                             </button>
                         </div>

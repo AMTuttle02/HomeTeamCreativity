@@ -719,6 +719,21 @@ footer {
   color: black;
 }
 
+.PaymentButton {
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: xx-large;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.PaymentButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
 .ReturnShopping{
   color:white;
   font-size: 40px;
@@ -744,5 +759,4 @@ footer {
 .PaymentButtonPlacement{
   text-align: center;
   float: center;
-  padding-right: 40px;
 }
