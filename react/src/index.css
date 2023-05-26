@@ -731,3 +731,9 @@ footer {
   float: right;
   padding-right: 40px;
 }
+
+.PaymentButtonPlacement{
+  text-align: center;
+  float: center;
+  padding-right: 40px;
+}

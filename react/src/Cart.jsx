@@ -127,23 +127,8 @@ function Cart() {
 
   const checkout = (order) => {
     if (order['total_cost'] > 0) {
-      window.location.href="/api/stripeCheckout.php";
-      /*
-      fetch("/api/checkout.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          order_id: order.order_id}),
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data == 1) {
-          window.location.href='/api/orderComplete';
-        }
-        else {
-          window.location.href='/orderFailed';
-        }
-      })*/
+      navigate("/checkout");
+      //window.location.href="/api/stripeCheckout.php";
     }
   }
 

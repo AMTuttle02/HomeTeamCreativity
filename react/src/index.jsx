@@ -20,6 +20,7 @@ import CustomOrder from "./CustomOrder";
 import Checkout from "./Checkout";
 import CheckoutFailed from "./CheckoutFailed";
 import ReturnPolicy from "./ReturnPolicy";
+import CheckoutDetails from "./CheckoutDetails";
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="ordercomplete" element={<Checkout />} />
           <Route path="orderfailed" element={<CheckoutFailed />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
+          <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
