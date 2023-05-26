@@ -9,13 +9,49 @@ function CheckoutDetails() {
     const [email, setEmail] = useState("");
     const [shipping, setShipping] = useState(0);
     const [paying, setPaying] = useState(1);
+    const [location, setLocation] = useState("");
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [zip, setZip] = useState("");
+    
 
     const payNow = () => {
-        window.location.href = "/api/stripeCheckout.php";
+        let dbLocation = location;
+        if (shipping) {
+            dbLocation = address + " " + city + ", " + state + " " + zip;
+        }
+        fetch("/api/updateOrderInfo.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ first, last, email, shipping, dbLocation}),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            // If the email and password are valid, redirect to the homepage
+            if (data) {
+                window.location.href = "/api/stripeCheckout.php";
+            }
+        });
     };
 
     const payLater = () => {
-        window.location.href = "/api/checkout.php";
+        let dbLocation = location;
+        if (shipping) {
+            dbLocation = address + " " + city + ", " + state + " " + zip;
+        }
+        fetch("/api/updateOrderInfo.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ first, last, email, shipping, dbLocation}),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            // If the email and password are valid, redirect to the homepage
+            if (data) {
+                window.location.href = "/api/checkoutNoPay.php";
+            }
+        });
     };
       
 
@@ -50,15 +86,15 @@ function CheckoutDetails() {
                     <div className="row">
                         <div className="split50">
                             <label>First Name</label>
-                            <input type="text" id="first" name="first" defaultValue={first} />
+                            <input type="text" id="first" name="first" defaultValue={first} onChange={(event) => setFirst(event.target.value)} />
                         </div>
                         <div className="split50">
                             <label>Last Name</label>
-                            <input type="text" id="last" name="last" defaultValue={last} />
+                            <input type="text" id="last" name="last" defaultValue={last} onChange={(event) => setLast(event.target.value)} />
                         </div>
                     </div>
                     <label> Email</label>
-                    <input type="text" id="email" name="email" defaultValue={email} />
+                    <input type="text" id="email" name="email" defaultValue={email} onChange={(event) => setEmail(event.target.value)} />
                     <br />
                     <br />
                     <div className="row">
@@ -77,18 +113,18 @@ function CheckoutDetails() {
                         <div>
                             <br />
                             <label> Address</label>
-                            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" />
+                            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" onChange={(event) => setAddress(event.target.value)}/>
                             <label> City</label>
-                            <input type="text" id="city" name="city" placeholder="New York" />
+                            <input type="text" id="city" name="city" placeholder="New York" onChange={(event) => setCity(event.target.value)}/>
 
                             <div className="row">
                                 <div className="split50">
                                     <label>State</label>
-                                    <input type="text" id="state" name="state" placeholder="NY" />
+                                    <input type="text" id="state" name="state" placeholder="NY" onChange={(event) => setState(event.target.value)}/>
                                 </div>
                                 <div className="split50">
                                     <label>Zip</label>
-                                    <input type="text" id="zip" name="zip" placeholder="10001" />
+                                    <input type="text" id="zip" name="zip" placeholder="10001" onChange={(event) => setZip(event.target.value)}/>
                                 </div>
                             </div>
                             <div>
@@ -111,7 +147,7 @@ function CheckoutDetails() {
                         <div>
                             <br />
                             <label> Location</label>
-                            <input type="text" id="adr" name="address" placeholder="Iberia Dollar General" />
+                            <input type="text" id="adr" name="address" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
                             <div className="row">
                                 <div className="split50Center">
                                     <label>
