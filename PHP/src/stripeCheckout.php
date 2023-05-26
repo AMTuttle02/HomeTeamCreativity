@@ -31,7 +31,7 @@ if (!$result) {
 }
 
 $orderId = $result['order_id'];
-$total_cost = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.3), 2);
+$total_cost = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
 
 $total_cost = $total_cost * 100;
 
