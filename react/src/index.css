@@ -562,6 +562,15 @@ input[type="text"], input[type="password"] {
   color: darkblue;
 }
 
+.split50 {
+  width: 50%;
+}
+
+.split50Center {
+  width: 50%;
+  text-align: center;
+}
+
 .customOrderBox textarea {
   width: 70%;
   height: 100px;

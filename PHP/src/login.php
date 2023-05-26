@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['loggedin'] = true;
     $_SESSION['email'] = $email;
     $_SESSION['first_name'] = $row['first_name'];
+    $_SESSION['last_name'] = $row['last_name'];
     $_SESSION['admin'] = $row['admin'];
     $_SESSION['userId'] = $row['user_id'];
 
