@@ -326,7 +326,7 @@ function Cart() {
             </div>
           </div>
           <div className="cartSideItem">
-            <h1 className="ItemCount"> Total: ${order.total_cost}</h1>
+            <h1 className="ItemCount"> Subtotal: ${order.total_cost}</h1>
             <h1 className="ItemCount"> {addedItems} item(s)</h1>
           </div>
           <div className="cartSideCheckout">
@@ -418,7 +418,7 @@ function Cart() {
             ))}
           <br/>
           <div className = "CheckoutButtonPlacement">
-            <h1> Total: ${order.total_cost}</h1>
+            <h1> Subtotal: ${order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
             <button onClick={() => checkout(order)} className="CheckoutButton">

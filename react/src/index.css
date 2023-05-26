@@ -181,14 +181,14 @@ body {
 }
 
 .cartSideItem {
-  -ms-flex: 12%; /* IE10 */
-  flex: 12%;
+  -ms-flex: 15%; /* IE10 */
+  flex: 15%;
   padding-top: 20px;
 }
 
 .cartSideCheckout {
-  -ms-flex: 22%; /* IE10 */
-  flex: 21%;
+  -ms-flex: 18%; /* IE10 */
+  flex: 18%;
   padding-top: 20px;
   text-align: center;
 }
@@ -690,8 +690,19 @@ footer {
     text-align: center;
     display: block;
   }
+
+  .PaymentButton{
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
+
   .policy {
     width: 90%;
+  }
+
+  .container {
+    width: 100%;
   }
 }
 
@@ -759,4 +770,8 @@ footer {
 .PaymentButtonPlacement{
   text-align: center;
   float: center;
+}
+
+.RightAlign {
+  text-align: right;
 }
