@@ -181,14 +181,14 @@ body {
 }
 
 .cartSideItem {
-  -ms-flex: 12%; /* IE10 */
-  flex: 12%;
+  -ms-flex: 15%; /* IE10 */
+  flex: 15%;
   padding-top: 20px;
 }
 
 .cartSideCheckout {
-  -ms-flex: 22%; /* IE10 */
-  flex: 21%;
+  -ms-flex: 18%; /* IE10 */
+  flex: 18%;
   padding-top: 20px;
   text-align: center;
 }
@@ -562,6 +562,15 @@ input[type="text"], input[type="password"] {
   color: darkblue;
 }
 
+.split50 {
+  width: 50%;
+}
+
+.split50Center {
+  width: 50%;
+  text-align: center;
+}
+
 .customOrderBox textarea {
   width: 70%;
   height: 100px;
@@ -681,8 +690,19 @@ footer {
     text-align: center;
     display: block;
   }
+
+  .PaymentButton{
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
+
   .policy {
     width: 90%;
+  }
+
+  .container {
+    width: 100%;
   }
 }
 
@@ -710,6 +730,21 @@ footer {
   color: black;
 }
 
+.PaymentButton {
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: xx-large;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.PaymentButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
 .ReturnShopping{
   color:white;
   font-size: 40px;
@@ -730,4 +765,13 @@ footer {
 .CheckoutButtonPlacement{
   float: right;
   padding-right: 40px;
+}
+
+.PaymentButtonPlacement{
+  text-align: center;
+  float: center;
+}
+
+.RightAlign {
+  text-align: right;
 }

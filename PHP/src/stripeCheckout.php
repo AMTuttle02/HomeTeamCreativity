@@ -31,7 +31,7 @@ if (!$result) {
 }
 
 $orderId = $result['order_id'];
-$total_cost = $result['total_cost'];
+$total_cost = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
 
 $total_cost = $total_cost * 100;
 
@@ -65,3 +65,4 @@ $checkout_session = \Stripe\Checkout\Session::create([
 
 header("HTTP/1.1 303 See Other");
 header("Location: " . $checkout_session->url);
+

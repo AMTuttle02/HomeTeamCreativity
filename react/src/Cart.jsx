@@ -127,23 +127,8 @@ function Cart() {
 
   const checkout = (order) => {
     if (order['total_cost'] > 0) {
-      window.location.href="/api/stripeCheckout.php";
-      /*
-      fetch("/api/checkout.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          order_id: order.order_id}),
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data == 1) {
-          window.location.href='/api/orderComplete';
-        }
-        else {
-          window.location.href='/orderFailed';
-        }
-      })*/
+      navigate("/checkout");
+      //window.location.href="/api/stripeCheckout.php";
     }
   }
 
@@ -341,7 +326,7 @@ function Cart() {
             </div>
           </div>
           <div className="cartSideItem">
-            <h1 className="ItemCount"> Total: ${order.total_cost}</h1>
+            <h1 className="ItemCount"> Subtotal: ${order.total_cost}</h1>
             <h1 className="ItemCount"> {addedItems} item(s)</h1>
           </div>
           <div className="cartSideCheckout">
@@ -433,7 +418,7 @@ function Cart() {
             ))}
           <br/>
           <div className = "CheckoutButtonPlacement">
-            <h1> Total: ${order.total_cost}</h1>
+            <h1> Subtotal: ${order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
             <button onClick={() => checkout(order)} className="CheckoutButton">
