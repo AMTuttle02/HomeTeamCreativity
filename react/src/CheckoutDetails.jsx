@@ -14,6 +14,7 @@ function CheckoutDetails() {
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [zip, setZip] = useState("");
+    const [notCustomOrder, setNotCustomOrder] = useState(1);
     
 
     const payNow = () => {
@@ -53,7 +54,6 @@ function CheckoutDetails() {
             }
         });
     };
-      
 
     useEffect(() => { 
         fetch("/api/getOrder.php")
@@ -61,6 +61,18 @@ function CheckoutDetails() {
         .then((data) => {
           //console.log(data);
           setOrder(data);
+        });
+    }, []);
+
+    useEffect(() => { 
+        fetch("/api/getCart.php")
+        .then((response) => response.json())
+        .then((data) => {
+            for (let i = 0; i < data.length; ++i) {
+                if (data[i].product_id == 0) {
+                    setNotCustomOrder(0);
+                }
+            }
         });
     }, []);
 
@@ -127,13 +139,20 @@ function CheckoutDetails() {
                                     <input type="text" id="zip" name="zip" placeholder="10001" onChange={(event) => setZip(event.target.value)}/>
                                 </div>
                             </div>
-                            <div>
-                            <div className="RightAlign">
-                                <p> Subtotal: ${order.total_cost}</p>
-                                <p> Shipping: TBD</p>
-                                <p> Discounts: $0.00</p>
-                                <h3> Total : ${order.total_cost}+</h3>
-                                <h3> Due Now : $0.00</h3>
+                            <div className="row">
+                                <div className="split50">
+                                    <p style={{color: 'red'}}>Shipping Cost and Payment will be requested via Email.</p>
+                                    <p><a href="/payLater">Learn More</a></p>
+                                </div>
+                                <div className="split50">
+                                    <div className="RightAlign">
+                                        <p> Subtotal: ${order.total_cost}</p>
+                                        <p> Shipping: TBD</p>
+                                        <p> Discounts: $0.00</p>
+                                        <h3> Total : ${order.total_cost}+</h3>
+                                        <h3> Due Now : $0.00</h3>
+                                    </div>
+                                </div>
                             </div>
                             <br/>
                             <div className = "PaymentButtonPlacement">
@@ -142,26 +161,29 @@ function CheckoutDetails() {
                                 </button>
                             </div>
                         </div>
-                        </div>
                     : 
                         <div>
                             <br />
                             <label> Location</label>
                             <input type="text" id="adr" name="address" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
-                            <div className="row">
-                                <div className="split50Center">
-                                    <label>
-                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
-                                    </label>
-                                </div>
-                                <div className="split50Center">
-                                    <label>
-                                        <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
-                                    </label>
-                                </div>
-                            </div>
+                            {notCustomOrder ?
+                                <div className="row">
+                                    <div className="split50Center">
+                                        <label>
+                                        <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
+                                        </label>
+                                    </div>
+                                    <div className="split50Center">
+                                        <label>
+                                            <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
+                                        </label>
+                                    </div>
+                                </div> 
+                            : 
+                                <div />
+                            }
                             
-                            {paying ?
+                            {paying && notCustomOrder ?
                                 <div>
                                     <div className="RightAlign">
                                         <p> Subtotal: ${order.total_cost}</p>
@@ -178,14 +200,35 @@ function CheckoutDetails() {
                                     </div>
                                 </div>
                             :
-                                <div>
-                                    <div className="RightAlign">
-                                        <p> Subtotal: ${order.total_cost}</p>
-                                        <p> Shipping: 0.00</p>
-                                        <p> Online Processing Fee: $0.00</p>
-                                        <p> Discounts: $0.00</p>
-                                        <h3> Total : ${order.total_cost}</h3>
-                                        <h3> Due Now : $0.00</h3>
+                                <div className="row">
+
+                                    {notCustomOrder ?
+                                        <div className="split50">
+                                        </div>
+                                    :
+                                        <div className="split50">
+                                            <p style={{color: 'red'}}>Total Cost May Vary Based On Custom Mockup.</p>
+                                            <p><a href="/payLater">Learn More</a></p>
+                                        </div>
+                                    }
+                                    <div className="split50">
+                                        <div className="RightAlign">
+                                            <p> Subtotal: ${order.total_cost}</p>
+                                            <p> Shipping: 0.00</p>
+                                            <p> Online Processing Fee: $0.00</p>
+                                            <p> Discounts: $0.00</p>
+                                            {notCustomOrder ? 
+                                                <div>
+                                                    <h3> Total : ${order.total_cost}</h3>
+                                                    <h3> Due Now : $0.00</h3>
+                                                </div>
+                                            :
+                                                <div>
+                                                    <h3> Total : ${order.total_cost}+</h3>
+                                                    <h3> Due Now : $0.00</h3>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
                                     <br/>
                                     <div className = "PaymentButtonPlacement">
