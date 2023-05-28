@@ -17,20 +17,15 @@ body {
 }
 
 /* Style the navigation bar links */
-.navbar a {
+.navLink {
   width: calc(100%/7);
   border: none;
   float: left;
   color: black;
   text-align: center;
   text-decoration: none;
-  font-size: 40px;
+  font-size: 2vw;
   padding: 20px 10px;
-}
-
-/* Right-aligned link */
-.navbar a.right {
-  float: right;
 }
 
 .navbar a:hover {
@@ -66,8 +61,16 @@ body {
 }
 
 .cart {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
+}
+
+.cartLink {
+  margin-right: 5px;
+}
+
+.homeLink {
+  margin-left: 5px;
 }
 
 .cartButton {
@@ -252,8 +255,8 @@ body {
 
 
 .logo{
-  width: 160px;
-  height: 140px;
+  width: 140px;
+  height: 120px;
   padding: 5px;
 }
 
@@ -605,19 +608,43 @@ footer {
 }
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
-@media screen and (max-width: 1600px) {
-  .navbar a {
+@media screen and (max-width: 1199px) {
+  .navLink {
+    float: none;
+    width: 50%;
+    display: block;
+    text-align: center;
+  }
+
+  .logo{
+    width: 140px;
+    height: 120px;
+    padding: 5px;
+  }
+
+  .cart {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .cartLink {
     float: none;
     width: 100%;
     display:block;
-    text-align: left;
+    text-align: center;
   }
-  .navbar button {
+
+  .searchBox {
+    display: none;
+  }
+  
+  .homeLink {
     float: none;
     width: 100%;
     display:block;
-    text-align: left;
+    text-align: center;
   }
+
   .row {   
     flex-direction: column;
   }
@@ -669,7 +696,45 @@ footer {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 481px) {
+  .navLink {
+    float: none;
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+
+  .logo{
+    width: 100px;
+    height: 80px;
+    padding: 5px;
+  }
+
+  .cart {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .cartLink {
+    float: none;
+    width: 48%;
+    display:block;
+    text-align: center;
+  }
+
+  .searchBox {
+    width: 48%;
+    display: block;
+    margin-left: 5px;
+  }
+  
+  .homeLink {
+    float: none;
+    width: 100%;
+    display:block;
+    text-align: center;
+  }
+
   .orderLinks {
     display: block;
     width: 450px;

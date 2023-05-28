@@ -50,25 +50,25 @@ function Homepage() {
     <div className="HomePage">
       <div className="App">
         <div className="navbar">
-          <Link to="/">
+          <Link to="/" className="homeLink">
               <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
           </Link>
-          <Link to="products">
+          <Link to="products" className="navLink">
             Products
           </Link>
-          <Link to="howitworks">
+          <Link to="howitworks" className="navLink">
             How It Works
           </Link>
-          <Link to="about">
+          <Link to="about" className="navLink">
             About Us
           </Link>
-          <Link to="login">
+          <Link to="login" className="navLink">
             {Login}
           </Link>
-          <form id="search">
-            <input type="text" placeholder="Search..." value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown}/>
+          <form id="search" className="searchBox">
+            <input type="text" placeholder="Search..." value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
           </form>
-          <Link to="cart">
+          <Link to="cart" className="cartLink">
               <img src={cart} alt="Cart" className="cart"/>
           </Link>
         </div>
