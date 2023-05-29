@@ -306,22 +306,22 @@ function Cart() {
       {userId ?
       <div>
         <br/>
-        <div className="row">
+        <div className="cartRow">
           <div className="cartSide">
             <Link to="/products" className="ReturnShopping">
               Continue Shopping
             </Link>
           </div>
           <div className="cartMain">
-            <div className="row">
+            <div className="cartRow">
               <div className="myCartSide">
-                <img src={cart} alt="Cart Image" className="cart"/>
+                <img src={cart} alt="Cart Image" className="cartImg"/>
               </div>
               <div className="myCartMain">
                 <h1>My Cart</h1>
               </div> 
               <div className="myCartSide">
-                <img src={cart} alt="Cart Image" className="cart"/>
+                <img src={cart} alt="Cart Image" className="cartImg"/>
               </div>
             </div>
           </div>

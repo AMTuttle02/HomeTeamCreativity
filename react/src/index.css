@@ -65,6 +65,11 @@ body {
   height: 80px;
 }
 
+.cartImg {
+  width: 80px;
+  height: 80px;
+}
+
 .cartLink {
   margin-right: 5px;
 }
@@ -86,6 +91,14 @@ body {
   display: flex;
   -ms-flex-wrap: wrap; /* IE10 */
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.cartRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
   width: 100%;
 }
 
@@ -181,18 +194,23 @@ body {
   flex: 23%;
   padding-top: 20px;
   text-align: center;
+  width: 23%;
+  padding: 0px;
+  padding-top: 15px;
 }
 
 .cartSideItem {
   -ms-flex: 15%; /* IE10 */
   flex: 15%;
+  padding: 0px;
   padding-top: 20px;
+  text-align: center;
 }
 
 .cartSideCheckout {
-  -ms-flex: 18%; /* IE10 */
-  flex: 18%;
-  padding-top: 20px;
+  -ms-flex: 15%; /* IE10 */
+  flex: 15%;
+  padding: 0px;
   text-align: center;
 }
 
@@ -204,16 +222,23 @@ body {
 }
 
 .myCartSide {
-  -ms-flex: 33%; /* IE10 */
-  flex: 33%;
+  -ms-flex: 35%; /* IE10 */
+  flex: 35%;
+  padding: 0px;
 }
 
 .myCartMain {   
-  -ms-flex: 33%; /* IE10 */
-  flex: 33%;
+  -ms-flex: 30%; /* IE10 */
+  flex: 30%;
   text-align: center;
   color: white;
   padding-top: 20px;
+  font-size: 2vw;
+  
+}
+
+.myCartMain h1{
+  font-size: 2vw;
 }
 
 .success {
@@ -607,8 +632,119 @@ footer {
   display: block;
 }
 
+
+.CartPage{
+  border-bottom: 5px solid white;
+}
+
+.CheckoutButton {
+  background-color: #B7C9E2;
+  color: black;
+  padding: 22px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2vw;
+  text-align: right;
+  padding-left: 95px;
+  padding-right: 95px;
+  white-space: nowrap;
+}
+
+.CheckoutButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
+.PaymentButton {
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: xx-large;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.PaymentButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
+.ReturnShopping{
+  color:white;
+  font-size: 2vw;
+  text-align: inline;
+  text-align: center;
+  text-decoration: none;
+  padding: 0px;
+}
+
+.CartHeader{
+  display:inline;
+}
+
+.ItemCount{
+  color:white;
+  text-align: inline;
+  font-size: 2vw;
+}
+
+.CheckoutButtonPlacement{
+  float: right;
+  padding-right: 40px;
+}
+
+.PaymentButtonPlacement{
+  text-align: center;
+  float: center;
+}
+
+.RightAlign {
+  text-align: right;
+}
+
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
 @media screen and (max-width: 1199px) {
+  .cartSide {
+    padding: 0px;
+  }
+
+  .cartSideItem {
+    padding: 0px;
+  }
+
+  .cartSideCheckout {
+    padding: 0px;
+  }
+
+  .CheckoutButtonPlacement {
+    float: left;
+    padding: 0px;
+    width: 100%;
+    display: flex;
+  }
+
+  .CheckoutButton {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .myCartSide {
+    padding: 0px;
+  }
+
+  .myCartMain {
+    padding-top: 10px;
+  }
+
+  .cartImg {
+    width: 40px;
+    height: 40px;
+  }
+
   .AboutParagraph {
     padding: 0px;
     margin-left: 20px;
@@ -711,6 +847,11 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .cartImg {
+    width: 30px;
+    height: 30px;
+  }
+
   .AboutParagraph {
     padding: 0px;
     text-align: center;
@@ -777,12 +918,6 @@ footer {
     flex-direction: column;
   }
 
-  .CheckoutButtonPlacement{
-    width: 100%;
-    text-align: center;
-    display: block;
-  }
-
   .PaymentButton{
     width: 100%;
     text-align: center;
@@ -796,74 +931,4 @@ footer {
   .container {
     width: 100%;
   }
-}
-
-.CartPage{
-  border-bottom: 5px solid white;
-}
-
-.CheckoutButton {
-  background-color: #B7C9E2;
-  color: black;
-  padding: 25px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: xx-large;
-  text-align: right;
-  padding-left: 100px;
-  padding-right: 100px;
-  white-space: nowrap;
-}
-
-.CheckoutButton:hover {
-  background-color: #45a049;
-  color: black;
-}
-
-.PaymentButton {
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: xx-large;
-  text-align: center;
-  white-space: nowrap;
-  width: 100%;
-}
-
-.PaymentButton:hover {
-  background-color: #45a049;
-  color: black;
-}
-
-.ReturnShopping{
-  color:white;
-  font-size: 40px;
-  text-align: inline;
-  text-align: center;
-  text-decoration: none;
-}
-
-.CartHeader{
-  display:inline;
-}
-
-.ItemCount{
-  color:white;
-  text-align: inline;
-}
-
-.CheckoutButtonPlacement{
-  float: right;
-  padding-right: 40px;
-}
-
-.PaymentButtonPlacement{
-  text-align: center;
-  float: center;
-}
-
-.RightAlign {
-  text-align: right;
 }
