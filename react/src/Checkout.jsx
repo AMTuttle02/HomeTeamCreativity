@@ -26,7 +26,6 @@ import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
 import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
 import WhiteHoodie from "./assets/WhiteHoodie.png";
 import { Link } from "react-router-dom";
-import cart from "./assets/cart.png";
 
 function setType(type, color) {
   if (type == "Crewneck Sweatshirt") {
@@ -199,65 +198,64 @@ function Checkout() {
             <br />
 
             <div className="CartPage" />
-                {products.map((product) => (
-                <div key={product.product_id}>
-                    <div className="row">
-                    <div className="productSideLeft" />
+              {products.map((product) => (
+              <div key={product.product_id}>
+                <div className="cartProductRow">
+                  <div className="productSide">
+                      <div className="fullDesign">
+                      <img
+                        src={setType(product.product_type, product.color)}
+                        alt="Home Team Creativity Logo"
+                        className="cartTshirt"
+                      />
+                      <img
+                        src={"api/images/" + product.filename}
+                        alt={product.filename}
+                        className="cartDesign"
+                      />
+                      </div>
+                  </div>
+                  <div className="productSide">
+                      <br />
+                      <h2> <b> {product.product_name} </b></h2> 
+                      <h2> Style: {product.product_type} </h2>
+                      <h2> Size: {product.size} </h2>
+                      <h2> Color: {product.color} </h2>
+                  </div>
+                  <div className="productSide">
+                  <br />
+                  {product.product_id ?
                     <div className="productSide">
-                        <div className="fullDesign">
-                        <img
-                          src={setType(product.product_type, product.color)}
-                          alt="Home Team Creativity Logo"
-                          className="tshirt"
-                        />
-                        <img
-                          src={"api/images/" + product.filename}
-                          alt={product.filename}
-                          className="design"
-                        />
-                        </div>
+                      <br /><br />
+                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                     </div>
+                  :
                     <div className="productSide">
-                        <br />
-                        <h2> <b> {product.product_name} </b></h2> 
-                        <h2> Style: {product.product_type} </h2>
-                        <h2> Size: {product.size} </h2>
-                        <h2> Color: {product.color} </h2>
+                      <br /><br />
+                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                     </div>
+                  }
+                  <br /><br />
+                  <h2> 
+                    Qty: 
+                    {product.product_quantity} 
+                  </h2>
+                  </div>
+                  {product.product_id ?
                     <div className="productSide">
-                    <br />
-                    {product.product_id ?
-                      <div className="productSide">
-                        <br /><br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                      </div>
-                    :
-                      <div className="productSide">
-                        <br /><br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
-                      </div>
-                    }
-                    <br /><br />
-                    <h2> 
-                      Qty: 
-                      {product.product_quantity} 
-                    </h2>
+                      <br /><br /><br /><br /><br /><br />
+                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                     </div>
-                    {product.product_id ?
-                      <div className="productSide">
-                        <br /><br /><br /><br /><br /><br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                      </div>
-                    :
-                      <div className="productSide">
-                        <br /><br /><br /><br /><br /><br />
-                        <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
-                      </div>
-                    }
-                    <div className="CartPage" />
+                  :
+                    <div className="productSide">
+                      <br /><br /><br /><br /><br /><br />
+                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                     </div>
+                  }
                 </div>
-                ))}
+                <div className="CartPage" />
+              </div>
+              ))}
             <br/>
             </div>
       :
