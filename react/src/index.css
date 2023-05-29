@@ -756,6 +756,21 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .container {
+    width: 90%;
+  }
+
+  
+  .split50 {
+    width: 100%;
+    padding-right: 0px;
+  }
+
+  .split50Center {
+    text-align: left;
+    width: 100%;
+  }
+
   .cartDesign {
     position: absolute;
     top: 80px;
