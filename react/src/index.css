@@ -94,6 +94,14 @@ body {
   width: 100%;
 }
 
+.HomeRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
 .orderRow {  
   display: -ms-flexbox; /* IE10 */
   display: flex;
@@ -322,6 +330,12 @@ body {
   width: 100%;
 }
 
+.productsTableHomepage {
+  display: table;
+  width: 750px;
+  margin-top: 50px;
+}
+
 .productsTd {
   display: table-cell;
   width: 25%;
@@ -334,6 +348,13 @@ body {
 }
 
 .fullDesign {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  float: left;
+}
+
+.homeFullDesign {
   position: relative;
   top: 0px;
   left: 0px;
@@ -354,6 +375,14 @@ body {
   position: relative;
   width: 440px;
   height: 440px;
+}
+
+.homeTshirt {
+  top: 0px;
+  left: 0px;
+  position: relative;
+  width: 360px;
+  height: 360px;
 }
 
 .cartTshirt {
@@ -378,6 +407,14 @@ body {
   left: 160px;
   width: 125px;
   height: 125px;
+}
+
+.homeDesign {
+  position: absolute;
+  top: 81px;
+  left: 135px;
+  width: 103px;
+  height: 103px;
 }
 
 .cartDesign {
@@ -437,7 +474,7 @@ body {
   cursor: pointer;
   text-decoration: none;
   font-size: xx-large;
-  width: 40%;
+  width: 50%;
 }
 
 .OrderButton:hover {
@@ -766,6 +803,17 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .productsTableHomepage {
+    width: 100%;
+  }
+
+  .HomeRow {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+    width: 100%;
+  }
 
   .container {
     width: 90%;
@@ -958,6 +1006,28 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .OrderButton {
+    width: 90%;
+    font-size: large;
+  }
+
+  .productsTableHomepage {
+    text-align: left;
+  }
+
+  .homeTshirt {
+    width: 220px;
+    height: 220px;
+  }
+
+  .homeDesign {
+    position: absolute;
+    top: 50px;
+    left: 78px;
+    width: 63px;
+    height: 63px;
+  }
+
   .addToCart {
     padding: 12px 20px;
     width: 90%;
