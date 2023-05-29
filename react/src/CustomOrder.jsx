@@ -304,7 +304,7 @@ function CustomOrder() {
     <div className="Order">
       <br />
       <h1 className="orderHeader">Order Summary</h1>
-      <div className="row">
+      <div className="orderRow">
         <div className="orderSide">
           <div className="orderFullDesign">
             <img
@@ -315,7 +315,7 @@ function CustomOrder() {
             <img
               src={"api/images/" + design.filename}
               alt={design.productName}
-              className="orderDesign"
+              className="design"
             />
             <br /><br />
             <h3>{design.productName}</h3>
@@ -327,7 +327,7 @@ function CustomOrder() {
             <p>Wash Inside Out If Possible</p>
             <Link to='/returnpolicy'>Return Policy</Link>
             <br /><br /><br />
-            </div>
+          </div>
         </div>
         {userId ?
           <div className="orderMain">

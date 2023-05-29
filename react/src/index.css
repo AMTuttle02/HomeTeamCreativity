@@ -94,6 +94,14 @@ body {
   width: 100%;
 }
 
+.orderRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 .cartRow {  
   display: -ms-flexbox; /* IE10 */
   display: flex;
@@ -266,6 +274,7 @@ body {
   flex: 25%;
   padding-top: 10px;
   text-align: center;
+  margin-left: 5%;
 }
 
 .orderSide p {
@@ -285,7 +294,6 @@ body {
   padding-top: 20px;
   text-align: center;
 }
-
 
 .logo{
   width: 140px;
@@ -336,7 +344,8 @@ body {
   position: relative;
   top: 0px;
   left: 0px;
-  float: right;
+  float: left;
+  text-align: center;
 }
 
 .tshirt {
@@ -592,6 +601,7 @@ input[type="text"], input[type="password"] {
 .typeOptionRow {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .shirtOptions {
@@ -756,11 +766,11 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+
   .container {
     width: 90%;
   }
 
-  
   .split50 {
     width: 100%;
     padding-right: 0px;
@@ -938,9 +948,6 @@ footer {
     height: 140px;
   }
 
-  .orderFullDesign {
-    float: left;
-  }
   .design {
     position: absolute;
     top: 100px;
@@ -951,6 +958,41 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .addToCart {
+    padding: 12px 20px;
+    width: 90%;
+    margin-left: 0px;
+  }
+  
+  .addToCart:hover {
+    background-color: #45a049;
+  }
+
+  .size {
+    padding: 5px;
+    font-size: medium;
+  }
+
+  .tshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 220px;
+    height: 220px;
+  }
+
+  .design {
+    position: absolute;
+    top: 50px;
+    left: 78px;
+    width: 63px;
+    height: 63px;
+  }
+
+  .orderMain {
+    width: 100%;
+  }
+
   .FinalCheckoutButtonPlacement {
     padding: 0px;
     margin: auto;
@@ -1026,34 +1068,5 @@ footer {
     width: 100%;
     display:block;
     text-align: center;
-  }
-
-  .orderLinks {
-    display: block;
-    width: 450px;
-  }
-  .orderMain {
-    padding: 5%;
-  }
-  .orderFullDesign {
-    padding: 0px;
-    float: right;
-  }
-  .typeOptionRow {
-    flex-direction: column;
-  }
-
-  .PaymentButton{
-    width: 100%;
-    text-align: center;
-    display: block;
-  }
-
-  .policy {
-    width: 90%;
-  }
-
-  .container {
-    width: 100%;
   }
 }
