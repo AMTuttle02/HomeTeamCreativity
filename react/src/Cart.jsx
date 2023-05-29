@@ -416,15 +416,17 @@ function Cart() {
               </div>
             ))}
           <br/>
-          <div className = "CheckoutButtonPlacement">
+          <div className = "FinalCheckoutButtonPlacement">
             <h1> Subtotal: ${order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
-            <button onClick={() => checkout(order)} className="CheckoutButton">
+            <button onClick={() => checkout(order)} className="FinalCheckoutButton">
               Check Out
             </button>
           </div>
           <br/>
+          <br />
+          <br />
           <br />
           <br />
         </div>

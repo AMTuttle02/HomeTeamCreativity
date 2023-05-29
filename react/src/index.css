@@ -681,6 +681,26 @@ footer {
   color: black;
 }
 
+.FinalCheckoutButton {
+  background-color: #B7C9E2;
+  color: black;
+  padding: 22px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2vw;
+  text-align: right;
+  padding-left: 95px;
+  padding-right: 95px;
+  white-space: nowrap;
+}
+
+.FinalCheckoutButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
 .PaymentButton {
   border: none;
   cursor: pointer;
@@ -716,6 +736,11 @@ footer {
 }
 
 .CheckoutButtonPlacement{
+  float: right;
+  padding-right: 40px;
+}
+
+.FinalCheckoutButtonPlacement{
   float: right;
   padding-right: 40px;
 }
@@ -789,6 +814,11 @@ footer {
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  .FinalCheckoutButton {
+    width: 100%;
+    font-size: large;
   }
 
   .myCartSide {
@@ -906,6 +936,11 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .FinalCheckoutButtonPlacement {
+    padding: 0px;
+    margin: auto;
+  }
+
   .cartDesign {
     position: absolute;
     top: 40px;
