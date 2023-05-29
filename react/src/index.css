@@ -609,6 +609,20 @@ footer {
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
 @media screen and (max-width: 1199px) {
+  .AboutParagraph {
+    padding: 0px;
+    margin-left: 20px;
+  }
+
+  .contactUsImg {
+    width: 100%;
+    margin-left: 10px;
+  }
+
+  .side {
+    padding: 0px;
+  }
+
   .navLink {
     float: none;
     width: 50%;
@@ -697,6 +711,19 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .AboutParagraph {
+    padding: 0px;
+    text-align: center;
+  }
+
+  .contactUsImg {
+    margin-left: 0px;
+  }
+
+  .MaggieImg {
+    width: 100%;
+  }
+
   .navLink {
     float: none;
     width: 100%;
