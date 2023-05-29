@@ -343,19 +343,18 @@ function Cart() {
         <div className="CartPage" />
             {products.map((product) => (
               <div key={product.product_id}>
-                <div className="row">
-                  <div className="productSideLeft" />
+                <div className="cartProductRow">
                   <div className="productSide">
                     <div className="fullDesign">
                       <img
                         src={setType(product.product_type, product.color)}
                         alt="Home Team Creativity Logo"
-                        className="tshirt"
+                        className="cartTshirt"
                       />
                       <img
                         src={"api/images/" + product.filename}
                         alt={product.filename}
-                        className="design"
+                        className="cartDesign"
                       />
                     </div>
                   </div>
@@ -412,8 +411,8 @@ function Cart() {
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                   </div>
                   }
-                  <div className="CartPage" />
                 </div>
+                <div className="CartPage" />
               </div>
             ))}
           <br/>

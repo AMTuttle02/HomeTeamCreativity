@@ -102,6 +102,14 @@ body {
   width: 100%;
 }
 
+.cartProductRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
 .row h2 {
   color: white;
   text-align: center;
@@ -339,6 +347,14 @@ body {
   height: 440px;
 }
 
+.cartTshirt {
+  top: 0px;
+  left: 0px;
+  position: relative;
+  width: 440px;
+  height: 440px;
+}
+
 .ordertshirt {
   top: 0px;
   left: 0px;
@@ -348,6 +364,14 @@ body {
 }
 
 .design {
+  position: absolute;
+  top: 100px;
+  left: 160px;
+  width: 125px;
+  height: 125px;
+}
+
+.cartDesign {
   position: absolute;
   top: 100px;
   left: 160px;
@@ -705,8 +729,43 @@ footer {
   text-align: right;
 }
 
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+/* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .cartDesign {
+    position: absolute;
+    top: 80px;
+    left: 125px;
+    width: 102px;
+    height: 102px;
+  }
+
+  .cartTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 360px;
+    height: 360px;
+  }
+
+  .productSide {
+    -ms-flex: 15%; /* IE10 */
+    flex: 15%;
+    margin: auto;
+  }
+  
+  .productSide h2 {
+    color: black;
+    padding: 10px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: large;
+  }
+
+  .cartProductRow {
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+  }
+
   .cartSide {
     padding: 0px;
   }
@@ -847,6 +906,22 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .cartDesign {
+    position: absolute;
+    top: 40px;
+    left: 65px;
+    width: 51px;
+    height: 51px;
+  }
+
+  .cartTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 180px;
+    height: 180px;
+  }
+
   .cartImg {
     width: 30px;
     height: 30px;
