@@ -634,7 +634,7 @@ function Order() {
     <div className="Order">
       <br />
       <h1 className="orderHeader">Order Summary</h1>
-      <div className="row">
+      <div className="orderRow">
         <div className="orderSide">
           <div className="orderFullDesign">
             <img
@@ -646,7 +646,7 @@ function Order() {
               <img
                 src={"api/images/" + currentDesign.filename}
                 alt={currentDesign.product_name}
-                className="orderDesign"
+                className="design"
               />
               <br /><br />
               <h3>{currentDesign.product_name}</h3>
