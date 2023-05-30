@@ -640,13 +640,13 @@ function Order() {
             <img
             src={productType.type}
             alt="Home Team Creativity Logo"
-            className="tshirt"
+            className="orderTshirt"
             />
             <div>
               <img
                 src={"api/images/" + currentDesign.filename}
                 alt={currentDesign.product_name}
-                className="design"
+                className="orderDesign"
               />
               <br /><br />
               <h3>{currentDesign.product_name}</h3>

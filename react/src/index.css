@@ -335,7 +335,6 @@ body {
 .productsTd {
   display: table-cell;
   width: 25%;
-  padding-left: 70px;
 }
 
 .productsTdHomepage {
@@ -348,6 +347,15 @@ body {
   top: 0px;
   left: 0px;
   float: left;
+  width: 25%;
+}
+
+.cartFullDesign {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  float: left;
+  text-align: center;
 }
 
 .homeFullDesign {
@@ -370,11 +378,11 @@ body {
 }
 
 .tshirt {
-  top: 0px;
-  left: 0px;
+  top: 0%;
+  left: 0%;
   position: relative;
-  width: 440px;
-  height: 440px;
+  width: 100%;
+  height: auto;
 }
 
 .homeTshirt {
@@ -393,7 +401,7 @@ body {
   height: 440px;
 }
 
-.ordertshirt {
+.orderTshirt {
   top: 0px;
   left: 0px;
   position: relative;
@@ -403,10 +411,10 @@ body {
 
 .design {
   position: absolute;
-  top: 100px;
-  left: 160px;
-  width: 125px;
-  height: 125px;
+  top: 18%;
+  left: 38%;
+  width: 22%;
+  height: auto;
 }
 
 .homeDesign {
@@ -420,7 +428,7 @@ body {
 .cartDesign {
   position: absolute;
   top: 100px;
-  left: 160px;
+  left: 152px;
   width: 125px;
   height: 125px;
 }
@@ -432,10 +440,10 @@ body {
 
 .orderDesign {
   position: absolute;
-  top: 100px;
-  left: 150px;
-  width: 140px;
-  height: 140px;
+  top: 110px;
+  left: 185px;
+  width: 120px;
+  height: 120px;
 }
 
 .quantity {
@@ -804,6 +812,10 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .fullDesign {
+    width: 50%;
+  }
+
   .howItWorksSide {
     -ms-flex: 100%; /* IE10 */
     flex: 100%;
@@ -822,7 +834,6 @@ footer {
   .howItWorksSide li{
     font-size: x-large;
   }
-
 
   .howItWorksRight {
     -ms-flex: 100%; /* IE10 */
@@ -1006,13 +1017,7 @@ footer {
     width:100%;
     display: block; 
   }
-  .tshirt {
-    top: 0px;
-    left: 0px;
-    position: relative;
-    width: 400px;
-    height: 400px;
-  }
+
   .orderTshirt {
     top: 0px;
     left: 0px;
@@ -1023,22 +1028,31 @@ footer {
 
   .orderDesign {
     position: absolute;
-    top: 100px;
-    left: 135px;
-    width: 140px;
-    height: 140px;
+    top: 90px;
+    left: 145px;
+    width: 100px;
+    height: 100px;
   }
 
-  .design {
-    position: absolute;
-    top: 100px;
-    left: 150px;
-    width: 105px;
-    height: 105px;
-  }
 }
 
 @media screen and (max-width: 481px) {
+  .orderTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 300px;
+    height: 300px;
+  }
+
+  .orderDesign {
+    position: absolute;
+    top: 70px;
+    left: 110px;
+    width: 75px;
+    height: 75px;
+  }
+
   .howItWorksSide li{
     font-size: large;
   }
@@ -1085,20 +1099,8 @@ footer {
     font-size: medium;
   }
 
-  .tshirt {
-    top: 0px;
-    left: 0px;
-    position: relative;
-    width: 220px;
-    height: 220px;
-  }
-
-  .design {
-    position: absolute;
-    top: 50px;
-    left: 78px;
-    width: 63px;
-    height: 63px;
+  .fullDesign {
+    width: 100%;
   }
 
   .orderMain {

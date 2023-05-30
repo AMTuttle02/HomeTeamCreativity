@@ -345,7 +345,7 @@ function Cart() {
               <div key={product.product_id}>
                 <div className="cartProductRow">
                   <div className="productSide">
-                    <div className="fullDesign">
+                    <div className="cartFullDesign">
                       <img
                         src={setType(product.product_type, product.color)}
                         alt="Home Team Creativity Logo"
