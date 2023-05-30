@@ -154,11 +154,7 @@ body {
   box-shadow: 0 5px 5px rgba(0,0,0,0.3);
   color: black;
   border-radius: 4px;
-}
-
-.howItWorksMiddle {
-  -ms-flex: 1%; /* IE10 */
-  flex: 1%;
+  margin: 10px;
 }
 
 .howItWorksRight {
@@ -807,6 +803,37 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .howItWorksSide {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: left;
+    padding-left: 5%;
+    border-style: solid;
+    border-color: lightgray;
+    background-color: #fff;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+    color: black;
+    border-radius: 4px;
+    margin: 0px;
+    margin-bottom: 1%;
+  }
+
+  .howItWorksSide li{
+    font-size: x-large;
+  }
+
+
+  .howItWorksRight {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    width: 100%;
+    padding: 0px;
+  }
+  
+  .howItWorksRight .howItWorksSide{
+    margin-right: 0px;
+  }
+
   .productsTableHomepage {
     width: 100%;
   }
@@ -963,6 +990,7 @@ footer {
 
   .row {   
     flex-direction: column;
+    margin: auto;
   }
   .productsTr {
     display: block;
@@ -1010,6 +1038,15 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .howItWorksSide li{
+    font-size: large;
+  }
+
+  .howItWorksSide h2{
+    padding: 25px;
+    font-size: large;
+  }
+
   .OrderButton {
     width: 90%;
     font-size: large;

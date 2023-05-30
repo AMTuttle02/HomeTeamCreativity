@@ -10,7 +10,6 @@ function HowItWorks() {
       <h1>How It Works</h1>
       <br />
       <div className="row">
-        <div className="howItWorksMiddle" />
         <div className="howItWorksSide">
           <h2>For Custom Designs: </h2>
           <ol> 
@@ -22,7 +21,6 @@ function HowItWorks() {
             <li>Receive confirmation email and receipt including tracking number, if applicable.</li>
           </ol>
         </div>
-        <div className="howItWorksMiddle" />
         <div className="howItWorksRight">
           <div className="howItWorksSide">
             <h2>Product Ordering Steps: </h2>
@@ -32,7 +30,6 @@ function HowItWorks() {
               <li>See price info below</li>
             </ol>
           </div>
-          <br />
           <div className="howItWorksSide">
             <h2>Already Have A Design? </h2>
             <ol> 
@@ -47,7 +44,6 @@ function HowItWorks() {
       <h1>Price Info</h1>
       <br />
       <div className="row">
-        <div className="howItWorksMiddle" />
         <div className="howItWorksSide">
           <h2>Starting Prices: </h2>
           <ul> 
@@ -65,7 +61,6 @@ function HowItWorks() {
             <li>Adult Hoodie: $28 (S-XL) $30 (XXL-XXXL)</li>
           </ul>
         </div>
-        <div className="howItWorksMiddle" />
           <div className="howItWorksSide">
             <h2>Additional Info: </h2>
             <ul>
