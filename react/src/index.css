@@ -571,7 +571,8 @@ input[type="text"], input[type="password"] {
   border-radius: 4px;
   width: 10%;
   cursor: pointer;
-  margin-left: 15px;
+  white-space: nowrap;
+  text-decoration: none;
 }
 
 .signUpButton:hover {
