@@ -361,6 +361,10 @@ body {
   float: left;
 }
 
+.homeFullDesign p{
+  color: white;
+}
+
 .orderFullDesign {
   position: relative;
   top: 0px;
