@@ -176,6 +176,10 @@ body {
   flex: 33%;
 }
 
+.dashLogOut h3, .dashLogOut p{
+  text-align: right;
+}
+
 .dashLogOut button {
   background-color: #4c77af;
   color: #fff;
@@ -877,6 +881,39 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .dashUpload {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: center;
+  }
+
+  .dashUpload button {
+    float: none;
+    width: 100%;
+  }
+  
+  .dashName {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: center;
+  }
+
+  .dashLogOut button {
+    float: none;
+    width: 100%;
+  }
+  
+  .dashLogOut {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: center;
+  }
+
+  .dashLogOut h3 .dashLogOut p {
+    float: none;
+    text-align: center;
+  }
+
   .policy {
     width: 60%;
   }
