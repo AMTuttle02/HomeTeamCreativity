@@ -43,5 +43,5 @@ https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubunt
 docker cp hometeamcreativity-api-1:/var/www/images PHP/src
 
 ## Build for production
-npm install
+npm install  
 npm run build
