@@ -170,7 +170,8 @@ function SignUp() {
         </div>
         <div className="UserAccess">
           <br/><br/>
-          <p>Already Have An Account?
+          <p>Already Have An Account?</p> 
+          <p>
           <Link to="/login" className="signUpButton">Login </Link>
           </p>
         </div>
