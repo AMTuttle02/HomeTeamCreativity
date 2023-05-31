@@ -22,6 +22,7 @@ import CheckoutFailed from "./CheckoutFailed";
 import ReturnPolicy from "./ReturnPolicy";
 import CheckoutDetails from "./CheckoutDetails";
 import PayLater from "./PayLater";
+import Dashboard from "./Dashboard";
 
 export default function App() {
   return (
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="paylater" element={<PayLater />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>

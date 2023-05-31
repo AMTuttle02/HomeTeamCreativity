@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function LoginSuccess() {
+function Dashboard() {
   const navigate = useNavigate();
 
   const logout = (e) => {
@@ -40,6 +40,7 @@ function LoginSuccess() {
           <br />
           <h2>Welcome Back to Home Team Creativity!</h2>
           <h2>You are currently logged in.</h2>
+          <h2>Upload Designs <Link to="/upload">Here</Link></h2>
           <h2>Already Ordered? View Your Recent Order <Link to="/orderComplete">Here</Link>!</h2>
           <br/>
           <button type="signUpButton" onClick={logout}>Log Out</button>
@@ -49,4 +50,4 @@ function LoginSuccess() {
   }
   else {}
 }
-export default LoginSuccess;
+export default Dashboard;
