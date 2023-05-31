@@ -12,7 +12,14 @@ function Dashboard() {
     })
   }
 
+  const upload = (e) => {
+    navigate("/upload");
+  }
+
   const [firstName, setFirstName] = useState("");
+  const [admin, setAdmin] = useState(0);
+  const [orders, setOrders] = useState([]);
+
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
@@ -25,29 +32,44 @@ function Dashboard() {
     fetch("/api/admin.php")
       .then((response) => response.json())
       .then((data) => {
-        if (data.admin) {
-          navigate("/dashboard");
-        }
+        setAdmin(data.admin);
+      });
+    fetch("/api/allOrders.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setOrders(data);
       });
   }, []);
 
-  if (firstName) {
+  if (admin) {
     return (
-      <div className='LoginSuccess'>
+      <div className='Dashboard'>
         <br />
-        <div className="container">
-          <h1>Hello {firstName}!</h1>
-          <br />
-          <h2>Welcome Back to Home Team Creativity!</h2>
-          <h2>You are currently logged in.</h2>
-          <h2>Upload Designs <Link to="/upload">Here</Link></h2>
-          <h2>Already Ordered? View Your Recent Order <Link to="/orderComplete">Here</Link>!</h2>
-          <br/>
-          <button type="signUpButton" onClick={logout}>Log Out</button>
+        <div className="dashboardContainer">
+            <div className="row">
+                <div className="dashUpload">
+                    <button type="signUpButton" onClick={upload}>Upload Designs</button>
+                </div>
+                <div className="dashName">
+                    <h1>Hello {firstName}!</h1>
+                </div>
+                <div className="dashLogOut">
+                    <button type="signUpButton" onClick={logout}>Log Out</button>
+                </div>
+            </div>
+            <br />
+            <div className="BlackLine" />
+            <br />
+            <center>
+                <h1> Current Orders </h1>
+            </center>
+
         </div>
       </div>
     );
   }
-  else {}
+  else {
+    
+  }
 }
 export default Dashboard;

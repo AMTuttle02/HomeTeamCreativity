@@ -139,6 +139,58 @@ body {
   flex: 50%;
 }
 
+.dashUpload {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+}
+
+.dashUpload h1 {
+  text-align: left;
+  color: black;
+  padding: 0px;
+}
+
+.dashUpload button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  float: left;
+}
+
+.dashUpload button:hover {
+  background-color: #45a049;
+}
+
+.dashName {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+}
+
+.dashLogOut {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+}
+
+.dashLogOut button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  float: right;
+}
+
+.dashLogOut button:hover {
+  background-color: #45a049;
+}
+
 .HowItWorks h1{
   color: white;
 }
@@ -510,6 +562,14 @@ input[type=text] {
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
+.dashboardContainer {
+  margin: auto;
+  width: 90%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
 .howContainer {
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -716,6 +776,10 @@ footer {
 
 .CartPage{
   border-bottom: 5px solid white;
+}
+
+.BlackLine{
+  border-bottom: 5px solid black;
 }
 
 .CheckoutButton {
