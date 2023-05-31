@@ -306,22 +306,22 @@ function Cart() {
       {userId ?
       <div>
         <br/>
-        <div className="row">
+        <div className="cartRow">
           <div className="cartSide">
             <Link to="/products" className="ReturnShopping">
               Continue Shopping
             </Link>
           </div>
           <div className="cartMain">
-            <div className="row">
+            <div className="cartRow">
               <div className="myCartSide">
-                <img src={cart} alt="Cart Image" className="cart"/>
+                <img src={cart} alt="Cart Image" className="cartImg"/>
               </div>
               <div className="myCartMain">
                 <h1>My Cart</h1>
               </div> 
               <div className="myCartSide">
-                <img src={cart} alt="Cart Image" className="cart"/>
+                <img src={cart} alt="Cart Image" className="cartImg"/>
               </div>
             </div>
           </div>
@@ -343,19 +343,18 @@ function Cart() {
         <div className="CartPage" />
             {products.map((product) => (
               <div key={product.product_id}>
-                <div className="row">
-                  <div className="productSideLeft" />
+                <div className="cartProductRow">
                   <div className="productSide">
-                    <div className="fullDesign">
+                    <div className="cartFullDesign">
                       <img
                         src={setType(product.product_type, product.color)}
                         alt="Home Team Creativity Logo"
-                        className="tshirt"
+                        className="cartTshirt"
                       />
                       <img
                         src={"api/images/" + product.filename}
                         alt={product.filename}
-                        className="design"
+                        className="cartDesign"
                       />
                     </div>
                   </div>
@@ -412,20 +411,22 @@ function Cart() {
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                   </div>
                   }
-                  <div className="CartPage" />
                 </div>
+                <div className="CartPage" />
               </div>
             ))}
           <br/>
-          <div className = "CheckoutButtonPlacement">
+          <div className = "FinalCheckoutButtonPlacement">
             <h1> Subtotal: ${order.total_cost}</h1>
             <div className="CartPage" />
             <br/>
-            <button onClick={() => checkout(order)} className="CheckoutButton">
+            <button onClick={() => checkout(order)} className="FinalCheckoutButton">
               Check Out
             </button>
           </div>
           <br/>
+          <br />
+          <br />
           <br />
           <br />
         </div>

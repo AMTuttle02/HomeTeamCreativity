@@ -634,13 +634,13 @@ function Order() {
     <div className="Order">
       <br />
       <h1 className="orderHeader">Order Summary</h1>
-      <div className="row">
+      <div className="orderRow">
         <div className="orderSide">
           <div className="orderFullDesign">
             <img
             src={productType.type}
             alt="Home Team Creativity Logo"
-            className="tshirt"
+            className="orderTshirt"
             />
             <div>
               <img

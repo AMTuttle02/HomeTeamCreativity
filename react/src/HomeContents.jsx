@@ -72,7 +72,7 @@ function HomeContents() {
   return (
     <div className="index">
       {firstName ? <h1>Welcome Back {firstName}!</h1> : <h1><b>Welcome to Home Team Creativity!</b></h1>}
-      <div className="row">
+      <div className="HomeRow">
         <div className="side">
           <div className="orderLinks">
             <br /><br /><br />
@@ -84,31 +84,33 @@ function HomeContents() {
           </div>
         </div>
         <div className="main">
-          <h2>Featured Products</h2>
-          <div className="productsTable">
-            <div className="productsTdHomepage">
-              {products.map((product) => (
-                <div key={product.filename}>
-                  <div className="fullDesign">
-                    <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
-                    <img
-                      src={currentColor(product)}
-                      alt="Home Team Creativity Logo"
-                      className="tshirt"
-                    />
-                    <img
-                      src={"api/images/" + product.filename}
-                      alt={product.filename}
-                      className="design"
-                    />
-                    <p>{product.product_name}</p>
-                    <p>{"$" + product.price}</p>
-                    </button>
-                  </div>
-                </div>
-              ))}
+            <div className="productsTableHomepage">
+              <div className="productsTdHomepage">
+                <h2>Featured Products</h2>
+                <br />
+                  {products.map((product) => (
+                    <div key={product.filename}>
+                      <div className="homeFullDesign">
+                        <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
+                        <img
+                          src={currentColor(product)}
+                          alt="Home Team Creativity Logo"
+                          className="homeTshirt"
+                        />
+                        <img
+                          src={"api/images/" + product.filename}
+                          alt={product.filename}
+                          className="homeDesign"
+                        />
+                        <p>{product.product_name}</p>
+                        <p>{"$" + product.price}</p>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
-          </div>
+          
         </div>
       </div>
       <Outlet />

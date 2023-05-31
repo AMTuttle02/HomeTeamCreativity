@@ -17,20 +17,15 @@ body {
 }
 
 /* Style the navigation bar links */
-.navbar a {
+.navLink {
   width: calc(100%/7);
   border: none;
   float: left;
   color: black;
   text-align: center;
   text-decoration: none;
-  font-size: 40px;
+  font-size: 2vw;
   padding: 20px 10px;
-}
-
-/* Right-aligned link */
-.navbar a.right {
-  float: right;
 }
 
 .navbar a:hover {
@@ -66,8 +61,21 @@ body {
 }
 
 .cart {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
+}
+
+.cartImg {
+  width: 80px;
+  height: 80px;
+}
+
+.cartLink {
+  margin-right: 5px;
+}
+
+.homeLink {
+  margin-left: 5px;
 }
 
 .cartButton {
@@ -83,6 +91,38 @@ body {
   display: flex;
   -ms-flex-wrap: wrap; /* IE10 */
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.HomeRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.orderRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.cartRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.cartProductRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
   width: 100%;
 }
 
@@ -114,11 +154,7 @@ body {
   box-shadow: 0 5px 5px rgba(0,0,0,0.3);
   color: black;
   border-radius: 4px;
-}
-
-.howItWorksMiddle {
-  -ms-flex: 1%; /* IE10 */
-  flex: 1%;
+  margin: 10px;
 }
 
 .howItWorksRight {
@@ -138,6 +174,7 @@ body {
 
 .ReturnPolicy {
   text-align: center;
+  color: white;
 }
 
 .policy {
@@ -178,18 +215,23 @@ body {
   flex: 23%;
   padding-top: 20px;
   text-align: center;
+  width: 23%;
+  padding: 0px;
+  padding-top: 15px;
 }
 
 .cartSideItem {
   -ms-flex: 15%; /* IE10 */
   flex: 15%;
+  padding: 0px;
   padding-top: 20px;
+  text-align: center;
 }
 
 .cartSideCheckout {
-  -ms-flex: 18%; /* IE10 */
-  flex: 18%;
-  padding-top: 20px;
+  -ms-flex: 15%; /* IE10 */
+  flex: 15%;
+  padding: 0px;
   text-align: center;
 }
 
@@ -201,16 +243,23 @@ body {
 }
 
 .myCartSide {
-  -ms-flex: 33%; /* IE10 */
-  flex: 33%;
+  -ms-flex: 35%; /* IE10 */
+  flex: 35%;
+  padding: 0px;
 }
 
 .myCartMain {   
-  -ms-flex: 33%; /* IE10 */
-  flex: 33%;
+  -ms-flex: 30%; /* IE10 */
+  flex: 30%;
   text-align: center;
   color: white;
   padding-top: 20px;
+  font-size: 2vw;
+  
+}
+
+.myCartMain h1{
+  font-size: 2vw;
 }
 
 .success {
@@ -230,6 +279,7 @@ body {
   flex: 25%;
   padding-top: 10px;
   text-align: center;
+  margin-left: 5%;
 }
 
 .orderSide p {
@@ -250,10 +300,9 @@ body {
   text-align: center;
 }
 
-
 .logo{
-  width: 160px;
-  height: 140px;
+  width: 140px;
+  height: 120px;
   padding: 5px;
 }
 
@@ -278,10 +327,15 @@ body {
   width: 100%;
 }
 
+.productsTableHomepage {
+  display: table;
+  width: 750px;
+  margin-top: 50px;
+}
+
 .productsTd {
   display: table-cell;
   width: 25%;
-  padding-left: 70px;
 }
 
 .productsTdHomepage {
@@ -294,16 +348,53 @@ body {
   top: 0px;
   left: 0px;
   float: left;
+  width: 25%;
+}
+
+.cartFullDesign {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  float: left;
+  text-align: center;
+}
+
+.homeFullDesign {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  float: left;
+}
+
+.homeFullDesign p{
+  color: white;
 }
 
 .orderFullDesign {
   position: relative;
   top: 0px;
   left: 0px;
-  float: right;
+  float: left;
+  text-align: center;
 }
 
 .tshirt {
+  top: 0%;
+  left: 0%;
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.homeTshirt {
+  top: 0px;
+  left: 0px;
+  position: relative;
+  width: 360px;
+  height: 360px;
+}
+
+.cartTshirt {
   top: 0px;
   left: 0px;
   position: relative;
@@ -311,7 +402,7 @@ body {
   height: 440px;
 }
 
-.ordertshirt {
+.orderTshirt {
   top: 0px;
   left: 0px;
   position: relative;
@@ -321,8 +412,24 @@ body {
 
 .design {
   position: absolute;
+  top: 18%;
+  left: 38%;
+  width: 22%;
+  height: auto;
+}
+
+.homeDesign {
+  position: absolute;
+  top: 81px;
+  left: 135px;
+  width: 103px;
+  height: 103px;
+}
+
+.cartDesign {
+  position: absolute;
   top: 100px;
-  left: 160px;
+  left: 152px;
   width: 125px;
   height: 125px;
 }
@@ -334,10 +441,10 @@ body {
 
 .orderDesign {
   position: absolute;
-  top: 100px;
-  left: 150px;
-  width: 140px;
-  height: 140px;
+  top: 110px;
+  left: 185px;
+  width: 120px;
+  height: 120px;
 }
 
 .quantity {
@@ -376,7 +483,7 @@ body {
   cursor: pointer;
   text-decoration: none;
   font-size: xx-large;
-  width: 40%;
+  width: 50%;
 }
 
 .OrderButton:hover {
@@ -473,7 +580,8 @@ input[type="text"], input[type="password"] {
   border-radius: 4px;
   width: 10%;
   cursor: pointer;
-  margin-left: 15px;
+  white-space: nowrap;
+  text-decoration: none;
 }
 
 .signUpButton:hover {
@@ -540,6 +648,7 @@ input[type="text"], input[type="password"] {
 .typeOptionRow {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .shirtOptions {
@@ -600,111 +709,10 @@ footer {
   text-align: center;
   color: white;
   font-style: italic;
-  font-size: 40px;
+  font-size: 2vw;
   display: block;
 }
 
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
-@media screen and (max-width: 1600px) {
-  .navbar a {
-    float: none;
-    width: 100%;
-    display:block;
-    text-align: left;
-  }
-  .navbar button {
-    float: none;
-    width: 100%;
-    display:block;
-    text-align: left;
-  }
-  .row {   
-    flex-direction: column;
-  }
-  .productsTr {
-    display: block;
-    float: center;
-  }
-  .productsTd {
-    width: 100%;
-    display: block;
-    padding-left: 0px;
-  }
-  .productsTh {
-    width:100%;
-    display: block; 
-  }
-  .tshirt {
-    top: 0px;
-    left: 0px;
-    position: relative;
-    width: 400px;
-    height: 400px;
-  }
-  .orderTshirt {
-    top: 0px;
-    left: 0px;
-    position: relative;
-    width: 400px;
-    height: 400px;
-  }
-
-  .orderDesign {
-    position: absolute;
-    top: 100px;
-    left: 135px;
-    width: 140px;
-    height: 140px;
-  }
-
-  .orderFullDesign {
-    float: left;
-  }
-  .design {
-    position: absolute;
-    top: 100px;
-    left: 150px;
-    width: 105px;
-    height: 105px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .orderLinks {
-    display: block;
-    width: 450px;
-  }
-  .orderMain {
-    padding: 5%;
-  }
-  .orderFullDesign {
-    padding: 0px;
-    float: right;
-  }
-  .typeOptionRow {
-    flex-direction: column;
-  }
-
-  .CheckoutButtonPlacement{
-    width: 100%;
-    text-align: center;
-    display: block;
-  }
-
-  .PaymentButton{
-    width: 100%;
-    text-align: center;
-    display: block;
-  }
-
-  .policy {
-    width: 90%;
-  }
-
-  .container {
-    width: 100%;
-  }
-}
 
 .CartPage{
   border-bottom: 5px solid white;
@@ -713,19 +721,39 @@ footer {
 .CheckoutButton {
   background-color: #B7C9E2;
   color: black;
-  padding: 25px;
+  padding: 22px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  font-size: xx-large;
+  font-size: 2vw;
   text-align: right;
-  padding-left: 100px;
-  padding-right: 100px;
+  padding-left: 95px;
+  padding-right: 95px;
   white-space: nowrap;
 }
 
 .CheckoutButton:hover {
+  background-color: #45a049;
+  color: black;
+}
+
+.FinalCheckoutButton {
+  background-color: #B7C9E2;
+  color: black;
+  padding: 22px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2vw;
+  text-align: right;
+  padding-left: 95px;
+  padding-right: 95px;
+  white-space: nowrap;
+}
+
+.FinalCheckoutButton:hover {
   background-color: #45a049;
   color: black;
 }
@@ -747,10 +775,11 @@ footer {
 
 .ReturnShopping{
   color:white;
-  font-size: 40px;
+  font-size: 2vw;
   text-align: inline;
   text-align: center;
   text-decoration: none;
+  padding: 0px;
 }
 
 .CartHeader{
@@ -760,9 +789,15 @@ footer {
 .ItemCount{
   color:white;
   text-align: inline;
+  font-size: 2vw;
 }
 
 .CheckoutButtonPlacement{
+  float: right;
+  padding-right: 40px;
+}
+
+.FinalCheckoutButtonPlacement{
   float: right;
   padding-right: 40px;
 }
@@ -774,4 +809,387 @@ footer {
 
 .RightAlign {
   text-align: right;
+}
+
+/* Responsive layout - when the screen is less than 1199px wide */
+@media screen and (max-width: 1199px) {
+  .policy {
+    width: 60%;
+  }
+
+  .fullDesign {
+    width: 50%;
+  }
+
+  .howItWorksSide {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: left;
+    padding-left: 5%;
+    border-style: solid;
+    border-color: lightgray;
+    background-color: #fff;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+    color: black;
+    border-radius: 4px;
+    margin: 0px;
+    margin-bottom: 1%;
+  }
+
+  .howItWorksSide li{
+    font-size: x-large;
+  }
+
+  .howItWorksRight {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    width: 100%;
+    padding: 0px;
+  }
+  
+  .howItWorksRight .howItWorksSide{
+    margin-right: 0px;
+  }
+
+  .productsTableHomepage {
+    width: 100%;
+  }
+
+  .HomeRow {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .container {
+    width: 90%;
+  }
+
+  .split50 {
+    width: 100%;
+    padding-right: 0px;
+  }
+
+  .split50Center {
+    text-align: left;
+    width: 100%;
+  }
+
+  .cartDesign {
+    position: absolute;
+    top: 80px;
+    left: 125px;
+    width: 102px;
+    height: 102px;
+  }
+
+  .cartTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 360px;
+    height: 360px;
+  }
+
+  .productSide {
+    -ms-flex: 15%; /* IE10 */
+    flex: 15%;
+    margin: auto;
+  }
+  
+  .productSide h2 {
+    color: black;
+    padding: 10px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: large;
+  }
+
+  .cartProductRow {
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+  }
+
+  .cartSide {
+    padding: 0px;
+  }
+
+  .cartSideItem {
+    padding: 0px;
+  }
+
+  .cartSideCheckout {
+    padding: 0px;
+  }
+
+  .CheckoutButtonPlacement {
+    float: left;
+    padding: 0px;
+    width: 100%;
+    display: flex;
+  }
+
+  .CheckoutButton {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .FinalCheckoutButton {
+    width: 100%;
+    font-size: large;
+  }
+
+  .myCartSide {
+    padding: 0px;
+  }
+
+  .myCartMain {
+    padding-top: 10px;
+  }
+
+  .cartImg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .AboutParagraph {
+    padding: 0px;
+    margin-left: 20px;
+  }
+
+  .contactUsImg {
+    width: 100%;
+    margin-left: 10px;
+  }
+
+  .side {
+    padding: 0px;
+  }
+
+  .navLink {
+    float: none;
+    width: 50%;
+    display: block;
+    text-align: center;
+  }
+
+  .logo{
+    width: 140px;
+    height: 120px;
+    padding: 5px;
+  }
+
+  .cart {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .cartLink {
+    float: none;
+    width: 100%;
+    display:block;
+    text-align: center;
+  }
+
+  .searchBox {
+    display: none;
+  }
+  
+  .homeLink {
+    float: none;
+    width: 100%;
+    display:block;
+    text-align: center;
+  }
+
+  .row {   
+    flex-direction: column;
+    margin: auto;
+  }
+  .productsTr {
+    display: block;
+    float: center;
+  }
+  .productsTd {
+    width: 100%;
+    display: block;
+    padding-left: 0px;
+  }
+  .productsTh {
+    width:100%;
+    display: block; 
+  }
+
+  .orderTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 400px;
+    height: 400px;
+  }
+
+  .orderDesign {
+    position: absolute;
+    top: 90px;
+    left: 145px;
+    width: 100px;
+    height: 100px;
+  }
+
+}
+
+@media screen and (max-width: 481px) {
+  .policy {
+    width: 80%;
+  }
+
+  .orderTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 300px;
+    height: 300px;
+  }
+
+  .orderDesign {
+    position: absolute;
+    top: 70px;
+    left: 110px;
+    width: 75px;
+    height: 75px;
+  }
+
+  .howItWorksSide li{
+    font-size: large;
+  }
+
+  .howItWorksSide h2{
+    padding: 25px;
+    font-size: large;
+  }
+
+  .OrderButton {
+    width: 90%;
+    font-size: large;
+  }
+
+  .productsTableHomepage {
+    text-align: left;
+  }
+
+  .homeTshirt {
+    width: 220px;
+    height: 220px;
+  }
+
+  .homeDesign {
+    position: absolute;
+    top: 50px;
+    left: 78px;
+    width: 63px;
+    height: 63px;
+  }
+
+  .addToCart {
+    padding: 12px 20px;
+    width: 90%;
+    margin-left: 0px;
+  }
+  
+  .addToCart:hover {
+    background-color: #45a049;
+  }
+
+  .size {
+    padding: 5px;
+    font-size: medium;
+  }
+
+  .fullDesign {
+    width: 100%;
+  }
+
+  .orderMain {
+    width: 100%;
+  }
+
+  .FinalCheckoutButtonPlacement {
+    padding: 0px;
+    margin: auto;
+  }
+
+  .cartDesign {
+    position: absolute;
+    top: 40px;
+    left: 65px;
+    width: 51px;
+    height: 51px;
+  }
+
+  .cartTshirt {
+    top: 0px;
+    left: 0px;
+    position: relative;
+    width: 180px;
+    height: 180px;
+  }
+
+  .cartImg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .AboutParagraph {
+    padding: 0px;
+    text-align: center;
+  }
+
+  .contactUsImg {
+    margin-left: 0px;
+  }
+
+  .MaggieImg {
+    width: 100%;
+  }
+
+  .navLink {
+    float: none;
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+
+  .logo{
+    width: 100px;
+    height: 80px;
+    padding: 5px;
+  }
+
+  .cart {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .cartLink {
+    float: none;
+    width: 48%;
+    display:block;
+    text-align: center;
+  }
+
+  .searchBox {
+    width: 48%;
+    display: block;
+    margin-left: 5px;
+  }
+  
+  .homeLink {
+    float: none;
+    width: 100%;
+    display:block;
+    text-align: center;
+  }
 }

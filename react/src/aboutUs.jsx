@@ -20,11 +20,11 @@ function AboutUs() {
               time with my family and friends, listening to music, and crafting.
             </h3>
           </div>
-          <img src={info} alt="About Us Contact Info" />
+          <img src={info} alt="About Us Contact Info" className="contactUsImg"/>
         </div>
         <div className="main">
           <br />
-          <img src={maggie} alt="Maggie Tuttle: Business Owner" />
+          <img src={maggie} alt="Maggie Tuttle: Business Owner" className="MaggieImg"/>
           <div className="Maggie">
             <h1> Maggie Tuttle </h1>
             <h3> Business Owner </h3>
