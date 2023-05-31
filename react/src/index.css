@@ -139,6 +139,62 @@ body {
   flex: 50%;
 }
 
+.dashUpload {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+}
+
+.dashUpload h1 {
+  text-align: left;
+  color: black;
+  padding: 0px;
+}
+
+.dashUpload button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  float: left;
+}
+
+.dashUpload button:hover {
+  background-color: #45a049;
+}
+
+.dashName {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+}
+
+.dashLogOut {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+}
+
+.dashLogOut h3, .dashLogOut p{
+  text-align: right;
+}
+
+.dashLogOut button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  float: right;
+}
+
+.dashLogOut button:hover {
+  background-color: #45a049;
+}
+
 .HowItWorks h1{
   color: white;
 }
@@ -510,6 +566,14 @@ input[type=text] {
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
+.dashboardContainer {
+  margin: auto;
+  width: 90%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
 .howContainer {
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -718,6 +782,10 @@ footer {
   border-bottom: 5px solid white;
 }
 
+.BlackLine{
+  border-bottom: 5px solid black;
+}
+
 .CheckoutButton {
   background-color: #B7C9E2;
   color: black;
@@ -813,6 +881,39 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .dashUpload {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: center;
+  }
+
+  .dashUpload button {
+    float: none;
+    width: 100%;
+  }
+  
+  .dashName {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: center;
+  }
+
+  .dashLogOut button {
+    float: none;
+    width: 100%;
+  }
+  
+  .dashLogOut {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    text-align: center;
+  }
+
+  .dashLogOut h3 .dashLogOut p {
+    float: none;
+    text-align: center;
+  }
+
   .policy {
     width: 60%;
   }

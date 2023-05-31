@@ -31,18 +31,23 @@ function Homepage() {
   }
   
   const [firstName, setFirstName] = useState("");
+  const [admin, setAdmin] = useState(0);
 
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);
+        setAdmin(data.admin);
       });
   }, []);
 
   let Login = 'Login';
 
-  if (firstName) {
+  if (admin) {
+    Login = 'Dashboard';
+  }
+  else if (firstName) {
     Login = 'Log Out';
   }
 

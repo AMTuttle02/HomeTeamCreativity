@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginSuccess() {
+  const navigate = useNavigate();
 
   const logout = (e) => {
     fetch("/api/logout.php")
@@ -20,12 +21,13 @@ function LoginSuccess() {
       });
   }, []);
 
-  const [admin, setAdmin] = useState("");
   useEffect(() => {
     fetch("/api/admin.php")
       .then((response) => response.json())
       .then((data) => {
-        setAdmin(data.admin);
+        if (data.admin) {
+          navigate("/dashboard");
+        }
       });
   }, []);
 
@@ -38,7 +40,6 @@ function LoginSuccess() {
           <br />
           <h2>Welcome Back to Home Team Creativity!</h2>
           <h2>You are currently logged in.</h2>
-          {admin ? <h2>Upload Designs <Link to="/upload">Here</Link></h2> : <></>}
           <h2>Already Ordered? View Your Recent Order <Link to="/orderComplete">Here</Link>!</h2>
           <br/>
           <button type="signUpButton" onClick={logout}>Log Out</button>
