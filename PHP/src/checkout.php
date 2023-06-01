@@ -37,7 +37,7 @@ if ($userId) {
     if ($orderId && $email && $first && $last) {
         $query = $conn->prepare(
                             "UPDATE orders
-                            SET is_cart = 0, paid = 1
+                            SET is_cart = 0, paid = 1, status = 'processing'
                             WHERE order_id = ?");
         $query->bind_param(
                         "s",

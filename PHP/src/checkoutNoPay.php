@@ -31,7 +31,7 @@ $orderId = $result['order_id'];
 
 $query = $conn->prepare(
                     "UPDATE orders
-                    SET is_cart = 0
+                    SET is_cart = 0, status = 'processing'
                     WHERE order_id = ?");
 $query->bind_param(
                 "s",
