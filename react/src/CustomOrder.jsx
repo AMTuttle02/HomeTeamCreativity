@@ -544,14 +544,23 @@ function CustomOrder() {
     else if (currentStyle == "Crewneck Sweatshirt") {
       setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
       setCurrentColor(crewneckColor);
+      if (size.description == "Adult XXX-Large") {
+        setSize({description: "Adult XX-Large", addedCost: 2});
+      }
     }
     else if (currentStyle == "Long Sleeve T-Shirt") {
       setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
       setCurrentColor(longSleeveColor);
+      if (size.description == "Adult XXX-Large") {
+        setSize({description: "Adult XX-Large", addedCost: 2});
+      }
     }
     else if (currentStyle == "Hooded Sweatshirt") {
       setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
       setCurrentColor(hoodieColor);
+      if (size.description == "Adult XXX-Large") {
+        setSize({description: "Adult XX-Large", addedCost: 2});
+      }
     }
 
     if (currentColor == "Navy" && size.description.includes("Youth") && currentStyle == "Short Sleeve T-Shirt") {
