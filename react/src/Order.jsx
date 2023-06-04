@@ -580,6 +580,9 @@ function Order() {
           setCurrentColor(color);
           setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
         }
+        if (size.description == "Adult XXX-Large") {
+          setSize({description: "Adult XX-Large", addedCost: 2});
+        }
       }
       else if (currentStyle == "Long Sleeve T-Shirt") {
         const lShirtMap = {
@@ -601,6 +604,9 @@ function Order() {
           setCurrentColor(color);
           setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
         }
+        if (size.description == "Adult XXX-Large") {
+          setSize({description: "Adult XX-Large", addedCost: 2});
+        }
       }
       else if (currentStyle == "Hooded Sweatshirt") {
         const hoodieMap = {
@@ -620,6 +626,9 @@ function Order() {
           setHoodie(hoodieMap[color]);
           setCurrentColor(color);
           setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
+        }
+        if (size.description == "Adult XXX-Large") {
+          setSize({description: "Adult XX-Large", addedCost: 2});
         }
       }
 
@@ -1044,8 +1053,17 @@ function Order() {
               <button 
                 onClick={() => setSize({description: "Adult XX-Large", addedCost: 2})}
                 className="productTypes">
-                <p className="size">XX-Large</p>
+                <p className="size">2XL</p>
               </button>
+              {currentStyle == "Short Sleeve T-Shirt" ?
+                <button 
+                  onClick={() => setSize({description: "Adult XXX-Large", addedCost: 2})}
+                  className="productTypes">
+                  <p className="size">3XL</p>
+                </button>
+              :
+              <div />
+              }
             </div>
             <br />
             <h1>Quantity: {" "}
