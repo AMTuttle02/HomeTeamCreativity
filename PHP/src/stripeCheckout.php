@@ -4,6 +4,7 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
+require_once 'secrets.php';
 
 if (session_status() === PHP_SESSION_ACTIVE) {
 } else {
@@ -39,10 +40,10 @@ $total_cost = $total_cost * 100;
 require_once 'vendor/autoload.php';
 //require_once '../secrets.php';
 
-\Stripe\Stripe::setApiKey('sk_test_51NBizIKEXSTaScLMCiiPwogR0mKkEmwzlaXh5EekzudF2K1NjuXD2E736tfdJEVhW7GymZTddStve3f6KBKLkDAC00xwBmBJLI');
+\Stripe\Stripe::setApiKey(STRIPE_KEY);
 header('Content-Type: application/json');
 
-$YOUR_DOMAIN = 'http://localhost';
+$YOUR_DOMAIN = DOMAIN;
 
 $checkout_session = \Stripe\Checkout\Session::create([
   'line_items' => [

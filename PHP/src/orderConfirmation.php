@@ -6,6 +6,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
 
 require 'vendor/autoload.php';
+require_once 'secrets.php';
 use PHPMailer\PHPMailer\PHPMailer;
 $mail = new PHPMailer;
 
