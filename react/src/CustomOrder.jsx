@@ -121,128 +121,388 @@ function CustomOrder() {
       if (design.tColors.includes("Gray")) {
         setTshirt(GrayTshirt);
         setTShirtColor("Gray");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.cColors.includes("Gray")) {
         setCrewneck(GrayCrewneck);
         setCrewneckColor("Gray");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.lColors.includes("Gray")) {
         setLongSleeve(GrayLongSleeve);
         setLongSleeveColor("Gray");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.hColors.includes("Gray")) {
         setHoodie(GrayHoodie);
         setHoodieColor("Gray");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }  
     }
     else if (e == black) {
       if (design.tColors.includes("Black")) {
         setTshirt(BlackTshirt);
         setTShirtColor("Black");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.cColors.includes("Black")) {
         setCrewneck(BlackCrewneck);
         setCrewneckColor("Black");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.lColors.includes("Black")) {
         setLongSleeve(BlackLongSleeve);
         setLongSleeveColor("Black");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.hColors.includes("Black")) {
         setHoodie(BlackHoodie);
         setHoodieColor("Black");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       } 
     }
     else if (e == white) {
       if (design.tColors.includes("White")) {
         setTshirt(WhiteTshirt);
         setTShirtColor("White");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.cColors.includes("White")) {
         setCrewneck(WhiteCrewneck);
         setCrewneckColor("White");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.lColors.includes("White")) {
         setLongSleeve(WhiteLongSleeve);
         setLongSleeveColor("White");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.hColors.includes("White")) {
         setHoodie(WhiteHoodie);
         setHoodieColor("White");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       } 
     }
     else if (e == navy) {
       if (design.tColors.includes("Navy")) {
         setTshirt(NavyTshirt);
         setTShirtColor("Navy");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.lColors.includes("Navy")) {
         setLongSleeve(NavyLongSleeve);
         setLongSleeveColor("Navy");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.hColors.includes("Navy")) {
         setHoodie(NavyHoodie);
         setHoodieColor("Navy");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == red) {
       if (design.tColors.includes("Red")) {
         setTshirt(RedTshirt);
         setTShirtColor("Red");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.lColors.includes("Red")) {
         setLongSleeve(RedLongSleeve);
         setLongSleeveColor("Red");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.hColors.includes("Red")) {
         setHoodie(RedHoodie);
         setHoodieColor("Red");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == royal) {
       if (design.tColors.includes("Royal")) {
         setTshirt(RoyalTshirt);
         setTShirtColor("Royal");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
       if (design.lColors.includes("Royal")) {
         setLongSleeve(RoyalLongSleeve);
         setLongSleeveColor("Royal");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == yellow) {
       if (design.tColors.includes("Yellow")) {
         setTshirt(YellowTshirt);
         setTShirtColor("Yellow");
+        setDesign({
+          id: 0, 
+          filename: "customDesignBlack.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == pink) {
       if (design.tColors.includes("Pink")) {
         setTshirt(PinkTshirt);
         setTShirtColor("Pink");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == green) {
       if (design.tColors.includes("Green")) {
         setTshirt(GreenTshirt);
         setTShirtColor("Green");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == maroon) {
       if (design.tColors.includes("Maroon")) {
         setTshirt(MaroonTshirt);
         setTShirtColor("Maroon");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == orange) {
       if (design.tColors.includes("Orange")) {
         setTshirt(OrangeTshirt);
         setTShirtColor("Orange");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
     else if (e == purple) {
       if (design.tColors.includes("Purple")) {
         setTshirt(PurpleTshirt);
         setTShirtColor("Purple");
+        setDesign({
+          id: 0, 
+          filename: "customDesign.png", 
+          productName: "Custom Design", 
+          price: "16.00",
+          tColors: "Black Gray Yellow Pink Green Maroon Orange Purple Red Royal White Navy", 
+          lColors: "Black Gray Red Royal White Navy", 
+          cColors: "Black Gray White", 
+          hColors: "Black Gray Red White Navy"
+        });
       }
     }
   };
@@ -310,12 +570,12 @@ function CustomOrder() {
             <img
             src={productType.type}
             alt="Home Team Creativity Logo"
-            className="tshirt"
+            className="orderTshirt"
             />
             <img
               src={"api/images/" + design.filename}
               alt={design.productName}
-              className="design"
+              className="orderDesign"
             />
             <br /><br />
             <h3>{design.productName}</h3>
