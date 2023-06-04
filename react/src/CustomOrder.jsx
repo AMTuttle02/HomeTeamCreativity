@@ -310,12 +310,12 @@ function CustomOrder() {
             <img
             src={productType.type}
             alt="Home Team Creativity Logo"
-            className="tshirt"
+            className="orderTshirt"
             />
             <img
               src={"api/images/" + design.filename}
               alt={design.productName}
-              className="design"
+              className="orderDesign"
             />
             <br /><br />
             <h3>{design.productName}</h3>
