@@ -42,7 +42,7 @@ require_once 'vendor/autoload.php';
 \Stripe\Stripe::setApiKey('sk_test_51NBizIKEXSTaScLMCiiPwogR0mKkEmwzlaXh5EekzudF2K1NjuXD2E736tfdJEVhW7GymZTddStve3f6KBKLkDAC00xwBmBJLI');
 header('Content-Type: application/json');
 
-$YOUR_DOMAIN = 'https://test.hometeamcreativity.com/';
+$YOUR_DOMAIN = 'https://test.hometeamcreativity.com';
 
 $checkout_session = \Stripe\Checkout\Session::create([
   'line_items' => [
