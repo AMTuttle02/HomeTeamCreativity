@@ -17,3 +17,4 @@ TODOs.md
 .eslintcache
 .env
 previousProd
+PHP/src/secrets.php
