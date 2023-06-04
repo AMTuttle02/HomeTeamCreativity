@@ -1044,8 +1044,17 @@ function Order() {
               <button 
                 onClick={() => setSize({description: "Adult XX-Large", addedCost: 2})}
                 className="productTypes">
-                <p className="size">XX-Large</p>
+                <p className="size">2XL</p>
               </button>
+              {currentStyle == "Short Sleeve T-Shirt" ?
+                <button 
+                  onClick={() => setSize({description: "Adult XXX-Large", addedCost: 2})}
+                  className="productTypes">
+                  <p className="size">3XL</p>
+                </button>
+              :
+              <div />
+              }
             </div>
             <br />
             <h1>Quantity: {" "}
