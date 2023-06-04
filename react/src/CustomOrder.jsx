@@ -746,7 +746,7 @@ function CustomOrder() {
                 Add to Cart
               </button>
               <br /><br />
-              <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
+              <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}+</h1>
               { failed && <Failed /> }
             </center>
           </div>
