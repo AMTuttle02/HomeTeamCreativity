@@ -18,3 +18,4 @@ TODOs.md
 .env
 previousProd
 PHP/src/secrets.php
+PHP/src/prodSecrets.php

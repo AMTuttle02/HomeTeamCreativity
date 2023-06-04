@@ -7,6 +7,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type');
 session_start();
 
 include 'conn.php';
+require_once 'secrets.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $productName = $_POST["productName"];
@@ -17,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $cColors = $_POST["cColors"];
   $hColors = $_POST["hColors"];
   $file = $_FILES['image'];
-  $targetDir = "/var/www/images/";
+  $targetDir = UPLOAD_DIR;
   $targetFile = $targetDir . basename($file["name"]);
   $fileName = basename($file["name"]);
   $uploadOk = 1;
