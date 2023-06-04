@@ -15,44 +15,64 @@ function CheckoutDetails() {
     const [state, setState] = useState("");
     const [zip, setZip] = useState("");
     const [notCustomOrder, setNotCustomOrder] = useState(1);
+    const [locationError, setLocationError] = useState("");
     
+    const handleValidation = () => {
+        if (shipping) {
+            if (address == "" || city == "" || state == "" || zip == "") {
+                setLocationError("Please provide a shipping address.");
+                return false;
+            }
+        }
+        else {
+            if (location == "") {
+                setLocationError("Please provide a drop off location.");
+                return false;
+            }
+        }
+        return true;
+    }
 
     const payNow = () => {
-        let dbLocation = location;
-        if (shipping) {
-            dbLocation = address + " " + city + ", " + state + " " + zip;
-        }
-        fetch("/api/updateOrderInfo.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ first, last, email, shipping, dbLocation}),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            // If the email and password are valid, redirect to the homepage
-            if (data) {
-                window.location.href = "/api/stripeCheckout.php";
+        if (handleValidation()) {
+            let dbLocation = location;
+            if (shipping) {
+                dbLocation = address + " " + city + ", " + state + " " + zip;
             }
-        });
+            fetch("/api/updateOrderInfo.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ first, last, email, shipping, dbLocation}),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                // If the email and password are valid, redirect to the homepage
+                if (data) {
+                    window.location.href = "/api/stripeCheckout.php";
+                }
+            });
+        }
     };
 
     const payLater = () => {
-        let dbLocation = location;
-        if (shipping) {
-            dbLocation = address + " " + city + ", " + state + " " + zip;
-        }
-        fetch("/api/updateOrderInfo.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ first, last, email, shipping, dbLocation}),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            // If the email and password are valid, redirect to the homepage
-            if (data) {
-                window.location.href = "/api/checkoutNoPay.php";
+        if (handleValidation()) {
+            let dbLocation = location;
+            if (shipping) {
+                dbLocation = address + " " + city + ", " + state + " " + zip;
             }
-        });
+            fetch("/api/updateOrderInfo.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ first, last, email, shipping, dbLocation}),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                // If the email and password are valid, redirect to the homepage
+                if (data) {
+                    window.location.href = "/api/checkoutNoPay.php";
+                }
+            });
+        }
     };
 
     useEffect(() => { 
@@ -86,6 +106,10 @@ function CheckoutDetails() {
             setEmail(data.email);
         });
     }, []);
+
+    useEffect(() => {
+        setLocationError("");
+    }, [shipping, paying]);
 
   return (
     <div className="CheckoutDetails">
@@ -125,6 +149,9 @@ function CheckoutDetails() {
                         <div>
                             <br />
                             <label> Address</label>
+                            <div className="red">
+                                {locationError}
+                            </div>
                             <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" onChange={(event) => setAddress(event.target.value)}/>
                             <label> City</label>
                             <input type="text" id="city" name="city" placeholder="New York" onChange={(event) => setCity(event.target.value)}/>
@@ -165,6 +192,9 @@ function CheckoutDetails() {
                         <div>
                             <br />
                             <label> Location</label>
+                            <div className="red">
+                                {locationError}
+                            </div>
                             <input type="text" id="adr" name="address" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
                             {notCustomOrder ?
                                 <div className="row">
