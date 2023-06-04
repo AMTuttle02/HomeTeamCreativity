@@ -14,7 +14,7 @@ function HowItWorks() {
         <div className="howItWorksSide">
           <h2>For Custom Designs: </h2>
           <ol> 
-            <li>Complete the ordering process, including as much detail as possible in the custom design.</li>
+            <li>Complete the ordering process, including as much detail as possible in the custom design text box.</li>
             <li>An Order Confirmation will be sent to you and our team.</li>
             <li>The designer will send you mockup images for you to choose and adjust to your liking.</li>
             <li>Once you approve the design, you can choose your payment method.</li>
