@@ -501,9 +501,9 @@ body {
 .orderDesign {
   position: absolute;
   top: 110px;
-  left: 185px;
-  width: 120px;
-  height: 120px;
+  left: 170px;
+  width: 150px;
+  height: 150px;
 }
 
 .quantity {
@@ -1138,9 +1138,9 @@ footer {
   .orderDesign {
     position: absolute;
     top: 90px;
-    left: 145px;
-    width: 100px;
-    height: 100px;
+    left: 140px;
+    width: 115px;
+    height: 115px;
   }
 
 }
@@ -1161,9 +1161,9 @@ footer {
   .orderDesign {
     position: absolute;
     top: 70px;
-    left: 110px;
-    width: 75px;
-    height: 75px;
+    left: 105px;
+    width: 90px;
+    height: 90px;
   }
 
   .howItWorksSide li{
