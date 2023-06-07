@@ -15,6 +15,7 @@ import WhiteTshirt from "./assets/WhiteTShirt.png";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
 
   const orderProduct = (productId) => {
@@ -37,15 +38,38 @@ function Products() {
       navigate("/customOrder");
     }
   };
-  
+
+  const removeProduct = (productId) => {
+    const data = { id: productId };
+    fetch("/api/deleteProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data == 1) {
+          console.log(data);
+          //window.location.reload();
+        }
+        else {
+          console.log(data);
+        }
+      })
+  }
 
   useEffect(() => {
     fetch("/api/products.php")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
-        console.log(data);
       });
+
+      fetch("/api/session.php")
+        .then((response) => response.json())
+        .then((data) => {
+          setAdmin(data.admin);
+        });
   }, []);
 
   const currentColor = (product) => {
@@ -95,6 +119,13 @@ function Products() {
                   <p>{product.product_name}</p>
                   <p>{"$" + product.price}</p>
                   </button>
+                  {admin ?
+                    <div className="center">
+                      <button onClick={() => removeProduct(product.product_id)} className="RemoveProductButton">Delete</button>
+                    </div>
+                  : 
+                    <div />
+                  }
                 </div>
                 {/* To here */}
               </div>
