@@ -49,8 +49,7 @@ function Products() {
       .then((response) => response.json())
       .then((data) => {
         if (data == 1) {
-          console.log(data);
-          //window.location.reload();
+          window.location.reload();
         }
         else {
           console.log(data);
