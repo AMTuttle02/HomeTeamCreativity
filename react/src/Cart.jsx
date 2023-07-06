@@ -343,7 +343,7 @@ function Cart() {
           {products.map((product) => (
             <div key={product.product_id}>
               <div className="cartProductRow">
-                <div className="productSide">
+                <div className="productsCell">
                   <div className="fullDesign">
                     <img
                       src={setType(product.product_type, product.color)}
@@ -357,7 +357,7 @@ function Cart() {
                     />
                   </div>
                 </div>
-                <div className="productSide">
+                <div className="productsCell">
                   <br />
                   <h2> <b> {product.product_name} </b></h2> 
                   <h2> Style: {product.product_type} </h2>
@@ -365,7 +365,7 @@ function Cart() {
                   <h2> Color: {product.color} </h2>
                 </div>
                 {product.product_id ?
-                  <div className="productSide">
+                  <div className="productsCell">
                     <br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
                     <br /><br />
@@ -382,7 +382,7 @@ function Cart() {
                     </h2>
                   </div>
                   :
-                  <div className="productSide">
+                  <div className="productsCell">
                     <br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
                     <br /><br />
@@ -400,12 +400,12 @@ function Cart() {
                   </div>
                 }
                 {product.product_id ?
-                  <div className="productSide">
+                  <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                   </div>
                 :
-                <div className="productSide">
+                <div className="productsCell">
                   <br /><br /><br /><br /><br /><br />
                   <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                 </div>

@@ -259,6 +259,11 @@ body {
   padding: 20px;
 }
 
+.productsCell h2 {
+  margin-left: 10px;
+  padding: 20px;
+}
+
 .noDisplay {
   border: none;
   text-decoration: none;
@@ -414,13 +419,8 @@ body {
 .fullDesign {
   position: relative;
   display: inline-block;
-  /*
-  top: 0px;
-  left: 0px;
-  float: left;
   width: 100%;
   height: auto;
-  */
 }
 
 .cartFullDesign {
@@ -1042,6 +1042,15 @@ footer {
     white-space: nowrap;
     text-align: center;
     font-size: large;
+  }
+
+  .productsCell {
+    text-align: center;
+  }
+
+  .productsCell h2 {
+    padding: 10px;
+    margin: 0px;
   }
 
   .cartProductRow {
