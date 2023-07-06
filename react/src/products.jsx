@@ -97,40 +97,36 @@ function Products() {
         For custom apparel,{" "}
         <a href="https://linktr.ee/hometeamcreativity" target="_blank">send us a message!</a>
       </p>
-      <div className="productsTable">
-        <div className="productsTr">
-          <div className="productsTd">
-            {products.map((product) => (
-              <div key={product.product_id}>
-                {/* You can use this div for order page and cart page */}
-                <div className="fullDesign">
-                <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
-                  <img
-                    src={currentColor(product)}
-                    alt="Home Team Creativity Logo"
-                    className="tshirt"
-                  />
-                  <img
-                    src={"api/images/" + product.filename}
-                    alt={product.filename}
-                    className="design"
-                  />
-                  <p>{product.product_name}</p>
-                  <p>{"$" + product.price}</p>
-                  </button>
-                  {admin ?
-                    <div className="center">
-                      <button onClick={() => removeProduct(product.product_id)} className="RemoveProductButton">Delete</button>
-                    </div>
-                  : 
-                    <div />
-                  }
-                </div>
-                {/* To here */}
-              </div>
-            ))}
+      <div className="productsRow">
+        {products.map((product) => (
+          <div key={product.product_id} className="productsCell">
+            {/* You can use this div for order page and cart page */}
+            <div className="fullDesign">
+              <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
+                <img
+                  src={currentColor(product)}
+                  alt="Home Team Creativity Logo"
+                  className="tshirt"
+                />
+                <img
+                  src={"api/images/" + product.filename}
+                  alt={product.filename}
+                  className="design"
+                />
+                <p>{product.product_name}</p>
+                <p>{"$" + product.price}</p>
+                </button>
+                {admin ?
+                  <div className="center">
+                    <button onClick={() => removeProduct(product.product_id)} className="RemoveProductButton">Delete</button>
+                  </div>
+                : 
+                  <div />
+              }
+            </div>
+            {/* To here */}
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
