@@ -245,8 +245,8 @@ body {
 }
 
 .productSide {
-  -ms-flex: 23%; /* IE10 */
-  flex: 23%;
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
 }
 
 .productSideLeft {
@@ -413,10 +413,14 @@ body {
 
 .fullDesign {
   position: relative;
+  display: inline-block;
+  /*
   top: 0px;
   left: 0px;
   float: left;
   width: 100%;
+  height: auto;
+  */
 }
 
 .cartFullDesign {
@@ -456,7 +460,7 @@ body {
 
 .design {
   position: absolute;
-  top: 18%;
+  top: 22%;
   left: 38%;
   width: 22%;
   height: auto;

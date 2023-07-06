@@ -100,9 +100,9 @@ function Products() {
       <div className="productsRow">
         {products.map((product) => (
           <div key={product.product_id} className="productsCell">
-            {/* You can use this div for order page and cart page */}
-            <div className="fullDesign">
+            <div className="productDetails">
               <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
+              <div className="fullDesign">
                 <img
                   src={currentColor(product)}
                   alt="Home Team Creativity Logo"
@@ -113,18 +113,18 @@ function Products() {
                   alt={product.filename}
                   className="design"
                 />
-                <p>{product.product_name}</p>
-                <p>{"$" + product.price}</p>
-                </button>
-                {admin ?
-                  <div className="center">
-                    <button onClick={() => removeProduct(product.product_id)} className="RemoveProductButton">Delete</button>
-                  </div>
-                : 
-                  <div />
+              </div>
+              <p>{product.product_name}</p>
+              <p>{"$" + product.price}</p>
+              </button>
+              {admin ?
+                <div className="center">
+                  <button onClick={() => removeProduct(product.product_id)} className="RemoveProductButton">Delete</button>
+                </div>
+              : 
+                <div />
               }
             </div>
-            {/* To here */}
           </div>
         ))}
       </div>
