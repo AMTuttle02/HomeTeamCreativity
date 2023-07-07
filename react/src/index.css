@@ -670,6 +670,7 @@ input[type="text"], input[type="password"] {
   background-color: transparent;
   border: none;
   border-radius: 4px;
+  color: white;
 }
 
 .orderProducts:hover {
