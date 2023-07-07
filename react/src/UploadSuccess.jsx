@@ -55,30 +55,34 @@ function Upload() {
       <div className='Upload'>
         <br />
         <div className="productsTable">
-            <div className="productsTd">
-                <h1>Upload Complete!</h1>
-                <h2>Design Preview:</h2>
-                {design.map((product) => (
-                    <div key={product.filename}>
+          <div className="productsTd">
+            <h1>Upload Complete!</h1>
+            <h2>Design Preview:</h2>
+            <div className="productsRow">
+              {design.map((product) => (
+                  <div key={product.filename} className="productsCell">
+                      <div className="productDetails">
                         <div className="fullDesign">
-                            <img
-                            src={color}
-                            alt="Home Team Creativity Logo"
-                            className="tshirt"
-                            />
-                            <img
-                            src={"api/images/" + product.filename}
-                            alt={product.filename}
-                            className="design"
-                            />
-                            <center>
-                            <p>{product.product_name}</p>
-                            <p>{"$" + product.price}</p>
-                            </center>
+                          <img
+                          src={color}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
+                          />
+                          <img
+                          src={"api/images/" + product.filename}
+                          alt={product.filename}
+                          className="design"
+                          />
                         </div>
-                    </div>
-                ))}
+                        <center>
+                        <p>{product.product_name}</p>
+                        <p>{"$" + product.price}</p>
+                        </center>
+                      </div>
+                  </div>
+              ))}
             </div>
+          </div>
         </div>
       </div>
     );
