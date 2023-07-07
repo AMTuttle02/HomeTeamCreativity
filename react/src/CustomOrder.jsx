@@ -575,17 +575,19 @@ function CustomOrder() {
       <h1 className="orderHeader">Order Summary</h1>
       <div className="orderRow">
         <div className="orderSide">
-          <div className="orderFullDesign">
-            <img
-            src={productType.type}
-            alt="Home Team Creativity Logo"
-            className="orderTshirt"
-            />
-            <img
-              src={"api/images/" + design.filename}
-              alt={design.productName}
-              className="orderDesign"
-            />
+          <div className="productDetails">
+            <div className="fullDesign">
+              <img
+              src={productType.type}
+              alt="Home Team Creativity Logo"
+              className="tshirt"
+              />
+              <img
+                src={"api/images/" + design.filename}
+                alt={design.productName}
+                className="design"
+              />
+            </div>
             <br /><br />
             <h3>{design.productName}</h3>
             <br />

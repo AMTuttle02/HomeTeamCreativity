@@ -645,21 +645,21 @@ function Order() {
       <h1 className="orderHeader">Order Summary</h1>
       <div className="orderRow">
         <div className="orderSide">
-          <div className="orderFullDesign">
-            <img
-            src={productType.type}
-            alt="Home Team Creativity Logo"
-            className="orderTshirt"
-            />
-            <div>
+          <div className="productDetails">
+            <div className="fullDesign">
+              <img
+              src={productType.type}
+              alt="Home Team Creativity Logo"
+              className="tshirt"
+              />
               <img
                 src={"api/images/" + currentDesign.filename}
                 alt={currentDesign.product_name}
-                className="orderDesign"
+                className="design"
               />
-              <br /><br />
-              <h3>{currentDesign.product_name}</h3>
             </div>
+            <br /><br />
+            <h3>{currentDesign.product_name}</h3>
             <br />
             <p>Details:</p>
             <p>100% Cotton</p>
@@ -667,7 +667,7 @@ function Order() {
             <p>Regular Fit</p>
             <p>Wash Inside Out If Possible</p>
             <Link to='/returnpolicy'>Return Policy</Link>
-            </div>
+          </div>
         </div>
         {userId ?
           <div className="orderMain">
