@@ -139,6 +139,11 @@ body {
   flex: 50%;
 }
 
+.homeSide {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
 .dashUpload {
   -ms-flex: 33%; /* IE10 */
   flex: 33%;
@@ -357,6 +362,12 @@ body {
 }
 
 /* Main column */
+.homeMain {   
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+/* Main column */
 .orderMain {   
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
@@ -410,8 +421,22 @@ body {
   justify-content: left;
 }
 
+.homeProductsRow {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .productsCell {
   width: 25%;
+  max-width: 100%;
+  height: auto;
+}
+
+.homeProductsCell {
+  width: 50%;
   max-width: 100%;
   height: auto;
 }
@@ -915,6 +940,16 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .homeSide {   
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+  }
+
+  .homeMain {
+    margin-top: 5%;
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+  }
 
   .dashUpload {
     -ms-flex: 100%; /* IE10 */
@@ -1189,6 +1224,12 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .homeProductsCell {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
   .orderSide {
     -ms-flex: 100%; /* IE10 */
     flex: 100%;
