@@ -221,25 +221,28 @@ function Checkout() {
                   <h2> Size: {product.size} </h2>
                   <h2> Color: {product.color} </h2>
                 </div>
-                <div className="productsCell">
                 <br />
                 {product.product_id ?
                   <div className="productsCell">
                     <br /><br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <br /><br />
+                    <h2> 
+                      Qty: 
+                      {product.product_quantity} 
+                    </h2>
                   </div>
                 :
                   <div className="productsCell">
                     <br /><br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                    <br /><br />
+                    <h2> 
+                      Qty: 
+                      {product.product_quantity} 
+                    </h2>
                   </div>
                 }
-                <br /><br />
-                <h2> 
-                  Qty: 
-                  {product.product_quantity} 
-                </h2>
-                </div>
                 {product.product_id ?
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
