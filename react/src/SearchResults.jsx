@@ -25,42 +25,40 @@ function SearchResults() {
 
   if (result) {
   return (
-        <div className="Products">
-        <h1>Products</h1>
-        <p>
-            For custom apparel,{" "}
-            <a href="https://linktr.ee/hometeamcreativity" target="_blank">send us a message!</a>
-        </p>
-        <p>Too Generic? Try using key words instead!</p>
-        <div className="productsTable">
-            <div className="productsTr">
-            <div className="productsTd">
-                {result.map((product) => (
-                <div key={product.filename}>
-                    {/* You can use this div for order page and cart page */}
-                    <div className="fullDesign">
-                        <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
-                        <img
-                            src={tshirt}
-                            alt="Home Team Creativity Logo"
-                            className="tshirt"
-                        />
-                        <img
-                            src={"api/images/" + product.filename}
-                            alt={product.filename}
-                            className="design"
-                        />
-                        <p>{product.product_name}</p>
-                        <p>{"$" + product.price}</p>
-                        </button>
-                    </div>
-                    {/* To here */}
-                </div>
-                ))}
+      <div className="Products">
+      <h1>Products</h1>
+      <p>
+          For custom apparel,{" "}
+          <a href="https://linktr.ee/hometeamcreativity" target="_blank">send us a message!</a>
+      </p>
+      <p>Too Generic? Try using key words instead!</p>
+      <div className="productsRow">
+        {result.map((product) => (
+          <div key={product.filename} className="productsCell">
+            {/* You can use this div for order page and cart page */}
+            <div className="productDetails">
+              <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
+              <div className="fullDesign">
+                <img
+                  src={tshirt}
+                  alt="Home Team Creativity Logo"
+                  className="tshirt"
+                />
+                <img
+                  src={"api/images/" + product.filename}
+                  alt={product.filename}
+                  className="design"
+                />
+              </div>
+              <p>{product.product_name}</p>
+              <p>{"$" + product.price}</p>
+              </button>
             </div>
-            </div>
+            {/* To here */}
+          </div>
+          ))}
         </div>
-        </div>
+      </div>
     );
   }
   else {
