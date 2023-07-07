@@ -347,7 +347,7 @@ body {
 }
 
 .orderSide p {
-  line-height: 0;
+  line-height: 1;
 }
 
 /* Main column */
@@ -915,6 +915,7 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+
   .dashUpload {
     -ms-flex: 100%; /* IE10 */
     flex: 100%;
@@ -1188,6 +1189,12 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .orderSide {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    margin-left: 0%;
+  }
+
   .policy {
     width: 80%;
   }
