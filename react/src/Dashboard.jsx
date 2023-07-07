@@ -290,54 +290,59 @@ function Dashboard() {
                         return (
                             <div key={product.product_id}>
                                 <div className="cartProductRow">
-                                  <div className="productSide">
+                                  <div className="productsCell">
                                       <div className="fullDesign">
                                       <img
                                           src={setType(product.product_type, product.color)}
                                           alt="Home Team Creativity Logo"
-                                          className="cartTshirt"
+                                          className="tshirt"
                                       />
                                       <img
                                           src={"api/images/" + product.filename}
                                           alt={product.filename}
-                                          className="cartDesign"
+                                          className="design"
                                       />
                                       </div>
                                   </div>
-                                  <div className="productSide">
+                                  <div className="productsCell">
                                       <br />
                                       <h2> <b> {product.product_name} </b></h2> 
                                       <h2> Style: {product.product_type} </h2>
                                       <h2> Size: {product.size} </h2>
                                       <h2> Color: {product.color} </h2>
                                   </div>
-                                  <div className="productSide">
                                   <br />
                                   {product.product_id ?
-                                      <div className="productSide">
+                                    <div className="productsCell">
                                       <br /><br />
                                       <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                                      </div>
+                                      <br />
+                                      <br />
+                                      <h2> 
+                                          Qty: 
+                                          {product.product_quantity} 
+                                      </h2>
+                                    </div>
                                   :
-                                      <div className="productSide">
+                                    <div className="productsCell">
                                       <br /><br />
                                       <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
-                                      </div>
+                                      <br />
+                                      <br />
+                                      <h2> 
+                                          Qty: 
+                                          {product.product_quantity} 
+                                      </h2>
+                                    </div>
                                   }
-                                  <br />
-                                  <br />
-                                  <h2> 
-                                      Qty: 
-                                      {product.product_quantity} 
-                                  </h2>
-                                  </div>
+                                  
                                   {product.product_id ?
-                                      <div className="productSide">
+                                      <div className="productsCell">
                                       <br /><br /><br /><br /><br /><br />
                                       <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                                       </div>
                                   :
-                                      <div className="productSide">
+                                      <div className="productsCell">
                                       <br /><br /><br /><br /><br /><br />
                                       <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                                       </div>
