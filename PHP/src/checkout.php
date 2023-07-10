@@ -56,7 +56,7 @@ if ($userId) {
             die("Query failed: " . $query->error);
         }
 
-        include 'orderConfirmation.php';
+        include 'orderConfirmationPaid.php';
 
         mysqli_close($conn);
 
