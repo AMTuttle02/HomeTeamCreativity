@@ -179,6 +179,15 @@ function Checkout() {
     return price;
   }
 
+  const determineDesign = (color) => {
+    if (color == 'Yellow' || color == 'Gray' || color == 'White') {
+      return ('customDesignBlack.png')
+    }
+    else {
+      return ('customDesign.png')
+    }
+  }
+
   return (
     <div className="Checkout">
       {userId ? 
@@ -199,40 +208,68 @@ function Checkout() {
           <div className="CartPage" />
             {products.map((product) => (
             <div key={product.product_id}>
-              <div className="cartProductRow">
-                <div className="productsCell">
-                  <div className="fullDesign">
-                  <img
-                    src={setType(product.product_type, product.color)}
-                    alt="Home Team Creativity Logo"
-                    className="tshirt"
-                  />
-                  <img
-                    src={"api/images/" + product.filename}
-                    alt={product.filename}
-                    className="design"
-                  />
+              {product.product_id ?
+                <div className="cartProductRow">
+                  <div className="productsCell">
+                    <div className="fullDesign">
+                    <img
+                      src={setType(product.product_type, product.color)}
+                      alt="Home Team Creativity Logo"
+                      className="tshirt"
+                    />
+                    <img
+                      src={"api/images/" + product.filename}
+                      alt={product.filename}
+                      className="design"
+                    />
+                    </div>
                   </div>
-                </div>
-                <div className="productsCell">
+                  <div className="productsCell">
+                    <br />
+                    <h2> <b> {product.product_name} </b></h2> 
+                    <h2> Style: {product.product_type} </h2>
+                    <h2> Size: {product.size} </h2>
+                    <h2> Color: {product.color} </h2>
+                  </div>
                   <br />
-                  <h2> <b> {product.product_name} </b></h2> 
-                  <h2> Style: {product.product_type} </h2>
-                  <h2> Size: {product.size} </h2>
-                  <h2> Color: {product.color} </h2>
+                  <div className="productsCell">
+                    <br /><br />
+                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <br /><br />
+                    <h2> 
+                      Qty: 
+                      {product.product_quantity} 
+                    </h2>
+                  </div>
+                  <div className="productsCell">
+                    <br /><br /><br /><br /><br /><br />
+                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                  </div>
                 </div>
-                <br />
-                {product.product_id ?
+              :
+                <div className="cartProductRow">
                   <div className="productsCell">
-                    <br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                    <br /><br />
-                    <h2> 
-                      Qty: 
-                      {product.product_quantity} 
-                    </h2>
+                    <div className="fullDesign">
+                    <img
+                      src={setType(product.product_type, product.color)}
+                      alt="Home Team Creativity Logo"
+                      className="tshirt"
+                    />
+                    <img
+                      src={"api/images/" + determineDesign(product.color)}
+                      alt={product.filename}
+                      className="design"
+                    />
+                    </div>
                   </div>
-                :
+                  <div className="productsCell">
+                    <br />
+                    <h2> <b> {product.product_name} </b></h2> 
+                    <h2> Style: {product.product_type} </h2>
+                    <h2> Size: {product.size} </h2>
+                    <h2> Color: {product.color} </h2>
+                  </div>
+                  <br />
                   <div className="productsCell">
                     <br /><br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
@@ -242,19 +279,12 @@ function Checkout() {
                       {product.product_quantity} 
                     </h2>
                   </div>
-                }
-                {product.product_id ?
-                  <div className="productsCell">
-                    <br /><br /><br /><br /><br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                  </div>
-                :
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                   </div>
-                }
-              </div>
+                </div>
+              }
               <div className="CartPage" />
             </div>
             ))}
