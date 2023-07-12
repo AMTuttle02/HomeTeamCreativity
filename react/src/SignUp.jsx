@@ -43,7 +43,7 @@ function SignUp() {
     }
     
     
-    if (!email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+    if (!email.match(/^.+@.+\..+$/)) {
       formIsValid = false;
       setemailError("Email Not Valid");
       return false;
