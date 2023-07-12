@@ -639,6 +639,15 @@ function Order() {
     }
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size, currentDesign]);
 
+  const validStyle = (colors) => {
+    if (colors == 'None') {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   return (
     <div className="Order">
       <br />
@@ -676,42 +685,50 @@ function Order() {
             <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
             <h1>Style: {currentStyle}</h1>
             <div className="typeOptionRow">
-              <button 
-                onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
-                className="productTypes">
-              <img
-                src={transparentTshirt}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
-              <button 
-                onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
-                className="productTypes">
-              <img
-                src={transparentLongSleeve}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
-              <button 
-                onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
-                className="productTypes">
-              <img
-                src={transparentCrewneck}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
-              <button 
-                onClick={() => setCurrentStyle("Hooded Sweatshirt")}
-                className="productTypes">
-              <img
-                src={transparentHoodie}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
+              {validStyle(tColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
+                  className="productTypes">
+                <img
+                  src={transparentTshirt}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
+              {validStyle(lColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
+                  className="productTypes">
+                <img
+                  src={transparentLongSleeve}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
+              {validStyle(cColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
+                  className="productTypes">
+                <img
+                  src={transparentCrewneck}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
+              {validStyle(hColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Hooded Sweatshirt")}
+                  className="productTypes">
+                <img
+                  src={transparentHoodie}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
             </div>
             <br />
             <h1>Color: {currentColor}</h1>
