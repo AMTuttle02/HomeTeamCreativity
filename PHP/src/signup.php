@@ -68,8 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Set the session variables
         $row = $result->fetch_assoc();
         $_SESSION['loggedin'] = true;
-        $_SESSION['email'] = $inputs["email"];
+        $_SESSION['email'] = $row['email'];
         $_SESSION['first_name'] = $row['first_name'];
+        $_SESSION['last_name'] = $row['last_name'];
         $_SESSION['admin'] = $row['admin'];
         $_SESSION['userId'] = $row['user_id'];
     

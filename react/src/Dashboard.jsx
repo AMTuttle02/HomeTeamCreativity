@@ -223,6 +223,15 @@ function Dashboard() {
     return price;
   }
 
+  const determineDesign = (color) => {
+    if (color == 'Yellow' || color == 'Gray' || color == 'White') {
+      return ('customDesignBlack.png')
+    }
+    else {
+      return ('customDesign.png')
+    }
+  }
+
   if (admin) {
     return (
       <div className='Dashboard'>
@@ -289,60 +298,85 @@ function Dashboard() {
                     if (product.order_id === order.order_id) {
                         return (
                             <div key={product.product_id}>
+                              {product.product_id ?
                                 <div className="cartProductRow">
-                                  <div className="productSide">
+                                  <div className="productsCell">
                                       <div className="fullDesign">
                                       <img
                                           src={setType(product.product_type, product.color)}
                                           alt="Home Team Creativity Logo"
-                                          className="cartTshirt"
+                                          className="tshirt"
                                       />
                                       <img
                                           src={"api/images/" + product.filename}
                                           alt={product.filename}
-                                          className="cartDesign"
+                                          className="design"
                                       />
                                       </div>
                                   </div>
-                                  <div className="productSide">
+                                  <div className="productsCell">
                                       <br />
                                       <h2> <b> {product.product_name} </b></h2> 
                                       <h2> Style: {product.product_type} </h2>
                                       <h2> Size: {product.size} </h2>
                                       <h2> Color: {product.color} </h2>
                                   </div>
-                                  <div className="productSide">
                                   <br />
-                                  {product.product_id ?
-                                      <div className="productSide">
-                                      <br /><br />
-                                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                                      </div>
-                                  :
-                                      <div className="productSide">
-                                      <br /><br />
-                                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
-                                      </div>
-                                  }
-                                  <br />
-                                  <br />
-                                  <h2> 
-                                      Qty: 
-                                      {product.product_quantity} 
-                                  </h2>
+                                  <div className="productsCell">
+                                    <br /><br />
+                                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                                    <br />
+                                    <br />
+                                    <h2> 
+                                        Qty: 
+                                        {product.product_quantity} 
+                                    </h2>
                                   </div>
-                                  {product.product_id ?
-                                      <div className="productSide">
-                                      <br /><br /><br /><br /><br /><br />
-                                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                                      </div>
-                                  :
-                                      <div className="productSide">
-                                      <br /><br /><br /><br /><br /><br />
-                                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
-                                      </div>
-                                  }
+                                  <div className="productsCell">
+                                  <br /><br /><br /><br /><br /><br />
+                                  <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                                  </div>
                                 </div>
+                              :
+                                <div className="cartProductRow">
+                                    <div className="productsCell">
+                                        <div className="fullDesign">
+                                        <img
+                                            src={setType(product.product_type, product.color)}
+                                            alt="Home Team Creativity Logo"
+                                            className="tshirt"
+                                        />
+                                        <img
+                                            src={"api/images/" + determineDesign(product.color)}
+                                            alt={product.filename}
+                                            className="design"
+                                        />
+                                        </div>
+                                    </div>
+                                    <div className="productsCell">
+                                        <br />
+                                        <h2> <b> {product.product_name} </b></h2> 
+                                        <h2> Style: {product.product_type} </h2>
+                                        <h2> Size: {product.size} </h2>
+                                        <h2> Color: {product.color} </h2>
+                                    </div>
+                                    <br />
+                                    <div className="productsCell">
+                                      <br /><br />
+                                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                                      <br />
+                                      <br />
+                                      <h2> 
+                                          Qty: 
+                                          {product.product_quantity} 
+                                      </h2>
+                                    </div>
+                                    <div className="productsCell">
+                                    <br /><br /><br /><br /><br /><br />
+                                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                                    </div>
+                                  </div>
+                                }
                                 <br />
                                 <h3> 
                                   <b>Custom Details: </b>

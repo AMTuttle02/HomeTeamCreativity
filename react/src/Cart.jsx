@@ -267,6 +267,15 @@ function Cart() {
     })
   }
 
+  const determineDesign = (color) => {
+    if (color == 'Yellow' || color == 'Gray' || color == 'White') {
+      return ('customDesignBlack.png')
+    }
+    else {
+      return ('customDesign.png')
+    }
+  }
+
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
@@ -339,97 +348,116 @@ function Cart() {
           </div>
         </div>
         <br />
-
         <div className="CartPage" />
-            {products.map((product) => (
-              <div key={product.product_id}>
+          {products.map((product) => (
+            <div key={product.product_id}>
+              {product.product_id ?
                 <div className="cartProductRow">
-                  <div className="productSide">
-                    <div className="cartFullDesign">
+                  <div className="productsCell">
+                    <div className="fullDesign">
                       <img
                         src={setType(product.product_type, product.color)}
                         alt="Home Team Creativity Logo"
-                        className="cartTshirt"
+                        className="tshirt"
                       />
                       <img
                         src={"api/images/" + product.filename}
                         alt={product.filename}
-                        className="cartDesign"
+                        className="design"
                       />
                     </div>
                   </div>
-                  <div className="productSide">
+                  <div className="productsCell">
                     <br />
                     <h2> <b> {product.product_name} </b></h2> 
                     <h2> Style: {product.product_type} </h2>
                     <h2> Size: {product.size} </h2>
                     <h2> Color: {product.color} </h2>
                   </div>
-                  {product.product_id ?
-                    <div className="productSide">
-                      <br />
-                      <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
-                      <br /><br />
-                      <h2> 
-                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
-                        {product.product_quantity} 
-                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
-                      </h2>
-                      <br /><br />
-                      <h2>
-                        <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
-                          Delete
-                        </button>
-                      </h2>
+                  <div className="productsCell">
+                    <br />
+                    <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
+                    <br /><br />
+                    <h2> 
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                      {product.product_quantity} 
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                    </h2>
+                    <br /><br />
+                    <h2>
+                      <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
+                        Delete
+                      </button>
+                    </h2>
+                  </div>
+                  <div className="productsCell">
+                    <br /><br /><br /><br /><br /><br />
+                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                  </div>
+                </div>
+              :
+                <div className="cartProductRow">
+                  <div className="productsCell">
+                    <div className="fullDesign">
+                      <img
+                        src={setType(product.product_type, product.color)}
+                        alt="Home Team Creativity Logo"
+                        className="tshirt"
+                      />
+                      <img
+                        src={"api/images/" + determineDesign(product.color)}
+                        alt={product.filename}
+                        className="design"
+                      />
                     </div>
-                    :
-                    <div className="productSide">
-                      <br />
-                      <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
-                      <br /><br />
-                      <h2> 
-                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
-                        {product.product_quantity} 
-                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
-                      </h2>
-                      <br /><br />
-                      <h2>
-                        <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
-                          Delete
-                        </button>
-                      </h2>
-                    </div>
-                  }
-                  {product.product_id ?
-                    <div className="productSide">
-                      <br /><br /><br /><br /><br /><br />
-                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
-                    </div>
-                  :
-                  <div className="productSide">
+                  </div>
+                  <div className="productsCell">
+                    <br />
+                    <h2> <b> {product.product_name} </b></h2> 
+                    <h2> Style: {product.product_type} </h2>
+                    <h2> Size: {product.size} </h2>
+                    <h2> Color: {product.color} </h2>
+                  </div>
+                  <div className="productsCell">
+                    <br />
+                    <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
+                    <br /><br />
+                    <h2> 
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                      {product.product_quantity} 
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                    </h2>
+                    <br /><br />
+                    <h2>
+                      <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
+                        Delete
+                      </button>
+                    </h2>
+                  </div>
+                  <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                   </div>
-                  }
                 </div>
-                <div className="CartPage" />
-              </div>
-            ))}
+              }
+              <div className="CartPage" />
+            </div>
+          ))}
+        <br/>
+        <div className = "FinalCheckoutButtonPlacement">
+          <h1> Subtotal: ${order.total_cost}</h1>
+          <div className="CartPage" />
           <br/>
-          <div className = "FinalCheckoutButtonPlacement">
-            <h1> Subtotal: ${order.total_cost}</h1>
-            <div className="CartPage" />
-            <br/>
-            <button onClick={() => checkout(order)} className="FinalCheckoutButton">
-              Check Out
-            </button>
-          </div>
-          <br/>
-          <br />
-          <br />
-          <br />
-          <br />
+          <button onClick={() => checkout(order)} className="FinalCheckoutButton">
+            Check Out
+          </button>
         </div>
+        <br/>
+        <br />
+        <br />
+        <br />
+        <br />
+      </div>
       :
       <div>
         <center>

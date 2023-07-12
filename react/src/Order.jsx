@@ -639,27 +639,36 @@ function Order() {
     }
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size, currentDesign]);
 
+  const validStyle = (colors) => {
+    if (colors == 'None') {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   return (
     <div className="Order">
       <br />
       <h1 className="orderHeader">Order Summary</h1>
       <div className="orderRow">
         <div className="orderSide">
-          <div className="orderFullDesign">
-            <img
-            src={productType.type}
-            alt="Home Team Creativity Logo"
-            className="orderTshirt"
-            />
-            <div>
+          <div className="productDetails">
+            <div className="fullDesign">
+              <img
+              src={productType.type}
+              alt="Home Team Creativity Logo"
+              className="tshirt"
+              />
               <img
                 src={"api/images/" + currentDesign.filename}
                 alt={currentDesign.product_name}
-                className="orderDesign"
+                className="design"
               />
-              <br /><br />
-              <h3>{currentDesign.product_name}</h3>
             </div>
+            <br /><br />
+            <h3>{currentDesign.product_name}</h3>
             <br />
             <p>Details:</p>
             <p>100% Cotton</p>
@@ -667,7 +676,7 @@ function Order() {
             <p>Regular Fit</p>
             <p>Wash Inside Out If Possible</p>
             <Link to='/returnpolicy'>Return Policy</Link>
-            </div>
+          </div>
         </div>
         {userId ?
           <div className="orderMain">
@@ -676,42 +685,50 @@ function Order() {
             <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
             <h1>Style: {currentStyle}</h1>
             <div className="typeOptionRow">
-              <button 
-                onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
-                className="productTypes">
-              <img
-                src={transparentTshirt}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
-              <button 
-                onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
-                className="productTypes">
-              <img
-                src={transparentLongSleeve}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
-              <button 
-                onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
-                className="productTypes">
-              <img
-                src={transparentCrewneck}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
-              <button 
-                onClick={() => setCurrentStyle("Hooded Sweatshirt")}
-                className="productTypes">
-              <img
-                src={transparentHoodie}
-                alt="Home Team Creativity Logo"
-                className="shirtOptions"
-              />
-              </button>
+              {validStyle(tColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
+                  className="productTypes">
+                <img
+                  src={transparentTshirt}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
+              {validStyle(lColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
+                  className="productTypes">
+                <img
+                  src={transparentLongSleeve}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
+              {validStyle(cColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
+                  className="productTypes">
+                <img
+                  src={transparentCrewneck}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
+              {validStyle(hColors) ? <>
+                <button 
+                  onClick={() => setCurrentStyle("Hooded Sweatshirt")}
+                  className="productTypes">
+                <img
+                  src={transparentHoodie}
+                  alt="Home Team Creativity Logo"
+                  className="shirtOptions"
+                />
+                </button>
+              </> : <></>}
             </div>
             <br />
             <h1>Color: {currentColor}</h1>

@@ -139,6 +139,11 @@ body {
   flex: 50%;
 }
 
+.homeSide {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
 .dashUpload {
   -ms-flex: 33%; /* IE10 */
   flex: 33%;
@@ -245,8 +250,8 @@ body {
 }
 
 .productSide {
-  -ms-flex: 23%; /* IE10 */
-  flex: 23%;
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
 }
 
 .productSideLeft {
@@ -256,6 +261,11 @@ body {
 
 .productSide h2 {
   color: black;
+  padding: 20px;
+}
+
+.productsCell h2 {
+  margin-left: 10px;
   padding: 20px;
 }
 
@@ -342,11 +352,17 @@ body {
 }
 
 .orderSide p {
-  line-height: 0;
+  line-height: 1;
 }
 
 /* Main column */
 .main {   
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+/* Main column */
+.homeMain {   
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
 }
@@ -397,12 +413,39 @@ body {
   width: 25%;
 }
 
+.productsRow {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+
+.homeProductsRow {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.productsCell {
+  width: 25%;
+  max-width: 100%;
+  height: auto;
+}
+
+.homeProductsCell {
+  width: 50%;
+  max-width: 100%;
+  height: auto;
+}
+
 .fullDesign {
   position: relative;
-  top: 0px;
-  left: 0px;
-  float: left;
-  width: 25%;
+  display: inline-block;
+  width: 100%;
+  height: auto;
 }
 
 .cartFullDesign {
@@ -440,6 +483,14 @@ body {
   height: auto;
 }
 
+.design {
+  position: absolute;
+  top: 22%;
+  left: 38%;
+  width: 22%;
+  height: auto;
+}
+
 .homeTshirt {
   top: 0px;
   left: 0px;
@@ -462,14 +513,6 @@ body {
   position: relative;
   width: 500px;
   height: 500px;
-}
-
-.design {
-  position: absolute;
-  top: 18%;
-  left: 38%;
-  width: 22%;
-  height: auto;
 }
 
 .homeDesign {
@@ -627,6 +670,7 @@ input[type="text"], input[type="password"] {
   background-color: transparent;
   border: none;
   border-radius: 4px;
+  color: white;
 }
 
 .orderProducts:hover {
@@ -897,6 +941,17 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .homeSide {   
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+  }
+
+  .homeMain {
+    margin-top: 5%;
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+  }
+
   .dashUpload {
     -ms-flex: 100%; /* IE10 */
     flex: 100%;
@@ -933,9 +988,11 @@ footer {
   .policy {
     width: 60%;
   }
-
-  .fullDesign {
+  
+  .productsCell {
     width: 50%;
+    max-width: 100%;
+    height: auto;
   }
 
   .howItWorksSide {
@@ -1013,7 +1070,7 @@ footer {
   .productSide {
     -ms-flex: 15%; /* IE10 */
     flex: 15%;
-    margin: auto;
+    margin: 0px;
   }
   
   .productSide h2 {
@@ -1022,6 +1079,15 @@ footer {
     white-space: nowrap;
     text-align: center;
     font-size: large;
+  }
+
+  .productsCell {
+    text-align: center;
+  }
+
+  .productsCell h2 {
+    padding: 10px;
+    margin: 0px;
   }
 
   .cartProductRow {
@@ -1159,6 +1225,18 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .homeProductsCell {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .orderSide {
+    -ms-flex: 100%; /* IE10 */
+    flex: 100%;
+    margin-left: 0%;
+  }
+
   .policy {
     width: 80%;
   }
@@ -1225,8 +1303,10 @@ footer {
     font-size: medium;
   }
 
-  .fullDesign {
+  .productsCell {
     width: 100%;
+    max-width: 100%;
+    height: auto;
   }
 
   .orderMain {
