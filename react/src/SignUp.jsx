@@ -9,6 +9,7 @@ function SignUpFailed() {
     </div>
   );
 }
+
 function SignUp() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -21,20 +22,34 @@ function SignUp() {
   const [badLogin, setBadLogin] = useState("");
   const handleValidation = (event) => {
     let formIsValid = true;
-    if (!fname.match(/^[a-zA-Z]{2,22}$/)) {
+    if (!fname) {
       formIsValid = false;
       setfnameError(
-        "Only Letters and length must be min 2 Chracters and Max 22 Chracters"
+        "First Name is required."
+      );
+      return false;
+    }
+    else if (!fname.match(/^[a-zA-Z]{1,50}$/)) {
+      formIsValid = false;
+      setfnameError(
+        "Sorry, your first name is too long. Try a shorter one."
       );
       return false;
     } else {
       setfnameError("");
       formIsValid = true;
     }
-    if (!lname.match(/^[a-zA-Z]{2,22}$/)) {
+    if (!lname) {
       formIsValid = false;
       setlnameError(
-        "Only Letters and length must be min 2 Chracters and Max 22 Chracters"
+        "Last Name is required."
+      );
+      return false;
+    }
+    else if (!lname.match(/^[a-zA-Z]{1,50}$/)) {
+      formIsValid = false;
+      setlnameError(
+        "Sorry, your last name is too long. Can you shorten it?"
       );
       return false;
     } else {
@@ -42,8 +57,7 @@ function SignUp() {
       formIsValid = true;
     }
     
-    
-    if (!email.match(/^.+@.+\..+$/)) {
+    if (!email.match(/^.+@.+\..+$/) || !email) {
       formIsValid = false;
       setemailError("Email Not Valid");
       return false;
@@ -51,10 +65,10 @@ function SignUp() {
       setemailError("");
       formIsValid = true;
     }
-    if (!password.match(/^[\w\S]{8,}$/)) {
+    if (!password.match(/^[\w\S]{8,}$/) || !password) {
       formIsValid = false;
       setpasswordError(
-        "Only Letters and length must best min 8 Chracters and Max 22 Chracters"
+        "Password must be at least 8 characters."
       );
       return false;
     } else {
@@ -97,6 +111,27 @@ function SignUp() {
         setFirstName(data.first_name);
       });
   }, []);
+
+  useEffect(() => {
+    if (fname && fname.length < 51) {
+      setfnameError("");
+    }
+    
+  }, [fname]);
+
+  useEffect(() => {
+    if (lname && lname.length < 51) {
+      setlnameError("");
+    }
+  }, [lname]);
+
+  useEffect(() => {
+    setemailError("");
+  }, [email]);
+
+  useEffect(() => {
+    setpasswordError("");
+  }, [password]);
 
   if (firstName) {
     window.location.href='/loggedin';
