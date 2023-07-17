@@ -84,7 +84,7 @@ function Login() {
                 placeholder="Password"
                 onChange={(event) => setPassword(event.target.value)}
               />
-              {loginAttempted && badLogin && <LoginFailed />} {/* Display LoginFailed component only if loginAttempted and badLogin are true */}
+              {loginAttempted && badLogin && <LoginFailed />}
               <br />
               <button type="submit">Log In</button>
             </form>
