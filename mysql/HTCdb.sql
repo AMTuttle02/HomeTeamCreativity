@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
     user_id int AUTO_INCREMENT,
     email varchar(255) UNIQUE NOT NULL CHECK (email LIKE "_%@_%._%"),
-    pswrd varchar(31) NOT NULL,
+    pswrd varchar(255) NOT NULL,
     admin BOOLEAN DEFAULT 0,
     first_name varchar(255) NOT NULL,
     last_name varchar(255) NOT NULL,

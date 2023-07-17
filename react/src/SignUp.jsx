@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import bcrypt from 'bcryptjs';
 
 function SignUpFailed() {
   return (
@@ -79,6 +80,10 @@ function SignUp() {
   };
   const signUpSubmit = (e) => {
     e.preventDefault();
+    const saltRounds = 10;
+    const hashedPassword = bcrypt.hashSync(password, saltRounds);
+    console.log(password);
+    console.log(hashedPassword);
     if (handleValidation()) {
       fetch('/api/signup.php', {  
         method: "POST",
@@ -87,7 +92,7 @@ function SignUp() {
           "fname":fname, 
           "lname" :lname,
           "email" : email,
-          "password" : password
+          "password" : hashedPassword
         }),
       })
         .then((response) => response.json())

@@ -1,8 +1,4 @@
 <?php
-// Requires login.jsx to pass it a "JSON.stringify()"-ed form containing variables with these names
-// email, password
-// returns email of the row with a matching email and password
-// If there is no matching row, returns an empty array
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
@@ -34,17 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($result->num_rows > 0) {
     // Set the session variables
     $row = $result->fetch_assoc();
-    $_SESSION['loggedin'] = true;
-    $_SESSION['email'] = $email;
-    $_SESSION['first_name'] = $row['first_name'];
-    $_SESSION['last_name'] = $row['last_name'];
-    $_SESSION['admin'] = $row['admin'];
-    $_SESSION['userId'] = $row['user_id'];
 
-    echo(json_encode($_SESSION));
+    echo(json_encode($row));
   } else {
     // If the email and password do not match, display an error message
-    echo(json_encode("Invalid email or password."));
+    echo(json_encode("Invalid email."));
   } 
 }
 
