@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
+import bcrypt from 'bcryptjs';
 
 function LoginFailed() {
   return (
@@ -14,23 +15,49 @@ function Login() {
   const [email, setEmail] = useState("");
   const [badLogin, setBadLogin] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loginAttempted, setLoginAttempted] = useState(false); // New state variable to track login attempts
+  const [loginAttempted, setLoginAttempted] = useState(false);
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    fetch("/api/login.php", {
+    fetch("/api/loginDetails.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email }),
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.loggedin) {
-          setLoggedIn(true);
-        } else {
+        if(data.user_id) {
+          bcrypt.compare(password, data.pswrd, (err, isMatch) => {
+            if (err) {
+              setBadLogin(true);
+              setLoginAttempted(true);
+            } else if (isMatch) {
+              // Passwords match, authentication successful
+              fetch("/api/login.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.loggedin) {
+                    setLoggedIn(true);
+                  } else {
+                    setBadLogin(true);
+                  }
+                  setLoginAttempted(true); // Set login attempt status
+                });
+            } else {
+              // Passwords do not match, authentication failed
+              // Handle the failure appropriately
+              setBadLogin(true);
+              setLoginAttempted(true);
+            }
+          });
+        }
+        else {
           setBadLogin(true);
         }
-        setLoginAttempted(true); // Set login attempt status
       });
   };
 

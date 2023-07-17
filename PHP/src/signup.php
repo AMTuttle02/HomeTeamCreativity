@@ -20,12 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
   $cryptid = $inputs["password"];
 
-  // Encrypt the input password
-  // TODO: Research salt strings, potential to increase security
-  if (CRYPT_STD_DES == 1) {
-    $cryptid = crypt($inputs["password"], "HT");
-  }
-
   // Check if email address already exists
   $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
   $stmt->bind_param("s", $inputs["email"]);
