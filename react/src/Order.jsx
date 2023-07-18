@@ -648,6 +648,12 @@ function Order() {
     }
   }
 
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  }
+
   return (
     <div className="Order">
       <br />
