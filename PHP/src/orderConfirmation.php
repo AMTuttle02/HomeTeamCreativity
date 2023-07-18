@@ -17,6 +17,8 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 
 include 'conn.php';
 
+date_default_timezone_set('America/New_York');
+
 // Obtain cart
 $inputs = json_decode(file_get_contents('php://input'), true);
 
