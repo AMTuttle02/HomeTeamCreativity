@@ -385,7 +385,7 @@ function Cart() {
                     </h2>
                     <br /><br />
                     <h2>
-                      <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
+                      <button onClick={() => deleteFromCart(product, order)} className="CartRemoveProductButton">
                         Delete
                       </button>
                     </h2>
@@ -429,7 +429,7 @@ function Cart() {
                     </h2>
                     <br /><br />
                     <h2>
-                      <button onClick={() => deleteFromCart(product, order)} className="noDisplay">
+                      <button onClick={() => deleteFromCart(product, order)} className="CartRemoveProductButton">
                         Delete
                       </button>
                     </h2>

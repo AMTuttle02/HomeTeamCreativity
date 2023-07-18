@@ -935,6 +935,23 @@ footer {
   white-space: nowrap;
 }
 
+.CartRemoveProductButton {
+  background-color: #B7C9E2;
+  color: black;
+  padding: 2px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  padding-left: 5px;
+  padding-right: 5px;
+  white-space: nowrap;
+}
+
+.CartRemoveProductButton:hover {
+  background: lightcoral;
+}
+
 .center {
   text-align: center;
 }
