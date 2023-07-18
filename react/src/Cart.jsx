@@ -124,6 +124,7 @@ function Cart() {
   const [order, setOrder] = useState([]);
   const [addedItems, setAddedItems] = useState(0);
   const navigate = useNavigate();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const checkout = (order) => {
     if (order['total_cost'] > 0) {
@@ -385,10 +386,22 @@ function Cart() {
                     </h2>
                     <br /><br />
                     <h2>
-                      <button onClick={() => deleteFromCart(product, order)} className="CartRemoveProductButton">
+                      <button onClick={() => setShowConfirmation(true)} className="CartRemoveProductButton">
                         Delete
                       </button>
                     </h2>
+                    {showConfirmation && (
+                      <div className="confirmation-modal">
+                        <div className="confirmation-dialog">
+                          <h3>Confirm Delete</h3>
+                          <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
+                          <div className="confirmation-buttons">
+                            <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                            <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
@@ -433,6 +446,18 @@ function Cart() {
                         Delete
                       </button>
                     </h2>
+                    {showConfirmation && (
+                      <div className="confirmation-modal">
+                        <div className="confirmation-dialog">
+                          <h3>Confirm Delete</h3>
+                          <p>Are you sure you want to delete "{productName}"?</p>
+                          <div className="confirmation-buttons">
+                            <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                            <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
