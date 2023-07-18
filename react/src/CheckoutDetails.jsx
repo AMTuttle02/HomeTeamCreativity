@@ -175,6 +175,7 @@ function CheckoutDetails() {
                                     <div className="RightAlign">
                                         <p> Subtotal: ${order.total_cost}</p>
                                         <p> Shipping: TBD</p>
+                                        <p> Online Processing Fee: $0.00</p>
                                         <p> Discounts: $0.00</p>
                                         <h3> Total : ${order.total_cost}+</h3>
                                         <h3> Due Now : $0.00</h3>
@@ -221,6 +222,7 @@ function CheckoutDetails() {
                                         <p> Online Processing Fee: ${(order.total_cost * 0.029 + 0.31).toFixed(2)}</p>
                                         <p> Discounts: $0.00</p>
                                         <h3> Total : ${((order.total_cost * 1) + (order.total_cost * 0.029 + 0.31)).toFixed(2)}</h3>
+                                        <h3> Due Now : ${((order.total_cost * 1) + (order.total_cost * 0.029 + 0.31)).toFixed(2)}</h3>
                                     </div>
                                     <br/>
                                     <div className = "PaymentButtonPlacement">
