@@ -57,6 +57,7 @@ function Login() {
         }
         else {
           setBadLogin(true);
+          setLoginAttempted(true); // Set login attempt status
         }
       });
   };

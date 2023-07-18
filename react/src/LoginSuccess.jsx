@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function LoginSuccess() {
   const navigate = useNavigate();
+  const [order, setOrder] = useState("");
 
   const logout = (e) => {
     fetch("/api/logout.php")
@@ -31,6 +32,19 @@ function LoginSuccess() {
       });
   }, []);
 
+  useEffect(() => {
+    fetch("/api/previousOrder.php")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          setOrder(1);
+        }
+        else {
+          setOrder("");
+        }
+      });
+  })
+
   if (firstName) {
     return (
       <div className='LoginSuccess'>
@@ -40,7 +54,7 @@ function LoginSuccess() {
           <br />
           <h2>Welcome Back to Home Team Creativity!</h2>
           <h2>You are currently logged in.</h2>
-          <h2>Already Ordered? View Your Recent Order <Link to="/orderComplete">Here</Link>!</h2>
+          {order && <><h2>View Your Recent Order <Link to="/orderComplete">Here</Link>!</h2></> }
           <br/>
           <button type="signUpButton" onClick={logout}>Log Out</button>
         </div>
