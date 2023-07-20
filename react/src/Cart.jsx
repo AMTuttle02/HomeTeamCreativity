@@ -461,7 +461,7 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity}</h2>
                   </div>
                 </div>
               }
