@@ -433,7 +433,7 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size)}+ </h2>
+                    <h2>$ {setPrice(product.price, product.product_type, product.size)} - ${setPrice(product.price, product.product_type, product.size) + 6}</h2>
                     <br /><br />
                     <h2> 
                       Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
@@ -442,7 +442,7 @@ function Cart() {
                     </h2>
                     <br /><br />
                     <h2>
-                      <button onClick={() => deleteFromCart(product, order)} className="CartRemoveProductButton">
+                      <button onClick={() => setShowConfirmation(true)} className="CartRemoveProductButton">
                         Delete
                       </button>
                     </h2>
@@ -450,7 +450,7 @@ function Cart() {
                       <div className="confirmation-modal">
                         <div className="confirmation-dialog">
                           <h3>Confirm Delete</h3>
-                          <p>Are you sure you want to delete "{productName}"?</p>
+                          <p>Are you sure you want to delete "{product.product_name}"?</p>
                           <div className="confirmation-buttons">
                             <button onClick={() => setShowConfirmation(false)}>Cancel</button>
                             <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
