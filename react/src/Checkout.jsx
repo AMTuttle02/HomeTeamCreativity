@@ -120,13 +120,19 @@ function Checkout() {
   const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [products, setProducts] = useState([]);
+  const [customHighTotal, setCustomHighTotal] = useState(0);
 
   useEffect(() => {
     fetch("/api/previousOrder.php")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
-        console.log(data);
+        for (let i = 0; i < data.length; ++i) {
+          if (data[i].product_id == 0) {
+            const temp = customHighTotal;
+            setCustomHighTotal(temp + (6 * data[i].product_quantity));
+          }
+        }
       });
   }, []);
 
@@ -234,16 +240,16 @@ function Checkout() {
                   <br />
                   <div className="productsCell">
                     <br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                     <br /><br />
                     <h2> 
-                      Qty: 
+                      Qty:{' '}
                       {product.product_quantity} 
                     </h2>
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                   </div>
                 </div>
               :
@@ -272,16 +278,16 @@ function Checkout() {
                   <br />
                   <div className="productsCell">
                     <br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size)} - ${(setPrice(product.price, product.product_type, product.size) * 1 +customHighTotal)}</h2>
                     <br /><br />
                     <h2> 
-                      Qty: 
+                      Qty:{' '} 
                       {product.product_quantity} 
                     </h2>
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) * product.product_quantity * 1 +customHighTotal)}</h2>
                   </div>
                 </div>
               }
