@@ -66,6 +66,7 @@ function Order() {
   const [currentStyle, setCurrentStyle] = useState("Short Sleeve T-Shirt");
   const [design, setDesign] = useState([]);
   const [currentDesign, setCurrentDesign] = useState("");
+  const [defaultDesign, setDefaultDesign] = useState("");
   const [tColors, setTColors] = useState("");
   const [lColors, setLColors] = useState("");
   const [cColors, setCColors] = useState("");
@@ -82,6 +83,13 @@ function Order() {
         if (data) {
           console.log(data);
           setDesign(data);
+          let retrieveDefault = data[0];
+          for (let i = 0; i < data.length; ++i) {
+            if (data[i].product_id < retrieveDefault.product_id) {
+              retrieveDefault = data[i];
+            }
+          }
+          setDefaultDesign(retrieveDefault);
           setCurrentDesign(data[0]);
           const tShirtMap = {
             "Black": BlackTshirt,
@@ -97,9 +105,16 @@ function Order() {
             "White": WhiteTshirt
           }
           const regex = /\S+/;
-          let firstWord = data[0].tColors.match(regex)[0];
-          setTShirtColor(firstWord);
-          setTshirt(tShirtMap[firstWord]);
+          if (data[0].tColors) {
+            let firstWord = data[0].tColors.match(regex)[0];
+            setTShirtColor(firstWord);
+            setTshirt(tShirtMap[firstWord]);
+          }
+          else {
+            let firstWord = retrieveDefault.tColors.match(regex)[0];
+            setTShirtColor(firstWord);
+            setTshirt(tShirtMap[firstWord]);
+          }
           
           const lShirtMap = {
             "Black": BlackLongSleeve,
@@ -109,18 +124,32 @@ function Order() {
             "White": WhiteLongSleeve,
             "Navy": NavyLongSleeve
           }
-          firstWord = data[0].lColors.match(regex)[0];
-          setLongSleeveColor(firstWord);
-          setLongSleeve(lShirtMap[firstWord]);
+          if (data[0].lColors) {
+            let firstWord = data[0].lColors.match(regex)[0];
+            setLongSleeveColor(firstWord);
+            setLongSleeve(lShirtMap[firstWord]);
+          }
+          else {
+            let firstWord = retrieveDefault.lColors.match(regex)[0];
+            setLongSleeveColor(firstWord);
+            setLongSleeve(lShirtMap[firstWord]);
+          }
 
           const crewMap = {
             "Black": BlackCrewneck,
             "Gray": GrayCrewneck,
             "White": WhiteCrewneck
           }
-          firstWord = data[0].cColors.match(regex)[0];
-          setCrewneckColor(firstWord);
-          setCrewneck(crewMap[firstWord]);
+          if (data[0].cColors) {
+            let firstWord = data[0].cColors.match(regex)[0];
+            setCrewneckColor(firstWord);
+            setCrewneck(crewMap[firstWord]);
+          }
+          else {
+            let firstWord = retrieveDefault.cColors.match(regex)[0];
+            setCrewneckColor(firstWord);
+            setCrewneck(crewMap[firstWord]);
+          }
 
           const hoodieMap = {
             "Black": BlackHoodie,
@@ -129,9 +158,16 @@ function Order() {
             "White": WhiteHoodie,
             "Navy": NavyHoodie
           }
-          firstWord = data[0].hColors.match(regex)[0];
-          setHoodieColor(firstWord);
-          setHoodie(hoodieMap[firstWord]);
+          if (data[0].hColors) {
+            let firstWord = data[0].hColors.match(regex)[0];
+            setHoodieColor(firstWord);
+            setHoodie(hoodieMap[firstWord]);
+          }
+          else {
+            let firstWord = retrieveDefault.hColors.match(regex)[0];
+            setHoodieColor(firstWord);
+            setHoodie(hoodieMap[firstWord]);
+          }
  
           let colors = data.map(item => item.tColors).flat();
           setTColors(colors.join(' '));
@@ -554,8 +590,15 @@ function Order() {
             setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
             setCurrentColor(tShirtColor);
           }
-          else {
+          else if (currentDesign.tColors){
             const color = currentDesign.tColors.match(regex)[0];
+            setTShirtColor(color);
+            setTshirt(tShirtMap[color]);
+            setCurrentColor(color);
+            setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+          }
+          else {
+            const color = defaultDesign.tColors.match(regex)[0];
             setTShirtColor(color);
             setTshirt(tShirtMap[color]);
             setCurrentColor(color);
@@ -573,8 +616,16 @@ function Order() {
           setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
           setCurrentColor(crewneckColor);
         }
-        else {
+        else if (currentDesign.cColors) {
           const color = currentDesign.cColors.match(regex)[0];
+          setCrewneckColor(color);
+          setCrewneck(crewMap[color]);
+          setCurrentColor(color);
+          setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
+        }
+        else {
+          setCurrentDesign(defaultDesign);
+          const color = defaultDesign.cColors.match(regex)[0];
           setCrewneckColor(color);
           setCrewneck(crewMap[color]);
           setCurrentColor(color);
@@ -597,8 +648,16 @@ function Order() {
           setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
           setCurrentColor(longSleeveColor);
         }
-        else {
+        else if (currentDesign.lColors) {
           const color = currentDesign.lColors.match(regex)[0];
+          setLongSleeveColor(color);
+          setLongSleeve(lShirtMap[color]);
+          setCurrentColor(color);
+          setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
+        }
+        else {
+          setCurrentDesign(defaultDesign);
+          const color = defaultDesign.lColors.match(regex)[0];
           setLongSleeveColor(color);
           setLongSleeve(lShirtMap[color]);
           setCurrentColor(color);
@@ -620,8 +679,16 @@ function Order() {
           setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
           setCurrentColor(hoodieColor);
         }
-        else {
+        else if (currentDesign.hColors) {
           const color = currentDesign.hColors.match(regex)[0];
+          setHoodieColor(color);
+          setHoodie(hoodieMap[color]);
+          setCurrentColor(color);
+          setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
+        }
+        else {
+          setCurrentDesign(defaultDesign);
+          const color = defaultDesign.hColors.match(regex)[0];
           setHoodieColor(color);
           setHoodie(hoodieMap[color]);
           setCurrentColor(color);
