@@ -515,6 +515,10 @@ body {
   height: 500px;
 }
 
+.margin {
+  margin-left: 1%;
+}
+
 .homeDesign {
   position: absolute;
   top: 81px;
