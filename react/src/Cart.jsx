@@ -125,6 +125,7 @@ function Cart() {
   const [addedItems, setAddedItems] = useState(0);
   const navigate = useNavigate();
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [customHighTotal, setCustomHighTotal] = useState(0);
 
   const checkout = (order) => {
     if (order['total_cost'] > 0) {
@@ -210,6 +211,11 @@ function Cart() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      if (productId == 0) {
+        const temp = customHighTotal;
+        setCustomHighTotal(temp + 6);
+        console.log(customHighTotal);
+      }
     })
 
     order['total_cost'] *= 1;
@@ -246,7 +252,11 @@ function Cart() {
       })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        if (productId == 0) {
+          const temp = customHighTotal;
+          setCustomHighTotal(temp - 6);
+          console.log(customHighTotal);
+        }
       })
 
       order['total_cost'] *= 1;
@@ -300,6 +310,14 @@ function Cart() {
     .then((data) => {
       console.log(data);
       setProducts(data);
+      for (let i = 0; i < data.length; ++i) {
+        console.log(data[i].product_id);
+        if (data[i].product_id == 0) {
+          const temp = customHighTotal;
+          setCustomHighTotal(temp + (6 * data[i].product_quantity));
+          console.log(customHighTotal);
+        }
+      }
     });
   }, []);
 
@@ -307,6 +325,7 @@ function Cart() {
     fetch("/api/totalItems.php")
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
       setAddedItems(data["SUM(product_quantity)"]);
     })
   }, []);
@@ -335,10 +354,14 @@ function Cart() {
               </div>
             </div>
           </div>
-          <div className="cartSideItem">
-            <h1 className="ItemCount"> Subtotal: ${order.total_cost}</h1>
-            <h1 className="ItemCount"> {addedItems} item(s)</h1>
-          </div>
+            <div className="cartSideItem">
+              <h1 className="ItemCount"> ${order.total_cost * 1}
+                                        {customHighTotal ? 
+                                          <>
+                                          {' '}- ${order.total_cost * 1 + customHighTotal}
+                                          </> : <div />}</h1>
+              <h1 className="ItemCount"> {addedItems} item(s)</h1>
+            </div>
           <div className="cartSideCheckout">
             <div className = "CheckoutButtonPlacement">
               <br/>
@@ -377,7 +400,7 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size)} </h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size)} </h2>
                     <br /><br />
                     <h2> 
                       Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
@@ -405,7 +428,7 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                   </div>
                 </div>
               :
@@ -433,7 +456,7 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size)} - ${setPrice(product.price, product.product_type, product.size) + 6}</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size)} - ${setPrice(product.price, product.product_type, product.size) + 6}</h2>
                     <br /><br />
                     <h2> 
                       Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
@@ -447,10 +470,10 @@ function Cart() {
                       </button>
                     </h2>
                     {showConfirmation && (
-                      <div className="confirmation-modal">
+                      <div className="confirmation-modal"> {console.log(product)}
                         <div className="confirmation-dialog">
                           <h3>Confirm Delete</h3>
-                          <p>Are you sure you want to delete "{product.product_name}"?</p>
+                          <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
                           <div className="confirmation-buttons">
                             <button onClick={() => setShowConfirmation(false)}>Cancel</button>
                             <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
@@ -461,7 +484,7 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity}</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity}</h2>
                   </div>
                 </div>
               }
@@ -470,7 +493,11 @@ function Cart() {
           ))}
         <br/>
         <div className = "FinalCheckoutButtonPlacement">
-          <h1> Subtotal: ${order.total_cost}</h1>
+          <h1> Subtotal: ${order.total_cost * 1}
+                          {customHighTotal ? 
+                          <>
+                          {' '}- ${order.total_cost * 1 + customHighTotal}
+                          </> : <div />}</h1>
           <div className="CartPage" />
           <br/>
           <button onClick={() => checkout(order)} className="FinalCheckoutButton">
