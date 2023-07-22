@@ -17,6 +17,8 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 
 include 'conn.php';
 
+date_default_timezone_set('America/New_York');
+
 // Obtain cart
 $inputs = json_decode(file_get_contents('php://input'), true);
 
@@ -115,6 +117,8 @@ if (!$query->execute()) {
 }
 
 $result = $query->get_result();
+
+$totalHighEnd = $total_cost;
 
 $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -270,22 +274,44 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $price = setPrice($row['price'], $row['product_type'], $row['size']) * $row['product_quantity'];
-        $productHTML.='                                                 <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td align="center" class="esd-block-text es-p25t es-p25b es-p20r es-p20l es-m-txt-c">
-                                                                                        <h3 class="p_name" style="line-height: 150%;">'.$row['product_name'].'</h3>
-                                                                                        <p style="line-height: 150%;">Style: '.$row['product_type'].'</p>
-                                                                                        <p class="p_description" style="line-height: 150%;">Color: '.$row['color'].'</p>
-                                                                                        <p style="line-height: 150%;">Size: '.$row['size'].'</p>
-                                                                                        <p style="line-height: 150%;">Additional Details: '.$row['product_details'].'</p>
-                                                                                        <p style="line-height: 150%;">Quantity:&nbsp;'.$row['product_quantity'].'</p>
-                                                                                        <h3 style="line-height: 150%;" class="p_price">$'.$price.'</h3>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                        <br>';
+        if ($row['product_id'] > 0) {
+            $productHTML.='                                                 <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td align="center" class="esd-block-text es-p25t es-p25b es-p20r es-p20l es-m-txt-c">
+                                                                                            <h3 class="p_name" style="line-height: 150%;">'.$row['product_name'].'</h3>
+                                                                                            <p style="line-height: 150%;">Style: '.$row['product_type'].'</p>
+                                                                                            <p class="p_description" style="line-height: 150%;">Color: '.$row['color'].'</p>
+                                                                                            <p style="line-height: 150%;">Size: '.$row['size'].'</p>
+                                                                                            <p style="line-height: 150%;">Additional Details: '.$row['product_details'].'</p>
+                                                                                            <p style="line-height: 150%;">Quantity:&nbsp;'.$row['product_quantity'].'</p>
+                                                                                            <h3 style="line-height: 150%;" class="p_price">$'.$price.'</h3>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <br>';
+        }
+        else {
+            $highEndPrice = $price + (6 * $row['product_quantity']);
+            $totalHighEnd += (6 * $row['product_quantity']);
+            $productHTML.='                                                 <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td align="center" class="esd-block-text es-p25t es-p25b es-p20r es-p20l es-m-txt-c">
+                                                                                            <h3 class="p_name" style="line-height: 150%;">'.$row['product_name'].'</h3>
+                                                                                            <p style="line-height: 150%;">Style: '.$row['product_type'].'</p>
+                                                                                            <p class="p_description" style="line-height: 150%;">Color: '.$row['color'].'</p>
+                                                                                            <p style="line-height: 150%;">Size: '.$row['size'].'</p>
+                                                                                            <p style="line-height: 150%;">Additional Details: '.$row['product_details'].'</p>
+                                                                                            <p style="line-height: 150%;">Quantity:&nbsp;'.$row['product_quantity'].'</p>
+                                                                                            <h3 style="line-height: 150%;" class="p_price">$'.$price.' - $'.$highEndPrice.'</h3>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <br>';
+        }
     }
 }
 $productHTML.='                                                      </td>
@@ -341,7 +367,9 @@ $productHTML.='                                                      </td>
                                                                         </table>
                                                                     </td>
                                                                     <td width="20"></td>
-                                                                    <td class="esdev-mso-td" valign="top">
+                                                                    <td class="esdev-mso-td" valign="top">';
+if ($totalHighEnd == $total_cost) {
+    $productHTML.='                                                                    
                                                                         <table cellpadding="0" cellspacing="0" class="es-right" align="right">
                                                                             <tbody>
                                                                                 <tr>
@@ -358,7 +386,29 @@ $productHTML.='                                                      </td>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
-                                                                        </table>
+                                                                        </table>';
+}
+else {
+    $productHTML.='                                                                    
+                                                                        <table cellpadding="0" cellspacing="0" class="es-right" align="right">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td width="270" align="left" class="esd-container-frame">
+                                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td align="right" class="esd-block-text">
+                                                                                                        <p>$'.$total_cost.' - $'.$totalHighEnd.'.00<br>$00.00<br>$00.00</p>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>';
+}
+$productHTML.='                                                                        
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -424,10 +474,20 @@ $productHTML.='                                                      </td>
                                                                                     <td width="270" align="left" class="esd-container-frame">
                                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                                             <tbody>
-                                                                                                <tr>
+                                                                                                <tr>';
+                                                                                                if ($totalHighEnd == $total_cost) {
+                                                                                                    $productHTML.=' 
                                                                                                     <td align="right" class="esd-block-text es-m-txt-r">
                                                                                                         <h3>$'.$total_cost.'</h3>
-                                                                                                    </td>
+                                                                                                    </td>';
+                                                                                                }
+                                                                                                else {
+                                                                                                    $productHTML.=' 
+                                                                                                    <td align="right" class="esd-block-text es-m-txt-r">
+                                                                                                        <h3>$'.$total_cost.' - $'.$totalHighEnd.'.00</h3>
+                                                                                                    </td>';
+                                                                                                }
+                                                                                                $productHTML.=' 
                                                                                                 </tr>
                                                                                             </tbody>
                                                                                         </table>

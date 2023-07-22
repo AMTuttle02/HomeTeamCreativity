@@ -604,7 +604,7 @@ function CustomOrder() {
           <div className="orderMain">
             <h3>Style Your Product With The Options Below</h3>
             <h3>Click <Link to="/order" className="customDesignButton">Here</Link> To Order a Previously Created Design</h3>
-            <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}+</h1>
+            <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity} - ${((design.price * 1) + productType.addedCost + size.addedCost + 6) * quantity}</h1>
             <h1>Type Your Desired Design Description Below</h1>
             <h3>Please Be As Descriptive As Possible</h3>
             <div className="customOrderBox">
@@ -1026,7 +1026,7 @@ function CustomOrder() {
                 Add to Cart
               </button>
               <br /><br />
-              <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity}+</h1>
+              <h1>Price: ${((design.price * 1) + productType.addedCost + size.addedCost) * quantity} - ${((design.price * 1) + productType.addedCost + size.addedCost + 6) * quantity}</h1>
               { failed && <Failed /> }
             </center>
           </div>

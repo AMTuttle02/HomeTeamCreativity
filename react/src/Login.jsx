@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
+import bcrypt from 'bcryptjs';
 
 function LoginFailed() {
   return (
@@ -8,50 +9,59 @@ function LoginFailed() {
     </div>
   );
 }
+
 function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [passwordError, setpasswordError] = useState("");
-  const [emailError, setemailError] = useState("");
-  const [badLogin, setBadLogin] = useState("");
-  const handleValidation = (event) => {
-    let formIsValid = true;
-    if (!email.match(/^.+@.+\..+$/)) {
-      formIsValid = false;
-      setemailError("Email Not Valid");
-    } else {
-      setemailError("");
-    }
-    if (!password.match(/^[\w\S]{8,}$/)) {
-      formIsValid = false;
-      setpasswordError(
-        "Length must best min 8 Chracters and Max 22 Chracters"
-      );
-    } else {
-      setpasswordError("");
-    }
-    return formIsValid;
-  };
+  const [badLogin, setBadLogin] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loginAttempted, setLoginAttempted] = useState(false);
+
   const loginSubmit = (e) => {
     e.preventDefault();
-    if (handleValidation()) {
-      fetch("/api/login.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // If the email and password are valid, redirect to the homepage
-          if (data.loggedin) {
-            window.location.href = '/loggedin';
-          } else {
-            // If the email and password are not valid, display an error message
-            setBadLogin(true);
-          }
-        });
-    }
+    fetch("/api/loginDetails.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if(data.user_id) {
+          bcrypt.compare(password, data.pswrd, (err, isMatch) => {
+            if (err) {
+              setBadLogin(true);
+              setLoginAttempted(true);
+            } else if (isMatch) {
+              // Passwords match, authentication successful
+              fetch("/api/login.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.loggedin) {
+                    setLoggedIn(true);
+                  } else {
+                    setBadLogin(true);
+                  }
+                  setLoginAttempted(true); // Set login attempt status
+                });
+            } else {
+              // Passwords do not match, authentication failed
+              // Handle the failure appropriately
+              setBadLogin(true);
+              setLoginAttempted(true);
+            }
+          });
+        }
+        else {
+          setBadLogin(true);
+          setLoginAttempted(true); // Set login attempt status
+        }
+      });
   };
+
   const [firstName, setFirstName] = useState("");
   useEffect(() => {
     fetch("/api/session.php")
@@ -61,65 +71,67 @@ function Login() {
       });
   }, []);
 
-  if (firstName) {
-    window.location.href='/loggedin';
-  }
-  else {
-  return (
-    <div className="UpdatedLogin">
-      <br />
-      <div className="LoginPage">
-        <div className="container">
-          <h1>
-            <u>Login</u>
-          </h1>
-          <form id="loginform" onSubmit={loginSubmit}>
-            <label>Email address</label>
-            <input
-              type="email"
-              className="form-control"
-              id="EmailInput"
-              name="EmailInput"
-              aria-describedby="emailHelp"
-              placeholder="Enter email"
-              onChange={(event) => setEmail(event.target.value)}
-            />
-            <small id="emailHelp" className="text-danger form-text">
-              {emailError}
-            </small>
+  useEffect(() => {
+    if (firstName) {
+      setLoggedIn(true);
+    }
+  }, [firstName]);
+
+  useEffect(() => {
+    setBadLogin(false);
+  }, [email, password]);
+
+  if (loggedIn) {
+    window.location.href = "/loggedin";
+  } else {
+    return (
+      <div className="UpdatedLogin">
+        <br />
+        <div className="LoginPage">
+          <div className="container">
+            <h1>
+              <u>Login</u>
+            </h1>
+            <form id="loginform" onSubmit={loginSubmit}>
+              <label>Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                id="EmailInput"
+                name="EmailInput"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                onChange={(event) => setEmail(event.target.value)}
+              />
+              <br />
+              <label>Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="exampleInputPassword1"
+                placeholder="Password"
+                onChange={(event) => setPassword(event.target.value)}
+              />
+              {loginAttempted && badLogin && <LoginFailed />}
+              <br />
+              <button type="submit">Log In</button>
+            </form>
+          </div>
+          <div className="UserAccess">
             <br />
-            <label>Password</label>
-            <input
-              type="password"
-              className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Password"
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <small id="passworderror" className="text-danger form-text">
-              {passwordError}
-            </small>
-            { badLogin && <LoginFailed /> }
             <br />
-            <button type="submit">Log In</button>
-          </form>
+            <p>Don't Have An Account?</p>
+            <p>
+              <Link to="/signup" className="signUpButton">
+                Create An Account
+              </Link>
+            </p>
+          </div>
+          <Outlet />
         </div>
-        <div className="UserAccess">
-          <br />
-          <br />
-          <p>
-            Don't Have An Account?
-          </p>
-          <p>
-            <Link to="/signup" className="signUpButton">
-              Create An Account
-            </Link>
-          </p>
-        </div>
-        <Outlet />
       </div>
-    </div>
-  );
+    );
   }
 }
+
 export default Login;

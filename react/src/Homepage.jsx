@@ -27,6 +27,8 @@ function Homepage() {
             });
           }
         });
+      
+      event.target.blur();
     }
   }
   
