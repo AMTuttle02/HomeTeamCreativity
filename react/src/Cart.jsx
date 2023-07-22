@@ -211,7 +211,6 @@ function Cart() {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       if (productId == 0) {
         const temp = customHighTotal;
         setCustomHighTotal(temp + 6);
@@ -300,7 +299,6 @@ function Cart() {
     fetch("/api/getOrder.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       setOrder(data);
     });
   }, []);
@@ -309,16 +307,15 @@ function Cart() {
     fetch("/api/getCart.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       setProducts(data);
+      let total = 0;
       for (let i = 0; i < data.length; ++i) {
         console.log(data[i].product_id);
         if (data[i].product_id == 0) {
-          const temp = customHighTotal;
-          setCustomHighTotal(temp + (6 * data[i].product_quantity));
-          console.log(customHighTotal);
+          total += (6 * data[i].product_quantity)
         }
       }
+      setCustomHighTotal(total);
     });
   }, []);
 
@@ -326,7 +323,6 @@ function Cart() {
     fetch("/api/totalItems.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       setAddedItems(data["SUM(product_quantity)"]);
     })
   }, []);
