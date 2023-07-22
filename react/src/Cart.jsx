@@ -196,7 +196,7 @@ function Cart() {
     })
   }
 
-  const increaseQuantity = (product, productId, quantity, price) => {
+  const increaseQuantity = (product, productId, quantity, price, style, color, size) => {
     fetch("/api/increaseQuantity.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -211,7 +211,6 @@ function Cart() {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       if (productId == 0) {
         const temp = customHighTotal;
         setCustomHighTotal(temp + 6);
@@ -224,7 +223,7 @@ function Cart() {
     setAddedItems((addedItems * 1) + 1);
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
-        if (product.product_id === productId) {
+        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size) {
           return {
             ...product,
             product_quantity: quantity + 1
@@ -237,7 +236,7 @@ function Cart() {
     })
   }
 
-  const decreaseQuantity = (product, productId, quantity, price) => {
+  const decreaseQuantity = (product, productId, quantity, price, style, color, size) => {
     if (quantity > 1) {
       fetch("/api/decreaseQuantity.php", {
         method: "POST",
@@ -266,7 +265,7 @@ function Cart() {
     }
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
-        if (product.product_id === productId && quantity > 1) {
+        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size && quantity > 1) {
           return {
             ...product,
             product_quantity: quantity - 1
@@ -300,7 +299,6 @@ function Cart() {
     fetch("/api/getOrder.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       setOrder(data);
     });
   }, []);
@@ -309,16 +307,15 @@ function Cart() {
     fetch("/api/getCart.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       setProducts(data);
+      let total = 0;
       for (let i = 0; i < data.length; ++i) {
         console.log(data[i].product_id);
         if (data[i].product_id == 0) {
-          const temp = customHighTotal;
-          setCustomHighTotal(temp + (6 * data[i].product_quantity));
-          console.log(customHighTotal);
+          total += (6 * data[i].product_quantity)
         }
       }
+      setCustomHighTotal(total);
     });
   }, []);
 
@@ -326,7 +323,6 @@ function Cart() {
     fetch("/api/totalItems.php")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       setAddedItems(data["SUM(product_quantity)"]);
     })
   }, []);
@@ -381,7 +377,7 @@ function Cart() {
         <br />
         <div className="CartPage" />
           {products.map((product) => (
-            <div key={product.product_id}>
+            <div key={[product.product_id, product.product_type, product.size, product.color]}>
               {product.product_id ?
                 <div className="cartProductRow">
                   <div className="productsCell">
@@ -410,9 +406,9 @@ function Cart() {
                     <h2>${setPrice(product.price, product.product_type, product.size)} </h2>
                     <br /><br />
                     <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
                       {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
                     </h2>
                     <br /><br />
                     <h2>
@@ -439,60 +435,68 @@ function Cart() {
                   </div>
                 </div>
               :
-                <div className="cartProductRow">
-                  <div className="productsCell">
-                    <div className="fullDesign">
-                      <img
-                        src={setType(product.product_type, product.color)}
-                        alt="Home Team Creativity Logo"
-                        className="tshirt"
-                      />
-                      <img
-                        src={"api/images/" + determineDesign(product.color)}
-                        alt={product.filename}
-                        className="design"
-                      />
-                    </div>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2> <b> {product.product_name} </b></h2> 
-                    <h2> Style: {product.product_type} </h2>
-                    <h2> Size: {product.size} </h2>
-                    <h2> Color: {product.color} </h2>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2>${setPrice(product.price, product.product_type, product.size)} - ${setPrice(product.price, product.product_type, product.size) + 6}</h2>
-                    <br /><br />
-                    <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
-                      {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
-                    </h2>
-                    <br /><br />
-                    <h2>
-                      <button onClick={() => confirmDelete(product)} className="CartRemoveProductButton">
-                        Delete
-                      </button>
-                    </h2>
-                  </div>
-                  {showConfirmation && deleteProduct === product &&
-                    <div className="confirmation-modal">
-                      <div className="confirmation-dialog">
-                        <h3>Confirm Delete</h3>
-                        <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
-                        <div className="confirmation-buttons">
-                          <button onClick={() => setShowConfirmation(false)}>Cancel</button>
-                          <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
-                        </div>
+                <div className="customProduct">
+                  <div className="cartProductRow">
+                    <div className="productsCell">
+                      <div className="fullDesign">
+                        <img
+                          src={setType(product.product_type, product.color)}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
+                        />
+                        <img
+                          src={"api/images/" + determineDesign(product.color)}
+                          alt={product.filename}
+                          className="design"
+                        />
                       </div>
                     </div>
-                  }
-                  <div className="productsCell">
-                    <br /><br /><br /><br /><br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity}</h2>
+                    <div className="productsCell">
+                      <br />
+                      <h2> <b> {product.product_name} </b></h2> 
+                      <h2> Style: {product.product_type} </h2>
+                      <h2> Size: {product.size} </h2>
+                      <h2> Color: {product.color} </h2>
+                    </div>
+                    <div className="productsCell">
+                      <br />
+                      <h2>${setPrice(product.price, product.product_type, product.size)} - ${setPrice(product.price, product.product_type, product.size) + 6}</h2>
+                      <br /><br />
+                      <h2> 
+                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
+                        {product.product_quantity} 
+                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
+                      </h2>
+                      <br /><br />
+                      <h2>
+                        <button onClick={() => confirmDelete(product)} className="CartRemoveProductButton">
+                          Delete
+                        </button>
+                      </h2>
+                    </div>
+                    {showConfirmation && deleteProduct === product &&
+                      <div className="confirmation-modal">
+                        <div className="confirmation-dialog">
+                          <h3>Confirm Delete</h3>
+                          <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
+                          <div className="confirmation-buttons">
+                            <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                            <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    <div className="productsCell">
+                      <br /><br /><br /><br /><br /><br />
+                      <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity}</h2>
+                    </div>
                   </div>
+                  <br />
+                  <h3 className="margin"> 
+                    <b>Custom Details: </b>
+                    {product.product_details} 
+                  </h3>
+                  <br />
                 </div>
               }
               <div className="CartPage" />
