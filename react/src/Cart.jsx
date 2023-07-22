@@ -196,7 +196,7 @@ function Cart() {
     })
   }
 
-  const increaseQuantity = (product, productId, quantity, price) => {
+  const increaseQuantity = (product, productId, quantity, price, style, color, size) => {
     fetch("/api/increaseQuantity.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -224,7 +224,7 @@ function Cart() {
     setAddedItems((addedItems * 1) + 1);
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
-        if (product.product_id === productId) {
+        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size) {
           return {
             ...product,
             product_quantity: quantity + 1
@@ -237,7 +237,7 @@ function Cart() {
     })
   }
 
-  const decreaseQuantity = (product, productId, quantity, price) => {
+  const decreaseQuantity = (product, productId, quantity, price, style, color, size) => {
     if (quantity > 1) {
       fetch("/api/decreaseQuantity.php", {
         method: "POST",
@@ -266,7 +266,7 @@ function Cart() {
     }
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
-        if (product.product_id === productId && quantity > 1) {
+        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size && quantity > 1) {
           return {
             ...product,
             product_quantity: quantity - 1
@@ -381,7 +381,7 @@ function Cart() {
         <br />
         <div className="CartPage" />
           {products.map((product) => (
-            <div key={product.product_id}>
+            <div key={[product.product_id, product.product_type, product.size, product.color]}>
               {product.product_id ?
                 <div className="cartProductRow">
                   <div className="productsCell">
@@ -410,9 +410,9 @@ function Cart() {
                     <h2>${setPrice(product.price, product.product_type, product.size)} </h2>
                     <br /><br />
                     <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
                       {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
                     </h2>
                     <br /><br />
                     <h2>
@@ -467,9 +467,9 @@ function Cart() {
                       <h2>${setPrice(product.price, product.product_type, product.size)} - ${setPrice(product.price, product.product_type, product.size) + 6}</h2>
                       <br /><br />
                       <h2> 
-                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>-</button>
+                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
                         {product.product_quantity} 
-                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size))}>+</button>
+                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
                       </h2>
                       <br /><br />
                       <h2>
