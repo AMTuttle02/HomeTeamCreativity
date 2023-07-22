@@ -116,13 +116,13 @@ function CheckoutDetails() {
         fetch("/api/getCart.php")
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
+            let total = 0;
             for (let i = 0; i < data.length; ++i) {
-            if (data[i].product_id == 0) {
-                const temp = customHighTotal;
-                setCustomHighTotal(temp + (6 * data[i].product_quantity));
+                if (data[i].product_id == 0) {
+                    total += (6 * data[i].product_quantity)
+                }
             }
-            }
+            setCustomHighTotal(total);
         });
     }, []);
 
