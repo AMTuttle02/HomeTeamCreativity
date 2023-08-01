@@ -142,7 +142,7 @@ function Cart() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
@@ -151,7 +151,7 @@ function Cart() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
@@ -160,7 +160,7 @@ function Cart() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
@@ -168,7 +168,7 @@ function Cart() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
@@ -308,6 +308,7 @@ function Cart() {
     .then((response) => response.json())
     .then((data) => {
       setProducts(data);
+      console.log(data);
       let total = 0;
       for (let i = 0; i < data.length; ++i) {
         console.log(data[i].product_id);
