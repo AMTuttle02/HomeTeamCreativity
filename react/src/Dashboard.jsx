@@ -190,7 +190,7 @@ function Dashboard() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
@@ -199,7 +199,7 @@ function Dashboard() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
@@ -208,7 +208,7 @@ function Dashboard() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
@@ -216,7 +216,7 @@ function Dashboard() {
       if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
         price -= 2;
       }
-      else if (size == "Adult XX-Large") {
+      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
         price += 2;
       }
     }
