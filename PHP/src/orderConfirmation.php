@@ -103,7 +103,19 @@ if (!$result) {
 }
 
 $orderId = $result['order_id'];
-$total_cost = $result['total_cost'];
+
+if (!$result['shipped']) {
+    $subTotal = number_format($result['total_cost'], 2);
+    $total_cost = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.0725), 2);
+    $tax = '$'.number_format(($result['total_cost'] * 0.0725), 2);
+    $shipping = '$00.00';
+}
+else {
+    $subTotal = number_format($result['total_cost'], 2);
+    $total_cost = number_format($result['total_cost'], 2);
+    $tax = "TBD";
+    $shipping = "TBD";
+}
 
 $query = $conn->prepare(
     "SELECT *
@@ -118,7 +130,7 @@ if (!$query->execute()) {
 
 $result = $query->get_result();
 
-$totalHighEnd = $total_cost;
+$totalHighEnd = $subTotal;
 
 $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -356,7 +368,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="left" class="esd-block-text">
-                                                                                                        <p>Subtotal<br>Discount<br>Shipping</p>
+                                                                                                        <p>Subtotal<br>Discount<br>Shipping<br>Estimated Tax</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -378,7 +390,7 @@ if ($totalHighEnd == $total_cost) {
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$'.$total_cost.'<br>$00.00<br>$00.00</p>
+                                                                                                        <p>$'.$subTotal.'<br>$00.00<br>'.$shipping.'<br>'.$tax.'</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -398,7 +410,7 @@ else {
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$'.$total_cost.' - $'.$totalHighEnd.'.00<br>$00.00<br>$00.00</p>
+                                                                                                        <p>$'.$subTotal.' - $'.$totalHighEnd.'.00<br>$00.00<br>'.$shipping.'<br>TBD</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -478,13 +490,13 @@ $productHTML.='
                                                                                                 if ($totalHighEnd == $total_cost) {
                                                                                                     $productHTML.=' 
                                                                                                     <td align="right" class="esd-block-text es-m-txt-r">
-                                                                                                        <h3>$'.$total_cost.'</h3>
+                                                                                                        <h3>$'.$subTotal.'</h3>
                                                                                                     </td>';
                                                                                                 }
                                                                                                 else {
                                                                                                     $productHTML.=' 
                                                                                                     <td align="right" class="esd-block-text es-m-txt-r">
-                                                                                                        <h3>$'.$total_cost.' - $'.$totalHighEnd.'.00</h3>
+                                                                                                        <h3>$'.$subTotal.' - $'.$totalHighEnd.'.00</h3>
                                                                                                     </td>';
                                                                                                 }
                                                                                                 $productHTML.=' 
