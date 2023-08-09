@@ -103,7 +103,9 @@ if (!$result) {
 }
 
 $orderId = $result['order_id'];
-$total_cost = $result['total_cost'];
+$subTotal = number_format($result['total_cost'], 2);
+$total_cost = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.0725), 2);
+$tax = number_format(($result['total_cost'] * 0.0725), 2);
 
 $query = $conn->prepare(
     "SELECT *
@@ -356,7 +358,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="left" class="esd-block-text">
-                                                                                                        <p>Subtotal<br>Discount<br>Shipping</p>
+                                                                                                        <p>Subtotal<br>Discount<br>Shipping<br>Estimated Tax</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -378,7 +380,7 @@ if ($totalHighEnd == $total_cost) {
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$'.$total_cost.'<br>$00.00<br>$00.00</p>
+                                                                                                        <p>$'.$subTotal.'<br>$00.00<br>$00.00<br>$'.$tax.'</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
