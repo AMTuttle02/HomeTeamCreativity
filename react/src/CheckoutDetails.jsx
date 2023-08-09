@@ -265,8 +265,8 @@ function CheckoutDetails() {
                                                 <p> Shipping: $0.00</p>
                                                 <p> Online Processing Fee: ${processingFee}</p>
                                                 <p> Estimated Tax: ${tax}</p>
-                                                <h3> Total: ${onlineTotalCost(order.total_cost)}</h3>
-                                                <h3> Due Now: ${onlineTotalCost(order.total_cost)}</h3>
+                                                <h3> Total: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
+                                                <h3> Due Now: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -296,7 +296,7 @@ function CheckoutDetails() {
                                             {notCustomOrder ? 
                                                 <div>
                                                     <p> Estimated Tax: ${(order.total_cost * 0.0725).toFixed(2)}</p>
-                                                    <h3> Total: {onlineTotalCost(order.total_cost)}</h3>
+                                                    <h3> Total: {onlineTotalCost(order.total_cost).toFixed(2)}</h3>
                                                     <h3> Due Now : $0.00</h3>
                                                 </div>
                                             :
