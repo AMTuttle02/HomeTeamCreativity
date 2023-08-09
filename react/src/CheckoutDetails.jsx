@@ -16,6 +16,8 @@ function CheckoutDetails() {
     const [zip, setZip] = useState("");
     const [notCustomOrder, setNotCustomOrder] = useState(1);
     const [locationError, setLocationError] = useState("");
+    const [processingFee, setProcessingFee] = useState(0);
+    const [tax, setTax] = useState(0);
     
     const handleValidation = () => {
         if (shipping) {
@@ -111,6 +113,23 @@ function CheckoutDetails() {
         setLocationError("");
     }, [shipping, paying]);
 
+    useEffect(() => {
+        if (!notCustomOrder) {
+            setProcessingFee((0.00).toFixed(2));
+            setTax(0);
+        }
+        else if (!paying) {
+            setProcessingFee((0.00).toFixed(2));
+            setTax((order.total_cost * 0.0725).toFixed(2));
+        }
+        else {
+            setProcessingFee((order.total_cost * 0.029 + 0.31).toFixed(2));
+            let temp = (order.total_cost * 1 + (order.total_cost * 0.029 + 0.31)).toFixed(2);
+            // sales tax
+            setTax((temp * 0.0725).toFixed(2));
+        }
+    }, [paying, notCustomOrder, order])
+
     const [customHighTotal, setCustomHighTotal] = useState(0);
     useEffect(() => { 
         fetch("/api/getCart.php")
@@ -125,6 +144,11 @@ function CheckoutDetails() {
             setCustomHighTotal(total);
         });
     }, []);
+
+    const onlineTotalCost = (subtotal) => {
+        let total = (subtotal * 1 + tax * 1 + processingFee * 1);
+        return (total);
+    }
 
   return (
     <div className="CheckoutDetails">
@@ -183,7 +207,8 @@ function CheckoutDetails() {
                             </div>
                             <div className="row">
                                 <div className="split50">
-                                    <p style={{color: 'red'}}>Shipping Cost and Payment will be requested via Email.</p>
+                                    <p style={{color: 'red'}}>Total varies depending on shipping cost.</p>
+                                    <p style={{color: 'red'}}>Total will be sent via email.</p>
                                     <p><a href="/payLater">Learn More</a></p>
                                 </div>
                                 <div className="split50">
@@ -191,7 +216,7 @@ function CheckoutDetails() {
                                         <p> Subtotal: ${order.total_cost}{!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>}</p>
                                         <p> Shipping: TBD</p>
                                         <p> Online Processing Fee: $0.00</p>
-                                        <p> Discounts: $0.00</p>
+                                        <p> Estimated Tax: TBD</p>
                                         <h3> Total: ${order.total_cost}{!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>}</h3>
                                         <h3> Due Now: $0.00</h3>
                                     </div>
@@ -231,13 +256,19 @@ function CheckoutDetails() {
                             
                             {paying && notCustomOrder ?
                                 <div>
-                                    <div className="RightAlign">
-                                        <p> Subtotal: ${order.total_cost}</p>
-                                        <p> Shipping: $0.00</p>
-                                        <p> Online Processing Fee: ${(order.total_cost * 0.029 + 0.31).toFixed(2)}</p>
-                                        <p> Discounts: $0.00</p>
-                                        <h3> Total: ${((order.total_cost * 1) + (order.total_cost * 0.029 + 0.31)).toFixed(2)}{!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>}</h3>
-                                        <h3> Due Now: ${((order.total_cost * 1) + (order.total_cost * 0.029 + 0.31)).toFixed(2)}</h3>
+                                    <div className="row">
+                                        <div className="split50">
+                                        </div>
+                                        <div className="split50">
+                                            <div className="RightAlign">
+                                                <p> Subtotal: ${order.total_cost}</p>
+                                                <p> Shipping: $0.00</p>
+                                                <p> Online Processing Fee: ${processingFee}</p>
+                                                <p> Estimated Tax: ${tax}</p>
+                                                <h3> Total: ${onlineTotalCost(order.total_cost)}</h3>
+                                                <h3> Due Now: ${onlineTotalCost(order.total_cost)}</h3>
+                                            </div>
+                                        </div>
                                     </div>
                                     <br/>
                                     <div className = "PaymentButtonPlacement">
@@ -248,7 +279,6 @@ function CheckoutDetails() {
                                 </div>
                             :
                                 <div className="row">
-
                                     {notCustomOrder ?
                                         <div className="split50">
                                         </div>
@@ -261,16 +291,17 @@ function CheckoutDetails() {
                                     <div className="split50">
                                         <div className="RightAlign">
                                             <p> Subtotal: ${order.total_cost} {!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>} </p>
-                                            <p> Shipping: 0.00</p>
+                                            <p> Shipping: $0.00</p>
                                             <p> Online Processing Fee: $0.00</p>
-                                            <p> Discounts: $0.00</p>
                                             {notCustomOrder ? 
                                                 <div>
-                                                    <h3> Total: ${order.total_cost}</h3>
+                                                    <p> Estimated Tax: ${(order.total_cost * 0.0725).toFixed(2)}</p>
+                                                    <h3> Total: {onlineTotalCost(order.total_cost)}</h3>
                                                     <h3> Due Now : $0.00</h3>
                                                 </div>
                                             :
                                                 <div>
+                                                    <p> Estimated Tax: TBD</p>
                                                     <h3> Total: ${order.total_cost} - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</h3>
                                                     <h3> Due Now: $0.00</h3>
                                                 </div>
