@@ -103,8 +103,11 @@ if (!$result) {
 }
 
 $orderId = $result['order_id'];
-$total_cost = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
+$subTotal = number_format($result['total_cost'], 2);
+$temp = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
+$total_cost = number_format(($temp * 1) + ($temp * 0.0725), 2);
 $processingFee = number_format($result['total_cost'] * 0.029 + 0.31, 2);
+$tax = number_format(($temp * 0.0725), 2);
 
 $query = $conn->prepare(
     "SELECT *
@@ -333,7 +336,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="left" class="esd-block-text">
-                                                                                                        <p>Subtotal<br>Discount<br>Shipping<br>Online Processing Fee</p>
+                                                                                                        <p>Subtotal<br>Discount<br>Shipping<br>Online Processing Fee<br>Estimated Tax</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -353,7 +356,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$'.$total_cost.'<br>$00.00<br>$00.00<br>$'.$processingFee.'</p>
+                                                                                                        <p>$'.$subTotal.'<br>$00.00<br>$00.00<br>$'.$processingFee.'<br>$'.$tax.'</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
