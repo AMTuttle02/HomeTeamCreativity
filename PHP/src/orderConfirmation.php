@@ -380,7 +380,7 @@ $productHTML.='                                                      </td>
                                                                     </td>
                                                                     <td width="20"></td>
                                                                     <td class="esdev-mso-td" valign="top">';
-if ($totalHighEnd == $total_cost) {
+if ($totalHighEnd == $subTotal) {
     $productHTML.='                                                                    
                                                                         <table cellpadding="0" cellspacing="0" class="es-right" align="right">
                                                                             <tbody>
@@ -487,10 +487,10 @@ $productHTML.='
                                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                                             <tbody>
                                                                                                 <tr>';
-                                                                                                if ($totalHighEnd == $total_cost) {
+                                                                                                if ($totalHighEnd == $subTotal) {
                                                                                                     $productHTML.=' 
                                                                                                     <td align="right" class="esd-block-text es-m-txt-r">
-                                                                                                        <h3>$'.$subTotal.'</h3>
+                                                                                                        <h3>$'.$total_cost.'</h3>
                                                                                                     </td>';
                                                                                                 }
                                                                                                 else {
