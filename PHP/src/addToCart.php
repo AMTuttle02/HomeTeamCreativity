@@ -39,16 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   $productCost = $inputs['price'];
-  $totalCost = $totalCost + $productCost;
-
-  $query = $conn->prepare(
-                        "UPDATE orders 
-                        SET total_cost = $totalCost 
-                        WHERE orders.order_id = $orderId");
-  if (!$query->execute()) {
-    // If insertion fails, return error message
-    die(json_encode(0));
-  }
+  
 
   // Insert product to users cart
   $query = $conn->prepare(
@@ -69,7 +60,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode("Result set failed: " . $conn->error);
   }
   else {
-    echo json_encode(1);
+    $totalCost = $totalCost + $productCost;
+    $query = $conn->prepare(
+                          "UPDATE orders 
+                          SET total_cost = $totalCost 
+                          WHERE orders.order_id = $orderId");
+    if (!$query->execute()) {
+      // If insertion fails, return error message
+      die(json_encode(0));
+    }
+    else {
+      echo json_encode(1);
+    }
   }
 }
 
