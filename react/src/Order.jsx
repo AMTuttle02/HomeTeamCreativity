@@ -71,6 +71,7 @@ function Order() {
   const [lColors, setLColors] = useState("");
   const [cColors, setCColors] = useState("");
   const [hColors, setHColors] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     retrieveProduct();
@@ -721,6 +722,12 @@ function Order() {
     }
   }
 
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('.fullDesign')) {
+      setShowConfirmation(false);
+    }
+  };
+
   return (
     <div className="Order">
       <br />
@@ -728,19 +735,24 @@ function Order() {
       <div className="orderRow">
         <div className="orderSide">
           <div className="productDetails">
-            <div className="fullDesign">
-              <img
-              src={productType.type}
-              alt="Home Team Creativity Logo"
-              className="tshirt"
-              />
-              <img
-                src={"api/images/" + currentDesign.filename}
-                alt={currentDesign.product_name}
-                className="design"
-              />
-            </div>
+            <button 
+                  className="productTypes"
+                  onClick={() => setShowConfirmation(true)}>
+              <div className="fullDesign">
+                <img
+                src={productType.type}
+                alt="Home Team Creativity Logo"
+                className="tshirt"
+                />
+                <img
+                  src={"api/images/" + currentDesign.filename}
+                  alt={currentDesign.product_name}
+                  className="design"
+                />
+              </div>
+            </button>
             <br /><br />
+            <p>Click Design To Enlarge</p>
             <h3>{currentDesign.product_name}</h3>
             <br />
             <p>Details:</p>
@@ -751,6 +763,25 @@ function Order() {
             <Link to='/returnpolicy'>Return Policy</Link>
           </div>
         </div>
+        {showConfirmation &&
+                    <div className="confirmation-modal" onClick={handleOutsideClick}>
+                      <div className="orderItem-dialog">
+                        <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
+                        <div className="fullDesign">
+                          <img
+                          src={productType.type}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
+                          />
+                          <img
+                            src={"api/images/" + currentDesign.filename}
+                            alt={currentDesign.product_name}
+                            className="design"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  }
         {userId ?
           <div className="orderMain">
             <h3>Style Your Product With The Options Below</h3>
