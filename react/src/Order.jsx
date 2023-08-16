@@ -736,7 +736,7 @@ function Order() {
         <div className="orderSide">
           <div className="productDetails">
             <button 
-                  className="productTypes"
+                  className="magnify"
                   onClick={() => setShowConfirmation(true)}>
               <div className="fullDesign">
                 <img
@@ -764,24 +764,24 @@ function Order() {
           </div>
         </div>
         {showConfirmation &&
-                    <div className="confirmation-modal" onClick={handleOutsideClick}>
-                      <div className="orderItem-dialog">
-                        <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
-                        <div className="fullDesign">
-                          <img
-                          src={productType.type}
-                          alt="Home Team Creativity Logo"
-                          className="tshirt"
-                          />
-                          <img
-                            src={"api/images/" + currentDesign.filename}
-                            alt={currentDesign.product_name}
-                            className="design"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  }
+          <div className="confirmation-modal" onClick={handleOutsideClick}>
+            <div className="orderItem-dialog">
+              <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
+              <div className="fullDesign">
+                <img
+                src={productType.type}
+                alt="Home Team Creativity Logo"
+                className="tshirt"
+                />
+                <img
+                  src={"api/images/" + currentDesign.filename}
+                  alt={currentDesign.product_name}
+                  className="design"
+                />
+              </div>
+            </div>
+          </div>
+        }
         {userId ?
           <div className="orderMain">
             <h3>Style Your Product With The Options Below</h3>

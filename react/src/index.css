@@ -60,6 +60,17 @@ body {
   background-color: #858585;
 }
 
+.magnify {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+  width: 100%;
+}
+
+.magnify:hover {
+  background-color: #858585;
+}
+
 .cart {
   width: 80px;
   height: 80px;
@@ -1020,7 +1031,7 @@ footer {
 
 .orderItem-dialog {
   max-height: 100%;
-  max-width: 50%;
+  width: 50%;
   text-align: center;
 }
 
@@ -1039,6 +1050,10 @@ footer {
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .orderItem-dialog {
+    width: 75%;
+  }
+
   .homeSide {   
     -ms-flex: 100%; /* IE10 */
     flex: 100%;
@@ -1323,6 +1338,10 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .orderItem-dialog {
+    width: 100%;
+  }
+
   .homeProductsCell {
     width: 100%;
     max-width: 100%;
