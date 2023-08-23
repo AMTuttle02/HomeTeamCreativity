@@ -127,6 +127,7 @@ function Cart() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [customHighTotal, setCustomHighTotal] = useState(0);
   const [deleteProduct, setDeleteProduct] = useState("");
+  const [enlarge, setEnlarge] = useState(false);
 
   const checkout = (order) => {
     if (order['total_cost'] > 0) {
@@ -333,6 +334,12 @@ function Cart() {
     setDeleteProduct(product);
     setShowConfirmation(true);
   }
+
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('.fullDesign')) {
+      setEnlarge(false);
+    }
+  };
   
   return (
     <div className="mycart">
@@ -382,18 +389,22 @@ function Cart() {
               {product.product_id ?
                 <div className="cartProductRow">
                   <div className="productsCell">
-                    <div className="fullDesign">
-                      <img
-                        src={setType(product.product_type, product.color)}
-                        alt="Home Team Creativity Logo"
-                        className="tshirt"
-                      />
-                      <img
-                        src={"api/images/" + product.filename}
-                        alt={product.filename}
-                        className="design"
-                      />
-                    </div>
+                    <button 
+                          className="magnify"
+                          onClick={() => setEnlarge(true)}>
+                      <div className="fullDesign">
+                        <img
+                          src={setType(product.product_type, product.color)}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
+                        />
+                        <img
+                          src={"api/images/" + product.filename}
+                          alt={product.filename}
+                          className="design"
+                        />
+                      </div>
+                    </button>
                   </div>
                   <div className="productsCell">
                     <br />
@@ -434,6 +445,25 @@ function Cart() {
                     <br /><br /><br /><br /><br /><br />
                     <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                   </div>
+                  {enlarge &&
+                    <div className="confirmation-modal" onClick={handleOutsideClick}>
+                      <div className="orderItem-dialog">
+                        <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
+                        <div className="fullDesign">
+                          <img
+                            src={setType(product.product_type, product.color)}
+                            alt="Home Team Creativity Logo"
+                            className="tshirt"
+                          />
+                          <img
+                            src={"api/images/" + product.filename}
+                            alt={product.filename}
+                            className="design"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  }
                 </div>
               :
                 <div className="customProduct">
