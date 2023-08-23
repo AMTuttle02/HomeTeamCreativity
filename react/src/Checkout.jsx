@@ -121,6 +121,8 @@ function Checkout() {
   const [name, setName] = useState("");
   const [products, setProducts] = useState([]);
   const [customHighTotal, setCustomHighTotal] = useState(0);
+  const [enlarge, setEnlarge] = useState(false);
+  const [enlargeProduct, setEnlargeProduct] = useState(false);
 
   useEffect(() => {
     fetch("/api/previousOrder.php")
@@ -194,6 +196,17 @@ function Checkout() {
     }
   }
 
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('.fullDesign')) {
+      setEnlarge(false);
+    }
+  };
+
+  const confirmEnlarge = (product) => {
+    setEnlargeProduct(product);
+    setEnlarge(true);
+  }
+
   return (
     <div className="Checkout">
       {userId ? 
@@ -217,18 +230,22 @@ function Checkout() {
               {product.product_id ?
                 <div className="cartProductRow">
                   <div className="productsCell">
-                    <div className="fullDesign">
-                    <img
-                      src={setType(product.product_type, product.color)}
-                      alt="Home Team Creativity Logo"
-                      className="tshirt"
-                    />
-                    <img
-                      src={"api/images/" + product.filename}
-                      alt={product.filename}
-                      className="design"
-                    />
-                    </div>
+                    <button 
+                          className="magnify"
+                          onClick={() => confirmEnlarge(product)}>
+                      <div className="fullDesign">
+                        <img
+                          src={setType(product.product_type, product.color)}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
+                        />
+                        <img
+                          src={"api/images/" + product.filename}
+                          alt={product.filename}
+                          className="design"
+                        />
+                      </div>
+                    </button>
                   </div>
                   <div className="productsCell">
                     <br />
@@ -255,18 +272,22 @@ function Checkout() {
               :
                 <div className="cartProductRow">
                   <div className="productsCell">
-                    <div className="fullDesign">
-                    <img
-                      src={setType(product.product_type, product.color)}
-                      alt="Home Team Creativity Logo"
-                      className="tshirt"
-                    />
-                    <img
-                      src={"api/images/" + determineDesign(product.color)}
-                      alt={product.filename}
-                      className="design"
-                    />
-                    </div>
+                    <button 
+                          className="magnify"
+                          onClick={() => confirmEnlarge(product)}>
+                      <div className="fullDesign">
+                        <img
+                          src={setType(product.product_type, product.color)}
+                          alt="Home Team Creativity Logo"
+                          className="tshirt"
+                        />
+                        <img
+                          src={"api/images/" + determineDesign(product.color)}
+                          alt={product.filename}
+                          className="design"
+                        />
+                      </div>
+                    </button>
                   </div>
                   <div className="productsCell">
                     <br />
@@ -288,6 +309,25 @@ function Checkout() {
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
                     <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) * product.product_quantity * 1 +customHighTotal)}</h2>
+                  </div>
+                </div>
+              }
+              {enlarge && enlargeProduct === product &&
+                <div className="confirmation-modal" onClick={handleOutsideClick}>
+                  <div className="orderItem-dialog">
+                    <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
+                    <div className="fullDesign">
+                      <img
+                        src={setType(product.product_type, product.color)}
+                        alt="Home Team Creativity Logo"
+                        className="tshirt"
+                      />
+                      <img
+                        src={"api/images/" + product.filename}
+                        alt={product.filename}
+                        className="design"
+                      />
+                    </div>
                   </div>
                 </div>
               }
