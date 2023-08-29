@@ -72,6 +72,8 @@ function Order() {
   const [cColors, setCColors] = useState("");
   const [hColors, setHColors] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [nameOnBack, setNameOnBack] = useState(false);
+  const [numberOnBack, setNumberOnBack] = useState(false);
 
   useEffect(() => {
     retrieveProduct();
@@ -84,6 +86,8 @@ function Order() {
         if (data) {
           console.log(data);
           setDesign(data);
+          setNameOnBack(data[0].nameOnBack);
+          setNumberOnBack(data[0].numberOnBack);
           let retrieveDefault = data[0];
           for (let i = 0; i < data.length; ++i) {
             if (data[i].product_id < retrieveDefault.product_id) {
@@ -529,11 +533,21 @@ function Order() {
   };
 
   const addToCart = () => {
+    let details = "No custom details"
+    if (nameOnBack && numberOnBack) {
+      details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
+    }
+    else if (nameOnBack) {
+      details = "Name: " + nameOnBackDetails;
+    }
+    else if (numberOnBack) {
+      details = "Number: " + numberOnBackDetails;
+    }
     console.log(currentDesign);
     fetch("/api/addToCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         order_id: 100, 
         product_id: currentDesign.product_id, 
         quantity: quantity, 
@@ -541,7 +555,7 @@ function Order() {
         product_type: productType.description,
         size: size.description,
         price: ((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity,
-        product_details: "No Custom Details"}),
+        product_details: details}),
     })
     .then((response) => response.json())
     .then((data) => {
@@ -727,6 +741,16 @@ function Order() {
       setShowConfirmation(false);
     }
   };
+
+  const [nameOnBackDetails, setNameOnBackDetails] = useState("");
+  function handleNameOnBackDetails(event) {
+    setNameOnBackDetails(event.target.value);
+  }
+
+  const [numberOnBackDetails, setNumberOnBackDetails] = useState(0);
+  function handleNumberOnBackDetails(event) {
+    setNumberOnBackDetails(event.target.value);
+  }
 
   return (
     <div className="Order">
@@ -1186,6 +1210,32 @@ function Order() {
               <div />
               }
             </div>
+            {nameOnBack && 
+              <>
+                <h2>Name: {' '}
+                  <input
+                    type="text"
+                    value={nameOnBackDetails}
+                    onChange={handleNameOnBackDetails}
+                    placeholder="Enter Name For Back Of Product Here"
+                    className="lastNameOrderPage"
+                  />
+                </h2>
+              </>
+            }
+            {numberOnBack && 
+              <>
+                <h2>Number:{' '}
+                <input
+                  type="number"
+                  value={numberOnBackDetails}
+                  onChange={handleNumberOnBackDetails}
+                  min={0}
+                  max={99}
+                />
+                </h2>
+              </>
+            }
             <br />
             <h1>Quantity: {" "}
               <button 
