@@ -393,64 +393,72 @@ function Cart() {
           {products.map((product) => (
             <div key={[product.product_id, product.product_type, product.size, product.color]}>
               {product.product_id ?
-                <div className="cartProductRow">
-                  <div className="productsCell">
-                    <button 
-                          className="magnify"
-                          onClick={() => confirmEnlarge(product)}>
-                      <div className="fullDesign">
-                        <img
-                          src={setType(product.product_type, product.color)}
-                          alt="Home Team Creativity Logo"
-                          className="tshirt"
-                        />
-                        <img
-                          src={"api/images/" + product.filename}
-                          alt={product.filename}
-                          className="design"
-                        />
-                      </div>
-                    </button>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2> <b> {product.product_name} </b></h2> 
-                    <h2> Style: {product.product_type} </h2>
-                    <h2> Size: {product.size} </h2>
-                    <h2> Color: {product.color} </h2>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2>${setPrice(product.price, product.product_type, product.size)} </h2>
-                    <br /><br />
-                    <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
-                      {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
-                    </h2>
-                    <br /><br />
-                    <h2>
-                      <button onClick={() => confirmDelete(product)} className="CartRemoveProductButton">
-                        Delete
+                <div className="customProduct">
+                  <div className="cartProductRow">
+                    <div className="productsCell">
+                      <button 
+                            className="magnify"
+                            onClick={() => confirmEnlarge(product)}>
+                        <div className="fullDesign">
+                          <img
+                            src={setType(product.product_type, product.color)}
+                            alt="Home Team Creativity Logo"
+                            className="tshirt"
+                          />
+                          <img
+                            src={"api/images/" + product.filename}
+                            alt={product.filename}
+                            className="design"
+                          />
+                        </div>
                       </button>
-                    </h2>
-                  </div>
-                  {showConfirmation && deleteProduct === product &&
-                    <div className="confirmation-modal">
-                      <div className="confirmation-dialog">
-                        <h3>Confirm Delete</h3>
-                        <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
-                        <div className="confirmation-buttons">
-                          <button onClick={() => setShowConfirmation(false)}>Cancel</button>
-                          <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
+                    </div>
+                    <div className="productsCell">
+                      <br />
+                      <h2> <b> {product.product_name} </b></h2> 
+                      <h2> Style: {product.product_type} </h2>
+                      <h2> Size: {product.size} </h2>
+                      <h2> Color: {product.color} </h2>
+                    </div>
+                    <div className="productsCell">
+                      <br />
+                      <h2>${setPrice(product.price, product.product_type, product.size)} </h2>
+                      <br /><br />
+                      <h2> 
+                        Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
+                        {product.product_quantity} 
+                        <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
+                      </h2>
+                      <br /><br />
+                      <h2>
+                        <button onClick={() => confirmDelete(product)} className="CartRemoveProductButton">
+                          Delete
+                        </button>
+                      </h2>
+                    </div>
+                    {showConfirmation && deleteProduct === product &&
+                      <div className="confirmation-modal">
+                        <div className="confirmation-dialog">
+                          <h3>Confirm Delete</h3>
+                          <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
+                          <div className="confirmation-buttons">
+                            <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                            <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
+                          </div>
                         </div>
                       </div>
+                    }
+                    <div className="productsCell">
+                      <br /><br /><br /><br /><br /><br />
+                      <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                     </div>
-                  }
-                  <div className="productsCell">
-                    <br /><br /><br /><br /><br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
                   </div>
+                  <br />
+                  <h3 className="margin"> 
+                    <b>Custom Details: </b>
+                    {product.product_details} 
+                  </h3>
+                  <br />
                 </div>
               :
                 <div className="customProduct">
