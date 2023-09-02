@@ -594,31 +594,23 @@ function Order() {
           "Royal": RoyalTshirt,
           "White": WhiteTshirt
         };
-        if (size.description.includes("Youth") && tShirtColor == "Navy") {
-          setTShirtColor(design.tColors.split(" ")[0]);
-          setTshirt(tShirtMap[design.tColors.split(" ")[0]]);
+        if (currentDesign.tColors.includes(tShirtColor)) {
           setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
           setCurrentColor(tShirtColor);
         }
+        else if (currentDesign.tColors){
+          const color = currentDesign.tColors.match(regex)[0];
+          setTShirtColor(color);
+          setTshirt(tShirtMap[color]);
+          setCurrentColor(color);
+          setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+        }
         else {
-          if (currentDesign.tColors.includes(tShirtColor)) {
-            setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-            setCurrentColor(tShirtColor);
-          }
-          else if (currentDesign.tColors){
-            const color = currentDesign.tColors.match(regex)[0];
-            setTShirtColor(color);
-            setTshirt(tShirtMap[color]);
-            setCurrentColor(color);
-            setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-          }
-          else {
-            const color = defaultDesign.tColors.match(regex)[0];
-            setTShirtColor(color);
-            setTshirt(tShirtMap[color]);
-            setCurrentColor(color);
-            setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-          }
+          const color = defaultDesign.tColors.match(regex)[0];
+          setTShirtColor(color);
+          setTshirt(tShirtMap[color]);
+          setCurrentColor(color);
+          setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
         }
       }
       else if (currentStyle == "Crewneck Sweatshirt") {
@@ -712,11 +704,6 @@ function Order() {
         if (size.description == "Adult XXX-Large") {
           setSize({description: "Adult XX-Large", addedCost: 2});
         }
-      }
-
-      if (currentColor == "Navy" && size.description.includes("Youth") && currentStyle == "Short Sleeve T-Shirt") {
-        setCurrentColor(currentDesign.tColors.split(" ")[0]);
-        setProductType({type: BlackTshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
       }
     }
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size, currentDesign]);
@@ -993,7 +980,7 @@ function Order() {
                 />
               </button>
               : <div /> }
-              {tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" && !size.description.includes("Youth")?
+              {tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" ?
               <button 
                 onClick={() => changeColor(navy)}
                 className="productTypes">
