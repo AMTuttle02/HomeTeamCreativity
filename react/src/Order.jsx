@@ -107,7 +107,8 @@ function Order() {
             "Purple": PurpleTshirt,
             "Red": RedTshirt,
             "Royal": RoyalTshirt,
-            "White": WhiteTshirt
+            "White": WhiteTshirt,
+            "Navy": NavyTshirt
           }
           const regex = /\S+/;
           if (data[0].tColors) {
