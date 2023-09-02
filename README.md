@@ -1,6 +1,9 @@
 # HomeTeamCreativity
 Database-Driven Website for Home Team Creativity  
 https://www.hometeamcreativity.com  
+
+## To Do List
+https://ufindlay-my.sharepoint.com/:x:/g/personal/tuttlem2_findlay_edu/EdaYQbRsWVlFgGAmwEez-3EBvlVPPv5tjJLoOYsM91FH_g?e=1yUaFd&nav=MTVfe0VCMTIzN0UxLTc3MjEtNEMyOC1BOUI2LTFCRUYzMjY5OThFM30
   
 ## How To Run
 - UI (frontend): localhost
