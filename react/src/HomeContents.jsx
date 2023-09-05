@@ -11,6 +11,7 @@ import OrangeTshirt from "./assets/OrangeTShirt.png";
 import PurpleTshirt from "./assets/PurpleTShirt.png";
 import RoyalTshirt from "./assets/RoyalTShirt.png";
 import WhiteTshirt from "./assets/WhiteTShirt.png";
+import NavyTshirt from "./assets/NavyTShirt.png";
 import { Outlet, Link } from "react-router-dom";
 
 function HomeContents() {
@@ -51,7 +52,8 @@ function HomeContents() {
       "Purple": PurpleTshirt,
       "Red": RedTshirt,
       "Royal": RoyalTshirt,
-      "White": WhiteTshirt
+      "White": WhiteTshirt,
+      "Navy": NavyTshirt
     }
     const regex = /\S+/;
     let firstWord = product.tColors.match(regex)[0];
