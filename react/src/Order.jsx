@@ -192,6 +192,7 @@ function Order() {
   const [size, setSize] = useState({description: "Adult Medium", addedCost: 0});
   const [quantity, setQuantity] = useState(1);
   const [failed, setFailed] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const changeColor = (e) => {
     if (e == gray) {
@@ -568,6 +569,14 @@ function Order() {
       }
     })
   };
+
+  useEffect(() => {
+    fetch("/api/session.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setUserId(data.userId);
+      });
+  }, []);
 
   useEffect(() => {
     if (currentDesign) {
