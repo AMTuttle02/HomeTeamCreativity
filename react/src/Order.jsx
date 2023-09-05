@@ -533,8 +533,19 @@ function Order() {
     }
   };
 
+  const notInCart = (pID, color, style, size) => {
+    if (pID == localStorage.getItem("product_id") && color == localStorage.getItem("color") && style == localStorage.getItem("product_type") && size == localStorage.getItem("size")) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  
+  }
+
   const addToCart = () => {
-    let details = "No custom details"
+    let details = "No custom details";
+    let oID = 0;
     if (nameOnBack && numberOnBack) {
       details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
     }
@@ -545,11 +556,21 @@ function Order() {
       details = "Number: " + numberOnBackDetails;
     }
     console.log(currentDesign);
+    if (userId) {
+      oID = 0;
+    }
+    else if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID")
+    }
+    else {
+      oID = 1;
+    }
+    
     fetch("/api/addToCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        order_id: 100, 
+        order_id: oID, 
         product_id: currentDesign.product_id, 
         quantity: quantity, 
         color: currentColor,
@@ -562,6 +583,10 @@ function Order() {
     .then((data) => {
       if (data == 1) {
         navigate("/cart");;
+      }
+      else if (data > 1) {
+        localStorage.setItem("oID", data);
+        navigate("/cart");
       }
       else {
         console.log(data);

@@ -5,6 +5,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
 
+require_once 'secrets.php';
+
 session_start();
 
 include 'conn.php';
@@ -13,29 +15,82 @@ include 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
 
-  $orderId = 0;
-  // Insert product to users cart
-  $query = $conn->prepare(
-                        "SELECT *
-                        FROM orders
-                        WHERE user_id = ? AND is_active = 1 AND is_cart = 1");
-  $query->bind_param(
-                    "s",
-                    $_SESSION["userId"]);
-  if (!$query->execute()) {
-    die("Query failed: " . $stmt->error);
+  $orderId = $inputs['order_id'];
+  $uID = 0;
+  if ($orderId == 0) {
+    $query = $conn->prepare(
+                          "SELECT *
+                          FROM orders
+                          WHERE user_id = ? AND is_active = 1 AND is_cart = 1");
+    $query->bind_param(
+                      "s",
+                      $_SESSION["userId"]);
+    if (!$query->execute()) {
+      die("Query failed: " . $stmt->error);
+    }
+
+    $result = $query->get_result();
+
+    if (!$result) {
+      die("Result set failed: " . $conn->error);
+    }
+
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $orderId = $row['order_id'];
+      $totalCost = $row['total_cost'];
+    }
   }
+  else if ($orderId == 1) {
+    $uID = NAU_ID;
+    $query = $conn->prepare(
+      "INSERT INTO orders (user_id, total_cost, is_cart)
+      VALUES ($uID, 0, 1);");
+    if (!$query->execute()) {
+      die("Query failed: " . $stmt->error);
+    }
+    $query = $conn->prepare(
+      "SELECT order_id, total_cost
+      FROM orders
+      WHERE user_id = $uID AND is_active = 1 AND is_cart = 1
+      ORDER BY order_date DESC
+      LIMIT 1");
+    if (!$query->execute()) {
+      die("Query failed: " . $stmt->error);
+    }
 
-  $result = $query->get_result();
+    $result = $query->get_result();
 
-  if (!$result) {
-    die("Result set failed: " . $conn->error);
+    if (!$result) {
+      die("Result set failed: " . $conn->error);
+    }
+
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $orderId = $row['order_id'];
+      $totalCost = $row['total_cost'];
+    }
   }
+  else {
+    $query = $conn->prepare(
+      "SELECT order_id, total_cost
+      FROM orders
+      WHERE order_id = $orderId");
+    if (!$query->execute()) {
+      die("Query failed: " . $stmt->error);
+    }
 
-  if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $orderId = $row['order_id'];
-    $totalCost = $row['total_cost'];
+    $result = $query->get_result();
+
+    if (!$result) {
+      die("Result set failed: " . $conn->error);
+    }
+
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $orderId = $row['order_id'];
+      $totalCost = $row['total_cost'];
+    }
   }
 
   $productCost = $inputs['price'];
@@ -70,7 +125,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       die(json_encode(0));
     }
     else {
-      echo json_encode(1);
+      if ($uID) {
+        echo json_encode($orderId);
+      }
+      else {
+        echo json_encode(1);
+      }
     }
   }
 }
