@@ -107,6 +107,7 @@ function SignUp() {
         .then((data) => {
           // If the email and password are valid, redirect to the homepage
           if (data.loggedin) {
+            localStorage.clear();
             window.location.href = '/loggedin';
           } else {
             // If the email and password are not valid, display an error message
