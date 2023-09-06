@@ -533,16 +533,6 @@ function Order() {
     }
   };
 
-  const notInCart = (pID, color, style, size) => {
-    if (pID == localStorage.getItem("product_id") && color == localStorage.getItem("color") && style == localStorage.getItem("product_type") && size == localStorage.getItem("size")) {
-      return false;
-    }
-    else {
-      return true;
-    }
-  
-  }
-
   const addToCart = () => {
     let details = "No custom details";
     let oID = 0;
