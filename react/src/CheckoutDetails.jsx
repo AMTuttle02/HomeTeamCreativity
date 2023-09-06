@@ -100,7 +100,6 @@ function CheckoutDetails() {
             .then((data) => {
                 // If the email and password are valid, redirect to the homepage
                 if (data) {
-                    localStorage.clear();
                     window.location.href = "/api/checkoutNoPay.php";
                 }
             });

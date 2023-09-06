@@ -125,7 +125,15 @@ function Checkout() {
   const [enlargeProduct, setEnlargeProduct] = useState(false);
 
   useEffect(() => {
-    fetch("/api/previousOrder.php")
+    let oID = 0;
+    if (localStorage.getItem("oID")) {
+        oID = localStorage.getItem("oID");
+        localStorage.clear();
+    }
+    else if (userId) {
+        oID = 0;
+    }
+    fetch("/api/recentOrderDetails.php")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -209,7 +217,6 @@ function Checkout() {
 
   return (
     <div className="Checkout">
-      {userId ? 
         <div className="success">
           <h1>Thank you for placing an order!</h1>
           <br />
@@ -221,7 +228,7 @@ function Checkout() {
           <br />
           <div className="cartMain">
             <br />
-            <h1>{name}'s Order Details</h1>
+            <h1>Order Details</h1>
           </div>
           <br />
           <div className="CartPage" />
@@ -336,19 +343,6 @@ function Checkout() {
             ))}
           <br/>
         </div>
-      :
-        <div>
-            <center>
-            <br/>
-            <h1>Sorry, you must be logged in to view your order.</h1>
-            <br />
-            <Link to="/login" className="addToCart">
-                Login Here
-            </Link>
-            </center>
-
-        </div>
-      }
     </div>
   );
 }
