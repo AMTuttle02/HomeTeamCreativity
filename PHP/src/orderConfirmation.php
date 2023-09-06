@@ -25,73 +25,69 @@ $inputs = json_decode(file_get_contents('php://input'), true);
 function setPrice ($price, $type, $size) {
     $price = $price * 1;
     if ($type == "Crewneck Sweatshirt") {
-      $price += 8;
-      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
-        $price -= 2;
-      }
-      else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
-        $price += 2;
-      }
+            $price += 8;
+        if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+            $price -= 2;
+        }
+        else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
+            $price += 2;
+        }
     }
     else if ($type == "Hooded Sweatshirt") {
-      $price += 12;
-      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
-        $price -= 2;
-      }
-      else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
-        $price += 2;
-      }
+            $price += 12;
+        if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+            $price -= 2;
+        }
+        else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
+            $price += 2;
+        }
     }
     else if ($type == "Long Sleeve T-Shirt") {
-      $price += 4;
-      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
-        $price -= 2;
-      }
-      else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
-        $price += 2;
-      }
+            $price += 4;
+        if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+            $price -= 2;
+        }
+        else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
+            $price += 2;
+        }
     }
     else {
-      if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
-        $price -= 2;
-      }
-      else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
-        $price += 2;
-      }
+        if ($size == "Youth Small" || $size == "Youth Medium" || $size == "Youth Large" || $size == "Youth X-Large") {
+            $price -= 2;
+        }
+        else if ($size == "Adult XX-Large" || $size == "Adult XXX-Large") {
+            $price += 2;
+        }
     }
     return $price;
-  }
-
-$query = $conn->prepare(
-                        "SELECT *
-                        FROM users
-                        WHERE user_id = ?");
-$query->bind_param(
-        "s",
-        $_SESSION["userId"]
-    );
-if (!$query->execute()) {
-    die("Query failed: " . $stmt->error);
 }
 
-$result = mysqli_fetch_assoc($query->get_result());
+if ($_SESSION["order_id"]) {
+    $orderId = $_SESSION["order_id"];
 
-$first = $result['first_name'];
-$last = $result['last_name'];
-$email = $result['email'];
-
-$userId = $_SESSION["userId"];
-
-// Obtain order details
-$query = $conn->prepare(
-    "SELECT *
-    FROM orders
-    WHERE user_id = ? AND is_active = 1 AND is_cart = 0 AND order_date = 
-        (SELECT MAX(order_date)
+    // Obtain order details
+    $query = $conn->prepare(
+        "SELECT *
         FROM orders
-        WHERE user_id = ? AND is_active = 1 AND is_cart = 0)"
-);
-$query->bind_param("ss", $userId, $userId);
+        WHERE order_id = ?"
+    );
+    $query->bind_param("s", $orderId);
+}
+else {
+    $userId = $_SESSION["userId"];
+
+    // Obtain order details
+    $query = $conn->prepare(
+        "SELECT *
+        FROM orders
+        WHERE user_id = ? AND is_active = 1 AND is_cart = 0 AND order_date = 
+            (SELECT MAX(order_date)
+            FROM orders
+            WHERE user_id = ? AND is_active = 1 AND is_cart = 0)"
+    );
+    $query->bind_param("ss", $userId, $userId);
+}
+
 if (!$query->execute()) {
     die("Query failed: " . $query->error);
 }
@@ -103,6 +99,9 @@ if (!$result) {
 }
 
 $orderId = $result['order_id'];
+$first = $result['first_name'];
+$last = $result['last_name'];
+$email = $result['email'];
 
 if (!$result['shipped']) {
     $subTotal = number_format($result['total_cost'], 2);

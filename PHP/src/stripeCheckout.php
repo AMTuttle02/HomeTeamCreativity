@@ -13,29 +13,55 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 
 include 'conn.php';
 
-$userId = $_SESSION["userId"];
+if ($_SESSION["order_id"]) {
+    $orderId = $_SESSION["order_id"];
 
-// Obtain order details
-$query = $conn->prepare(
-    "SELECT *
-    FROM orders
-    WHERE user_id = $userId AND is_active = 1 AND is_cart = 1"
-);
-if (!$query->execute()) {
-    die("Query failed: " . $query->error);
+    // Obtain order details
+    $query = $conn->prepare(
+        "SELECT *
+        FROM orders
+        WHERE order_id = $orderId"
+    );
+    if (!$query->execute()) {
+        die("Query failed: " . $query->error);
+    }
+
+    $result = mysqli_fetch_assoc($query->get_result());
+
+    if (!$result) {
+        die("Result set failed: " . $conn->error);
+    }
+
+    $subTotal = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
+    $total_cost = number_format(($subTotal * 1) + ($subTotal * 0.0725), 2);
+
+    $total_cost = $total_cost * 100;
 }
+else {
+    $userId = $_SESSION["userId"];
 
-$result = mysqli_fetch_assoc($query->get_result());
+    // Obtain order details
+    $query = $conn->prepare(
+        "SELECT *
+        FROM orders
+        WHERE user_id = $userId AND is_active = 1 AND is_cart = 1"
+    );
+    if (!$query->execute()) {
+        die("Query failed: " . $query->error);
+    }
 
-if (!$result) {
-    die("Result set failed: " . $conn->error);
+    $result = mysqli_fetch_assoc($query->get_result());
+
+    if (!$result) {
+        die("Result set failed: " . $conn->error);
+    }
+
+    $orderId = $result['order_id'];
+    $subTotal = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
+    $total_cost = number_format(($subTotal * 1) + ($subTotal * 0.0725), 2);
+
+    $total_cost = $total_cost * 100;
 }
-
-$orderId = $result['order_id'];
-$subTotal = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
-$total_cost = number_format(($subTotal * 1) + ($subTotal * 0.0725), 2);
-
-$total_cost = $total_cost * 100;
 
 // stripe integration
 require_once 'vendor/autoload.php';
@@ -47,7 +73,7 @@ header('Content-Type: application/json');
 $YOUR_DOMAIN = DOMAIN;
 
 $checkout_session = \Stripe\Checkout\Session::create([
-  'line_items' => [
+'line_items' => [
         [
             'price_data' => [
                 'currency' => 'usd',
@@ -60,9 +86,9 @@ $checkout_session = \Stripe\Checkout\Session::create([
             'quantity' => 1,
         ]
     ],
-  'mode' => 'payment',
-  'success_url' => $YOUR_DOMAIN . '/api/checkout.php',
-  'cancel_url' => $YOUR_DOMAIN . '/cart',
+'mode' => 'payment',
+'success_url' => $YOUR_DOMAIN . '/api/checkout.php',
+'cancel_url' => $YOUR_DOMAIN . '/cart',
 ]);
 
 header("HTTP/1.1 303 See Other");
