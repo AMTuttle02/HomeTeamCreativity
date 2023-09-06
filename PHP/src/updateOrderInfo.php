@@ -17,40 +17,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ship = $inputs['shipping'];
     $location = $inputs['dbLocation'];
 
-    $userId = $_SESSION["userId"];
+    if ($inputs["order_id"]) {
+        $orderId = $inputs["order_id"];
 
-    // Obtain order details
-    $query = $conn->prepare(
-        "SELECT *
-        FROM orders
-        WHERE user_id = $userId AND is_active = 1 AND is_cart = 1"
-    );
-    if (!$query->execute()) {
-        die("Query failed: " . $query->error);
+        $query = $conn->prepare(
+                            "UPDATE orders
+                            SET location = ?, shipped = ?, email = ?, first_name = ?, last_name = ?
+                            WHERE order_id = ?");
+        $query->bind_param(
+                        "ssssss",
+                        $location,
+                        $ship,
+                        $email,
+                        $first,
+                        $last,
+                        $orderId);
+        if (!$query->execute()) {
+            die("Query failed: " . $stmt->error);
+        }
+        $_SESSION['order_id'] = $orderId;
     }
+    else {
+        $userId = $_SESSION["userId"];
 
-    $result = mysqli_fetch_assoc($query->get_result());
+        // Obtain order details
+        $query = $conn->prepare(
+            "SELECT *
+            FROM orders
+            WHERE user_id = $userId AND is_active = 1 AND is_cart = 1"
+        );
+        if (!$query->execute()) {
+            die("Query failed: " . $query->error);
+        }
 
-    if (!$result) {
-        die("Result set failed: " . $conn->error);
-    }
+        $result = mysqli_fetch_assoc($query->get_result());
 
-    $orderId = $result['order_id'];
+        if (!$result) {
+            die("Result set failed: " . $conn->error);
+        }
 
-    $query = $conn->prepare(
-                        "UPDATE orders
-                        SET location = ?, shipped = ?, email = ?, first_name = ?, last_name = ?
-                        WHERE order_id = ?");
-    $query->bind_param(
-                    "ssssss",
-                    $location,
-                    $ship,
-                    $email,
-                    $first,
-                    $last,
-                    $orderId);
-    if (!$query->execute()) {
-        die("Query failed: " . $stmt->error);
+        $orderId = $result['order_id'];
+
+        $query = $conn->prepare(
+                            "UPDATE orders
+                            SET location = ?, shipped = ?, email = ?, first_name = ?, last_name = ?
+                            WHERE order_id = ?");
+        $query->bind_param(
+                        "ssssss",
+                        $location,
+                        $ship,
+                        $email,
+                        $first,
+                        $last,
+                        $orderId);
+        if (!$query->execute()) {
+            die("Query failed: " . $stmt->error);
+        }
     }
 
     mysqli_close($conn);

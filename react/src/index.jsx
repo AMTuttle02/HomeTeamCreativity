@@ -17,12 +17,13 @@ import NoResults from "./NoResults";
 import Cart from "./Cart";
 import Order from "./Order";
 import CustomOrder from "./CustomOrder";
-import Checkout from "./Checkout";
+import Checkout from "./CheckoutComplete";
 import CheckoutFailed from "./CheckoutFailed";
 import ReturnPolicy from "./ReturnPolicy";
 import CheckoutDetails from "./CheckoutDetails";
 import PayLater from "./PayLater";
 import Dashboard from "./Dashboard";
+import PreviousOrder from "./PreviousOrder";
 
 export default function App() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="paylater" element={<PayLater />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="previousOrder" element={<PreviousOrder />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
