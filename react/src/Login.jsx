@@ -41,6 +41,7 @@ function Login() {
                 .then((response) => response.json())
                 .then((data) => {
                   if (data.loggedin) {
+                    localStorage.clear();
                     setLoggedIn(true);
                   } else {
                     setBadLogin(true);
