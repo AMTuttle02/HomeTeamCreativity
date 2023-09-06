@@ -316,13 +316,27 @@ function Cart() {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       setOrder(data);
     });
   }, []);
 
-  useEffect(() => { 
-    fetch("/api/getCart.php")
+  useEffect(() => {
+    let oID = 0;
+    if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID");
+    }
+    else if (userId) {
+      oID = 0;
+    }
+    else {
+    }
+    fetch("/api/getCart.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: oID
+      }),
+    })
     .then((response) => response.json())
     .then((data) => {
       setProducts(data);
