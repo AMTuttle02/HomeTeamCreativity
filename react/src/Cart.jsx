@@ -328,8 +328,6 @@ function Cart() {
     else if (userId) {
       oID = 0;
     }
-    else {
-    }
     fetch("/api/getCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -353,10 +351,28 @@ function Cart() {
   }, []);
 
   useEffect(() => { 
-    fetch("/api/totalItems.php")
+    let oID = 0;
+    if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID");
+    }
+    else if (userId) {
+      oID = 0;
+    }
+    fetch("/api/totalItems.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: oID
+      }),
+    })
     .then((response) => response.json())
     .then((data) => {
-      setAddedItems(data["SUM(product_quantity)"]);
+      if (data["SUM(product_quantity)"]) {
+        setAddedItems(data["SUM(product_quantity)"]);
+      }
+      else {
+        setAddedItems(0);
+      }
     })
   }, []);
 
