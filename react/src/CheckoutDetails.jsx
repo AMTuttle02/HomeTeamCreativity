@@ -129,7 +129,9 @@ function CheckoutDetails() {
           setOrder(data);
         });
       }, []);
+
     
+    const [customHighTotal, setCustomHighTotal] = useState(0);
     useEffect(() => {
     let oID = 0;
     if (localStorage.getItem("oID")) {
@@ -147,13 +149,14 @@ function CheckoutDetails() {
     })
     .then((response) => response.json())
     .then((data) => {
-        setProducts(data);
         console.log(data);
         let total = 0;
         for (let i = 0; i < data.length; ++i) {
             if (data[i].product_id == 0) {
                 setNotCustomOrder(0);
+                total += (6 * data[i].product_quantity);
             }
+            setCustomHighTotal(total);
         }
     });
     }, []);
@@ -191,37 +194,6 @@ function CheckoutDetails() {
             setTax((temp * 0.0725).toFixed(2));
         }
     }, [paying, notCustomOrder, order])
-
-    const [customHighTotal, setCustomHighTotal] = useState(0);
-    useEffect(() => {
-        let oID = 0;
-        if (localStorage.getItem("oID")) {
-          oID = localStorage.getItem("oID");
-        }
-        else if (userId) {
-          oID = 0;
-        }
-        fetch("/api/getCart.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            order_id: oID
-          }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          setProducts(data);
-          console.log(data);
-          let total = 0;
-          for (let i = 0; i < data.length; ++i) {
-            console.log(data[i].product_id);
-            if (data[i].product_id == 0) {
-              total += (6 * data[i].product_quantity)
-            }
-          }
-          setCustomHighTotal(total);
-        });
-      }, []);
 
     const onlineTotalCost = (subtotal) => {
         let total = (subtotal * 1 + tax * 1 + processingFee * 1);
