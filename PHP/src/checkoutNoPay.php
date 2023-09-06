@@ -47,6 +47,27 @@ if (!$query->execute()) {
     die("Query failed: " . $stmt->error);
 }
 
+if ($_SESSION["order_id"]) {}
+else {
+    $query = $conn->prepare(
+                            "INSERT INTO orders (user_id, total_cost, is_cart)
+                            VALUES (?, 0, 1);");
+    if ($_SESSION["order_id"]) {
+        $userId = NAU_ID;
+        $query->bind_param(
+            "s",
+            $userId);
+    }
+    else {
+        $query->bind_param(
+                            "s",
+                            $_SESSION["userId"]);
+    }
+    if (!$query->execute()) {
+        die("Query failed: " . $query->error);
+    }
+}
+
 include 'orderConfirmation.php';
 
 mysqli_close($conn);
