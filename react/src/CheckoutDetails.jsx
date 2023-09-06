@@ -37,7 +37,7 @@ function CheckoutDetails() {
             setLocationError("Please provide a shipping address.");
             return false;
         }
-        else if (location == "") {
+        else if (!shipping && location == "") {
             setNameError("");
             setEmailError("");
             setLocationError("Please provide a drop off location.");
