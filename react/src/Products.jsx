@@ -94,6 +94,81 @@ function Products() {
 
   return (
     <div className="Products">
+        <div className="productFilterRow">
+          <div className="button-wrapper">
+            <button>Faith</button>
+          </div>
+          <div className="button-wrapper">
+            <button>Family</button>
+          </div>
+          <div className="button-wrapper">
+            <button>Health &#9660;</button>
+            <div className="subcategories">
+              <button>Autism</button>
+            </div>
+          </div>
+          <div className="button-wrapper">
+            <button>Holiday &#9660;</button>
+              <div className="subcategories">
+                <button>Christmas</button>
+                <button>Halloween</button>
+                <button>Thanksgiving</button>
+                <button>Valentines</button>
+              </div>
+          </div>
+          <div className="button-wrapper">
+            <button>Ohio</button>
+          </div>
+          <div className="button-wrapper">
+            <button>Other &#9660;</button>
+              <div className="subcategories">
+                <button>Disney</button>
+                <button>Farming</button>
+                <button>Fishing</button>
+                <button>Friends Sitcom</button>
+                <button>Quotes</button>
+                <button>Scouts</button>
+              </div>
+          </div>
+          <div className="button-wrapper">
+            <button>Patriotic</button>
+          </div>
+          <div className="button-wrapper">
+            <button>School &#9660;</button>
+              <div className="subcategories">
+                <button>Akron</button>
+                <button>Chicago Moos</button>
+                <button>Findlay</button>
+                <button>Galion</button>
+                <button>Kentucky</button>
+                <button>Mount Gilead</button>
+                <button>Northmor</button>
+                <button>Ontario</button>
+                <button>St. Joseph</button>
+                <button>Seniors</button>
+                <button>Teachers</button>
+              </div>
+          </div>
+          <div className="button-wrapper">
+            <button>Seasons &#9660;</button>
+              <div className="subcategories">
+                <button>Fall</button>
+                <button>Spring</button>
+                <button>Summer</button>
+                <button>Winter</button>
+              </div>
+          </div>
+          <div className="button-wrapper">
+            <button>Sports &#9660;</button>
+              <div className="subcategories">
+                <button>Baseball</button>
+                <button>Basketball</button>
+                <button>Bowling</button>
+                <button>Dance</button>
+                <button>Football</button>
+              </div>
+          </div>
+        </div>
       <h1>Products</h1>
       <p>
         For custom apparel,{" "}
