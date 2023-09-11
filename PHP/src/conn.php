@@ -1,5 +1,5 @@
 <?php
-require 'secrets.php';
+require_once 'secrets.php';
 
 $servername = SERVER;
 $user = MYSQL_USER;
