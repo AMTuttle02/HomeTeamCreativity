@@ -534,55 +534,20 @@ function CustomOrder() {
 
   useEffect(() => {
     if (currentStyle == "Short Sleeve T-Shirt") {
-      if (size.description.includes("Youth") && tShirtColor == "Navy") {
-        const tShirtMap = {
-          "Black": BlackTshirt,
-          "Gray": GrayTshirt,
-          "Yellow": YellowTshirt,
-          "Pink": PinkTshirt,
-          "Green": GreenTshirt,
-          "Maroon": MaroonTshirt,
-          "Orange": OrangeTshirt,
-          "Purple": PurpleTshirt,
-          "Red": RedTshirt,
-          "Royal": RoyalTshirt,
-          "White": WhiteTshirt
-        }
-        setTShirtColor(design.tColors.split(" ")[0]);
-        setTshirt(tShirtMap[design.tColors.split(" ")[0]]);
-        setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-        setCurrentColor(tShirtColor);
-      }
-      else {
-        setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-        setCurrentColor(tShirtColor);
-      }
+      setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+      setCurrentColor(tShirtColor);
     }
     else if (currentStyle == "Crewneck Sweatshirt") {
       setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
       setCurrentColor(crewneckColor);
-      if (size.description == "Adult XXX-Large") {
-        setSize({description: "Adult XX-Large", addedCost: 2});
-      }
     }
     else if (currentStyle == "Long Sleeve T-Shirt") {
       setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
       setCurrentColor(longSleeveColor);
-      if (size.description == "Adult XXX-Large") {
-        setSize({description: "Adult XX-Large", addedCost: 2});
-      }
     }
     else if (currentStyle == "Hooded Sweatshirt") {
       setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
       setCurrentColor(hoodieColor);
-      if (size.description == "Adult XXX-Large") {
-        setSize({description: "Adult XX-Large", addedCost: 2});
-      }
-    }
-
-    if (currentColor == "Navy" && size.description.includes("Youth") && currentStyle == "Short Sleeve T-Shirt") {
-      setCurrentColor(design.tColors.split(" ")[0]);
-      setProductType({type: BlackTshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
     }
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size]);
 
@@ -833,7 +798,7 @@ function CustomOrder() {
               />
             </button>
             : <div /> }
-            {design.tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" && !size.description.includes("Youth")?
+            {design.tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" ?
             <button 
               onClick={() => changeColor(navy)}
               className="productTypes">
