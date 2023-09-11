@@ -4,7 +4,7 @@ import Homepage from "./Homepage"
 import HomeContents from "./HomeContents.jsx"
 import Login from "./Login";
 import SignUp from "./SignUp";
-import Products from "./products";
+import Products from "./Products";
 import HowItWorks from "./howItWorks";
 import About from "./aboutUs";
 import "./index.css";
