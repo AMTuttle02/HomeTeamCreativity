@@ -18,6 +18,22 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
+
+  useEffect(() => {
+    // Function to update the isMobile state variable based on screen size
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 1199);
+    }
+
+    // Attach the event listener
+    window.addEventListener('resize', handleResize);
+
+    // Remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const orderProduct = (productId) => {
     if (productId != 0) {
@@ -102,13 +118,13 @@ function Products() {
             <button>Family</button>
           </div>
           <div className="button-wrapper">
-            <button>Health &#9660;</button>
+            <button>Health {isMobile ? <></> : <>&#9660;</>}</button>
             <div className="subcategories">
               <button>Autism</button>
             </div>
           </div>
           <div className="button-wrapper">
-            <button>Holiday &#9660;</button>
+            <button>Holiday {isMobile ? <></> : <>&#9660;</>}</button>
               <div className="subcategories">
                 <button>Christmas</button>
                 <button>Halloween</button>
@@ -120,7 +136,7 @@ function Products() {
             <button>Ohio</button>
           </div>
           <div className="button-wrapper">
-            <button>Other &#9660;</button>
+            <button>Other {isMobile ? <></> : <>&#9660;</>}</button>
               <div className="subcategories">
                 <button>Disney</button>
                 <button>Farming</button>
@@ -134,7 +150,7 @@ function Products() {
             <button>Patriotic</button>
           </div>
           <div className="button-wrapper">
-            <button>School &#9660;</button>
+            <button>School {isMobile ? <></> : <>&#9660;</>}</button>
               <div className="subcategories">
                 <button>Akron</button>
                 <button>Chicago Moos</button>
@@ -150,7 +166,7 @@ function Products() {
               </div>
           </div>
           <div className="button-wrapper">
-            <button>Seasons &#9660;</button>
+            <button>Seasons {isMobile ? <></> : <>&#9660;</>}</button>
               <div className="subcategories">
                 <button>Fall</button>
                 <button>Spring</button>
@@ -159,7 +175,7 @@ function Products() {
               </div>
           </div>
           <div className="button-wrapper">
-            <button>Sports &#9660;</button>
+            <button>Sports {isMobile ? <></> : <>&#9660;</>}</button>
               <div className="subcategories">
                 <button>Baseball</button>
                 <button>Basketball</button>
