@@ -1079,7 +1079,7 @@ footer {
 .productFilterRow button {
   width: 100%;
   padding: 15px 10%;
-  background-color: #1b7bb8;
+  background-color: transparent;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -1093,7 +1093,6 @@ footer {
 .subcategories {
   display: none; /* Initially hide subcategories */
   flex-direction: column; /* Stack subcategories vertically */
-  padding: 10px 10%;
   background-color: #1b7bb8; /* Background color for subcategories */
   position: absolute;
   top: 100%;
@@ -1105,6 +1104,10 @@ footer {
   display: block; /* Show subcategories on hover */
 }
 
+.button-wrapper:hover {
+  background-color: #134a6d;
+}
+
 .button-wrapper:last-child .subcategories {
   right: 0; /* Align the rightmost subcategories to the right edge of the container */
   left: auto;
@@ -1113,14 +1116,16 @@ footer {
 /* Modify subcategories button style */
 .subcategories button {
   /* Remove any inherited constraints */
-  width: auto;
-  padding: 10px 30px;
+  width: 100%;
+  padding: 10px 60px;
   display: block;
   white-space: nowrap;
-  margin: 1px 0; /* Add spacing between subcategory buttons */
+  border-radius: 0px;
 }
 
-
+.subcategories button:hover {
+  background-color: #134a6d;
+}
 
 
 /* Responsive layout - when the screen is less than 1199px wide */
