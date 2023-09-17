@@ -17,6 +17,7 @@ import NavyTshirt from "./assets/NavyTShirt.png";
 function Products() {
   const [products, setProducts] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [display, setDisplay] = useState("All");
   const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
@@ -92,9 +93,17 @@ function Products() {
       .then((response) => response.json())
       .then((data) => {
         setSubcategories(data);
-        console.log(data);
       })
   }, []);
+
+  const [displayProducts, setDisplayProducts] = useState([]);
+
+  useEffect(() => {
+    const filteredProducts = products.filter((product) =>
+      product.categories.includes(display)
+    );
+    setDisplayProducts(filteredProducts);
+  }, [products, display]);
 
   const currentColor = (product) => {
     const tShirtMap = {
@@ -120,86 +129,98 @@ function Products() {
     <div className="Products">
         <div className="productFilterRow">
           <div className="button-wrapper">
-            <button>Faith</button>
+            <button onClick={() => setDisplay("Faith")}>Faith</button>
           </div>
           <div className="button-wrapper">
-            <button>Family</button>
+            <button onClick={() => setDisplay("Family")}>Family</button>
           </div>
           <div className="button-wrapper">
-            <button>Health {isMobile ? <></> : <>&#9660;</>}</button>
+            <button onClick={() => setDisplay("Health")}>Health {isMobile ? <></> : <>&#9660;</>}</button>
             <div className="subcategories">
-              <button>Autism</button>
+            {subcategories.map((subcategory) => (
+              <span key={subcategory.id}>
+                {subcategory.category === "Health" &&
+                  <><button onClick={() => setDisplay(subcategory.name)}>{subcategory.name}</button></>
+                }
+              </span>
+            ))}
             </div>
           </div>
           <div className="button-wrapper">
-            <button>Holiday {isMobile ? <></> : <>&#9660;</>}</button>
-              <div className="subcategories">
-                <button>Christmas</button>
-                <button>Halloween</button>
-                <button>Thanksgiving</button>
-                <button>Valentines</button>
-              </div>
+            <button onClick={() => setDisplay("Holiday")}>Holiday {isMobile ? <></> : <>&#9660;</>}</button>
+            <div className="subcategories">
+            {subcategories.map((subcategory) => (
+              <span key={subcategory.id}>
+                {subcategory.category === "Holiday" &&
+                  <><button onClick={() => setDisplay(subcategory.name)}>{subcategory.name}</button></>
+                }
+              </span>
+            ))}
+            </div>
           </div>
           <div className="button-wrapper">
-            <button>Ohio</button>
+            <button onClick={() => setDisplay("Ohio")}>Ohio</button>
           </div>
           <div className="button-wrapper">
-            <button>Other {isMobile ? <></> : <>&#9660;</>}</button>
-              <div className="subcategories">
-                <button>Disney</button>
-                <button>Farming</button>
-                <button>Fishing</button>
-                <button>Friends Sitcom</button>
-                <button>Quotes</button>
-                <button>Scouts</button>
-              </div>
+            <button onClick={() => setDisplay("Other")}>Other {isMobile ? <></> : <>&#9660;</>}</button>
+            <div className="subcategories">
+              {subcategories.map((subcategory) => (
+                <span key={subcategory.id}>
+                  {subcategory.category === "Other" &&
+                    <><button onClick={() => setDisplay(subcategory.name)}>{subcategory.name}</button></>
+                  }
+                </span>
+              ))}
+            </div>
           </div>
           <div className="button-wrapper">
-            <button>Patriotic</button>
+            <button onClick={() => setDisplay("Patriotic")}>Patriotic</button>
           </div>
           <div className="button-wrapper">
-            <button>School {isMobile ? <></> : <>&#9660;</>}</button>
-              <div className="subcategories">
-                <button>Akron</button>
-                <button>Chicago Moos</button>
-                <button>Findlay</button>
-                <button>Galion</button>
-                <button>Kentucky</button>
-                <button>Mount Gilead</button>
-                <button>Northmor</button>
-                <button>Ontario</button>
-                <button>St. Joseph</button>
-                <button>Seniors</button>
-                <button>Teachers</button>
-              </div>
+            <button onClick={() => setDisplay("School")}>School {isMobile ? <></> : <>&#9660;</>}</button>
+            <div className="subcategories">
+              {subcategories.map((subcategory) => (
+                <span key={subcategory.id}>
+                  {subcategory.category === "School" &&
+                    <><button onClick={() => setDisplay(subcategory.name)}>{subcategory.name}</button></>
+                  }
+                </span>
+              ))}
+            </div>
           </div>
           <div className="button-wrapper">
-            <button>Seasons {isMobile ? <></> : <>&#9660;</>}</button>
-              <div className="subcategories">
-                <button>Fall</button>
-                <button>Spring</button>
-                <button>Summer</button>
-                <button>Winter</button>
-              </div>
+            <button onClick={() => setDisplay("Seasons")}>Seasons {isMobile ? <></> : <>&#9660;</>}</button>
+            <div className="subcategories">
+              {subcategories.map((subcategory) => (
+                <span key={subcategory.id}>
+                  {subcategory.category === "Seasons" &&
+                    <><button onClick={() => setDisplay(subcategory.name)}>{subcategory.name}</button></>
+                  }
+                </span>
+              ))}
+            </div>
           </div>
           <div className="button-wrapper">
-            <button>Sports {isMobile ? <></> : <>&#9660;</>}</button>
-              <div className="subcategories">
-                <button>Baseball</button>
-                <button>Basketball</button>
-                <button>Bowling</button>
-                <button>Dance</button>
-                <button>Football</button>
-              </div>
+            <button onClick={() => setDisplay("Sports")}>Sports {isMobile ? <></> : <>&#9660;</>}</button>
+            <div className="subcategories">
+              {subcategories.map((subcategory) => (
+                <span key={subcategory.id}>
+                  {subcategory.category === "Sports" &&
+                    <><button onClick={() => setDisplay(subcategory.name)}>{subcategory.name}</button></>
+                  }
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       <h1>Products</h1>
+      <button onClick={() => setDisplay("All")}>Show All</button>
       <p>
         For custom apparel,{" "}
         <a href="https://linktr.ee/hometeamcreativity" target="_blank">send us a message!</a>
       </p>
       <div className="productsRow">
-        {products.map((product) => (
+        {displayProducts.map((product) => (
           <div key={product.product_id} className="productsCell">
             <div className="productDetails">
               <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
