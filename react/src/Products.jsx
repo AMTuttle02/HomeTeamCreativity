@@ -16,6 +16,7 @@ import NavyTshirt from "./assets/NavyTShirt.png";
 
 function Products() {
   const [products, setProducts] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
   const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
@@ -81,11 +82,18 @@ function Products() {
         setProducts(data);
       });
 
-      fetch("/api/session.php")
-        .then((response) => response.json())
-        .then((data) => {
-          setAdmin(data.admin);
-        });
+    fetch("/api/session.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAdmin(data.admin);
+      });
+    
+    fetch("/api/getSubCats.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setSubcategories(data);
+        console.log(data);
+      })
   }, []);
 
   const currentColor = (product) => {
