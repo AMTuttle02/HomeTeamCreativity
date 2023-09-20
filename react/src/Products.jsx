@@ -21,6 +21,8 @@ function Products() {
   const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
+  const amountPerPage = 20;
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     // Function to update the isMobile state variable based on screen size
@@ -97,13 +99,28 @@ function Products() {
   }, []);
 
   const [displayProducts, setDisplayProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const filteredProducts = products.filter((product) =>
+    const filters = products.filter((product) =>
       product.categories.includes(display)
     );
-    setDisplayProducts(filteredProducts);
+    setFilteredProducts(filters);
+    setPage(1);
   }, [products, display]);
+
+  useEffect(() => {
+    let temp = [];
+    let tempLocation = 0;
+    for (let i = (page * amountPerPage - 20); i < (page * amountPerPage); ++i) {
+      if (filteredProducts[i]) {
+        temp[tempLocation] = filteredProducts[i];
+        ++tempLocation;
+      }
+    }
+    setDisplayProducts(temp);
+    window.scrollTo(0, 0);
+  }, [filteredProducts, page]);
 
   const currentColor = (product) => {
     const tShirtMap = {
@@ -215,7 +232,11 @@ function Products() {
         </div>
       <div className="ProductHeaderRow">
         <div className="productsLeft">
-          <button>&#129044; Previous Page</button>
+          {page > 1 &&
+            <span>
+              <button onClick={() => setPage(page-1)}>&#129044; Previous Page</button>
+            </span>
+          }
         </div>
         <div className="productsMain">
           {display === ("All") ? 
@@ -234,7 +255,11 @@ function Products() {
           }
         </div>
         <div className="productsRight">
-          <button>Next Page &#129046;</button>
+          {page < (filteredProducts.length / 20) && 
+            <span>
+              <button onClick={() => setPage(page+1)}>Next Page &#129046;</button>
+            </span>
+          }
         </div>
       </div>
       <div className="productsRow">
@@ -267,6 +292,29 @@ function Products() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="ProductHeaderRow">
+        <div className="productsLeft">
+          {page > 1 &&
+            <span>
+              <button onClick={() => setPage(page-1)}>&#129044; Previous Page</button>
+            </span>
+          }
+        </div>
+        <div className="productsMain">
+          {display !== ("All") &&
+            <span>
+              <button onClick={() => setDisplay("All")}>See All Products</button>
+            </span>
+          }
+        </div>
+        <div className="productsRight">
+          {page < (filteredProducts.length / 20) && 
+            <span>
+              <button onClick={() => setPage(page+1)}>Next Page &#129046;</button>
+            </span>
+          }
+        </div>
       </div>
     </div>
   );
