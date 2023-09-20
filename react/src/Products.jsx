@@ -213,12 +213,30 @@ function Products() {
             </div>
           </div>
         </div>
-      <h1>Products</h1>
-      <button onClick={() => setDisplay("All")}>Show All</button>
-      <p>
-        For custom apparel,{" "}
-        <a href="https://linktr.ee/hometeamcreativity" target="_blank">send us a message!</a>
-      </p>
+      <div className="ProductHeaderRow">
+        <div className="productsLeft">
+          <button>&#129044; Previous Page</button>
+        </div>
+        <div className="productsMain">
+          {display === ("All") ? 
+            <span>
+              <h1>Products</h1>
+            </span>
+            :
+            <span>
+              <h1>{display}</h1>
+            </span>
+          }
+          {display !== ("All") &&
+            <span>
+              <button onClick={() => setDisplay("All")}>See All Products</button>
+            </span>
+          }
+        </div>
+        <div className="productsRight">
+          <button>Next Page &#129046;</button>
+        </div>
+      </div>
       <div className="productsRow">
         {displayProducts.map((product) => (
           <div key={product.product_id} className="productsCell">
