@@ -246,9 +246,36 @@ body {
   float: left;
 }
 
+.dashHeader button:hover {
+  background-color: #45a049;
+}
+
+.dashHeader {
+  -ms-flex: 20%; /* IE10 */
+  flex: 20%;
+}
+
+.dashHeader h1 {
+  text-align: center;
+  color: black;
+  padding: 0px;
+}
+
+.dashHeader button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 99%;
+  margin: 1%;
+}
+
 .dashUpload button:hover {
   background-color: #45a049;
 }
+
 
 .dashName {
   -ms-flex: 33%; /* IE10 */
