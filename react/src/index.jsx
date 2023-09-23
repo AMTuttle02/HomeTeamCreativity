@@ -24,6 +24,7 @@ import CheckoutDetails from "./CheckoutDetails";
 import PayLater from "./PayLater";
 import Dashboard from "./Dashboard";
 import PreviousOrder from "./PreviousOrder";
+import CreateCategories from "./CreateCategories";
 
 export default function App() {
   return (
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="paylater" element={<PayLater />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="previousOrder" element={<PreviousOrder />} />
+          <Route path="categories" element={<CreateCategories />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>

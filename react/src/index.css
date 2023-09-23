@@ -1223,6 +1223,29 @@ footer {
   background-color: #134a6d;
 }
 
+.createCatButtonWidth {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+.createCatButtonWidth button{
+  margin: 1%;
+}
+
+.createCatCheckbox {
+  text-align: center;
+  -ms-flex: 20%;
+  flex: 20%;
+}
+
+.createSubCatCheckbox {
+  -ms-flex: 33%;
+  flex: 33%;
+}
+
+.createSubCatCheckbox input {
+  margin: 1%;
+}
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
