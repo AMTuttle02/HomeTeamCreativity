@@ -262,7 +262,7 @@ function Dashboard() {
                     <h1>Hello {firstName}!</h1>
                 </div>
                 <div className="dashHeader">
-                    <button type="signUpButton" onClick={() => nav("/products")}>Edit Products</button>
+                    <button type="signUpButton" onClick={() => nav("/editproducts")}>Edit Products</button>
                 </div>
                 <div className="dashHeader">
                     <button type="signUpButton" onClick={logout}>Log Out</button>

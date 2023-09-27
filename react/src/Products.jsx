@@ -60,22 +60,20 @@ function Products() {
     }
   };
 
-  const removeProduct = (productId) => {
+  const editProduct = (productId) => {
     const data = { id: productId };
-    fetch("/api/deleteProduct.php", {
+    fetch("/api/setCurrentProduct.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data == 1) {
-          window.location.reload();
-        }
-        else {
-          console.log(data);
+        if (data) {
+          navigate("/editproducts");
         }
       })
+      .catch((error) => console.error(error));
   }
 
   useEffect(() => {
@@ -284,7 +282,7 @@ function Products() {
               </button>
               {admin ?
                 <div className="center">
-                  <button onClick={() => removeProduct(product.product_id)} className="RemoveProductButton">Delete</button>
+                  <button onClick={() => editProduct(product.product_id)} className="RemoveProductButton">Edit</button>
                 </div>
               : 
                 <div />
