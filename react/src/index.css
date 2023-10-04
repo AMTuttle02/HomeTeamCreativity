@@ -528,6 +528,10 @@ body {
   justify-content: left;
 }
 
+.alignLeft {
+  text-align: left;
+}
+
 .homeProductsRow {
   display: -ms-flexbox;
   display: flex;

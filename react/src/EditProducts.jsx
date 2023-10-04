@@ -2,16 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.css";
 import BlackTshirt from "./assets/blackTShirt.png";
-import BlackLongSleeve from "./assets/blackLongSleeve.png";
-import BlackCrewneck from "./assets/blackCrewneck.png";
-import BlackHoodie from "./assets/blackHoodie.png";
 import GrayTshirt from "./assets/GreyTShirt.png";
-import GrayLongSleeve from "./assets/GreyLongSleeve.png";
-import GrayCrewneck from "./assets/GreyCrewneckSS.png";
-import GrayHoodie from "./assets/GreyHoodie.png";
 import RedTshirt from "./assets/RedTShirt.png";
-import RedLongSleeve from "./assets/RedLongSleeve.png";
-import RedHoodie from "./assets/RedHoodie.png";
 import YellowTshirt from "./assets/YellowTShirt.png";
 import PinkTshirt from "./assets/PinkTShirt.png";
 import GreenTshirt from "./assets/GreenTShirt.png";
@@ -19,23 +11,24 @@ import MaroonTshirt from "./assets/MaroonTShirt.png";
 import OrangeTshirt from "./assets/OrangeTShirt.png";
 import PurpleTshirt from "./assets/PurpleTShirt.png";
 import RoyalTshirt from "./assets/RoyalTShirt.png";
-import RoyalLongSleeve from "./assets/RoyalLongSleeve.png";
 import NavyTshirt from "./assets/NavyTShirt.png";
-import NavyLongSleeve from "./assets/NavyLongSleece.png";
-import NavyHoodie from "./assets/NavyHoodie.png";
 import WhiteTshirt from "./assets/WhiteTShirt.png";
-import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
-import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
-import WhiteHoodie from "./assets/WhiteHoodie.png";
-import transparentTshirt from "./assets/transparentTshirt.png";
-import transparentLongSleeve from "./assets/transparentLongSleeve.png";
-import transparentCrewneck from "./assets/transparentCrewneck.png";
-import transparentHoodie from "./assets/transparentHoodie.png";
 
 function EditProducts() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(0);
   const [product, setProduct] = useState ([]);
+  const [tshirt, setTshirt] = useState(BlackTshirt);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
+  const [tagList, setTagList] = useState("");
+  const [tColors, setTColors] = useState("");
+  const [lColors, setLColors] = useState("");
+  const [cColors, setCColors] = useState("");
+  const [hColors, setHColors] = useState("");
+  const [categories, setCategories] = useState("");
+  
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -49,6 +42,31 @@ function EditProducts() {
       .then((data) => {
         console.log(data);
         setProduct(data);
+        const tShirtMap = {
+          "Black": BlackTshirt,
+          "Gray": GrayTshirt,
+          "Yellow": YellowTshirt,
+          "Pink": PinkTshirt,
+          "Green": GreenTshirt,
+          "Maroon": MaroonTshirt,
+          "Orange": OrangeTshirt,
+          "Purple": PurpleTshirt,
+          "Red": RedTshirt,
+          "Royal": RoyalTshirt,
+          "White": WhiteTshirt,
+          "Navy": NavyTshirt
+        }
+        const regex = /\S+/;
+        let firstWord = data.tColors.match(regex)[0];
+        setTshirt(tShirtMap[firstWord]);
+        setProductName(data.product_name);
+        setPrice(data.price);
+        setTagList(data.tag_list);
+        setTColors(data.tColors);
+        setLColors(data.lColors);
+        setCColors(data.cColors);
+        setHColors(data.hColors);
+        setCategories(data.categories);
       });
   }, []);
 
@@ -70,6 +88,15 @@ function EditProducts() {
       })
   }
 
+  const addTshirtColor = (color) => {
+    setTColors(tColors + ' ' + color);
+  }
+  const removeTshirtColor = (color) => {
+    const removedColor = tColors.replace(color, "");
+    setTColors(removedColor);
+  }
+  
+
   if (admin) {
     return (
       <div className="EditProducts">
@@ -78,507 +105,292 @@ function EditProducts() {
         <div className="orderRow">
           <div className="orderSide">
             <div className="productDetails">
-              {/*
-              <button 
-                    className="magnify"
-                    onClick={() => setShowConfirmation(true)}>*/}
-                <div className="fullDesign">
-                  {<img
-                  src={BlackTshirt}
-                  alt="Home Team Creativity Logo"
-                  className="tshirt"
-                  />}
-                  <img
-                    src={"api/images/" + product.filename}
-                    alt={product.product_name}
-                    className="design"
-                  />
-                </div>
-              {/*</button>*/}
+              <div className="fullDesign">
+                {<img
+                src={tshirt}
+                alt="Home Team Creativity Logo"
+                className="tshirt"
+                />}
+                <img
+                  src={"api/images/" + product.filename}
+                  alt={product.product_name}
+                  className="design"
+                />
+              </div>
               
               <br /><br />
               <p>Click Design To Enlarge</p>
               <h3>{product.product_name}</h3>
-              <div className="center">
-                <button onClick={() => removeProduct(product.product_id)}>Delete Product</button>
-              </div>
-            </div>
-          </div>
-          
-          {/*showConfirmation &&
-            <div className="confirmation-modal" onClick={handleOutsideClick}>
-              <div className="orderItem-dialog">
-                <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
-                <div className="fullDesign">
-                  <img
-                  src={productType.type}
-                  alt="Home Team Creativity Logo"
-                  className="tshirt"
-                  />
-                  <img
-                    src={"api/images/" + currentDesign.filename}
-                    alt={currentDesign.product_name}
-                    className="design"
-                  />
+              <h2>
+                <button onClick={() => setShowConfirmation(true)} className="CartRemoveProductButton">
+                  Delete Product
+                </button>
+              </h2>
+              {showConfirmation &&
+                <div className="confirmation-modal">
+                  <div className="confirmation-dialog">
+                    <h3>Confirm Delete</h3>
+                    <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
+                    <div className="confirmation-buttons">
+                      <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                      <button onClick={() => removeProduct(product.product_id)} className="delete-button">Delete</button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          */}
-          <div className="orderMain">
-            <h3>Edit Product Details Below</h3>
-            {/*<h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
-            <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
-            <h1>Style: {currentStyle}</h1>
-            <div className="typeOptionRow">
-              {validStyle(tColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
-                  className="productTypes">
-                <img
-                  src={transparentTshirt}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
-                />
-                </button>
-              </> : <></>}
-              {validStyle(lColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
-                  className="productTypes">
-                <img
-                  src={transparentLongSleeve}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
-                />
-                </button>
-              </> : <></>}
-              {validStyle(cColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
-                  className="productTypes">
-                <img
-                  src={transparentCrewneck}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
-                />
-                </button>
-              </> : <></>}
-              {validStyle(hColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Hooded Sweatshirt")}
-                  className="productTypes">
-                <img
-                  src={transparentHoodie}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
-                />
-                </button>
-              </> : <></>}
-            </div>
-            <br />
-            <h1>Color: {currentColor}</h1>
-            <div className="typeOptionRow">
-              {tColors.includes("Black") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Black") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {cColors.includes("Black") && currentStyle == "Crewneck Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("Black") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Gray") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Gray") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {cColors.includes("Gray") && currentStyle == "Crewneck Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("Gray") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("White") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("White") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {cColors.includes("White") && currentStyle == "Crewneck Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("White") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(navy)}
-                className="productTypes">
-                <img
-                  src={navy}
-                  alt="Navy"
-                  className="colorOptions"
-                />
-              </button> 
-              : <div /> }
-              {lColors.includes("Navy") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(navy)}
-                className="productTypes">
-                <img
-                  src={navy}
-                  alt="Navy"
-                  className="colorOptions"
-                />
-              </button> 
-              : <div /> }
-              {hColors.includes("Navy") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(navy)}
-                className="productTypes">
-                <img
-                  src={navy}
-                  alt="Navy"
-                  className="colorOptions"
-                />
-              </button> 
-              : <div /> }
-              {tColors.includes("Royal") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(royal)}
-                className="productTypes">
-                <img
-                  src={royal}
-                  alt="Royal"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Royal") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(royal)}
-                className="productTypes">
-                <img
-                  src={royal}
-                  alt="Royal"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Red") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(red)}
-                className="productTypes">
-                <img
-                  src={red}
-                  alt="Red"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Red") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(red)}
-                className="productTypes">
-                <img
-                  src={red}
-                  alt="Red"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("Red") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(red)}
-                className="productTypes">
-                <img
-                  src={red}
-                  alt="Red"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Maroon") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(maroon)}
-                className="productTypes">
-                <img
-                  src={maroon}
-                  alt="Maroon"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Yellow") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(yellow)}
-                className="productTypes">
-                <img
-                  src={yellow}
-                  alt="Yellow"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Pink") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(pink)}
-                className="productTypes">
-                <img
-                  src={pink}
-                  alt="Pink"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Green") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(green)}
-                className="productTypes">
-                <img
-                  src={green}
-                  alt="Green"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Orange") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(orange)}
-                className="productTypes">
-                <img
-                  src={orange}
-                  alt="Orange"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Purple") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(purple)}
-                className="productTypes">
-                <img
-                  src={purple}
-                  alt="Purple"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-            </div>
-            <br />
-            <h1>Size: {size.description}</h1>
-            <div className="typeOptionRow">
-              <p className="size">YOUTH:</p>
-              <button 
-                onClick={() => setSize({description: "Youth Small", addedCost: -2})}
-                className="productTypes">
-                <p className="size">Small</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Youth Medium", addedCost: -2})}
-                className="productTypes">
-                <p className="size">Medium</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Youth Large", addedCost: -2})}
-                className="productTypes">
-                <p className="size">Large</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Youth X-Large", addedCost: -2})}
-                className="productTypes">
-                <p className="size">X-Large</p>
-              </button>
-            </div>
-            <div className="typeOptionRow">
-              <p className="size">ADULT:</p>
-              <button 
-                onClick={() => setSize({description: "Adult Small", addedCost: 0})}
-                className="productTypes">
-                <p className="size">Small</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult Medium", addedCost: 0})}
-                className="productTypes">
-                <p className="size">Medium</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult Large", addedCost: 0})}
-                className="productTypes">
-                <p className="size">Large</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult X-Large", addedCost: 0})}
-                className="productTypes">
-                <p className="size">X-Large</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult XX-Large", addedCost: 2})}
-                className="productTypes">
-                <p className="size">2XL</p>
-              </button>
-              {currentStyle == "Short Sleeve T-Shirt" ?
-                <button 
-                  onClick={() => setSize({description: "Adult XXX-Large", addedCost: 2})}
-                  className="productTypes">
-                  <p className="size">3XL</p>
-                </button>
-              :
-              <div />
               }
             </div>
-            {nameOnBack && 
-              <>
-                <h2>Name: {' '}
-                  <input
-                    type="text"
-                    value={nameOnBackDetails}
-                    onChange={handleNameOnBackDetails}
-                    placeholder="Enter Name For Back Of Product Here"
-                    className="lastNameOrderPage"
-                  />
-                </h2>
-              </>
-            }
-            {numberOnBack && 
-              <>
-                <h2>Number:{' '}
+          </div>
+          <div className="orderMain">
+            <div className="container">
+              <h1>Edit Product Details Below</h1>
+              <br/>
+              <form className="alignLeft">
+                <label>Product Display Name</label>
                 <input
-                  type="number"
-                  value={numberOnBackDetails}
-                  onChange={handleNumberOnBackDetails}
-                  min={0}
-                  max={99}
+                  type="text"
+                  id="product_name"
+                  name="product_name"
+                  value={productName}
+                  onChange={(event) => setProductName(event.target.value)}
                 />
-                </h2>
-              </>
-            }
-            <br />
-            <h1>Quantity: {" "}
-              <button 
-                className="quantity"
-                onClick={() => decreaseQuantity()}>
-                -
-              </button>
-              {" "}{quantity}{" "}
-              <button
-                className="quantity"
-                onClick={() => setQuantity(quantity + 1)}>
-                +
-              </button>
-            </h1>
-            <center>
-              <br />
-              <button
-                className="addToCart"
-                onClick={() => addToCart()}>
-                Add to Cart
-              </button>
-              <br /><br />
-              <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
-              { failed && <Failed /> }
-            </center>
-          */}
+                <label>Price (Do Not Include $) (Pricing Default is for an Adult Medium T-Shirt)</label>
+                <input
+                  type="text"
+                  id="price"
+                  name="price"
+                  value={price}
+                  onChange={(event) => setPrice(event.target.value)}
+                />
+                <label>Tags</label>
+                <input
+                  type="text"
+                  id="product_name"
+                  name="product_name"
+                  value={tagList}
+                  onChange={(event) => setTagList(event.target.value)}
+                />
+                <label>T-Shirt: {tColors}</label>
+                <br />
+                {tColors.includes("Black") ? 
+                <span>
+                  <input type="checkbox" id="tBlack" name="tBlack" value="Black" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Black</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tBlack" name="tBlack" value="Black" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Black</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Yellow") ? 
+                <span>
+                  <input type="checkbox" id="tYellow" name="tYellow" value="Yellow" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Yellow</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tYellow" name="tYellow" value="Yellow" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Yellow</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Pink") ? 
+                <span>
+                  <input type="checkbox" id="tPink" name="tPink" value="Pink" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Pink</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tPink" name="tPink" value="Pink" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Pink</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Gray") ? 
+                <span>
+                  <input type="checkbox" id="tGray" name="tGray" value="Gray" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Gray</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tGray" name="tGray" value="Gray" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Gray</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Maroon") ? 
+                <span>
+                  <input type="checkbox" id="tMaroon" name="tMaroon" value="Maroon" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Maroon</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tMaroon" name="tMaroon" value="Maroon" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Maroon</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Orange") ? 
+                <span>
+                  <input type="checkbox" id="tOrange" name="tOrange" value="Orange" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Orange</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tOrange" name="tOrange" value="Orange" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Orange</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Purple") ? 
+                <span>
+                  <input type="checkbox" id="tPurple" name="tPurple" value="Purple" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Purple</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tPurple" name="tPurple" value="Purple" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Purple</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Red") ? 
+                <span>
+                  <input type="checkbox" id="tRed" name="tRed" value="Red" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Red</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tRed" name="tRed" value="Red" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Red</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Royal") ? 
+                <span>
+                  <input type="checkbox" id="tRoyal" name="tRoyal" value="Royal" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Royal</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tRoyal" name="tRoyal" value="Royal" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Royal</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Green") ? 
+                <span>
+                  <input type="checkbox" id="tGreen" name="tGreen" value="Green" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Green</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tGreen" name="tGreen" value="Green" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Green</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("White") ? 
+                <span>
+                  <input type="checkbox" id="tWhite" name="tWhite" value="White" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;White</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tWhite" name="tWhite" value="White" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;White</label>
+                    <br />
+                </span>
+                }
+                {tColors.includes("Navy") ? 
+                <span>
+                  <input type="checkbox" id="tNavy" name="tNavy" value="Navy" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Navy</label>
+                    <br />
+                </span>
+                :
+                <span>
+                  <input type="checkbox" id="tNavy" name="tNavy" value="Navy" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Navy</label>
+                    <br />
+                </span>
+                }
+                
+                <label>Long Sleeve: {lColors}</label>
+                <br />
+                <input type="checkbox" id="lBlack" name="lBlack" value="Black" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Black</label>
+                  <br />
+                <input type="checkbox" id="lNavy" name="lNavy" value="Navy" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Navy</label>
+                  <br />
+                <input type="checkbox" id="lRed" name="lRed" value="Red" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Red</label>
+                  <br />
+                <input type="checkbox" id="lRoyal" name="lRoyal" value="Royal" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Royal</label>
+                  <br />
+                <input type="checkbox" id="lGray" name="lGray" value="Gray" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Gray</label>
+                  <br />
+                <input type="checkbox" id="lWhite" name="lWhite" value="White" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;White</label>
+                  <br />
+
+                <label>Crewneck: {cColors}</label>
+                <br />
+                <input type="checkbox" id="cBlack" name="cBlack" value="Black" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Black</label>
+                  <br />
+                <input type="checkbox" id="cGray" name="cGray" value="Gray" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Gray</label>
+                  <br />
+                <input type="checkbox" id="cWhite" name="cWhite" value="White" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;White</label>
+                  <br />
+
+                <label>Hoodie: {hColors}</label>
+                <br />
+                <input type="checkbox" id="hBlack" name="hBlack" value="Black" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Black</label>
+                  <br />
+                <input type="checkbox" id="hGray" name="hGray" value="Gray" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Gray</label>
+                  <br />
+                <input type="checkbox" id="hRed" name="hRed" value="Red" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Red</label>
+                  <br />
+                <input type="checkbox" id="hNavy" name="hNavy" value="Navy" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;Navy</label>
+                  <br />
+                <input type="checkbox" id="hWhite" name="hWhite" value="White" onChange={(event) => addTshirtColor(event.target.value)}/>
+                  <label>&nbsp;White</label>
+                  <br />
+                <label>Categories</label>
+                <input
+                  type="text"
+                  id="product_name"
+                  name="product_name"
+                  value={categories}
+                  onChange={(event) => setCategories(event.target.value)}
+                />
+                <br/>
+                <br/>
+                <button type="submit">Upload</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
