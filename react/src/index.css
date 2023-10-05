@@ -113,6 +113,14 @@ body {
   width: 100%;
 }
 
+.ProductHeaderRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
 .orderRow {  
   display: -ms-flexbox; /* IE10 */
   display: flex;
@@ -155,6 +163,67 @@ body {
   flex: 50%;
 }
 
+.productsMain {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+}
+
+.productsLeft {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: left;
+}
+
+.productsRight {
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.productsLeft button {
+  color: white;
+  font-size: 1.25vw;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  margin-left: 3%;
+}
+
+.productsLeft button:hover {
+  color: blue;
+}
+
+.productsRight button {
+  color: white;
+  font-size: 1.25vw;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  margin-left: 5%;
+}
+
+.productsRight button:hover {
+  color: blue;
+  
+}
+
+.productsMain button {
+  color: white;
+  font-size: 1.25vw;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+}
+
+.productsMain button:hover {
+  color: blue;
+  
+}
+
 .dashUpload {
   -ms-flex: 33%; /* IE10 */
   flex: 33%;
@@ -177,9 +246,36 @@ body {
   float: left;
 }
 
+.dashHeader button:hover {
+  background-color: #45a049;
+}
+
+.dashHeader {
+  -ms-flex: 20%; /* IE10 */
+  flex: 20%;
+}
+
+.dashHeader h1 {
+  text-align: center;
+  color: black;
+  padding: 0px;
+}
+
+.dashHeader button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 99%;
+  margin: 1%;
+}
+
 .dashUpload button:hover {
   background-color: #45a049;
 }
+
 
 .dashName {
   -ms-flex: 33%; /* IE10 */
@@ -395,7 +491,7 @@ body {
 .Products h1 {
   color: white;
   text-align: center;
-  padding: 40px;
+  padding: 5%;
 }
 
 .Products p {
@@ -430,6 +526,10 @@ body {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   justify-content: left;
+}
+
+.alignLeft {
+  text-align: left;
 }
 
 .homeProductsRow {
@@ -622,6 +722,14 @@ input[type=text] {
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
+.EditProductsContainer {
+  margin: 0 auto;
+  width: 80%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
 .dashboardContainer {
   margin: auto;
   width: 90%;
@@ -665,6 +773,20 @@ input[type="text"], input[type="password"] {
 }
 
 .container button:hover {
+  background-color: #45a049;
+}
+
+.defaultButton {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.defaultButton:hover {
   background-color: #45a049;
 }
 
@@ -1059,8 +1181,144 @@ footer {
   resize: none;
 }
 
+.Products {
+  z-index: 0;
+}
+
+/* Apply Flexbox layout to evenly space the button wrappers */
+.productFilterRow {
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: #1b7bb8;
+}
+
+/* Style button wrappers */
+.button-wrapper {
+  position: relative;
+  width: 10%;
+}
+
+.productFilterRow button {
+  width: 100%;
+  padding: 15px 10%;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.25vw;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Style the subcategories */
+.subcategories {
+  display: none; /* Initially hide subcategories */
+  flex-direction: column; /* Stack subcategories vertically */
+  background-color: #1b7bb8; /* Background color for subcategories */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1; /* Ensure subcategories appear above content */
+}
+
+.button-wrapper:hover .subcategories {
+  display: block; /* Show subcategories on hover */
+}
+
+.button-wrapper:hover {
+  background-color: #134a6d;
+}
+
+.button-wrapper:last-child .subcategories {
+  right: 0; /* Align the rightmost subcategories to the right edge of the container */
+  left: auto;
+}
+
+/* Modify subcategories button style */
+.subcategories button {
+  /* Remove any inherited constraints */
+  width: 100%;
+  padding: 10px 60px;
+  display: block;
+  white-space: nowrap;
+  border-radius: 0px;
+}
+
+.subcategories button:hover {
+  background-color: #134a6d;
+}
+
+.createCatButtonWidth {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+.createCatButtonWidth button{
+  margin: 1%;
+}
+
+.createCatCheckbox {
+  text-align: center;
+  -ms-flex: 20%;
+  flex: 20%;
+}
+
+.createSubCatCheckbox {
+  -ms-flex: 33%;
+  flex: 33%;
+}
+
+.createSubCatCheckbox input {
+  margin: 1%;
+}
+
+.subCatCheckbox {
+  -ms-flex: 50%;
+  flex: 50%;
+}
+
+.subCatCheckbox input {
+  margin: 1%;
+}
+
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .productsRight button {
+    font-size: 2vw;
+  }
+  .productsLeft button {
+    font-size: 2vw;
+  }
+  .productsMain button {
+    font-size: 2vw;
+  }
+
+  .ProductHeaderRow {  
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .productFilterRow {
+    flex-wrap: wrap;
+  }
+
+  /* Style button wrappers */
+  .button-wrapper {
+    width: 20%;
+  }
+
+  .productFilterRow button {
+    font-size: 1.75vw;
+  }
+
+  .button-wrapper:hover .subcategories {
+    display: none; /* Hide subcategories on hover for small screens */
+  }
+
   .orderItem-dialog {
     width: 75%;
   }
@@ -1349,6 +1607,19 @@ footer {
 }
 
 @media screen and (max-width: 481px) {
+  .productFilterRow {
+    flex-wrap: wrap;
+  }
+
+  /* Style button wrappers */
+  .button-wrapper {
+    width: 50%;
+  }
+
+  .productFilterRow button {
+    font-size: 2vw;
+  }
+
   .orderItem-dialog {
     width: 100%;
   }

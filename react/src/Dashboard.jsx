@@ -26,6 +26,7 @@ import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
 import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
 import WhiteHoodie from "./assets/WhiteHoodie.png";
 import { useNavigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 function setType(type, color) {
     if (type == "Crewneck Sweatshirt") {
@@ -139,8 +140,8 @@ function Dashboard() {
     });
   }
 
-  const upload = (e) => {
-    navigate("/upload");
+  const nav = (e) => {
+    navigate(e);
   }
 
   const [firstName, setFirstName] = useState("");
@@ -251,13 +252,19 @@ function Dashboard() {
         <br />
         <div className="dashboardContainer">
             <div className="row">
-                <div className="dashUpload">
-                    <button type="signUpButton" onClick={upload}>Upload Designs</button>
+                <div className="dashHeader">
+                    <button type="signUpButton" onClick={() => nav("/upload")}>Upload Designs</button>
                 </div>
-                <div className="dashName">
+                <div className="dashHeader">
+                    <button type="signUpButton" onClick={() => nav("/categories")}>Edit Categories</button>
+                </div>
+                <div className="dashHeader">
                     <h1>Hello {firstName}!</h1>
                 </div>
-                <div className="dashLogOut">
+                <div className="dashHeader">
+                    <button type="signUpButton" onClick={() => nav("/products")}>Edit Products</button>
+                </div>
+                <div className="dashHeader">
                     <button type="signUpButton" onClick={logout}>Log Out</button>
                 </div>
             </div>

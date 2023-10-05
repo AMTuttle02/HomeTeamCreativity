@@ -14,6 +14,8 @@ function Upload() {
   const [lColorsPrimary, setLColorPrimary] = useState("None");
   const [cColorsPrimary, setCColorPrimary] = useState("None");
   const [hColorsPrimary, setHColorPrimary] = useState("None");
+  const [category, setCategory] = useState("All ");
+  const [allSubcategories, setAllSubcategories] = useState([]);
 
   const handleFileInputChange = (event) => {
     setFile(event.target.files[0]);
@@ -59,6 +61,16 @@ function Upload() {
     }
   };
 
+  const handleCategory = (event) => {
+    if (category.includes(event)) {
+      const removeCat = category.replace(event, "");
+      setCategory(removeCat);
+    }
+    else {
+      setCategory(category + ' ' + event);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData();
@@ -70,6 +82,7 @@ function Upload() {
     formData.append('lColors', longSleeveColors);
     formData.append('cColors', crewneckColors);
     formData.append('hColors', hoodieColors);
+    formData.append('subcategories', category);
   
     fetch('/api/upload.php', {
       method: 'POST',
@@ -90,6 +103,14 @@ function Upload() {
       .then((data) => {
         setAdmin(data.admin);
       });
+    
+    fetch("/api/getCats.php")
+      .then((response) => response.json())
+      .then((data) => {
+          setAllSubcategories(data);
+          console.log(data);
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -262,6 +283,60 @@ function Upload() {
                   <label>&nbsp;White</label>
                   <br />
               </div>
+            </div>
+            <br/>
+            <center><h3>Categories</h3></center>
+            <div className="row">
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Faith" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Faith*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Family" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Family*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Health" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Health</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Holiday" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Holiday</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Ohio" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Ohio*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Other" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Other</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Patriotic" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Patriotic*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="School" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;School</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Seasons" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Seasons</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Sports" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Sports</label>
+              </div>
+            </div>
+            <br/>
+            <center><h3>Subcategories</h3></center>
+            <div className="row">
+                {allSubcategories.map((subcategory) => (
+                    <div className="createSubCatCheckbox">
+                        <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
+                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                    </div>
+                ))}
             </div>
             <br/><br/>
             <input type="file" onChange={handleFileInputChange} />
