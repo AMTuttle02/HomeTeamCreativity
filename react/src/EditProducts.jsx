@@ -194,7 +194,7 @@ function EditProducts() {
                 <div className="confirmation-modal">
                   <div className="confirmation-dialog">
                     <h3>Confirm Delete</h3>
-                    <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
+                    <p>Are you sure you want to delete "{product.product_name}" permanetly?</p>
                     <div className="confirmation-buttons">
                       <button onClick={() => setShowConfirmation(false)}>Cancel</button>
                       <button onClick={() => removeProduct(product.product_id)} className="delete-button">Delete</button>
