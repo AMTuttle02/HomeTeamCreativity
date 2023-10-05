@@ -722,6 +722,14 @@ input[type=text] {
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
+.EditProductsContainer {
+  margin: 0 auto;
+  width: 80%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
 .dashboardContainer {
   margin: auto;
   width: 90%;
@@ -765,6 +773,20 @@ input[type="text"], input[type="password"] {
 }
 
 .container button:hover {
+  background-color: #45a049;
+}
+
+.defaultButton {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.defaultButton:hover {
   background-color: #45a049;
 }
 
@@ -1248,6 +1270,15 @@ footer {
 }
 
 .createSubCatCheckbox input {
+  margin: 1%;
+}
+
+.subCatCheckbox {
+  -ms-flex: 50%;
+  flex: 50%;
+}
+
+.subCatCheckbox input {
   margin: 1%;
 }
 
