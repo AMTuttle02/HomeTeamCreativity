@@ -50,7 +50,7 @@ function HowItWorks() {
             <li>Onesies: $8 (NB, 0-3 mo, 3-6 mo, 6-12 mo, 12-18 mo)</li>
             <li>Infant T-Shirt: $10 (6-12 mo, 12-18 mo, 18-24 mo)</li>
             <li>Toddler T-Shirt: $12 (2T-4T)</li>
-            <li>Youth T-Shirt: $12 (S-XL)</li>
+            <li>Youth T-Shirt: $14 (S-XL)</li>
             <li>Youth Long Sleeve: $18 (S-XL)</li>
             <li>Youth Crewneck Sweatshirt: $22 (S-XL)</li>
             <li>Youth Hoodie: $26 (S-XL)</li>
