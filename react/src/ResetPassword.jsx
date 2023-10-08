@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import bcrypt from 'bcryptjs';
 
 function LoginFailed() {
@@ -10,7 +10,7 @@ function LoginFailed() {
   );
 }
 
-function Login() {
+function ResetPassword() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [badLogin, setBadLogin] = useState(false);
@@ -18,6 +18,8 @@ function Login() {
   const [loginAttempted, setLoginAttempted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
+  const { token } = useParams();
+
 
   const confirmLogin = (e) => {
     e.preventDefault();
@@ -99,10 +101,10 @@ function Login() {
         <div className="LoginPage">
           <div className="container">
             <h1>
-              <u>Login</u>
+              <u>Reset Password</u>
             </h1>
             <form id="loginform">
-              <label>Email address</label>
+              <label>New Password</label>
               <input
                 type="email"
                 className="form-control"
@@ -113,7 +115,7 @@ function Login() {
                 onChange={(event) => setEmail(event.target.value)}
               />
               <br />
-              <label>Password</label>
+              <label>Confirm Password</label>
               <input
                 type="password"
                 className="form-control"
@@ -121,16 +123,15 @@ function Login() {
                 placeholder="Password"
                 onChange={(event) => setPassword(event.target.value)}
               />
-              <Link to="/forgotpassword">Forgot Password?</Link>
               {loginAttempted && badLogin && <LoginFailed />}
               <br />
               {localStorage.getItem("oID") ?
                 <>
-                <button type="submit" onClick={(event) => confirmLogin(event)}>Log In</button>
+                <button type="submit" onClick={(event) => confirmLogin(event)}>Update Password</button>
                 </>
               :
                 <>
-                <button type="submit" onClick={(event) => loginSubmit(event)}>Log In</button>
+                <button type="submit" onClick={(event) => loginSubmit(event)}>Update Password</button>
                 </>
               }
             </form>
@@ -164,4 +165,4 @@ function Login() {
   }
 }
 
-export default Login;
+export default ResetPassword;

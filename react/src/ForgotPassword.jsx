@@ -5,13 +5,12 @@ import bcrypt from 'bcryptjs';
 function LoginFailed() {
   return (
     <div className="incorrectPassword">
-      <h2>Incorrect Email or Password</h2>
+      <h2>We don't have that email on file. Try another one!</h2>
     </div>
   );
 }
 
 function Login() {
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [badLogin, setBadLogin] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -27,14 +26,14 @@ function Login() {
   const loginSubmit = (e) => {
     e.preventDefault();
     setShowConfirmation(false);
-    fetch("/api/loginDetails.php", {
+    fetch("/api/newPasswordRequest.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     })
       .then((response) => response.json())
       .then((data) => {
-        if(data.user_id) {
+        if(data) {
           bcrypt.compare(password, data.pswrd, (err, isMatch) => {
             if (err) {
               setBadLogin(true);
@@ -88,7 +87,7 @@ function Login() {
 
   useEffect(() => {
     setBadLogin(false);
-  }, [email, password]);
+  }, [email]);
 
   if (loggedIn) {
     window.location.href = "/loggedin";
@@ -99,10 +98,10 @@ function Login() {
         <div className="LoginPage">
           <div className="container">
             <h1>
-              <u>Login</u>
+              <u>Forgot Password</u>
             </h1>
             <form id="loginform">
-              <label>Email address</label>
+              <label>Email Address</label>
               <input
                 type="email"
                 className="form-control"
@@ -113,35 +112,26 @@ function Login() {
                 onChange={(event) => setEmail(event.target.value)}
               />
               <br />
-              <label>Password</label>
-              <input
-                type="password"
-                className="form-control"
-                id="exampleInputPassword1"
-                placeholder="Password"
-                onChange={(event) => setPassword(event.target.value)}
-              />
-              <Link to="/forgotpassword">Forgot Password?</Link>
               {loginAttempted && badLogin && <LoginFailed />}
               <br />
               {localStorage.getItem("oID") ?
                 <>
-                <button type="submit" onClick={(event) => confirmLogin(event)}>Log In</button>
+                <button type="submit" onClick={(event) => confirmLogin(event)}>Request New Password</button>
                 </>
               :
                 <>
-                <button type="submit" onClick={(event) => loginSubmit(event)}>Log In</button>
+                <button type="submit" onClick={(event) => loginSubmit(event)}>Request New Password</button>
                 </>
               }
             </form>
             {showConfirmation &&
               <div className="confirmation-modal">
                 <div className="confirmation-dialog">
-                  <h3>Confirm Login</h3>
+                  <h3>Confirm Password Reset</h3>
                   <p>This will remove any items you currently have in your cart.</p>
                   <div className="confirmation-buttons">
                     <button onClick={() => setShowConfirmation(false)}>Cancel</button>
-                    <button onClick={(e) => loginSubmit(e)} className="delete-button">Login</button>
+                    <button onClick={(e) => loginSubmit(e)} className="delete-button">Send Request</button>
                   </div>
                 </div>
               </div>
