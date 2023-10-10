@@ -6,8 +6,8 @@ function EmailConfirmation() {
 
   return (
     <div className="EmailConfirmation">
+      <br />
       <div className="container">
-        <br />
         <h1> Reset Password Email Sent! </h1>
         <br />
           <h3>
