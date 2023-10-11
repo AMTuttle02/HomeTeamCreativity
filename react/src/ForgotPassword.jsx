@@ -32,10 +32,11 @@ function Login() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if(data) {
+        if(data === 1) {
           navigate('/emailconfirmation');
         }
         else {
+          console.log(data);
           setBadLogin(true);
           setLoginAttempted(true); // Set login attempt status
         }

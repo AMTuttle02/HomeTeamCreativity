@@ -23,11 +23,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $input = json_decode(file_get_contents('php://input'), true);
   $email = $input['email'];
 
-
-
   // Generate a unique token for password reset
   $token = bin2hex(random_bytes(16));
   $reset_link = DOMAIN . '/resetpassword/' . $token;
+
+  $resetTime = date("Y-m-d H:i:s");
+
+  // Check if email address already exists in table
+  $stmt = $conn->prepare("SELECT email FROM resetTokens WHERE email = ?");
+  $stmt->bind_param("s", $email);
+  if (!$stmt->execute()) {
+    die("Query failed: " . $stmt->error);
+    exit(1);
+  }
+
+  $result = $stmt->get_result();
+  $existing_user = $result->fetch_assoc();
+
+  if ($existing_user) {
+    // If email already exists, return error message
+    $query = $conn->prepare("UPDATE resetTokens SET token = ?, resetTime = ? WHERE email = ?;");
+    $query->bind_param("sss", $token, $resetTime, $email);
+
+    if (!$query->execute()) {
+      // If insertion fails, return error message
+      echo json_encode("ERR: Insertion failed to execute" . $query->error);
+      exit(1);
+    }
+  }
+  else {
+    // Attempt to insert new user into table
+    $query = $conn->prepare("INSERT INTO resetTokens (email, token, resetTime) VALUES (?, ?, ?);");
+    $query->bind_param("sss", $email, $token, $resetTime);
+
+    if (!$query->execute()) {
+      // If insertion fails, return error message
+      echo json_encode("ERR: Insertion failed to execute" . $query->error);
+      exit(1);
+    }
+  }
 
   // Email body
   $message = '
