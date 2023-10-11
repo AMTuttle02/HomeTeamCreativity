@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link, Navigate, useNavigate } from "react-router-dom";
-import bcrypt from 'bcryptjs';
 
 function LoginFailed() {
   return (
@@ -34,34 +33,7 @@ function Login() {
       .then((response) => response.json())
       .then((data) => {
         if(data) {
-          bcrypt.compare(password, data.pswrd, (err, isMatch) => {
-            if (err) {
-              setBadLogin(true);
-              setLoginAttempted(true);
-            } else if (isMatch) {
-              // Passwords match, authentication successful
-              fetch("/api/login.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email }),
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data.loggedin) {
-                    localStorage.clear();
-                    setLoggedIn(true);
-                  } else {
-                    setBadLogin(true);
-                  }
-                  setLoginAttempted(true); // Set login attempt status
-                });
-            } else {
-              // Passwords do not match, authentication failed
-              // Handle the failure appropriately
-              setBadLogin(true);
-              setLoginAttempted(true);
-            }
-          });
+          navigate('/emailconfirmation');
         }
         else {
           setBadLogin(true);
@@ -90,7 +62,7 @@ function Login() {
   }, [email]);
 
   if (loggedIn) {
-    window.location.href = "/loggedin";
+    navigate("/loggedin");
   } else {
     return (
       <div className="UpdatedLogin">
