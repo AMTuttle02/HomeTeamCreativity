@@ -722,7 +722,7 @@ $mail->SMTPAuth = true;
 $mail->Username = 'orderconfirmation@hometeamcreativity.com';
 $mail->Password = 'ConfirmationOfOrder1!';
 $mail->setFrom('orderconfirmation@hometeamcreativity.com', 'HomeTeam Creativity Order Confirmation');
-$mail->addReplyTo('IT@hometeamcreativity.com', 'HomeTeam Creativity IT');
+$mail->addReplyTo('admin@hometeamcreativity.com', 'HomeTeam Creativity Admin');
 $mail->addAddress($email, $first .' '. $last);
 $mail->addBCC('admin@hometeamcreativity.com', 'Admin');
 $mail->Subject = 'HomeTeam Creativity Order Confirmation';
