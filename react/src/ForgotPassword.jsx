@@ -36,7 +36,6 @@ function Login() {
           navigate('/emailconfirmation');
         }
         else {
-          console.log(data);
           setBadLogin(true);
           setLoginAttempted(true); // Set login attempt status
         }
