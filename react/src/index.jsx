@@ -26,6 +26,9 @@ import Dashboard from "./Dashboard";
 import PreviousOrder from "./PreviousOrder";
 import CreateCategories from "./CreateCategories";
 import EditProducts from "./EditProducts";
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
+import EmailConfirmation from "./EmailConfirmation";
 
 export default function App() {
   return (
@@ -56,6 +59,9 @@ export default function App() {
           <Route path="previousOrder" element={<PreviousOrder />} />
           <Route path="categories" element={<CreateCategories />} />
           <Route path="editproducts" element={<EditProducts />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
+          <Route path="/emailconfirmation" element={<EmailConfirmation />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>

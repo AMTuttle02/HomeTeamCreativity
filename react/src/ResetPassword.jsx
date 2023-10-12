@@ -1,27 +1,33 @@
 import React, { useState,useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import bcrypt from 'bcryptjs';
 
-function SignUpFailed() {
+function NoMatchPassword() {
   return (
     <div className="incorrectPassword">
-      <h2>Sorry, that email is already registered.</h2>
+      <h2>Passwords do not match. Please try again.</h2>
     </div>
   );
 }
 
-function SignUp() {
+function EmailFailed() {
+  return (
+    <div className="incorrectPassword">
+      <h2>Password reset has not been requested or token has expired. Please request a new token <Link to="/forgotpassword">here</Link>.</h2>
+    </div>
+  );
+}
+
+function ResetPassword() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [fname, setFName] = useState("");
-  const [lname, setLName] = useState("");
-  const [passwordError, setpasswordError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setemailError] = useState("");
-  const [fnameError, setfnameError] = useState("");
-  const [lnameError, setlnameError] = useState("");
+  const [passwordError, setpasswordError] = useState("");
   const [badLogin, setBadLogin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const {token} = useParams();
 
   const confirmLogin = (e) => {
     e.preventDefault();
@@ -29,91 +35,57 @@ function SignUp() {
   }
 
   const handleValidation = (event) => {
-    let formIsValid = true;
-    if (!fname) {
-      formIsValid = false;
-      setfnameError(
-        "First Name is required."
-      );
+    if (password != confirmPassword) {
+      setBadLogin("password");
       return false;
     }
-    else if (!fname.match(/^[a-zA-Z]{1,50}$/)) {
-      formIsValid = false;
-      setfnameError(
-        "Sorry, your first name is too long. Try a shorter one."
-      );
-      return false;
-    } else {
-      setfnameError("");
-      formIsValid = true;
-    }
-    if (!lname) {
-      formIsValid = false;
-      setlnameError(
-        "Last Name is required."
-      );
-      return false;
-    }
-    else if (!lname.match(/^[a-zA-Z]{1,50}$/)) {
-      formIsValid = false;
-      setlnameError(
-        "Sorry, your last name is too long. Can you shorten it?"
-      );
-      return false;
-    } else {
-      setlnameError("");
-      formIsValid = true;
-    }
-    
     if (!email.match(/^.+@.+\..+$/) || !email) {
-      formIsValid = false;
       setemailError("Email Not Valid");
       return false;
     } else {
       setemailError("");
-      formIsValid = true;
     }
     if (!password.match(/^[\w\S]{8,}$/) || !password) {
-      formIsValid = false;
       setpasswordError(
         "Password must be at least 8 characters."
       );
       return false;
     } else {
       setpasswordError("");
-      formIsValid = true;
     }
-    return formIsValid;
+    return true;
   };
-  const signUpSubmit = (e) => {
+
+  const passwordResetSubmit = (e) => {
     e.preventDefault();
     setShowConfirmation(false);
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
     if (handleValidation()) {
-      fetch('/api/signup.php', {  
+      fetch('/api/resetPassword.php', {  
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          "fname":fname, 
-          "lname" :lname,
+        body: JSON.stringify({
+          "password" : hashedPassword,
           "email" : email,
-          "password" : hashedPassword
+          "token" : token
         }),
       })
         .then((response) => response.json())
         .then((data) => {
           // If the email and password are valid, redirect to the homepage
-          if (data.loggedin) {
+          if (data === 1) {
             localStorage.clear();
-            window.location.href = '/loggedin';
+            window.location.href='/login';
           } else {
             // If the email and password are not valid, display an error message
-            setBadLogin(true);
+            setBadLogin("email");
+            console.log(data);
           }
         });
     }
   };
+
   const [firstName, setFirstName] = useState("");
   useEffect(() => {
     fetch("/api/session.php")
@@ -124,19 +96,6 @@ function SignUp() {
   }, []);
 
   useEffect(() => {
-    if (fname && fname.length < 51) {
-      setfnameError("");
-    }
-    
-  }, [fname]);
-
-  useEffect(() => {
-    if (lname && lname.length < 51) {
-      setlnameError("");
-    }
-  }, [lname]);
-
-  useEffect(() => {
     setemailError("");
   }, [email]);
 
@@ -144,44 +103,25 @@ function SignUp() {
     setpasswordError("");
   }, [password]);
 
+  useEffect(() => {
+    if (password != confirmPassword) {
+      setBadLogin("password");
+    }
+    else {
+      setBadLogin(false);
+    }
+  }, [confirmPassword]);
+
   if (firstName) {
-    window.location.href='/loggedin';
+    window.location.href='/login';
   }
   else {
     return (
-      <div className="SignUp">
+      <div className="ResetPassword">
         <br/>
         <div className="container">
-          <h1><u>Sign Up Below!</u></h1>
+          <h1><u>Reset Your Password</u></h1>
           <form id="signupform">
-            <label>First Name</label>
-            <input
-              type="name"
-              className="form-control"
-              id="NameInput"
-              name="NameInput"
-              aria-describedby="nameHelp"
-              placeholder="Enter your first name"
-              onChange={(event) => setFName(event.target.value)}
-            />
-            <small id="nameHelp" className="text-danger form-text">
-              {fnameError}
-            </small>
-            <br/>
-            <label>Last Name</label>
-            <input
-              type="name"
-              className="form-control"
-              id="NameInput"
-              name="NameInput"
-              aria-describedby="nameHelp"
-              placeholder="Enter your last name"
-              onChange={(event) => setLName(event.target.value)}
-            />
-            <small id="nameHelp" className="text-danger form-text">
-              {lnameError}
-            </small>
-            <br/>
             <label>Email address</label>
             <input
               type="email"
@@ -196,7 +136,7 @@ function SignUp() {
               {emailError}
             </small>
             <br/>
-            <label>Password</label>
+            <label>New Password</label>
             <input
               type="password"
               className="form-control"
@@ -208,26 +148,36 @@ function SignUp() {
               {passwordError}
             </small>
             <br/>
-            { badLogin && <SignUpFailed /> }
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="exampleInputPassword2"
+              placeholder="Password"
+              onChange={(event) => setConfirmPassword(event.target.value)}
+            />
+            <br />
+            { badLogin === "password" && <NoMatchPassword /> }
+            { badLogin === "email" && <EmailFailed /> }
             <br />
             {localStorage.getItem("oID") ?
                 <>
-                <button type="submit" onClick={(event) => confirmLogin(event)}>Sign Up</button>
+                <button type="submit" onClick={(event) => confirmLogin(event)}>Update Password</button>
                 </>
               :
                 <>
-                <button type="submit" onClick={(event) => signUpSubmit(event)}>Sign Up</button>
+                <button type="submit" onClick={(event) => passwordResetSubmit(event)}>Update Password</button>
                 </>
               }
           </form>
           {showConfirmation &&
             <div className="confirmation-modal">
               <div className="confirmation-dialog">
-                <h3>Confirm Signup</h3>
+                <h3>Confirm Password Reset</h3>
                 <p>This will remove any items you currently have in your cart.</p>
                 <div className="confirmation-buttons">
                   <button onClick={() => setShowConfirmation(false)}>Cancel</button>
-                  <button onClick={(e) => signUpSubmit(e)} className="delete-button">Sign Up</button>
+                  <button onClick={(e) => passwordResetSubmit(e)} className="delete-button">Update Password</button>
                 </div>
               </div>
             </div>
@@ -235,9 +185,9 @@ function SignUp() {
         </div>
         <div className="UserAccess">
           <br/><br/>
-          <p>Already Have An Account?</p> 
+          <p>Not what you're looking for?</p> 
           <p>
-          <Link to="/login" className="signUpButton">Login </Link>
+          <Link to="/login" className="signUpButton">Login Here</Link>
           </p>
         </div>
         <Outlet/>
@@ -245,4 +195,4 @@ function SignUp() {
     );
   }
 }
-export default SignUp;
+export default ResetPassword;
