@@ -90,8 +90,6 @@ function SignUp() {
     setShowConfirmation(false);
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
-    console.log(password);
-    console.log(hashedPassword);
     if (handleValidation()) {
       fetch('/api/signup.php', {  
         method: "POST",
@@ -112,7 +110,6 @@ function SignUp() {
           } else {
             // If the email and password are not valid, display an error message
             setBadLogin(true);
-            console.log(data);
           }
         });
     }
