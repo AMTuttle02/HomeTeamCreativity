@@ -29,6 +29,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $resetTime = date("Y-m-d H:i:s");
 
+  // Check if email address exists
+  $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
+  $stmt->bind_param("s", $email);
+  if (!$stmt->execute()) {
+    die("Query failed: " . $stmt->error);
+    exit(1);
+  }
+
+  $result = $stmt->get_result();
+  $existing_user = $result->fetch_assoc();
+
+  if (!$existing_user) {
+    die(json_encode(0));
+  }
+
   // Check if email address already exists in table
   $stmt = $conn->prepare("SELECT email FROM resetTokens WHERE email = ?");
   $stmt->bind_param("s", $email);
