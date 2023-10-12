@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { Outlet, Link, Navigate, useNavigate } from "react-router-dom";
+import { Outlet, Link, useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import bcrypt from 'bcryptjs';
 
@@ -14,7 +14,7 @@ function NoMatchPassword() {
 function EmailFailed() {
   return (
     <div className="incorrectPassword">
-      <h2>We don't have that email on file. Try another one!</h2>
+      <h2>Password reset has not been requested or token has expired. Please request a new token <Link to="/forgotpassword">here</Link>.</h2>
     </div>
   );
 }
@@ -27,8 +27,7 @@ function ResetPassword() {
   const [passwordError, setpasswordError] = useState("");
   const [badLogin, setBadLogin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [validToken, setValidToken] = useState(1);
-  const navigate = useNavigate();
+  const {token} = useParams();
 
   const confirmLogin = (e) => {
     e.preventDefault();
@@ -67,7 +66,9 @@ function ResetPassword() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          "password" : hashedPassword
+          "password" : hashedPassword,
+          "email" : email,
+          "token" : token
         }),
       })
         .then((response) => response.json())
@@ -75,10 +76,11 @@ function ResetPassword() {
           // If the email and password are valid, redirect to the homepage
           if (data === 1) {
             localStorage.clear();
-            navigate('/loggedin');
+            window.location.href='/login';
           } else {
             // If the email and password are not valid, display an error message
             setBadLogin("email");
+            console.log(data);
           }
         });
     }
@@ -111,10 +113,7 @@ function ResetPassword() {
   }, [confirmPassword]);
 
   if (firstName) {
-    navigate('/loggedin');
-  }
-  else if (!validToken) {
-    navigate('/invalidToken');
+    window.location.href='/login';
   }
   else {
     return (
