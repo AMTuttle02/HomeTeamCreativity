@@ -30,6 +30,7 @@ function EditProducts() {
   const [categories, setCategories] = useState("");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [currentSubcategories, setCurrentSubcategories] = useState("");
+  const [style, setStyle] = useState("tshirt");
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -79,6 +80,7 @@ function EditProducts() {
         setLColors(data.lColors);
         setCColors(data.cColors);
         setHColors(data.hColors);
+        setStyle(data.default_style);
       });
   }, []);
 
@@ -148,6 +150,7 @@ function EditProducts() {
     formData.append('cColors', cColors);
     formData.append('hColors', hColors);
     formData.append('subcategories', currentSubcategories);
+    formData.append('default_style', style);
   
     fetch('/api/updateProductDetails.php', {
       method: 'POST',
@@ -233,6 +236,70 @@ function EditProducts() {
                   value={tagList}
                   onChange={(event) => setTagList(event.target.value)}
                 />
+                <label><b>Default Style</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {style === "tshirt" ?
+                      <span>
+                        <input type="radio" id="style" name="tshirt" value="tshirt" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;T-Shirt</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="tshirt" value="tshirt" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;T-Shirt</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {style === "longsleeve" ?
+                      <span>
+                        <input type="radio" id="style" name="longsleeve" value="longsleeve" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Long Sleeve</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="longsleeve" value="longsleeve" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Long Sleeve</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {style === "crewneck" ?
+                      <span>
+                        <input type="radio" id="style" name="crewneck" value="crewneck" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Crewneck</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="crewneck" value="crewneck" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Crewneck</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {style === "hoodie" ?
+                      <span>
+                        <input type="radio" id="style" name="hoodie" value="hoodie" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Hoodie</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="hoodie" value="hoodie" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Hoodie</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                </div>
+                <label><b>Colors</b></label>
                 <div className="row">
                   <div className="uploadSplit">
                     <label><b>T-Shirt: </b>{tColors}</label>
