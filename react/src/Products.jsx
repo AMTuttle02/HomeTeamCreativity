@@ -2,8 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
 import BlackTshirt from "./assets/blackTShirt.png";
+import BlackLongSleeve from "./assets/blackLongSleeve.png";
+import BlackCrewneck from "./assets/blackCrewneck.png";
+import BlackHoodie from "./assets/blackHoodie.png";
 import GrayTshirt from "./assets/GreyTShirt.png";
+import GrayLongSleeve from "./assets/GreyLongSleeve.png";
+import GrayCrewneck from "./assets/GreyCrewneckSS.png";
+import GrayHoodie from "./assets/GreyHoodie.png";
 import RedTshirt from "./assets/RedTShirt.png";
+import RedLongSleeve from "./assets/RedLongSleeve.png";
+import RedHoodie from "./assets/RedHoodie.png";
 import YellowTshirt from "./assets/YellowTShirt.png";
 import PinkTshirt from "./assets/PinkTShirt.png";
 import GreenTshirt from "./assets/GreenTShirt.png";
@@ -11,8 +19,14 @@ import MaroonTshirt from "./assets/MaroonTShirt.png";
 import OrangeTshirt from "./assets/OrangeTShirt.png";
 import PurpleTshirt from "./assets/PurpleTShirt.png";
 import RoyalTshirt from "./assets/RoyalTShirt.png";
-import WhiteTshirt from "./assets/WhiteTShirt.png";
+import RoyalLongSleeve from "./assets/RoyalLongSleeve.png";
 import NavyTshirt from "./assets/NavyTShirt.png";
+import NavyLongSleeve from "./assets/NavyLongSleece.png";
+import NavyHoodie from "./assets/NavyHoodie.png";
+import WhiteTshirt from "./assets/WhiteTShirt.png";
+import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
+import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
+import WhiteHoodie from "./assets/WhiteHoodie.png";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -80,6 +94,7 @@ function Products() {
     fetch("/api/products.php")
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setProducts(data);
       });
 
@@ -121,23 +136,60 @@ function Products() {
   }, [filteredProducts, page]);
 
   const currentColor = (product) => {
-    const tShirtMap = {
-      "Black": BlackTshirt,
-      "Gray": GrayTshirt,
-      "Yellow": YellowTshirt,
-      "Pink": PinkTshirt,
-      "Green": GreenTshirt,
-      "Maroon": MaroonTshirt,
-      "Orange": OrangeTshirt,
-      "Purple": PurpleTshirt,
-      "Red": RedTshirt,
-      "Royal": RoyalTshirt,
-      "White": WhiteTshirt,
-      "Navy": NavyTshirt
+    if (product.default_style === "tshirt") {
+      const tShirtMap = {
+        "Black": BlackTshirt,
+        "Gray": GrayTshirt,
+        "Yellow": YellowTshirt,
+        "Pink": PinkTshirt,
+        "Green": GreenTshirt,
+        "Maroon": MaroonTshirt,
+        "Orange": OrangeTshirt,
+        "Purple": PurpleTshirt,
+        "Red": RedTshirt,
+        "Royal": RoyalTshirt,
+        "White": WhiteTshirt,
+        "Navy": NavyTshirt
+      }
+      const regex = /\S+/;
+      let firstWord = product.tColors.match(regex)[0];
+      return(tShirtMap[firstWord]);
     }
-    const regex = /\S+/;
-    let firstWord = product.tColors.match(regex)[0];
-    return(tShirtMap[firstWord]);
+    if (product.default_style === "longsleeve") {
+      const lShirtMap = {
+        "Black": BlackLongSleeve,
+        "Gray": GrayLongSleeve,
+        "Red": RedLongSleeve,
+        "Royal": RoyalLongSleeve,
+        "White": WhiteLongSleeve,
+        "Navy": NavyLongSleeve
+      }
+      const regex = /\S+/;
+      let firstWord = product.lColors.match(regex)[0];
+      return(lShirtMap[firstWord]);
+    }
+    if (product.default_style === "crewneck") {
+      const crewMap = {
+        "Black": BlackCrewneck,
+        "Gray": GrayCrewneck,
+        "White": WhiteCrewneck
+      }
+      const regex = /\S+/;
+      let firstWord = product.cColors.match(regex)[0];
+      return(crewMap[firstWord]);
+    }
+    if (product.default_style === "hoodie") {
+      const hoodieMap = {
+        "Black": BlackHoodie,
+        "Gray": GrayHoodie,
+        "Red": RedHoodie,
+        "White": WhiteHoodie,
+        "Navy": NavyHoodie
+      }
+      const regex = /\S+/;
+      let firstWord = product.hColors.match(regex)[0];
+      return(hoodieMap[firstWord]);
+    }
   }
 
   return (
@@ -264,11 +316,11 @@ function Products() {
         {displayProducts.map((product) => (
           <div key={product.product_id} className="productsCell">
             <div className="productDetails">
-              <button onClick={() => orderProduct(product.product_id)} className="orderProducts">
+              <button onClick={() => orderProduct(product.product_id)} className="magnify">
               <div className="fullDesign">
                 <img
                   src={currentColor(product)}
-                  alt="Home Team Creativity Logo"
+                  alt="Product Style"
                   className="tshirt"
                 />
                 <img
