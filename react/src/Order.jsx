@@ -85,6 +85,18 @@ function Order() {
       .then((data) => {
         if (data) {
           console.log(data);
+          if (data[0].default_style === "tshirt") {
+            setCurrentStyle("Short Sleeve T-Shirt");
+          }
+          else if (data[0].default_style === "longsleeve") {
+            setCurrentStyle("Long Sleeve T-Shirt");
+          }
+          else if (data[0].default_style === "crewneck") {
+            setCurrentStyle("Crewneck Sweatshirt");
+          }
+          else if (data[0].default_style === "hoodie") {
+            setCurrentStyle("Hooded Sweatshirt");
+          }
           setDesign(data);
           setNameOnBack(data[0].nameOnBack);
           setNumberOnBack(data[0].numberOnBack);
@@ -655,7 +667,7 @@ function Order() {
           setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XX-Large", addedCost: 2});
+          setSize({description: "Adult XXX-Large", addedCost: 2});
         }
       }
       else if (currentStyle == "Long Sleeve T-Shirt") {
@@ -687,7 +699,7 @@ function Order() {
           setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XX-Large", addedCost: 2});
+          setSize({description: "Adult XXX-Large", addedCost: 2});
         }
       }
       else if (currentStyle == "Hooded Sweatshirt") {
@@ -718,7 +730,7 @@ function Order() {
           setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XX-Large", addedCost: 2});
+          setSize({description: "Adult XXX-Large", addedCost: 2});
         }
       }
     }
