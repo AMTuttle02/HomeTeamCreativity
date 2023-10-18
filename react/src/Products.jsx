@@ -94,7 +94,6 @@ function Products() {
     fetch("/api/products.php")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setProducts(data);
       });
 
