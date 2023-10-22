@@ -1249,12 +1249,12 @@ function Order() {
             }
           </div>
           <h1>Additional Request Details</h1>
-          <h3>Please Be As Descriptive As Possible</h3>
+          <h3>This may increase the price. Any additional cost will be informed to you via email.</h3>
           <div className="customOrderBox">
             <textarea 
               onChange={handleOrderDetails}
               value={customDetails}
-              placeholder="This may increase the price. Any additional cost will be informed to you via email."
+              placeholder="No Custom Details."
             />
           </div>
           {nameOnBack && 
