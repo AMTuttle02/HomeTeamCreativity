@@ -206,6 +206,7 @@ function Order() {
   const [quantity, setQuantity] = useState(1);
   const [failed, setFailed] = useState(false);
   const [userId, setUserId] = useState("");
+  const [customDetails, setCustomDetails] = useState("");
 
   const changeColor = (e) => {
     if (e == gray) {
@@ -546,8 +547,14 @@ function Order() {
     }
   };
 
+  function handleOrderDetails(event) {
+    setCustomDetails(event.target.value);
+  }
+
   const addToCart = () => {
-    let details = "No custom details";
+    if (customDetails === "") {
+      setCustomDetails("No custom details");
+    }
     let oID = 0;
     if (nameOnBack && numberOnBack) {
       details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
@@ -584,7 +591,7 @@ function Order() {
           product_type: productType.description,
           size: size.description,
           price: ((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity,
-          product_details: details}),
+          product_details: customDetails}),
       })
       .then((response) => response.json())
       .then((data) => {
@@ -1240,6 +1247,15 @@ function Order() {
                 </div>
               </div>
             }
+          </div>
+          <h1>Additional Request Details</h1>
+          <h3>Please Be As Descriptive As Possible</h3>
+          <div className="customOrderBox">
+            <textarea 
+              onChange={handleOrderDetails}
+              value={customDetails}
+              placeholder="This may increase the price. Any additional cost will be informed to you via email."
+            />
           </div>
           {nameOnBack && 
             <>
