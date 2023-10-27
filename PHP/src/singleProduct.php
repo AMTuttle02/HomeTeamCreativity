@@ -23,12 +23,16 @@ if (!$conn) {
 
 // Get single products
 
+if ($inputs["id"]) {
+  $_SESSION['product_id'] = $inputs['id'];
+}
+
 if (isset($_SESSION['product_id'])) {
   $query = $conn->prepare("SELECT * FROM products WHERE product_id = ?;");
   $query->bind_param("s", $_SESSION["product_id"]);
   if (!$query->execute()) {
     // If insertion fails, return error message
-    echo json_encode("ERR: Insertion failed to execute" . $query->error);
+    echo json_encode("ERR: Selection failed to execute" . $query->error);
   }
   else {
     $result = $query->get_result();

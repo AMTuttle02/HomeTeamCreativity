@@ -55,19 +55,7 @@ function Products() {
 
   const orderProduct = (productId) => {
     if (productId != 0) {
-      const data = { id: productId };
-      fetch("/api/setCurrentProduct.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data) {
-            navigate("/order");
-          }
-        })
-        .catch((error) => console.error(error));
+      navigate("/order/" + productId);
     }
     else {
       navigate("/customOrder");

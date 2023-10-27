@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import BlackTshirt from "./assets/blackTShirt.png";
 import BlackLongSleeve from "./assets/blackLongSleeve.png";
 import BlackCrewneck from "./assets/blackCrewneck.png";
@@ -74,17 +74,27 @@ function Order() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [nameOnBack, setNameOnBack] = useState(false);
   const [numberOnBack, setNumberOnBack] = useState(false);
+  const {productKey} = useParams();
 
   useEffect(() => {
     retrieveProduct();
   }, []);
 
   function retrieveProduct() {
-    fetch("/api/singleProduct.php")
+    var data = { id: 0 };
+    
+    if (productKey) {
+      data = { id: productKey };
+    }
+
+    fetch("/api/singleProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log(data);
           if (data[0].default_style === "tshirt") {
             setCurrentStyle("Short Sleeve T-Shirt");
           }
@@ -195,6 +205,10 @@ function Order() {
           setCColors(colors.join(' '));
           colors = data.map(item => item.hColors).flat();
           setHColors(colors.join(' '));
+        }
+        else {
+          console.log( " Here ");
+          navigate("/invalidLocation");
         }
       });
   }
@@ -797,7 +811,7 @@ function Order() {
                 className="tshirt"
                 />
                 <img
-                  src={"api/images/" + currentDesign.filename}
+                  src={window.location.origin + "/api/images/" + currentDesign.filename}
                   alt={currentDesign.product_name}
                   className="design"
                 />
@@ -826,7 +840,7 @@ function Order() {
                 className="tshirt"
                 />
                 <img
-                  src={"api/images/" + currentDesign.filename}
+                  src={window.location.origin + "/api/images/" + currentDesign.filename}
                   alt={currentDesign.product_name}
                   className="design"
                 />
