@@ -206,10 +206,10 @@ function Order() {
           colors = data.map(item => item.hColors).flat();
           setHColors(colors.join(' '));
         }
-        else {
-          console.log( " Here ");
-          navigate("/invalidLocation");
-        }
+      })
+      .catch((error) => {
+        console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
+        navigate("/products");
       });
   }
 

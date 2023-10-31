@@ -32,7 +32,7 @@ if (isset($_SESSION['product_id'])) {
   $query->bind_param("s", $_SESSION["product_id"]);
   if (!$query->execute()) {
     // If insertion fails, return error message
-    echo json_encode("ERR: Selection failed to execute" . $query->error);
+    die(json_encode("ERR: Selection failed to execute" . $query->error));
   }
   else {
     $result = $query->get_result();

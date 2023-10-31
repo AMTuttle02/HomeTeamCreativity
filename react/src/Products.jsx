@@ -113,7 +113,6 @@ function Products() {
         if (!valid) {
           navigate("/products");
           setDisplay("All");
-          console.log("pos1");
         }
       }
       else if ((category === "Faith")
@@ -131,7 +130,6 @@ function Products() {
       else {
         navigate("/products");
         setDisplay("All");
-        console.log("pos2");
       }
     }
   }, [category, subcategory, subcategories]);
