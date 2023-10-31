@@ -26,6 +26,7 @@ import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
 import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
 import WhiteHoodie from "./assets/WhiteHoodie.png";
 import { useNavigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 function setType(type, color) {
     if (type == "Crewneck Sweatshirt") {
@@ -139,14 +140,16 @@ function Dashboard() {
     });
   }
 
-  const upload = (e) => {
-    navigate("/upload");
+  const nav = (e) => {
+    navigate(e);
   }
 
   const [firstName, setFirstName] = useState("");
   const [admin, setAdmin] = useState(0);
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
+  const [enlarge, setEnlarge] = useState(false);
+  const [enlargeProduct, setEnlargeProduct] = useState(false);
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -232,19 +235,36 @@ function Dashboard() {
     }
   }
 
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('.fullDesign')) {
+      setEnlarge(false);
+    }
+  };
+
+  const confirmEnlarge = (product) => {
+    setEnlargeProduct(product);
+    setEnlarge(true);
+  }
+
   if (admin) {
     return (
       <div className='Dashboard'>
         <br />
         <div className="dashboardContainer">
             <div className="row">
-                <div className="dashUpload">
-                    <button type="signUpButton" onClick={upload}>Upload Designs</button>
+                <div className="dashHeader">
+                    <button type="signUpButton" onClick={() => nav("/upload")}>Upload Designs</button>
                 </div>
-                <div className="dashName">
+                <div className="dashHeader">
+                    <button type="signUpButton" onClick={() => nav("/categories")}>Edit Categories</button>
+                </div>
+                <div className="dashHeader">
                     <h1>Hello {firstName}!</h1>
                 </div>
-                <div className="dashLogOut">
+                <div className="dashHeader">
+                    <button type="signUpButton" onClick={() => nav("/products")}>Edit Products</button>
+                </div>
+                <div className="dashHeader">
                     <button type="signUpButton" onClick={logout}>Log Out</button>
                 </div>
             </div>
@@ -301,6 +321,9 @@ function Dashboard() {
                               {product.product_id ?
                                 <div className="cartProductRow">
                                   <div className="productsCell">
+                                    <button 
+                                          className="magnify"
+                                          onClick={() => confirmEnlarge(product)}>
                                       <div className="fullDesign">
                                       <img
                                           src={setType(product.product_type, product.color)}
@@ -313,6 +336,7 @@ function Dashboard() {
                                           className="design"
                                       />
                                       </div>
+                                    </button>
                                   </div>
                                   <div className="productsCell">
                                       <br />
@@ -340,6 +364,9 @@ function Dashboard() {
                               :
                                 <div className="cartProductRow">
                                     <div className="productsCell">
+                                      <button 
+                                            className="magnify"
+                                            onClick={() => confirmEnlarge(product)}>
                                         <div className="fullDesign">
                                         <img
                                             src={setType(product.product_type, product.color)}
@@ -352,6 +379,7 @@ function Dashboard() {
                                             className="design"
                                         />
                                         </div>
+                                      </button>
                                     </div>
                                     <div className="productsCell">
                                         <br />
@@ -375,14 +403,33 @@ function Dashboard() {
                                     <br /><br /><br /><br /><br /><br />
                                     <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
                                     </div>
+                                </div>
+                              }
+                              <br />
+                              <h3> 
+                                <b>Custom Details: </b>
+                                {product.product_details} 
+                              </h3>
+                              <br />
+                              {enlarge && enlargeProduct === product &&
+                                <div className="confirmation-modal" onClick={handleOutsideClick}>
+                                  <div className="orderItem-dialog">
+                                    <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
+                                    <div className="fullDesign">
+                                      <img
+                                        src={setType(product.product_type, product.color)}
+                                        alt="Home Team Creativity Logo"
+                                        className="tshirt"
+                                      />
+                                      <img
+                                        src={"api/images/" + product.filename}
+                                        alt={product.filename}
+                                        className="design"
+                                      />
+                                    </div>
                                   </div>
-                                }
-                                <br />
-                                <h3> 
-                                  <b>Custom Details: </b>
-                                  {product.product_details} 
-                                </h3>
-                                <br />
+                                </div>
+                              }
                             </div>
                         );
                     }

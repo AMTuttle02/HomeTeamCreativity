@@ -1,8 +1,10 @@
 <?php
-$servername = "db";
-$user = $_ENV['MYSQL_USER'];
-$pass = $_ENV['MYSQL_PASSWORD'];
-$dbname = $_ENV['MYSQL_DATABASE'];
+require_once 'secrets.php';
+
+$servername = SERVER;
+$user = MYSQL_USER;
+$pass = MYSQL_PASSWORD;
+$dbname = MYSQL_DATABASE;
 $conn = mysqli_connect($servername, $user, $pass, $dbname);
 
 if ($conn->connect_error) {

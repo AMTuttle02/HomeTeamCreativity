@@ -71,6 +71,9 @@ function Order() {
   const [lColors, setLColors] = useState("");
   const [cColors, setCColors] = useState("");
   const [hColors, setHColors] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [nameOnBack, setNameOnBack] = useState(false);
+  const [numberOnBack, setNumberOnBack] = useState(false);
 
   useEffect(() => {
     retrieveProduct();
@@ -83,6 +86,8 @@ function Order() {
         if (data) {
           console.log(data);
           setDesign(data);
+          setNameOnBack(data[0].nameOnBack);
+          setNumberOnBack(data[0].numberOnBack);
           let retrieveDefault = data[0];
           for (let i = 0; i < data.length; ++i) {
             if (data[i].product_id < retrieveDefault.product_id) {
@@ -102,7 +107,8 @@ function Order() {
             "Purple": PurpleTshirt,
             "Red": RedTshirt,
             "Royal": RoyalTshirt,
-            "White": WhiteTshirt
+            "White": WhiteTshirt,
+            "Navy": NavyTshirt
           }
           const regex = /\S+/;
           if (data[0].tColors) {
@@ -528,24 +534,49 @@ function Order() {
   };
 
   const addToCart = () => {
+    let details = "No custom details";
+    let oID = 0;
+    if (nameOnBack && numberOnBack) {
+      details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
+    }
+    else if (nameOnBack) {
+      details = "Name: " + nameOnBackDetails;
+    }
+    else if (numberOnBack) {
+      details = "Number: " + numberOnBackDetails;
+    }
     console.log(currentDesign);
+    if (userId) {
+      oID = 0;
+    }
+    else if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID")
+    }
+    else {
+      oID = 1;
+    }
+    
     fetch("/api/addToCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        order_id: 100, 
+      body: JSON.stringify({
+        order_id: oID, 
         product_id: currentDesign.product_id, 
         quantity: quantity, 
         color: currentColor,
         product_type: productType.description,
         size: size.description,
         price: ((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity,
-        product_details: "No Custom Details"}),
+        product_details: details}),
     })
     .then((response) => response.json())
     .then((data) => {
       if (data == 1) {
         navigate("/cart");;
+      }
+      else if (data > 1) {
+        localStorage.setItem("oID", data);
+        navigate("/cart");
       }
       else {
         console.log(data);
@@ -579,31 +610,23 @@ function Order() {
           "Royal": RoyalTshirt,
           "White": WhiteTshirt
         };
-        if (size.description.includes("Youth") && tShirtColor == "Navy") {
-          setTShirtColor(design.tColors.split(" ")[0]);
-          setTshirt(tShirtMap[design.tColors.split(" ")[0]]);
+        if (currentDesign.tColors.includes(tShirtColor)) {
           setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
           setCurrentColor(tShirtColor);
         }
+        else if (currentDesign.tColors){
+          const color = currentDesign.tColors.match(regex)[0];
+          setTShirtColor(color);
+          setTshirt(tShirtMap[color]);
+          setCurrentColor(color);
+          setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+        }
         else {
-          if (currentDesign.tColors.includes(tShirtColor)) {
-            setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-            setCurrentColor(tShirtColor);
-          }
-          else if (currentDesign.tColors){
-            const color = currentDesign.tColors.match(regex)[0];
-            setTShirtColor(color);
-            setTshirt(tShirtMap[color]);
-            setCurrentColor(color);
-            setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-          }
-          else {
-            const color = defaultDesign.tColors.match(regex)[0];
-            setTShirtColor(color);
-            setTshirt(tShirtMap[color]);
-            setCurrentColor(color);
-            setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-          }
+          const color = defaultDesign.tColors.match(regex)[0];
+          setTShirtColor(color);
+          setTshirt(tShirtMap[color]);
+          setCurrentColor(color);
+          setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
         }
       }
       else if (currentStyle == "Crewneck Sweatshirt") {
@@ -698,11 +721,6 @@ function Order() {
           setSize({description: "Adult XX-Large", addedCost: 2});
         }
       }
-
-      if (currentColor == "Navy" && size.description.includes("Youth") && currentStyle == "Short Sleeve T-Shirt") {
-        setCurrentColor(currentDesign.tColors.split(" ")[0]);
-        setProductType({type: BlackTshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-      }
     }
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size, currentDesign]);
 
@@ -721,6 +739,22 @@ function Order() {
     }
   }
 
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('.fullDesign')) {
+      setShowConfirmation(false);
+    }
+  };
+
+  const [nameOnBackDetails, setNameOnBackDetails] = useState("");
+  function handleNameOnBackDetails(event) {
+    setNameOnBackDetails(event.target.value);
+  }
+
+  const [numberOnBackDetails, setNumberOnBackDetails] = useState(0);
+  function handleNumberOnBackDetails(event) {
+    setNumberOnBackDetails(event.target.value);
+  }
+
   return (
     <div className="Order">
       <br />
@@ -728,19 +762,24 @@ function Order() {
       <div className="orderRow">
         <div className="orderSide">
           <div className="productDetails">
-            <div className="fullDesign">
-              <img
-              src={productType.type}
-              alt="Home Team Creativity Logo"
-              className="tshirt"
-              />
-              <img
-                src={"api/images/" + currentDesign.filename}
-                alt={currentDesign.product_name}
-                className="design"
-              />
-            </div>
+            <button 
+                  className="magnify"
+                  onClick={() => setShowConfirmation(true)}>
+              <div className="fullDesign">
+                <img
+                src={productType.type}
+                alt="Home Team Creativity Logo"
+                className="tshirt"
+                />
+                <img
+                  src={"api/images/" + currentDesign.filename}
+                  alt={currentDesign.product_name}
+                  className="design"
+                />
+              </div>
+            </button>
             <br /><br />
+            <p>Click Design To Enlarge</p>
             <h3>{currentDesign.product_name}</h3>
             <br />
             <p>Details:</p>
@@ -751,445 +790,480 @@ function Order() {
             <Link to='/returnpolicy'>Return Policy</Link>
           </div>
         </div>
-        {userId ?
-          <div className="orderMain">
-            <h3>Style Your Product With The Options Below</h3>
-            <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
-            <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
-            <h1>Style: {currentStyle}</h1>
-            <div className="typeOptionRow">
-              {validStyle(tColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
-                  className="productTypes">
+        {showConfirmation &&
+          <div className="confirmation-modal" onClick={handleOutsideClick}>
+            <div className="orderItem-dialog">
+              <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
+              <div className="fullDesign">
                 <img
-                  src={transparentTshirt}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
+                src={productType.type}
+                alt="Home Team Creativity Logo"
+                className="tshirt"
                 />
-                </button>
-              </> : <></>}
-              {validStyle(lColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
-                  className="productTypes">
                 <img
-                  src={transparentLongSleeve}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
+                  src={"api/images/" + currentDesign.filename}
+                  alt={currentDesign.product_name}
+                  className="design"
                 />
-                </button>
-              </> : <></>}
-              {validStyle(cColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
-                  className="productTypes">
-                <img
-                  src={transparentCrewneck}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
-                />
-                </button>
-              </> : <></>}
-              {validStyle(hColors) ? <>
-                <button 
-                  onClick={() => setCurrentStyle("Hooded Sweatshirt")}
-                  className="productTypes">
-                <img
-                  src={transparentHoodie}
-                  alt="Home Team Creativity Logo"
-                  className="shirtOptions"
-                />
-                </button>
-              </> : <></>}
+              </div>
             </div>
-            <br />
-            <h1>Color: {currentColor}</h1>
-            <div className="typeOptionRow">
-              {tColors.includes("Black") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Black") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {cColors.includes("Black") && currentStyle == "Crewneck Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("Black") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(black)}
-                className="productTypes">
-                <img
-                  src={black}
-                  alt="Black"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Gray") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Gray") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {cColors.includes("Gray") && currentStyle == "Crewneck Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("Gray") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(gray)}
-                className="productTypes">
-                <img
-                  src={gray}
-                  alt="Gray"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("White") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("White") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {cColors.includes("White") && currentStyle == "Crewneck Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("White") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(white)}
-                className="productTypes">
-                <img
-                  src={white}
-                  alt="White"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" && !size.description.includes("Youth")?
-              <button 
-                onClick={() => changeColor(navy)}
-                className="productTypes">
-                <img
-                  src={navy}
-                  alt="Navy"
-                  className="colorOptions"
-                />
-              </button> 
-              : <div /> }
-              {lColors.includes("Navy") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(navy)}
-                className="productTypes">
-                <img
-                  src={navy}
-                  alt="Navy"
-                  className="colorOptions"
-                />
-              </button> 
-              : <div /> }
-              {hColors.includes("Navy") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(navy)}
-                className="productTypes">
-                <img
-                  src={navy}
-                  alt="Navy"
-                  className="colorOptions"
-                />
-              </button> 
-              : <div /> }
-              {tColors.includes("Royal") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(royal)}
-                className="productTypes">
-                <img
-                  src={royal}
-                  alt="Royal"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Royal") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(royal)}
-                className="productTypes">
-                <img
-                  src={royal}
-                  alt="Royal"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Red") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(red)}
-                className="productTypes">
-                <img
-                  src={red}
-                  alt="Red"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {lColors.includes("Red") && currentStyle == "Long Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(red)}
-                className="productTypes">
-                <img
-                  src={red}
-                  alt="Red"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {hColors.includes("Red") && currentStyle == "Hooded Sweatshirt" ?
-              <button 
-                onClick={() => changeColor(red)}
-                className="productTypes">
-                <img
-                  src={red}
-                  alt="Red"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Maroon") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(maroon)}
-                className="productTypes">
-                <img
-                  src={maroon}
-                  alt="Maroon"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Yellow") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(yellow)}
-                className="productTypes">
-                <img
-                  src={yellow}
-                  alt="Yellow"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Pink") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(pink)}
-                className="productTypes">
-                <img
-                  src={pink}
-                  alt="Pink"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Green") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(green)}
-                className="productTypes">
-                <img
-                  src={green}
-                  alt="Green"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Orange") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(orange)}
-                className="productTypes">
-                <img
-                  src={orange}
-                  alt="Orange"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-              {tColors.includes("Purple") && currentStyle == "Short Sleeve T-Shirt" ?
-              <button 
-                onClick={() => changeColor(purple)}
-                className="productTypes">
-                <img
-                  src={purple}
-                  alt="Purple"
-                  className="colorOptions"
-                />
-              </button>
-              : <div /> }
-            </div>
-            <br />
-            <h1>Size: {size.description}</h1>
-            <div className="typeOptionRow">
-              <p className="size">YOUTH:</p>
-              <button 
-                onClick={() => setSize({description: "Youth Small", addedCost: -2})}
-                className="productTypes">
-                <p className="size">Small</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Youth Medium", addedCost: -2})}
-                className="productTypes">
-                <p className="size">Medium</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Youth Large", addedCost: -2})}
-                className="productTypes">
-                <p className="size">Large</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Youth X-Large", addedCost: -2})}
-                className="productTypes">
-                <p className="size">X-Large</p>
-              </button>
-            </div>
-            <div className="typeOptionRow">
-              <p className="size">ADULT:</p>
-              <button 
-                onClick={() => setSize({description: "Adult Small", addedCost: 0})}
-                className="productTypes">
-                <p className="size">Small</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult Medium", addedCost: 0})}
-                className="productTypes">
-                <p className="size">Medium</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult Large", addedCost: 0})}
-                className="productTypes">
-                <p className="size">Large</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult X-Large", addedCost: 0})}
-                className="productTypes">
-                <p className="size">X-Large</p>
-              </button>
-              <button 
-                onClick={() => setSize({description: "Adult XX-Large", addedCost: 2})}
-                className="productTypes">
-                <p className="size">2XL</p>
-              </button>
-              {currentStyle == "Short Sleeve T-Shirt" ?
-                <button 
-                  onClick={() => setSize({description: "Adult XXX-Large", addedCost: 2})}
-                  className="productTypes">
-                  <p className="size">3XL</p>
-                </button>
-              :
-              <div />
-              }
-            </div>
-            <br />
-            <h1>Quantity: {" "}
-              <button 
-                className="quantity"
-                onClick={() => decreaseQuantity()}>
-                -
-              </button>
-              {" "}{quantity}{" "}
-              <button
-                className="quantity"
-                onClick={() => setQuantity(quantity + 1)}>
-                +
-              </button>
-            </h1>
-            <center>
-              <br />
-              <button
-                className="addToCart"
-                onClick={() => addToCart()}>
-                Add to Cart
-              </button>
-              <br /><br />
-              <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
-              { failed && <Failed /> }
-            </center>
-          </div>
-          :
-          <div className="orderMain">
-            <h1>Sorry, you must be logged in to add items to your cart.</h1>
-            <br />
-            <Link to="/login" className="addToCart">
-              Login Here
-            </Link>
           </div>
         }
+        <div className="orderMain">
+          <h3>Style Your Product With The Options Below</h3>
+          <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
+          <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
+          <h1>Style: {currentStyle}</h1>
+          <div className="typeOptionRow">
+            {validStyle(tColors) ? <>
+              <button 
+                onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
+                className="productTypes">
+              <img
+                src={transparentTshirt}
+                alt="Home Team Creativity Logo"
+                className="shirtOptions"
+              />
+              </button>
+            </> : <></>}
+            {validStyle(lColors) ? <>
+              <button 
+                onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
+                className="productTypes">
+              <img
+                src={transparentLongSleeve}
+                alt="Home Team Creativity Logo"
+                className="shirtOptions"
+              />
+              </button>
+            </> : <></>}
+            {validStyle(cColors) ? <>
+              <button 
+                onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
+                className="productTypes">
+              <img
+                src={transparentCrewneck}
+                alt="Home Team Creativity Logo"
+                className="shirtOptions"
+              />
+              </button>
+            </> : <></>}
+            {validStyle(hColors) ? <>
+              <button 
+                onClick={() => setCurrentStyle("Hooded Sweatshirt")}
+                className="productTypes">
+              <img
+                src={transparentHoodie}
+                alt="Home Team Creativity Logo"
+                className="shirtOptions"
+              />
+              </button>
+            </> : <></>}
+          </div>
+          <br />
+          <h1>Color: {currentColor}</h1>
+          <div className="typeOptionRow">
+            {tColors.includes("Black") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(black)}
+              className="productTypes">
+              <img
+                src={black}
+                alt="Black"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {lColors.includes("Black") && currentStyle == "Long Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(black)}
+              className="productTypes">
+              <img
+                src={black}
+                alt="Black"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {cColors.includes("Black") && currentStyle == "Crewneck Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(black)}
+              className="productTypes">
+              <img
+                src={black}
+                alt="Black"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {hColors.includes("Black") && currentStyle == "Hooded Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(black)}
+              className="productTypes">
+              <img
+                src={black}
+                alt="Black"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Gray") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(gray)}
+              className="productTypes">
+              <img
+                src={gray}
+                alt="Gray"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {lColors.includes("Gray") && currentStyle == "Long Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(gray)}
+              className="productTypes">
+              <img
+                src={gray}
+                alt="Gray"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {cColors.includes("Gray") && currentStyle == "Crewneck Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(gray)}
+              className="productTypes">
+              <img
+                src={gray}
+                alt="Gray"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {hColors.includes("Gray") && currentStyle == "Hooded Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(gray)}
+              className="productTypes">
+              <img
+                src={gray}
+                alt="Gray"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("White") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(white)}
+              className="productTypes">
+              <img
+                src={white}
+                alt="White"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {lColors.includes("White") && currentStyle == "Long Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(white)}
+              className="productTypes">
+              <img
+                src={white}
+                alt="White"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {cColors.includes("White") && currentStyle == "Crewneck Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(white)}
+              className="productTypes">
+              <img
+                src={white}
+                alt="White"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {hColors.includes("White") && currentStyle == "Hooded Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(white)}
+              className="productTypes">
+              <img
+                src={white}
+                alt="White"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(navy)}
+              className="productTypes">
+              <img
+                src={navy}
+                alt="Navy"
+                className="colorOptions"
+              />
+            </button> 
+            : <div /> }
+            {lColors.includes("Navy") && currentStyle == "Long Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(navy)}
+              className="productTypes">
+              <img
+                src={navy}
+                alt="Navy"
+                className="colorOptions"
+              />
+            </button> 
+            : <div /> }
+            {hColors.includes("Navy") && currentStyle == "Hooded Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(navy)}
+              className="productTypes">
+              <img
+                src={navy}
+                alt="Navy"
+                className="colorOptions"
+              />
+            </button> 
+            : <div /> }
+            {tColors.includes("Royal") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(royal)}
+              className="productTypes">
+              <img
+                src={royal}
+                alt="Royal"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {lColors.includes("Royal") && currentStyle == "Long Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(royal)}
+              className="productTypes">
+              <img
+                src={royal}
+                alt="Royal"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Red") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(red)}
+              className="productTypes">
+              <img
+                src={red}
+                alt="Red"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {lColors.includes("Red") && currentStyle == "Long Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(red)}
+              className="productTypes">
+              <img
+                src={red}
+                alt="Red"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {hColors.includes("Red") && currentStyle == "Hooded Sweatshirt" ?
+            <button 
+              onClick={() => changeColor(red)}
+              className="productTypes">
+              <img
+                src={red}
+                alt="Red"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Maroon") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(maroon)}
+              className="productTypes">
+              <img
+                src={maroon}
+                alt="Maroon"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Yellow") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(yellow)}
+              className="productTypes">
+              <img
+                src={yellow}
+                alt="Yellow"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Pink") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(pink)}
+              className="productTypes">
+              <img
+                src={pink}
+                alt="Pink"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Green") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(green)}
+              className="productTypes">
+              <img
+                src={green}
+                alt="Green"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Orange") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(orange)}
+              className="productTypes">
+              <img
+                src={orange}
+                alt="Orange"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+            {tColors.includes("Purple") && currentStyle == "Short Sleeve T-Shirt" ?
+            <button 
+              onClick={() => changeColor(purple)}
+              className="productTypes">
+              <img
+                src={purple}
+                alt="Purple"
+                className="colorOptions"
+              />
+            </button>
+            : <div /> }
+          </div>
+          <br />
+          <h1>Size: {size.description}</h1>
+          <div className="typeOptionRow">
+            <p className="size">YOUTH:</p>
+            <button 
+              onClick={() => setSize({description: "Youth Small", addedCost: -2})}
+              className="productTypes">
+              <p className="size">Small</p>
+            </button>
+            <button 
+              onClick={() => setSize({description: "Youth Medium", addedCost: -2})}
+              className="productTypes">
+              <p className="size">Medium</p>
+            </button>
+            <button 
+              onClick={() => setSize({description: "Youth Large", addedCost: -2})}
+              className="productTypes">
+              <p className="size">Large</p>
+            </button>
+            <button 
+              onClick={() => setSize({description: "Youth X-Large", addedCost: -2})}
+              className="productTypes">
+              <p className="size">X-Large</p>
+            </button>
+          </div>
+          <div className="typeOptionRow">
+            <p className="size">ADULT:</p>
+            <button 
+              onClick={() => setSize({description: "Adult Small", addedCost: 0})}
+              className="productTypes">
+              <p className="size">Small</p>
+            </button>
+            <button 
+              onClick={() => setSize({description: "Adult Medium", addedCost: 0})}
+              className="productTypes">
+              <p className="size">Medium</p>
+            </button>
+            <button 
+              onClick={() => setSize({description: "Adult Large", addedCost: 0})}
+              className="productTypes">
+              <p className="size">Large</p>
+            </button>
+            <button 
+              onClick={() => setSize({description: "Adult X-Large", addedCost: 0})}
+              className="productTypes">
+              <p className="size">X-Large</p>
+            </button>
+            <button 
+              onClick={() => setSize({description: "Adult XX-Large", addedCost: 2})}
+              className="productTypes">
+              <p className="size">2XL</p>
+            </button>
+            {currentStyle == "Short Sleeve T-Shirt" ?
+              <button 
+                onClick={() => setSize({description: "Adult XXX-Large", addedCost: 2})}
+                className="productTypes">
+                <p className="size">3XL</p>
+              </button>
+            :
+            <div />
+            }
+          </div>
+          {nameOnBack && 
+            <>
+              <h2>Name: {' '}
+                <input
+                  type="text"
+                  value={nameOnBackDetails}
+                  onChange={handleNameOnBackDetails}
+                  placeholder="Enter Name For Back Of Product Here"
+                  className="lastNameOrderPage"
+                />
+              </h2>
+            </>
+          }
+          {numberOnBack && 
+            <>
+              <h2>Number:{' '}
+              <input
+                type="number"
+                value={numberOnBackDetails}
+                onChange={handleNumberOnBackDetails}
+                min={0}
+                max={99}
+              />
+              </h2>
+            </>
+          }
+          <br />
+          <h1>Quantity: {" "}
+            <button 
+              className="quantity"
+              onClick={() => decreaseQuantity()}>
+              -
+            </button>
+            {" "}{quantity}{" "}
+            <button
+              className="quantity"
+              onClick={() => setQuantity(quantity + 1)}>
+              +
+            </button>
+          </h1>
+          <center>
+            <br />
+            <button
+              className="addToCart"
+              onClick={() => addToCart()}>
+              Add to Cart
+            </button>
+            <br /><br />
+            <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
+            { failed && <Failed /> }
+          </center>
+        </div>
       </div>
     </div>
   );

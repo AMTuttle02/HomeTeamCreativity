@@ -62,36 +62,32 @@ function setPrice ($price, $type, $size) {
     return $price;
   }
 
-$query = $conn->prepare(
-                        "SELECT *
-                        FROM users
-                        WHERE user_id = ?");
-$query->bind_param(
-        "s",
-        $_SESSION["userId"]
+if ($_SESSION["order_id"]) {
+    $orderId = $_SESSION["order_id"];
+
+    // Obtain order details
+    $query = $conn->prepare(
+        "SELECT *
+        FROM orders
+        WHERE order_id = ?"
     );
-if (!$query->execute()) {
-    die("Query failed: " . $stmt->error);
+    $query->bind_param("s", $orderId);
+}
+else {
+    $userId = $_SESSION["userId"];
+
+    // Obtain order details
+    $query = $conn->prepare(
+        "SELECT *
+        FROM orders
+        WHERE user_id = ? AND is_active = 1 AND is_cart = 0 AND order_date = 
+            (SELECT MAX(order_date)
+            FROM orders
+            WHERE user_id = ? AND is_active = 1 AND is_cart = 0)"
+    );
+    $query->bind_param("ss", $userId, $userId);
 }
 
-$result = mysqli_fetch_assoc($query->get_result());
-
-$first = $result['first_name'];
-$last = $result['last_name'];
-$email = $result['email'];
-
-$userId = $_SESSION["userId"];
-
-// Obtain order details
-$query = $conn->prepare(
-    "SELECT *
-    FROM orders
-    WHERE user_id = ? AND is_active = 1 AND is_cart = 0 AND order_date = 
-        (SELECT MAX(order_date)
-        FROM orders
-        WHERE user_id = ? AND is_active = 1 AND is_cart = 0)"
-);
-$query->bind_param("ss", $userId, $userId);
 if (!$query->execute()) {
     die("Query failed: " . $query->error);
 }
@@ -103,6 +99,10 @@ if (!$result) {
 }
 
 $orderId = $result['order_id'];
+$first = $result['first_name'];
+$last = $result['last_name'];
+$email = $result['email'];
+
 $subTotal = number_format($result['total_cost'], 2);
 $temp = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
 $total_cost = number_format(($temp * 1) + ($temp * 0.0725), 2);
@@ -654,10 +654,10 @@ $mail->SMTPDebug = 0;
 $mail->Host = 'smtp.titan.email';
 $mail->Port = 587;
 $mail->SMTPAuth = true;
-$mail->Username = 'orderconfirmation@hometeamcreativity.com';
-$mail->Password = 'ConfirmationOfOrder1!';
+$mail->Username = ORDER_EMAIL_USERNAME;
+$mail->Password = ORDER_EMAIL_PASSWORD;
 $mail->setFrom('orderconfirmation@hometeamcreativity.com', 'HomeTeam Creativity Order Confirmation');
-$mail->addReplyTo('IT@hometeamcreativity.com', 'HomeTeam Creativity IT');
+$mail->addReplyTo('admin@hometeamcreativity.com', 'HomeTeam Creativity Admin');
 $mail->addAddress($email, $first .' '. $last);
 $mail->addBCC('admin@hometeamcreativity.com', 'Admin');
 $mail->Subject = 'HomeTeam Creativity Order Confirmation';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, Navigate, useNavigate } from "react-router-dom";
 import bcrypt from 'bcryptjs';
 
 function LoginFailed() {
@@ -16,9 +16,17 @@ function Login() {
   const [badLogin, setBadLogin] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [loginAttempted, setLoginAttempted] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const navigate = useNavigate();
+
+  const confirmLogin = (e) => {
+    e.preventDefault();
+    setShowConfirmation(true);
+  }
 
   const loginSubmit = (e) => {
     e.preventDefault();
+    setShowConfirmation(false);
     fetch("/api/loginDetails.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -41,6 +49,7 @@ function Login() {
                 .then((response) => response.json())
                 .then((data) => {
                   if (data.loggedin) {
+                    localStorage.clear();
                     setLoggedIn(true);
                   } else {
                     setBadLogin(true);
@@ -92,7 +101,7 @@ function Login() {
             <h1>
               <u>Login</u>
             </h1>
-            <form id="loginform" onSubmit={loginSubmit}>
+            <form id="loginform">
               <label>Email address</label>
               <input
                 type="email"
@@ -112,10 +121,31 @@ function Login() {
                 placeholder="Password"
                 onChange={(event) => setPassword(event.target.value)}
               />
+              <Link to="/forgotpassword">Forgot Password?</Link>
               {loginAttempted && badLogin && <LoginFailed />}
               <br />
-              <button type="submit">Log In</button>
+              {localStorage.getItem("oID") ?
+                <>
+                <button type="submit" onClick={(event) => confirmLogin(event)}>Log In</button>
+                </>
+              :
+                <>
+                <button type="submit" onClick={(event) => loginSubmit(event)}>Log In</button>
+                </>
+              }
             </form>
+            {showConfirmation &&
+              <div className="confirmation-modal">
+                <div className="confirmation-dialog">
+                  <h3>Confirm Login</h3>
+                  <p>This will remove any items you currently have in your cart.</p>
+                  <div className="confirmation-buttons">
+                    <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                    <button onClick={(e) => loginSubmit(e)} className="delete-button">Login</button>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
           <div className="UserAccess">
             <br />

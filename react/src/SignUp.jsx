@@ -21,6 +21,13 @@ function SignUp() {
   const [fnameError, setfnameError] = useState("");
   const [lnameError, setlnameError] = useState("");
   const [badLogin, setBadLogin] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const confirmLogin = (e) => {
+    e.preventDefault();
+    setShowConfirmation(true);
+  }
+
   const handleValidation = (event) => {
     let formIsValid = true;
     if (!fname) {
@@ -80,10 +87,9 @@ function SignUp() {
   };
   const signUpSubmit = (e) => {
     e.preventDefault();
+    setShowConfirmation(false);
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
-    console.log(password);
-    console.log(hashedPassword);
     if (handleValidation()) {
       fetch('/api/signup.php', {  
         method: "POST",
@@ -99,11 +105,11 @@ function SignUp() {
         .then((data) => {
           // If the email and password are valid, redirect to the homepage
           if (data.loggedin) {
+            localStorage.clear();
             window.location.href = '/loggedin';
           } else {
             // If the email and password are not valid, display an error message
             setBadLogin(true);
-            console.log(data);
           }
         });
     }
@@ -147,7 +153,7 @@ function SignUp() {
         <br/>
         <div className="container">
           <h1><u>Sign Up Below!</u></h1>
-          <form id="signupform" onSubmit={signUpSubmit}>
+          <form id="signupform">
             <label>First Name</label>
             <input
               type="name"
@@ -203,10 +209,29 @@ function SignUp() {
             </small>
             <br/>
             { badLogin && <SignUpFailed /> }
-            <button type="submit">
-              Sign Up
-            </button>
+            <br />
+            {localStorage.getItem("oID") ?
+                <>
+                <button type="submit" onClick={(event) => confirmLogin(event)}>Sign Up</button>
+                </>
+              :
+                <>
+                <button type="submit" onClick={(event) => signUpSubmit(event)}>Sign Up</button>
+                </>
+              }
           </form>
+          {showConfirmation &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Confirm Signup</h3>
+                <p>This will remove any items you currently have in your cart.</p>
+                <div className="confirmation-buttons">
+                  <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                  <button onClick={(e) => signUpSubmit(e)} className="delete-button">Sign Up</button>
+                </div>
+              </div>
+            </div>
+          }
         </div>
         <div className="UserAccess">
           <br/><br/>

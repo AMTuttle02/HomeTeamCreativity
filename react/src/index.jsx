@@ -4,7 +4,7 @@ import Homepage from "./Homepage"
 import HomeContents from "./HomeContents.jsx"
 import Login from "./Login";
 import SignUp from "./SignUp";
-import Products from "./products";
+import Products from "./Products";
 import HowItWorks from "./howItWorks";
 import About from "./aboutUs";
 import "./index.css";
@@ -17,12 +17,18 @@ import NoResults from "./NoResults";
 import Cart from "./Cart";
 import Order from "./Order";
 import CustomOrder from "./CustomOrder";
-import Checkout from "./Checkout";
+import Checkout from "./CheckoutComplete";
 import CheckoutFailed from "./CheckoutFailed";
 import ReturnPolicy from "./ReturnPolicy";
 import CheckoutDetails from "./CheckoutDetails";
 import PayLater from "./PayLater";
 import Dashboard from "./Dashboard";
+import PreviousOrder from "./PreviousOrder";
+import CreateCategories from "./CreateCategories";
+import EditProducts from "./EditProducts";
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
+import EmailConfirmation from "./EmailConfirmation";
 
 export default function App() {
   return (
@@ -50,6 +56,12 @@ export default function App() {
           <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="paylater" element={<PayLater />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="previousOrder" element={<PreviousOrder />} />
+          <Route path="categories" element={<CreateCategories />} />
+          <Route path="editproducts" element={<EditProducts />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
+          <Route path="/emailconfirmation" element={<EmailConfirmation />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
