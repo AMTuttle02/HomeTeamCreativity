@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import BlackTshirt from "./assets/blackTShirt.png";
 import BlackLongSleeve from "./assets/blackLongSleeve.png";
 import BlackCrewneck from "./assets/blackCrewneck.png";
@@ -74,17 +74,39 @@ function Order() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [nameOnBack, setNameOnBack] = useState(false);
   const [numberOnBack, setNumberOnBack] = useState(false);
+  const {productKey} = useParams();
 
   useEffect(() => {
     retrieveProduct();
   }, []);
 
   function retrieveProduct() {
-    fetch("/api/singleProduct.php")
+    var data = { id: 0 };
+    
+    if (productKey) {
+      data = { id: productKey };
+    }
+
+    fetch("/api/singleProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log(data);
+          if (data[0].default_style === "tshirt") {
+            setCurrentStyle("Short Sleeve T-Shirt");
+          }
+          else if (data[0].default_style === "longsleeve") {
+            setCurrentStyle("Long Sleeve T-Shirt");
+          }
+          else if (data[0].default_style === "crewneck") {
+            setCurrentStyle("Crewneck Sweatshirt");
+          }
+          else if (data[0].default_style === "hoodie") {
+            setCurrentStyle("Hooded Sweatshirt");
+          }
           setDesign(data);
           setNameOnBack(data[0].nameOnBack);
           setNumberOnBack(data[0].numberOnBack);
@@ -184,15 +206,21 @@ function Order() {
           colors = data.map(item => item.hColors).flat();
           setHColors(colors.join(' '));
         }
+      })
+      .catch((error) => {
+        console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
+        navigate("/products");
       });
   }
 
   const navigate = useNavigate();
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-  const [size, setSize] = useState({description: "Adult Medium", addedCost: 0});
+  const [size, setSize] = useState({description: "", addedCost: 0});
+  const [invalidSize, setInvalidSize] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [failed, setFailed] = useState(false);
   const [userId, setUserId] = useState("");
+  const [customDetails, setCustomDetails] = useState("");
 
   const changeColor = (e) => {
     if (e == gray) {
@@ -533,8 +561,14 @@ function Order() {
     }
   };
 
+  function handleOrderDetails(event) {
+    setCustomDetails(event.target.value);
+  }
+
   const addToCart = () => {
-    let details = "No custom details";
+    if (customDetails === "") {
+      setCustomDetails("No custom details");
+    }
     let oID = 0;
     if (nameOnBack && numberOnBack) {
       details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
@@ -555,34 +589,39 @@ function Order() {
     else {
       oID = 1;
     }
-    
-    fetch("/api/addToCart.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_id: oID, 
-        product_id: currentDesign.product_id, 
-        quantity: quantity, 
-        color: currentColor,
-        product_type: productType.description,
-        size: size.description,
-        price: ((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity,
-        product_details: details}),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data == 1) {
-        navigate("/cart");;
-      }
-      else if (data > 1) {
-        localStorage.setItem("oID", data);
-        navigate("/cart");
-      }
-      else {
-        console.log(data);
-        setFailed(true);
-      }
-    })
+
+    if (size.description === "") {
+      setInvalidSize(true);
+    }
+    else {
+      fetch("/api/addToCart.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order_id: oID, 
+          product_id: currentDesign.product_id, 
+          quantity: quantity, 
+          color: currentColor,
+          product_type: productType.description,
+          size: size.description,
+          price: ((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity,
+          product_details: customDetails}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data == 1) {
+          navigate("/cart");;
+        }
+        else if (data > 1) {
+          localStorage.setItem("oID", data);
+          navigate("/cart");
+        }
+        else {
+          console.log(data);
+          setFailed(true);
+        }
+      })
+    }
   };
 
   useEffect(() => {
@@ -655,7 +694,7 @@ function Order() {
           setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XX-Large", addedCost: 2});
+          setSize({description: "Adult XXX-Large", addedCost: 2});
         }
       }
       else if (currentStyle == "Long Sleeve T-Shirt") {
@@ -687,7 +726,7 @@ function Order() {
           setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XX-Large", addedCost: 2});
+          setSize({description: "Adult XXX-Large", addedCost: 2});
         }
       }
       else if (currentStyle == "Hooded Sweatshirt") {
@@ -718,7 +757,7 @@ function Order() {
           setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XX-Large", addedCost: 2});
+          setSize({description: "Adult XXX-Large", addedCost: 2});
         }
       }
     }
@@ -772,7 +811,7 @@ function Order() {
                 className="tshirt"
                 />
                 <img
-                  src={"api/images/" + currentDesign.filename}
+                  src={window.location.origin + "/api/images/" + currentDesign.filename}
                   alt={currentDesign.product_name}
                   className="design"
                 />
@@ -801,7 +840,7 @@ function Order() {
                 className="tshirt"
                 />
                 <img
-                  src={"api/images/" + currentDesign.filename}
+                  src={window.location.origin + "/api/images/" + currentDesign.filename}
                   alt={currentDesign.product_name}
                   className="design"
                 />
@@ -1211,6 +1250,26 @@ function Order() {
             :
             <div />
             }
+            {invalidSize &&
+              <div className="confirmation-modal">
+                <div className="confirmation-dialog">
+                  <h3>Invalid Size</h3>
+                  <p>You must select a size to add this item to your cart.</p>
+                  <div className="confirmation-buttons">
+                    <button className="delete-button" onClick={() => setInvalidSize(false)}>Return To Order</button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <h1>Additional Request Details</h1>
+          <h3>This may increase the price. Any additional cost will be informed to you via email.</h3>
+          <div className="customOrderBox">
+            <textarea 
+              onChange={handleOrderDetails}
+              value={customDetails}
+              placeholder="No Custom Details."
+            />
           </div>
           {nameOnBack && 
             <>

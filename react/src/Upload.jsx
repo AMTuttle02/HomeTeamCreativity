@@ -16,6 +16,7 @@ function Upload() {
   const [hColorsPrimary, setHColorPrimary] = useState("None");
   const [category, setCategory] = useState("All ");
   const [allSubcategories, setAllSubcategories] = useState([]);
+  const [style, setStyle] = useState("");
 
   const handleFileInputChange = (event) => {
     setFile(event.target.files[0]);
@@ -83,6 +84,7 @@ function Upload() {
     formData.append('cColors', crewneckColors);
     formData.append('hColors', hoodieColors);
     formData.append('subcategories', category);
+    formData.append('default_style', style);
   
     fetch('/api/upload.php', {
       method: 'POST',
@@ -184,6 +186,37 @@ function Upload() {
               onChange={(event) => setTags(event.target.value)}
             />
             <br/>
+            <center><h3>Default Style</h3></center>
+            <div className="row">
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="style" name="style" value="tshirt" onChange={(event) => setStyle(event.target.value)}/>
+                    <label>&nbsp;T-Shirt</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="style" name="style" value="longsleeve" onChange={(event) => setStyle(event.target.value)}/>
+                    <label>&nbsp;Long Sleeve</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="style" name="style" value="crewneck" onChange={(event) => setStyle(event.target.value)}/>
+                    <label>&nbsp;Crewneck</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="style" name="style" value="hoodie" onChange={(event) => setStyle(event.target.value)}/>
+                    <label>&nbsp;Hoodie</label>
+                    <br />
+                </span>
+              </div>
+            </div>
             <center>
               <h3>Color Options</h3>
             </center>
