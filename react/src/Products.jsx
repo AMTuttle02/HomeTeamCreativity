@@ -295,7 +295,7 @@ function Products() {
         <div className="productsLeft">
           {page > 1 &&
             <span>
-              <button onClick={() => setPage(page-1)}>&#129044; Previous Page</button>
+              <button onClick={() => setPage(page-1)}>{'<'}{/*&#129046;*/} Previous Page</button>
             </span>
           }
         </div>
@@ -309,7 +309,7 @@ function Products() {
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 
             <span>
-              <button onClick={() => setPage(page+1)}>Next Page &#129046;</button>
+              <button onClick={() => setPage(page+1)}>Next Page {'>'}{/*&#129046;*/}</button>
             </span>
           }
         </div>
