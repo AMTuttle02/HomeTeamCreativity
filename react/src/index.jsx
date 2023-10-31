@@ -41,6 +41,8 @@ export default function App() {
           <Route path="loggedout" element={<LogOut />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="products" element={<Products />} />
+          <Route path="products/:category" element={<Products />} />
+          <Route path="products/:category/:subcategory" element={<Products />} />
           <Route path="howitworks" element={<HowItWorks />} />
           <Route path="about" element={<About />} />
           <Route path="upload" element={<Upload />} />
