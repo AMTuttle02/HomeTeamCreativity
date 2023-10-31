@@ -331,7 +331,7 @@ function Products() {
         <div className="productsMain">
           {display === ("All") ? 
             <span>
-              <h1>Products {subcategory}</h1>
+              <h1>Products</h1>
             </span>
             :
             <span>
