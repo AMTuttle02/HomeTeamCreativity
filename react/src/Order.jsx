@@ -566,7 +566,7 @@ function Order() {
         color: currentColor,
         product_type: productType.description,
         size: size.description,
-        price: ((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity,
+        price: (((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2),
         product_details: details}),
     })
     .then((response) => response.json())
@@ -812,7 +812,7 @@ function Order() {
         <div className="orderMain">
           <h3>Style Your Product With The Options Below</h3>
           <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
-          <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
+          <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
           <h1>Style: {currentStyle}</h1>
           <div className="typeOptionRow">
             {validStyle(tColors) ? <>
@@ -1260,7 +1260,7 @@ function Order() {
               Add to Cart
             </button>
             <br /><br />
-            <h1>Price: ${((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity}</h1>
+            <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
             { failed && <Failed /> }
           </center>
         </div>
