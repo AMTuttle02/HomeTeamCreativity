@@ -65,7 +65,8 @@ function CustomOrder() {
   const [crewneckColor, setCrewneckColor] = useState("Black");
   const [currentStyle, setCurrentStyle] = useState("Short Sleeve T-Shirt");
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-  const [size, setSize] = useState({description: "Adult Medium", addedCost: 0});
+  const [size, setSize] = useState({description: "", addedCost: 0});
+  const [invalidSize, setInvalidSize] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [failed, setFailed] = useState(false);
   const [design, setDesign] = useState({
@@ -104,33 +105,39 @@ function CustomOrder() {
     else {
       oID = 1;
     }
-    fetch("/api/addToCart.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        order_id: oID, 
-        product_id: design.id, 
-        quantity: quantity, 
-        color: currentColor,
-        product_type: productType.description,
-        size: size.description,
-        price: ((design.price * 1) + productType.addedCost + size.addedCost) * quantity,
-        product_details: customDetails}),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data == 1) {
-        navigate("/cart");;
-      }
-      else if (data > 1) {
-        localStorage.setItem("oID", data);
-        navigate("/cart");
-      }
-      else {
-        console.log(data);
-        setFailed(true);
-      }
-    })
+
+    if (size.description === "") {
+      setInvalidSize(true);
+    }
+    else {
+      fetch("/api/addToCart.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          order_id: oID, 
+          product_id: design.id, 
+          quantity: quantity, 
+          color: currentColor,
+          product_type: productType.description,
+          size: size.description,
+          price: ((design.price * 1) + productType.addedCost + size.addedCost) * quantity,
+          product_details: customDetails}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data == 1) {
+          navigate("/cart");;
+        }
+        else if (data > 1) {
+          localStorage.setItem("oID", data);
+          navigate("/cart");
+        }
+        else {
+          console.log(data);
+          setFailed(true);
+        }
+      })
+    }
   };
 
   const changeColor = (e) => {
@@ -1014,6 +1021,17 @@ function CustomOrder() {
             :
             <div />
             }
+          {invalidSize &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Invalid Size</h3>
+                <p>You must select a size to add this item to your cart.</p>
+                <div className="confirmation-buttons">
+                  <button className="delete-button" onClick={() => setInvalidSize(false)}>Return To Order</button>
+                </div>
+              </div>
+            </div>
+          }
           </div>
           <br />
           <h1>Quantity: {" "}

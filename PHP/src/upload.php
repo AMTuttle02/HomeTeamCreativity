@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $cColors = $_POST["cColors"];
   $hColors = $_POST["hColors"];
   $categories = $_POST["subcategories"];
+  $defaultStyle = $_POST["default_style"];
   $file = $_FILES['image'];
   $targetDir = UPLOAD_DIR;
   $targetFile = $targetDir . basename($file["name"]);
@@ -63,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (move_uploaded_file($file["tmp_name"], $targetFile)) {
       echo json_encode("The file has been uploaded with name " . $productName . " and price $" . $price . "with filename: " . $fileName);
       // Attempt to insert new design into table
-      $query = $conn->prepare("INSERT INTO products (product_name, price, filename, tag_list, tColors, lColors, cColors, hColors, categories)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
-      $query->bind_param("sssssssss", $productName, $price, $fileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories);
+      $query = $conn->prepare("INSERT INTO products (product_name, price, filename, tag_list, tColors, lColors, cColors, hColors, categories, default_style)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+      $query->bind_param("ssssssssss", $productName, $price, $fileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle);
       if (!$query->execute()) {
         // If insertion fails, return error message
         echo json_encode("ERR: Insertion failed to execute" . $query->error);

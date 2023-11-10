@@ -65,10 +65,23 @@ body {
   text-decoration: none;
   background-color: transparent;
   width: 100%;
+  color: white;
 }
 
 .magnify:hover {
   background-color: #858585;
+}
+
+.orderProducts {
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  color: white;
+}
+
+.orderProducts:hover {
+  background-color: #686868;
+  border: none;
 }
 
 .cart {
@@ -550,6 +563,7 @@ body {
   width: 50%;
   max-width: 100%;
   height: auto;
+  color: white;
 }
 
 .fullDesign {
@@ -801,18 +815,6 @@ input[type="text"], input[type="password"] {
   padding: 20px;
   color: white;
 
-}
-
-.orderProducts {
-  background-color: transparent;
-  border: none;
-  border-radius: 4px;
-  color: white;
-}
-
-.orderProducts:hover {
-  background-color: #686868;
-  border: none;
 }
 
 .signUpButton {
