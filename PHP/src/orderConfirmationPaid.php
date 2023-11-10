@@ -286,7 +286,7 @@ if ($result->num_rows > 0) {
                                                                                         <p style="line-height: 150%;">Size: '.$row['size'].'</p>
                                                                                         <p style="line-height: 150%;">Additional Details: '.$row['product_details'].'</p>
                                                                                         <p style="line-height: 150%;">Quantity:&nbsp;'.$row['product_quantity'].'</p>
-                                                                                        <h3 style="line-height: 150%;" class="p_price">$'.$price.'</h3>
+                                                                                        <h3 style="line-height: 150%;" class="p_price">$'.number_format($price, 2).'</h3>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -356,7 +356,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$'.$subTotal.'<br>$00.00<br>$00.00<br>$'.$processingFee.'<br>$'.$tax.'</p>
+                                                                                                        <p>$'.number_format($subTotal, 2).'<br>$00.00<br>$00.00<br>$'.$processingFee.'<br>$'.$tax.'</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -432,7 +432,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text es-m-txt-r">
-                                                                                                        <h3>$'.$total_cost.'</h3>
+                                                                                                        <h3>$'.number_format($total_cost, 2).'</h3>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
