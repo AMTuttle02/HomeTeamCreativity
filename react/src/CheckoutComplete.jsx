@@ -264,7 +264,7 @@ function Checkout() {
                   <br />
                   <div className="productsCell">
                     <br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
                     <br /><br />
                     <h2> 
                       Qty:{' '}
@@ -273,7 +273,7 @@ function Checkout() {
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
                   </div>
                 </div>
               :
@@ -306,7 +306,7 @@ function Checkout() {
                   <br />
                   <div className="productsCell">
                     <br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size)} - ${(setPrice(product.price, product.product_type, product.size) * 1 +customHighTotal)}</h2>
+                    <h2>${setPrice(product.price, product.product_type, product.size).toFixed(2)} - ${(setPrice(product.price, product.product_type, product.size) * 1 +customHighTotal).toFixed(2)}</h2>
                     <br /><br />
                     <h2> 
                       Qty:{' '} 
@@ -315,7 +315,7 @@ function Checkout() {
                   </div>
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) * product.product_quantity * 1 +customHighTotal)}</h2>
+                    <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)} - ${(setPrice(product.price, product.product_type, product.size) * product.product_quantity * 1 +customHighTotal).toFixed(2)}</h2>
                   </div>
                 </div>
               }

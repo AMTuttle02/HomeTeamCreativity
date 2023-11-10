@@ -416,10 +416,10 @@ function Cart() {
           </div>
         </div>
           <div className="cartSideItem">
-            <h1 className="ItemCount"> ${order.total_cost * 1}
+            <h1 className="ItemCount"> ${(order.total_cost * 1).toFixed(2)}
                                       {customHighTotal ? 
                                         <>
-                                        {' '}- ${order.total_cost * 1 + customHighTotal}
+                                        {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
                                         </> : <div />}</h1>
             <h1 className="ItemCount"> {addedItems} item(s)</h1>
           </div>
@@ -466,12 +466,12 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br />
-                    <h2>${setPrice(product.price, product.product_type, product.size)} </h2>
+                    <h2>${(setPrice(product.price, product.product_type, product.size)).toFixed(2)} </h2>
                     <br /><br />
                     <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size).toFixed(2)}>-</button>
                       {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size).toFixed(2)}>+</button>
                     </h2>
                     <br /><br />
                     <h2>
@@ -494,7 +494,7 @@ function Cart() {
                   }
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                    <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
                   </div>
                 </div>
                 <br />
@@ -534,12 +534,12 @@ function Cart() {
                   </div>
                   <div className="productsCell">
                     <br />
-                    <h2>${setPrice(product.price, product.product_type, product.size)} - ${setPrice(product.price, product.product_type, product.size) + 6}</h2>
+                    <h2>${(setPrice(product.price, product.product_type, product.size)).toFixed(2)} - ${(setPrice(product.price, product.product_type, product.size) + 6).toFixed(2)}</h2>
                     <br /><br />
                     <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, (setPrice(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size)}>-</button>
                       {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, (setPrice(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size)}>+</button>
                     </h2>
                     <br /><br />
                     <h2>
@@ -562,7 +562,7 @@ function Cart() {
                   }
                   <div className="productsCell">
                     <br /><br /><br /><br /><br /><br />
-                    <h2>${setPrice(product.price, product.product_type, product.size) * product.product_quantity} - ${(setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity}</h2>
+                    <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)} - ${((setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity).toFixed(2)}</h2>
                   </div>
                 </div>
                 <br />
@@ -597,10 +597,10 @@ function Cart() {
         ))}
       <br/>
       <div className = "FinalCheckoutButtonPlacement">
-        <h1> Subtotal: ${order.total_cost * 1}
+        <h1> Subtotal: ${(order.total_cost * 1).toFixed(2)}
                         {customHighTotal ? 
                         <>
-                        {' '}- ${order.total_cost * 1 + customHighTotal}
+                        {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
                         </> : <div />}</h1>
         <div className="CartPage" />
         <br/>
