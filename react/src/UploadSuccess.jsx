@@ -11,6 +11,7 @@ import OrangeTshirt from "./assets/OrangeTShirt.png";
 import PurpleTshirt from "./assets/PurpleTShirt.png";
 import RoyalTshirt from "./assets/RoyalTShirt.png";
 import WhiteTshirt from "./assets/WhiteTShirt.png";
+import NavyTshirt from "./assets/NavyTShirt.png";
 
 function Upload() {
   const [admin, setAdmin] = useState("");
@@ -42,7 +43,8 @@ function Upload() {
           "Purple": PurpleTshirt,
           "Red": RedTshirt,
           "Royal": RoyalTshirt,
-          "White": WhiteTshirt
+          "White": WhiteTshirt,
+          "Navy": NavyTshirt
         }
         const regex = /\S+/;
         let firstWord = data[0].tColors.match(regex)[0];
