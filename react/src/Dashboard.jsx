@@ -348,7 +348,7 @@ function Dashboard() {
                                   <br />
                                   <div className="productsCell">
                                     <br /><br />
-                                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                                    <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
                                     <br />
                                     <br />
                                     <h2> 
@@ -358,7 +358,7 @@ function Dashboard() {
                                   </div>
                                   <div className="productsCell">
                                   <br /><br /><br /><br /><br /><br />
-                                  <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}</h2>
+                                  <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
                                   </div>
                                 </div>
                               :
@@ -391,7 +391,7 @@ function Dashboard() {
                                     <br />
                                     <div className="productsCell">
                                       <br /><br />
-                                      <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                                      <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}+</h2>
                                       <br />
                                       <br />
                                       <h2> 
@@ -401,7 +401,7 @@ function Dashboard() {
                                     </div>
                                     <div className="productsCell">
                                     <br /><br /><br /><br /><br /><br />
-                                    <h2>$ {setPrice(product.price, product.product_type, product.size) * product.product_quantity}+</h2>
+                                    <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}+</h2>
                                     </div>
                                 </div>
                               }
