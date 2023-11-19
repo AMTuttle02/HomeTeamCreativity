@@ -479,6 +479,18 @@ body {
 .main {   
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+}
+
+/* Main column */
+.mainSplit {   
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Main column */
@@ -1284,6 +1296,16 @@ footer {
   margin: 1%;
 }
 
+.contactUsImg {
+  width: 100%;
+  height: auto;
+}
+
+.MaggieImg {
+  width: 100%;
+  height: auto;
+}
+
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
   .productsRight button {
@@ -1576,6 +1598,7 @@ footer {
     flex-direction: column;
     margin: auto;
   }
+
   .productsTr {
     display: block;
     float: center;

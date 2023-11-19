@@ -6,7 +6,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import Products from "./Products";
 import HowItWorks from "./howItWorks";
-import About from "./aboutUs";
+import About from "./AboutUs";
 import "./index.css";
 import LoginSuccess from "./LoginSuccess";
 import LogOut from "./LogOut";
