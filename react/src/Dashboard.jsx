@@ -246,6 +246,37 @@ function Dashboard() {
     setEnlarge(true);
   }
 
+  const isCustom = (order) => {
+    for(let i = 0; i < products.length; ++i) {
+      if (products[i].order_id === order && products[i].product_id === 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const findHighEndCost = (order) => {
+    let total = order.total_cost * 1;
+    for(let i = 0; i < products.length; ++i) {
+      if (products[i].order_id === order.order_id && products[i].product_id === 0) {
+        total += (6 * products[i].product_quantity);
+      }
+    }
+    return total.toFixed(2);
+  }
+
+  const onlineTotalCost = (subtotal) => {
+    let taxableTotal = (subtotal * 1 + (subtotal * 0.029 + 0.31) * 1)
+    let total = taxCost(taxableTotal);
+    return ((total *1).toFixed(2));
+  }
+
+  const taxCost = (subtotal) => {
+    let tax = (subtotal * 0.0725);
+    let total = ((subtotal * 1) + tax).toFixed(2);
+    return (total);
+  }
+
   return (
     <div className='Dashboard'>
       <br />
@@ -308,34 +339,52 @@ function Dashboard() {
                   }
               </div>
               <br />
-              <div className="row">
-                  {order.shipped ?
-                      <div className="dashUpload">
-                          <h3>Shipping: </h3>
-                          <p>{order.location}</p>
-                      </div>
-                  :
-                      <div className="dashUpload">
-                          <h3>Location: </h3>
-                          <p>{order.location}</p>
-                      </div>
-                  }
-                  {order.paid ? 
-                      <div className="dashName">
-                          <h3>Total: {order.total_cost}</h3>
-                          <h3>Paid!</h3>
-                      </div>
-                  :
+              {order.shipped ?
+                <div className="row">
+                  <div className="dashUpload">
+                      <h3>Shipping: </h3>
+                      <p>{order.location}</p>
+                  </div>
                   <div className="dashName">
-                          <h3>Total: {order.total_cost}</h3>
-                          <h3>Pay Later</h3>
-                      </div>
+                    <h3>Total: ${isCustom(order.order_id) ? 
+                                <span>{order.total_cost} - ${findHighEndCost(order)} </span>
+                               :
+                                <span>{order.total_cost}</span>
+                               }</h3>
+                    <h3>Pay Later</h3>
+                  </div>
+                  <div className="dashLogOut">
+                    <h3>Email: </h3>
+                    <p>{order.email}</p>
+                  </div>
+                </div>
+              :
+                <div className="row">
+                  <div className="dashUpload">
+                    <h3>Location: </h3>
+                    <p>{order.location}</p>
+                  </div>
+                  {order.paid ?
+                    <div className="dashName">
+                      <h3>Total: ${onlineTotalCost(order.total_cost)}</h3>
+                      <h3>Paid!</h3>
+                    </div>
+                  : 
+                    <div className="dashName">
+                      <h3>Total: ${isCustom(order.order_id) ? 
+                                <span>{order.total_cost} - ${findHighEndCost(order)} </span>
+                               :
+                                <span>{taxCost(order.total_cost)}</span>
+                               }</h3>
+                      <h3>Pay Later</h3>
+                    </div>
                   }
                   <div className="dashLogOut">
-                      <h3>Email: </h3>
-                      <p>{order.email}</p>
+                    <h3>Email: </h3>
+                    <p>{order.email}</p>
                   </div>
-              </div>
+                </div>
+              }
               <br />
               {products.map((product) => {
                   if (product.order_id === order.order_id) {
@@ -371,7 +420,7 @@ function Dashboard() {
                                 <br />
                                 <div className="productsCell">
                                   <br /><br />
-                                  <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+                                  <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
                                   <br />
                                   <br />
                                   <h2> 
@@ -381,7 +430,7 @@ function Dashboard() {
                                 </div>
                                 <div className="productsCell">
                                 <br /><br /><br /><br /><br /><br />
-                                <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+                                <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
                                 </div>
                               </div>
                             :
@@ -414,7 +463,8 @@ function Dashboard() {
                                   <br />
                                   <div className="productsCell">
                                     <br /><br />
-                                    <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}+</h2>
+                                    <h2>${setPrice(product.price, product.product_type, product.size).toFixed(2)} - $
+                                        {(setPrice(product.price, product.product_type, product.size) + 6).toFixed(2)}</h2>
                                     <br />
                                     <br />
                                     <h2> 
@@ -424,7 +474,8 @@ function Dashboard() {
                                   </div>
                                   <div className="productsCell">
                                   <br /><br /><br /><br /><br /><br />
-                                  <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}+</h2>
+                                  <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)} - $
+                                      {((setPrice(product.price, product.product_type, product.size) * product.product_quantity) + (6 * product.product_quantity)).toFixed(2)}</h2>
                                   </div>
                               </div>
                             }
