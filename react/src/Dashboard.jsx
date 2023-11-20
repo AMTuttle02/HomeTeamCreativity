@@ -303,7 +303,7 @@ function Dashboard() {
             </div>
             {admin ?
               <div className="dashHeader">
-                  <button type="signUpButton" onClick={() => nav("/products")}>Edit Products</button>
+                  <button type="signUpButton" onClick={() => nav("/costcalculator")}>Cost Calculator</button>
               </div>
             :
               <div className="dashHeader" />
