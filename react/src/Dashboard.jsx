@@ -293,9 +293,19 @@ function Dashboard() {
                   <div className="dashName">
                       <h3>Name: {order.first_name} {order.last_name}</h3>
                   </div>
+                  {admin ?
                   <div className="dashLogOut">
                       <button type="signUpButton" onClick={() => completeOrder(order.order_id)}>Complete Order</button>
                   </div>
+                  :
+                  <div className="dashLogOut">
+                    <h3>
+                      {order.status === 'processing' && <span>Status: Processing</span>}
+                      {order.status === 'active' && <span>Status: Active</span>}
+                      {order.status === 'complete' && <span>Status: Complete</span>}
+                    </h3>
+                  </div>
+                  }
               </div>
               <br />
               <div className="row">
