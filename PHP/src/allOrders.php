@@ -35,6 +35,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         echo json_encode($rows);
     }
+    else {
+        $query = $conn->prepare(
+            "SELECT *
+            FROM orders
+            WHERE user_id = ? AND status != 'active'
+            ORDER BY order_id DESC;"
+        );
+
+        $query->bind_param("s", $_SESSION['userId']);
+
+        if (!$query->execute()) {
+            die("Query failed: " . $query->error);
+        }
+
+        $result = $query->get_result();
+
+        $rows = array();
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $rows[] = $row;
+            }
+        }
+        echo json_encode($rows);
+
+    }
 }
 
 mysqli_close($conn);

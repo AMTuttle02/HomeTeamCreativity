@@ -46,11 +46,8 @@ function Homepage() {
 
   let Login = 'Login';
 
-  if (admin) {
+  if (firstName) {
     Login = 'Dashboard';
-  }
-  else if (firstName) {
-    Login = 'Log Out';
   }
 
   return (

@@ -91,7 +91,7 @@ function Login() {
   }, [email, password]);
 
   if (loggedIn) {
-    window.location.href = "/loggedin";
+    window.location.href = "/dashboard";
   } else {
     return (
       <div className="UpdatedLogin">
