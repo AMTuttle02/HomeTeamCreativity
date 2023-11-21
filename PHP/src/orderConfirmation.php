@@ -22,6 +22,8 @@ date_default_timezone_set('America/New_York');
 // Obtain cart
 $inputs = json_decode(file_get_contents('php://input'), true);
 
+$file_path = USER_UPLOAD_EMAIL;
+
 function setPrice ($price, $type, $size) {
     $price = $price * 1;
     if ($type == "Crewneck Sweatshirt") {
@@ -285,6 +287,11 @@ $productHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $price = setPrice($row['price'], $row['product_type'], $row['size']) * $row['product_quantity'];
+        if ($row["customerFilename"]) {
+            $file_path = USER_UPLOAD_EMAIL;
+            $file_path .= $row["customerFilename"];
+            $mail->addAttachment($file_path);
+        }
         if ($row['product_id'] > 0) {
             $productHTML.='                                                 <table cellpadding="0" cellspacing="0" width="100%" style="border-left:1px solid #4e8a99;border-right:1px solid #4e8a99;border-top:1px solid #4e8a99;border-bottom:1px solid #4e8a99;border-radius: 10px; border-collapse: separate;">
                                                                                 <tbody>
