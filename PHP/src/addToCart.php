@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Insert product to users cart
     $query = $conn->prepare(
                           "INSERT INTO 
-                          product_orders (order_id, product_id, product_quantity, color, product_type, size, product_details, filename) 
+                          product_orders (order_id, product_id, product_quantity, color, product_type, size, product_details, customerFilename) 
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $query->bind_param(
                       "ssssssss",
