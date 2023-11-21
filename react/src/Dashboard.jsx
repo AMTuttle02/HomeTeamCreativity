@@ -483,6 +483,12 @@ function Dashboard() {
                             <h3> 
                               <b>Custom Details: </b>
                               {product.product_details} 
+                              {product.customerFilename && 
+                                <span>
+                                  <br />
+                                  This product includes an uploaded image: {product.customerFilename}
+                                </span>
+                              }
                             </h3>
                             <br />
                             {enlarge && enlargeProduct === product &&

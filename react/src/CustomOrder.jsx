@@ -82,7 +82,12 @@ function CustomOrder() {
   const [userId, setUserId] = useState("");
   const [customDetails, setCustomDetails] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [file, setFile] = useState(null);
   const navigate = useNavigate();
+
+  const handleFileInputChange = (event) => {
+    setFile(event.target.files[0]);
+  };
 
   function handleOrderDetails(event) {
     setCustomDetails(event.target.value);
@@ -100,7 +105,7 @@ function CustomOrder() {
       oID = 0;
     }
     else if (localStorage.getItem("oID")) {
-      oID = localStorage.getItem("oID")
+      oID = localStorage.getItem("oID");
     }
     else {
       oID = 1;
@@ -110,18 +115,25 @@ function CustomOrder() {
       setInvalidSize(true);
     }
     else {
+      const formData = new FormData();
+        if (file) {
+          formData.append('image', file);
+        }
+        else {
+          formData.append('image', "");
+        }
+        formData.append('order_id', oID); 
+        formData.append('product_id', design.id);
+        formData.append('quantity', quantity);
+        formData.append('color', currentColor);
+        formData.append('product_type', productType.description);
+        formData.append('size', size.description);
+        formData.append('price', ((design.price * 1) + productType.addedCost + size.addedCost) * quantity);
+        formData.append('product_details', customDetails);
+
       fetch("/api/addToCart.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          order_id: oID, 
-          product_id: design.id, 
-          quantity: quantity, 
-          color: currentColor,
-          product_type: productType.description,
-          size: size.description,
-          price: ((design.price * 1) + productType.addedCost + size.addedCost) * quantity,
-          product_details: customDetails}),
+        body: formData,
       })
       .then((response) => response.json())
       .then((data) => {
@@ -631,6 +643,13 @@ function CustomOrder() {
               value={customDetails}
             />
           </div>
+          {userId &&
+            <span>
+              <h1>Have A Helpful Image?</h1>
+              <h3>Upload Image Below</h3>
+              <input type="file" onChange={handleFileInputChange} />
+            </span>
+          }
           <h1>Style: {currentStyle}</h1>
           <div className="typeOptionRow">
             <button 
