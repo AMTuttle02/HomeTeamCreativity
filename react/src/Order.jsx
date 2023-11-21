@@ -594,18 +594,20 @@ function Order() {
       setInvalidSize(true);
     }
     else {
+      const formData = new FormData();
+        formData.append('image', "");
+        formData.append('order_id', oID); 
+        formData.append('product_id', currentDesign.product_id);
+        formData.append('quantity', quantity);
+        formData.append('color', currentColor);
+        formData.append('product_type', productType.description);
+        formData.append('size', size.description);
+        formData.append('price', (((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2));
+        formData.append('product_details', customDetails);
+
       fetch("/api/addToCart.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          order_id: oID, 
-          product_id: currentDesign.product_id, 
-          quantity: quantity, 
-          color: currentColor,
-          product_type: productType.description,
-          size: size.description,
-          price: (((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2),
-          product_details: customDetails}),
+        body: formData,
       })
       .then((response) => response.json())
       .then((data) => {
