@@ -116,7 +116,12 @@ function CustomOrder() {
     }
     else {
       const formData = new FormData();
-        formData.append('image', file);
+        if (file) {
+          formData.append('image', file);
+        }
+        else {
+          formData.append('image', "");
+        }
         formData.append('order_id', oID); 
         formData.append('product_id', design.id);
         formData.append('quantity', quantity);
