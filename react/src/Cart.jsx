@@ -217,6 +217,7 @@ function Cart() {
         setCustomHighTotal(temp + 6);
         console.log(customHighTotal);
       }
+      window.location.reload();
     })
 
     order['total_cost'] *= 1;
@@ -258,6 +259,7 @@ function Cart() {
           setCustomHighTotal(temp - 6);
           console.log(customHighTotal);
         }
+        window.location.reload();
       })
 
       order['total_cost'] *= 1;

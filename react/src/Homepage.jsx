@@ -8,6 +8,7 @@ function Homepage() {
   const navigate = useNavigate();
 
   const [searchContents, setSearchContents] = useState("");
+  const [totalItems, setTotalItems] = useState(0);
 
   function handleKeyDown(event) {
     if (event.key === "Enter") {
@@ -34,6 +35,7 @@ function Homepage() {
   
   const [firstName, setFirstName] = useState("");
   const [admin, setAdmin] = useState(0);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -41,7 +43,32 @@ function Homepage() {
       .then((data) => {
         setFirstName(data.first_name);
         setAdmin(data.admin);
+        setUserId(data.userId);
+        let oID = 0;
+        if (localStorage.getItem("oID")) {
+          oID = localStorage.getItem("oID");
+        }
+        else if (data.userId) {
+          oID = 0;
+        }
+        fetch("/api/totalItems.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            order_id: oID
+          }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data["SUM(product_quantity)"]) {
+            setTotalItems(data["SUM(product_quantity)"]);
+          }
+          else {
+            setTotalItems(0);
+          }
+        })
       });
+      
   }, []);
 
   let Login = 'Login';
@@ -75,9 +102,13 @@ function Homepage() {
           <Link to="cart" className="cartLink">
               <div className="imageSize">
                 <img src={cart} alt="Cart" className="cart" />
-                <div class="circle">
-                  <span class="number">4</span>
-                </div>
+                {totalItems ? 
+                  <div class="circle">
+                    <span class="number">{totalItems}</span>
+                  </div>
+                :
+                  <span />
+                }
               </div>
           </Link>
         </div>

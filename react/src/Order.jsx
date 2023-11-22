@@ -612,11 +612,11 @@ function Order() {
       .then((response) => response.json())
       .then((data) => {
         if (data == 1) {
-          navigate("/cart");;
+          window.location.href = "/cart";
         }
         else if (data > 1) {
           localStorage.setItem("oID", data);
-          navigate("/cart");
+          window.location.href = "/cart";
         }
         else {
           console.log(data);
