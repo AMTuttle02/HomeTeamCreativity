@@ -73,7 +73,12 @@ function Homepage() {
             <input type="text" placeholder="Search..." value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
           </form>
           <Link to="cart" className="cartLink">
-              <img src={cart} alt="Cart" className="cart"/>
+              <div className="imageSize">
+                <img src={cart} alt="Cart" className="cart" />
+                <div class="circle">
+                  <span class="number">4</span>
+                </div>
+              </div>
           </Link>
         </div>
       </div>

@@ -89,6 +89,13 @@ body {
   height: 80px;
 }
 
+.imageSize {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  display: inline-block;
+}
+
 .cartImg {
   width: 80px;
   height: 80px;
@@ -96,6 +103,9 @@ body {
 
 .cartLink {
   margin-right: 5px;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
 }
 
 .homeLink {
@@ -1306,8 +1316,32 @@ footer {
   height: auto;
 }
 
+.circle {
+  width: 30%; /* Set the width and height to create a circle */
+  height: 30%;
+  border-radius: 50%; /* Makes the div a circle */
+  background-color: #1a53ae; /* Color of the circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Color of the number */
+  font-size: 16px; /* Size of the number */
+  text-decoration: none;
+  position: absolute;
+  top: 12px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  z-index: 1; /* Ensure the circle stays above the image */
+}
+
+.number {
+  /* Styling for the number inside the circle */
+  color: white;
+  text-decoration: none;
+}
+
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+
   .productsRight button {
     font-size: 2vw;
   }
