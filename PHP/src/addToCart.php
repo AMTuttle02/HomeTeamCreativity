@@ -3,7 +3,6 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
-header('Content-Type: application/json');
 
 require_once 'secrets.php';
 
@@ -13,9 +12,42 @@ include 'conn.php';
 
 // Create new user account
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $inputs = json_decode(file_get_contents('php://input'), true);
+  $fileName = "";
+  if (isset($_FILES['image'])) {
+    $file = $_FILES['image'];
+    $targetDir = USER_UPLOAD_DIR;
+    $targetFile = $targetDir . basename($file["name"]);
+    $fileName = basename($file["name"]);
+    $imageFileType = strtolower(pathinfo($targetFile,PATHINFO_EXTENSION));
 
-  $orderId = $inputs['order_id'];
+    // Check if image file is a actual image or fake image
+    $check = getimagesize($file["tmp_name"]);
+    if($check === false) {
+      die(json_encode("File is not an image."));
+    }
+    
+    // Check if file already exists
+    if (file_exists($targetFile)) {
+      die(json_encode("Sorry, file already exists."));
+    }
+    
+    // Check file size
+    if ($file["size"] > 500000) {
+      die(json_encode("Sorry, your file is too large."));
+    }
+    
+    // Allow certain file formats
+    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+      die(json_encode("Sorry, only JPG, JPEG, & PNG files are allowed."));
+    }
+
+    if (move_uploaded_file($file["tmp_name"], $targetFile)) {
+    }
+    else {
+      die(json_encode("File cannot be uploaded"));
+    }
+  }
+  $orderId = $_POST['order_id'];
   $uID = 0;
   if ($orderId == 0) {
     $query = $conn->prepare(
@@ -93,45 +125,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 
-  $productCost = $inputs['price'];
-  
+  $productCost = $_POST['price'];
 
   // Insert product to users cart
   $query = $conn->prepare(
                         "INSERT INTO 
-                        product_orders (order_id, product_id, product_quantity, color, product_type, size, product_details) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?)");
+                        product_orders (order_id, product_id, product_quantity, color, product_type, size, product_details, customerFilename) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
   $query->bind_param(
-                    "sssssss",
+                    "ssssssss",
                     $orderId, 
-                    $inputs["product_id"], 
-                    $inputs["quantity"], 
-                    $inputs["color"], 
-                    $inputs["product_type"], 
-                    $inputs["size"], 
-                    $inputs["product_details"]);
+                    $_POST["product_id"], 
+                    $_POST["quantity"], 
+                    $_POST["color"], 
+                    $_POST["product_type"], 
+                    $_POST["size"], 
+                    $_POST["product_details"],
+                    $fileName
+                    );
   if (!$query->execute()) {
     // If insertion fails, return error message
-    echo json_encode("Result set failed: " . $conn->error);
+    die(json_encode("Result set failed: " . $conn->error));
+  }
+  $totalCost = $totalCost + $productCost;
+  $query = $conn->prepare(
+                        "UPDATE orders 
+                        SET total_cost = $totalCost 
+                        WHERE orders.order_id = $orderId");
+  if (!$query->execute()) {
+    // If insertion fails, return error message
+    die(json_encode(0));
+  }
+  if ($uID) {
+    echo json_encode($orderId);
   }
   else {
-    $totalCost = $totalCost + $productCost;
-    $query = $conn->prepare(
-                          "UPDATE orders 
-                          SET total_cost = $totalCost 
-                          WHERE orders.order_id = $orderId");
-    if (!$query->execute()) {
-      // If insertion fails, return error message
-      die(json_encode(0));
-    }
-    else {
-      if ($uID) {
-        echo json_encode($orderId);
-      }
-      else {
-        echo json_encode(1);
-      }
-    }
+    echo json_encode(1);
   }
 }
 

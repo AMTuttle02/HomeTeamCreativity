@@ -91,7 +91,7 @@ function Login() {
   }, [email, password]);
 
   if (loggedIn) {
-    window.location.href = "/loggedin";
+    window.location.href = "/dashboard";
   } else {
     return (
       <div className="UpdatedLogin">
@@ -156,6 +156,8 @@ function Login() {
                 Create An Account
               </Link>
             </p>
+            <br />
+            <p>Creating an account allows you to view past order, see payments, and quickly buy again!</p>
           </div>
           <Outlet />
         </div>

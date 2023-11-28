@@ -6,7 +6,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import Products from "./Products";
 import HowItWorks from "./howItWorks";
-import About from "./aboutUs";
+import About from "./AboutUs";
 import "./index.css";
 import LoginSuccess from "./LoginSuccess";
 import LogOut from "./LogOut";
@@ -29,6 +29,7 @@ import EditProducts from "./EditProducts";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import EmailConfirmation from "./EmailConfirmation";
+import CostCalculator from "./CostCalculator.jsx";
 
 export default function App() {
   return (
@@ -65,6 +66,7 @@ export default function App() {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/emailconfirmation" element={<EmailConfirmation />} />
+          <Route path="/costcalculator" element={<CostCalculator />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
