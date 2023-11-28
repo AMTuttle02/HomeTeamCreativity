@@ -41,6 +41,8 @@ export default function App() {
           <Route path="loggedout" element={<LogOut />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="products" element={<Products />} />
+          <Route path="products/:category" element={<Products />} />
+          <Route path="products/:category/:subcategory" element={<Products />} />
           <Route path="howitworks" element={<HowItWorks />} />
           <Route path="about" element={<About />} />
           <Route path="upload" element={<Upload />} />
@@ -49,6 +51,7 @@ export default function App() {
           <Route path="noResults" element={<NoResults />} />
           <Route path="cart" element={<Cart />} />
           <Route path="order" element={<Order />} />
+          <Route path="order/:productKey" element={<Order />} />
           <Route path="customOrder" element={<CustomOrder />} />
           <Route path="ordercomplete" element={<Checkout />} />
           <Route path="orderfailed" element={<CheckoutFailed />} />
