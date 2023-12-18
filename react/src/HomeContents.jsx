@@ -113,16 +113,16 @@ function HomeContents() {
 
   const getPrice = (price, style) => {
     if (style === "tshirt") {
-      return ((price * 1 + 0) + ".00");
+      return ((price * 1 + 0));
     }
     else if (style === "longsleeve") {
-      return ((price * 1 + 4) + ".00");
+      return ((price * 1 + 4));
     }
     else if (style === "crewneck") {
-      return ((price * 1 + 8) + ".00");
+      return ((price * 1 + 8));
     }
     else if (style === "hoodie") {
-      return ((price * 1 + 12) + ".00"); 
+      return ((price * 1 + 12)); 
     }
   }
 
@@ -172,7 +172,7 @@ function HomeContents() {
                     />
                   </div>
                   <p>{product.product_name}</p>
-                  <p>{"$" + product.price}</p>
+                  <p>{"$" + (getPrice(product.price, product.default_style)).toFixed(2)}</p>
                   </button>
                 </div>
               </div>
