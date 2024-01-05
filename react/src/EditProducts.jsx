@@ -31,6 +31,7 @@ function EditProducts() {
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [currentSubcategories, setCurrentSubcategories] = useState("");
   const [style, setStyle] = useState("tshirt");
+  const [location, setLocation] = useState("front");
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -81,6 +82,7 @@ function EditProducts() {
         setCColors(data.cColors);
         setHColors(data.hColors);
         setStyle(data.default_style);
+        setLocation(data.style_locations);
       });
   }, []);
 
@@ -151,6 +153,7 @@ function EditProducts() {
     formData.append('hColors', hColors);
     formData.append('subcategories', currentSubcategories);
     formData.append('default_style', style);
+    formData.append('style_location', location);
   
     fetch('/api/updateProductDetails.php', {
       method: 'POST',
@@ -236,6 +239,39 @@ function EditProducts() {
                   value={tagList}
                   onChange={(event) => setTagList(event.target.value)}
                 />
+                <label><b>Style Location</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {location === "front" ?
+                      <span>
+                        <input type="radio" id="location" name="front" value="front" checked={true} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Front</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="location" name="front" value="front" checked={false} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Front</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {location === "back" ?
+                      <span>
+                        <input type="radio" id="location" name="back" value="back" checked={true} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Back</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="location" name="back" value="back" checked={false} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Back</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                </div>
                 <label><b>Default Style</b></label>
                 <div className="row">
                   <div className="uploadSplit">
