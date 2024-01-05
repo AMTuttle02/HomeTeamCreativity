@@ -17,6 +17,7 @@ function Upload() {
   const [category, setCategory] = useState("All ");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
+  const [location, setLocation] = useState("");
 
   const handleFileInputChange = (event) => {
     setFile(event.target.files[0]);
@@ -85,6 +86,7 @@ function Upload() {
     formData.append('hColors', hoodieColors);
     formData.append('subcategories', category);
     formData.append('default_style', style);
+    formData.append('style_location', location);
   
     fetch('/api/upload.php', {
       method: 'POST',
@@ -186,6 +188,24 @@ function Upload() {
               onChange={(event) => setTags(event.target.value)}
             />
             <br/>
+            <center><h3>Style Location</h3></center>
+            <div className="row">
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
+                    <label>&nbsp;Front</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
+                    <label>&nbsp;Back</label>
+                    <br />
+                </span>
+              </div>
+            </div>
+            <br />
             <center><h3>Default Style</h3></center>
             <div className="row">
               <div className="uploadSplit">
@@ -217,10 +237,10 @@ function Upload() {
                 </span>
               </div>
             </div>
+            <br />
             <center>
               <h3>Color Options</h3>
             </center>
-            <br/>
             <div className="row">
               <div className="uploadSplit">
                 <label>T-Shirt: {tColorsPrimary}</label>
