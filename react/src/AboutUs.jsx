@@ -36,7 +36,11 @@ function AboutUs() {
           <div className="mainSplit">
             <img src={info} alt="About Us Contact Info" className="contactUsImg"/>
           </div>
-          <h1><a href="https://maggietuttle.myportfolio.com" target="_blank" style={{color: "#336699"}}>Link To My Portfolio</a></h1>
+          <br/>
+          <div className="mainSplit">
+            <a href="https://maggietuttle.myportfolio.com" target="_blank" style={{color: "#336699"}}>Link To My Portfolio</a>
+          </div>
+          <div className="mainSplit" />
         </div>
       </div>
     </div>
