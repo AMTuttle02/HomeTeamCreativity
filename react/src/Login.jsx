@@ -157,7 +157,7 @@ function Login() {
               </Link>
             </p>
             <br />
-            <p>Creating an account allows you to view past order, see payments, and quickly buy again!</p>
+            <p>Creating an account allows you to view past orders, see payments, and quickly buy again!</p>
           </div>
           <Outlet />
         </div>

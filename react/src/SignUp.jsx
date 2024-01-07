@@ -235,7 +235,7 @@ function SignUp() {
         </div>
         <div className="UserAccess">
           <br/><br/>
-          <p>Creating an account allows you to view past order, see payments, and quickly buy again!</p>
+          <p>Creating an account allows you to view past orders, see payments, and quickly buy again!</p>
           <p>Already Have An Account?</p> 
           <p>
           <Link to="/login" className="signUpButton">Login </Link>
