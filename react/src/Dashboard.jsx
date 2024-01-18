@@ -246,80 +246,195 @@ function Dashboard() {
     setEnlarge(true);
   }
 
-  if (admin) {
-    return (
-      <div className='Dashboard'>
-        <br />
-        <div className="dashboardContainer">
-            <div className="row">
-                <div className="dashHeader">
-                    <button type="signUpButton" onClick={() => nav("/upload")}>Upload Designs</button>
-                </div>
-                <div className="dashHeader">
-                    <button type="signUpButton" onClick={() => nav("/categories")}>Edit Categories</button>
-                </div>
-                <div className="dashHeader">
-                    <h1>Hello {firstName}!</h1>
-                </div>
-                <div className="dashHeader">
-                    <button type="signUpButton" onClick={() => nav("/products")}>Edit Products</button>
-                </div>
-                <div className="dashHeader">
-                    <button type="signUpButton" onClick={logout}>Log Out</button>
-                </div>
+  const isCustom = (order) => {
+    for(let i = 0; i < products.length; ++i) {
+      if (products[i].order_id === order && products[i].product_id === 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const findHighEndCost = (order) => {
+    let total = order.total_cost * 1;
+    for(let i = 0; i < products.length; ++i) {
+      if (products[i].order_id === order.order_id && products[i].product_id === 0) {
+        total += (6 * products[i].product_quantity);
+      }
+    }
+    return total.toFixed(2);
+  }
+
+  const onlineTotalCost = (subtotal) => {
+    let taxableTotal = (subtotal * 1 + (subtotal * 0.029 + 0.31) * 1)
+    let total = taxCost(taxableTotal);
+    return ((total *1).toFixed(2));
+  }
+
+  const taxCost = (subtotal) => {
+    let tax = (subtotal * 0.0725);
+    let total = ((subtotal * 1) + tax).toFixed(2);
+    return (total);
+  }
+
+  return (
+    <div className='Dashboard'>
+      <br />
+      <div className="dashboardContainer">
+          <div className="row">
+            {admin ? 
+              <div className="dashHeader">
+                <button type="signUpButton" onClick={() => nav("/upload")}>Upload Designs</button>
+              </div>
+            :
+              <div className="dashHeader">
+                <button type="signUpButton" onClick={() => nav("/products")}>Continue Shopping</button>
+              </div>
+            }
+            {admin ?
+              <div className="dashHeader">
+                <button type="signUpButton" onClick={() => nav("/categories")}>Edit Categories</button>
+              </div>
+            :
+              <div className="dashHeader" />
+            }
+            <div className="dashHeader">
+              <h1>Hello {firstName}!</h1>
             </div>
-            <br />
-            <div className="BlackLine" />
-            {orders.map((order) => (
-              <div key={order.order_id}>
-                <br />
+            {admin ?
+              <div className="dashHeader">
+                  <button type="signUpButton" onClick={() => nav("/costcalculator")}>Cost Calculator</button>
+              </div>
+            :
+              <div className="dashHeader" />
+            }
+            <div className="dashHeader">
+                <button type="signUpButton" onClick={logout}>Log Out</button>
+            </div>
+          </div>
+          <br />
+          <div className="BlackLine" />
+          {orders.map((order) => (
+            <div key={order.order_id}>
+              <br />
+              <div className="row">
+                  <div className="dashUpload">
+                      <h3>Order No. {order.order_id}</h3>
+                  </div>
+                  <div className="dashName">
+                      <h3>Name: {order.first_name} {order.last_name}</h3>
+                  </div>
+                  {admin ?
+                  <div className="dashLogOut">
+                      <button type="signUpButton" onClick={() => completeOrder(order.order_id)}>Complete Order</button>
+                  </div>
+                  :
+                  <div className="dashLogOut">
+                    <h3>
+                      {order.status === 'processing' && <span>Status: Processing</span>}
+                      {order.status === 'active' && <span>Status: Active</span>}
+                      {order.status === 'complete' && <span>Status: Complete</span>}
+                    </h3>
+                  </div>
+                  }
+              </div>
+              <br />
+              {order.shipped ?
                 <div className="row">
-                    <div className="dashUpload">
-                        <h3>Order No. {order.order_id}</h3>
-                    </div>
-                    <div className="dashName">
-                        <h3>Name: {order.first_name} {order.last_name}</h3>
-                    </div>
-                    <div className="dashLogOut">
-                        <button type="signUpButton" onClick={() => completeOrder(order.order_id)}>Complete Order</button>
-                    </div>
+                  <div className="dashUpload">
+                      <h3>Shipping: </h3>
+                      <p>{order.location}</p>
+                  </div>
+                  <div className="dashName">
+                    <h3>Total: ${isCustom(order.order_id) ? 
+                                <span>{order.total_cost} - ${findHighEndCost(order)} </span>
+                               :
+                                <span>{order.total_cost}</span>
+                               }</h3>
+                    <h3>Pay Later</h3>
+                  </div>
+                  <div className="dashLogOut">
+                    <h3>Email: </h3>
+                    <p>{order.email}</p>
+                  </div>
                 </div>
-                <br />
+              :
                 <div className="row">
-                    {order.shipped ?
-                        <div className="dashUpload">
-                            <h3>Shipping: </h3>
-                            <p>{order.location}</p>
-                        </div>
-                    :
-                        <div className="dashUpload">
-                            <h3>Location: </h3>
-                            <p>{order.location}</p>
-                        </div>
-                    }
-                    {order.paid ? 
-                        <div className="dashName">
-                            <h3>Total: {order.total_cost}</h3>
-                            <h3>Paid!</h3>
-                        </div>
-                    :
+                  <div className="dashUpload">
+                    <h3>Location: </h3>
+                    <p>{order.location}</p>
+                  </div>
+                  {order.paid ?
                     <div className="dashName">
-                            <h3>Total: {order.total_cost}</h3>
-                            <h3>Pay Later</h3>
-                        </div>
-                    }
-                    <div className="dashLogOut">
-                        <h3>Email: </h3>
-                        <p>{order.email}</p>
+                      <h3>Total: ${onlineTotalCost(order.total_cost)}</h3>
+                      <h3>Paid!</h3>
                     </div>
+                  : 
+                    <div className="dashName">
+                      <h3>Total: ${isCustom(order.order_id) ? 
+                                <span>{order.total_cost} - ${findHighEndCost(order)} </span>
+                               :
+                                <span>{taxCost(order.total_cost)}</span>
+                               }</h3>
+                      <h3>Pay Later</h3>
+                    </div>
+                  }
+                  <div className="dashLogOut">
+                    <h3>Email: </h3>
+                    <p>{order.email}</p>
+                  </div>
                 </div>
-                <br />
-                {products.map((product) => {
-                    if (product.order_id === order.order_id) {
-                        return (
-                            <div key={product.product_id}>
-                              {product.product_id ?
-                                <div className="cartProductRow">
+              }
+              <br />
+              {products.map((product) => {
+                  if (product.order_id === order.order_id) {
+                      return (
+                          <div key={product.product_id}>
+                            {product.product_id ?
+                              <div className="cartProductRow">
+                                <div className="productsCell">
+                                  <button 
+                                        className="magnify"
+                                        onClick={() => confirmEnlarge(product)}>
+                                    <div className="fullDesign">
+                                    <img
+                                        src={setType(product.product_type, product.color)}
+                                        alt="Home Team Creativity Logo"
+                                        className="tshirt"
+                                    />
+                                    <img
+                                        src={"api/images/" + product.filename}
+                                        alt={product.filename}
+                                        className="design"
+                                    />
+                                    </div>
+                                  </button>
+                                </div>
+                                <div className="productsCell">
+                                    <br />
+                                    <h2> <b> {product.product_name} </b></h2> 
+                                    <h2> Style: {product.product_type} </h2>
+                                    <h2> Size: {product.size} </h2>
+                                    <h2> Color: {product.color} </h2>
+                                </div>
+                                <br />
+                                <div className="productsCell">
+                                  <br /><br />
+                                  <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+                                  <br />
+                                  <br />
+                                  <h2> 
+                                      Qty: 
+                                      {product.product_quantity} 
+                                  </h2>
+                                </div>
+                                <div className="productsCell">
+                                <br /><br /><br /><br /><br /><br />
+                                <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+                                </div>
+                              </div>
+                            :
+                              <div className="cartProductRow">
                                   <div className="productsCell">
                                     <button 
                                           className="magnify"
@@ -331,7 +446,7 @@ function Dashboard() {
                                           className="tshirt"
                                       />
                                       <img
-                                          src={"api/images/" + product.filename}
+                                          src={"api/images/" + determineDesign(product.color)}
                                           alt={product.filename}
                                           className="design"
                                       />
@@ -348,7 +463,8 @@ function Dashboard() {
                                   <br />
                                   <div className="productsCell">
                                     <br /><br />
-                                    <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+                                    <h2>${setPrice(product.price, product.product_type, product.size).toFixed(2)} - $
+                                        {(setPrice(product.price, product.product_type, product.size) + 6).toFixed(2)}</h2>
                                     <br />
                                     <br />
                                     <h2> 
@@ -358,93 +474,54 @@ function Dashboard() {
                                   </div>
                                   <div className="productsCell">
                                   <br /><br /><br /><br /><br /><br />
-                                  <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+                                  <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)} - $
+                                      {((setPrice(product.price, product.product_type, product.size) * product.product_quantity) + (6 * product.product_quantity)).toFixed(2)}</h2>
+                                  </div>
+                              </div>
+                            }
+                            <br />
+                            <h3> 
+                              <b>Custom Details: </b>
+                              {product.product_details} 
+                              {product.customerFilename && 
+                                <span>
+                                  <br />
+                                  This product includes an uploaded image: {product.customerFilename}
+                                </span>
+                              }
+                            </h3>
+                            <br />
+                            {enlarge && enlargeProduct === product &&
+                              <div className="confirmation-modal" onClick={handleOutsideClick}>
+                                <div className="orderItem-dialog">
+                                  <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
+                                  <div className="fullDesign">
+                                    <img
+                                      src={setType(product.product_type, product.color)}
+                                      alt="Home Team Creativity Logo"
+                                      className="tshirt"
+                                    />
+                                    <img
+                                      src={"api/images/" + product.filename}
+                                      alt={product.filename}
+                                      className="design"
+                                    />
                                   </div>
                                 </div>
-                              :
-                                <div className="cartProductRow">
-                                    <div className="productsCell">
-                                      <button 
-                                            className="magnify"
-                                            onClick={() => confirmEnlarge(product)}>
-                                        <div className="fullDesign">
-                                        <img
-                                            src={setType(product.product_type, product.color)}
-                                            alt="Home Team Creativity Logo"
-                                            className="tshirt"
-                                        />
-                                        <img
-                                            src={"api/images/" + determineDesign(product.color)}
-                                            alt={product.filename}
-                                            className="design"
-                                        />
-                                        </div>
-                                      </button>
-                                    </div>
-                                    <div className="productsCell">
-                                        <br />
-                                        <h2> <b> {product.product_name} </b></h2> 
-                                        <h2> Style: {product.product_type} </h2>
-                                        <h2> Size: {product.size} </h2>
-                                        <h2> Color: {product.color} </h2>
-                                    </div>
-                                    <br />
-                                    <div className="productsCell">
-                                      <br /><br />
-                                      <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}+</h2>
-                                      <br />
-                                      <br />
-                                      <h2> 
-                                          Qty: 
-                                          {product.product_quantity} 
-                                      </h2>
-                                    </div>
-                                    <div className="productsCell">
-                                    <br /><br /><br /><br /><br /><br />
-                                    <h2>$ {(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}+</h2>
-                                    </div>
-                                </div>
-                              }
-                              <br />
-                              <h3> 
-                                <b>Custom Details: </b>
-                                {product.product_details} 
-                              </h3>
-                              <br />
-                              {enlarge && enlargeProduct === product &&
-                                <div className="confirmation-modal" onClick={handleOutsideClick}>
-                                  <div className="orderItem-dialog">
-                                    <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
-                                    <div className="fullDesign">
-                                      <img
-                                        src={setType(product.product_type, product.color)}
-                                        alt="Home Team Creativity Logo"
-                                        className="tshirt"
-                                      />
-                                      <img
-                                        src={"api/images/" + product.filename}
-                                        alt={product.filename}
-                                        className="design"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              }
-                            </div>
-                        );
-                    }
-                    return null;
+                              </div>
+                            }
+                          </div>
+                      );
+                  }
+                  return null;
 
-                })}
-                
-                <div className="BlackLine" />
-              </div>
-              ))}
-        </div>
+              })}
+              
+              <div className="BlackLine" />
+            </div>
+            ))}
       </div>
-    );
-  }
-  else {
-  }
+    </div>
+  );
 }
 export default Dashboard;

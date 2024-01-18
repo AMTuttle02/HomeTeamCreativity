@@ -217,6 +217,7 @@ function Cart() {
         setCustomHighTotal(temp + 6);
         console.log(customHighTotal);
       }
+      window.location.reload();
     })
 
     order['total_cost'] *= 1;
@@ -258,6 +259,7 @@ function Cart() {
           setCustomHighTotal(temp - 6);
           console.log(customHighTotal);
         }
+        window.location.reload();
       })
 
       order['total_cost'] *= 1;
@@ -501,6 +503,12 @@ function Cart() {
                 <h3 className="margin"> 
                   <b>Custom Details: </b>
                   {product.product_details} 
+                  {product.customerFilename && 
+                    <span>
+                      <br />
+                      This product includes an uploaded image: {product.customerFilename}
+                    </span>
+                  }
                 </h3>
                 <br />
               </div>
@@ -569,6 +577,12 @@ function Cart() {
                 <h3 className="margin"> 
                   <b>Custom Details: </b>
                   {product.product_details} 
+                  {product.customerFilename && 
+                    <span>
+                      <br />
+                      This product includes an uploaded image: {product.customerFilename}
+                    </span>
+                  }
                 </h3>
                 <br />
               </div>
