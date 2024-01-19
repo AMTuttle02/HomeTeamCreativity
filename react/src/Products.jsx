@@ -217,7 +217,7 @@ function Products() {
           "Purple": BackPurpleTshirt,
           "Red": BackRedTshirt,
           "Royal": BackRoyalTshirt,
-          "White": WhiteTshirt,
+          "White": BackWhiteTshirt,
           "Navy": BackNavyTshirt
         }
         const regex = /\S+/;
