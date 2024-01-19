@@ -27,6 +27,32 @@ import WhiteTshirt from "./assets/WhiteTShirt.png";
 import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
 import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
 import WhiteHoodie from "./assets/WhiteHoodie.png";
+import BackBlackTshirt from "./assets/TshirtBackView/TSBbk.png";
+import BackBlackLongSleeve from "./assets/LongSleeveBackView/LSBbk.png";
+import BackBlackCrewneck from "./assets/CrewBackView/CSBbk.png";
+import BackBlackHoodie from "./assets/HoodieBackView/HBbk.png";
+import BackGrayTshirt from "./assets/TshirtBackView/TSBg.png";
+import BackGrayLongSleeve from "./assets/LongSleeveBackView/LSBg.png";
+import BackGrayCrewneck from "./assets/CrewBackView/CSBg.png";
+import BackGrayHoodie from "./assets/HoodieBackView/HBg.png";
+import BackRedTshirt from "./assets/TshirtBackView/TSBr.png";
+import BackRedLongSleeve from "./assets/LongSleeveBackView/LSBR.png";
+import BackRedHoodie from "./assets/HoodieBackView/HSr.png";
+import BackYellowTshirt from "./assets/TshirtBackView/TSBy.png";
+import BackPinkTshirt from "./assets/TshirtBackView/TSBpk.png";
+import BackGreenTshirt from "./assets/TshirtBackView/TSBgn.png";
+import BackMaroonTshirt from "./assets/TshirtBackView/TSBm.png";
+import BackOrangeTshirt from "./assets/TshirtBackView/TSBo.png";
+import BackPurpleTshirt from "./assets/TshirtBackView/TSBp.png";
+import BackRoyalTshirt from "./assets/TshirtBackView/TSBb.png";
+import BackRoyalLongSleeve from "./assets/LongSleeveBackView/LSBb.png";
+import BackNavyTshirt from "./assets/TshirtBackView/TSBn.png";
+import BackNavyLongSleeve from "./assets/LongSleeveBackView/LSBn.png";
+import BackNavyHoodie from "./assets/HoodieBackView/HBn.png";
+import BackWhiteTshirt from "./assets/TshirtBackView/TSBw.png";
+import BackWhiteLongSleeve from "./assets/LongSleeveBackView/LSBw.png";
+import BackWhiteCrewneck from "./assets/CrewBackView/CSBw.png";
+import BackWhiteHoodie from "./assets/HoodieBackView/HBw.png";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -160,58 +186,120 @@ function Products() {
 
   const currentColor = (product) => {
     if (product.default_style === "tshirt") {
-      const tShirtMap = {
-        "Black": BlackTshirt,
-        "Gray": GrayTshirt,
-        "Yellow": YellowTshirt,
-        "Pink": PinkTshirt,
-        "Green": GreenTshirt,
-        "Maroon": MaroonTshirt,
-        "Orange": OrangeTshirt,
-        "Purple": PurpleTshirt,
-        "Red": RedTshirt,
-        "Royal": RoyalTshirt,
-        "White": WhiteTshirt,
-        "Navy": NavyTshirt
+      if (product.style_locations === "front") {
+        const tShirtMap = {
+          "Black": BlackTshirt,
+          "Gray": GrayTshirt,
+          "Yellow": YellowTshirt,
+          "Pink": PinkTshirt,
+          "Green": GreenTshirt,
+          "Maroon": MaroonTshirt,
+          "Orange": OrangeTshirt,
+          "Purple": PurpleTshirt,
+          "Red": RedTshirt,
+          "Royal": RoyalTshirt,
+          "White": WhiteTshirt,
+          "Navy": NavyTshirt
+        }
+        const regex = /\S+/;
+        let firstWord = product.tColors.match(regex)[0];
+        return(tShirtMap[firstWord]);
       }
-      const regex = /\S+/;
-      let firstWord = product.tColors.match(regex)[0];
-      return(tShirtMap[firstWord]);
+      else {
+        const BackTShirtMap = {
+          "Black": BackBlackTshirt,
+          "Gray": BackGrayTshirt,
+          "Yellow": BackYellowTshirt,
+          "Pink": BackPinkTshirt,
+          "Green": BackGreenTshirt,
+          "Maroon": BackMaroonTshirt,
+          "Orange": BackOrangeTshirt,
+          "Purple": BackPurpleTshirt,
+          "Red": BackRedTshirt,
+          "Royal": BackRoyalTshirt,
+          "White": WhiteTshirt,
+          "Navy": BackNavyTshirt
+        }
+        const regex = /\S+/;
+        let firstWord = product.tColors.match(regex)[0];
+        return(BackTShirtMap[firstWord]);
+      }
     }
     if (product.default_style === "longsleeve") {
-      const lShirtMap = {
-        "Black": BlackLongSleeve,
-        "Gray": GrayLongSleeve,
-        "Red": RedLongSleeve,
-        "Royal": RoyalLongSleeve,
-        "White": WhiteLongSleeve,
-        "Navy": NavyLongSleeve
+      if (product.style_locations === "front") {
+        const lShirtMap = {
+          "Black": BlackLongSleeve,
+          "Gray": GrayLongSleeve,
+          "Red": RedLongSleeve,
+          "Royal": RoyalLongSleeve,
+          "White": WhiteLongSleeve,
+          "Navy": NavyLongSleeve
+        }
+        const regex = /\S+/;
+        let firstWord = product.lColors.match(regex)[0];
+        return(lShirtMap[firstWord]);
       }
-      const regex = /\S+/;
-      let firstWord = product.lColors.match(regex)[0];
-      return(lShirtMap[firstWord]);
+      else {
+        const BacklShirtMap = {
+          "Black": BackBlackLongSleeve,
+          "Gray": BackGrayLongSleeve,
+          "Red": BackRedLongSleeve,
+          "Royal": BackRoyalLongSleeve,
+          "White": BackWhiteLongSleeve,
+          "Navy": BackNavyLongSleeve
+        }
+        const regex = /\S+/;
+        let firstWord = product.tColors.match(regex)[0];
+        return(BacklShirtMap[firstWord]);
+      }
     }
     if (product.default_style === "crewneck") {
-      const crewMap = {
-        "Black": BlackCrewneck,
-        "Gray": GrayCrewneck,
-        "White": WhiteCrewneck
+      if (product.style_locations === "front") {
+        const crewMap = {
+          "Black": BlackCrewneck,
+          "Gray": GrayCrewneck,
+          "White": WhiteCrewneck
+        }
+        const regex = /\S+/;
+        let firstWord = product.cColors.match(regex)[0];
+        return(crewMap[firstWord]);
       }
-      const regex = /\S+/;
-      let firstWord = product.cColors.match(regex)[0];
-      return(crewMap[firstWord]);
+      else {
+        const crewMap = {
+          "Black": BackBlackCrewneck,
+          "Gray": BackGrayCrewneck,
+          "White": BackWhiteCrewneck
+        }
+        const regex = /\S+/;
+        let firstWord = product.cColors.match(regex)[0];
+        return(crewMap[firstWord]);
+      }
     }
     if (product.default_style === "hoodie") {
-      const hoodieMap = {
-        "Black": BlackHoodie,
-        "Gray": GrayHoodie,
-        "Red": RedHoodie,
-        "White": WhiteHoodie,
-        "Navy": NavyHoodie
+      if (product.style_locations === "front") {
+        const hoodieMap = {
+          "Black": BlackHoodie,
+          "Gray": GrayHoodie,
+          "Red": RedHoodie,
+          "White": WhiteHoodie,
+          "Navy": NavyHoodie
+        }
+        const regex = /\S+/;
+        let firstWord = product.hColors.match(regex)[0];
+        return(hoodieMap[firstWord]);
       }
-      const regex = /\S+/;
-      let firstWord = product.hColors.match(regex)[0];
-      return(hoodieMap[firstWord]);
+      else {
+        const hoodieMap = {
+          "Black": BackBlackHoodie,
+          "Gray": BackGrayHoodie,
+          "Red": BackRedHoodie,
+          "White": BackWhiteHoodie,
+          "Navy": BackNavyHoodie
+        }
+        const regex = /\S+/;
+        let firstWord = product.hColors.match(regex)[0];
+        return(hoodieMap[firstWord]);
+      }
     }
   }
 
