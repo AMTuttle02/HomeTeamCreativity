@@ -249,7 +249,7 @@ function Products() {
           "Navy": BackNavyLongSleeve
         }
         const regex = /\S+/;
-        let firstWord = product.tColors.match(regex)[0];
+        let firstWord = product.lColors.match(regex)[0];
         return(BacklShirtMap[firstWord]);
       }
     }
