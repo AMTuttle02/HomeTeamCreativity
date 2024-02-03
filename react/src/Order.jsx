@@ -138,7 +138,7 @@ function Order() {
             setTShirtColor(firstWord);
             setTshirt(tShirtMap[firstWord]);
           }
-          else {
+          else if (retrieveDefault){
             let firstWord = retrieveDefault.tColors.match(regex)[0];
             setTShirtColor(firstWord);
             setTshirt(tShirtMap[firstWord]);
@@ -209,7 +209,10 @@ function Order() {
       })
       .catch((error) => {
         console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
-        navigate("/products");
+        console.log(error);
+        const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+        // Append the current URL to the target path
+        navigate('/404');
       });
   }
 
