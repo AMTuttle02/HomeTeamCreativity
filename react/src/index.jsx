@@ -30,6 +30,7 @@ import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import EmailConfirmation from "./EmailConfirmation";
 import CostCalculator from "./CostCalculator.jsx";
+import FourOFour from "./404.jsx";
 
 export default function App() {
   return (
@@ -67,6 +68,7 @@ export default function App() {
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/emailconfirmation" element={<EmailConfirmation />} />
           <Route path="/costcalculator" element={<CostCalculator />} />
+          <Route path="/404" element={<FourOFour />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
