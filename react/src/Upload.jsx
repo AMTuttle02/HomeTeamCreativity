@@ -18,11 +18,21 @@ function Upload() {
   const [category, setCategory] = useState("All ");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
-  const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState("");
   const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
     setSelectedFiles(e.target.files);
+  };
+
+  const handleLocation = (event) => {
+    if (locations.includes(event)) {
+      const removedLocation = locations.replace(event, "");
+      setLocations(removedLocation);
+    }
+    else {
+      setLocations(locations + ' ' + event);
+    }
   };
 
   const handleTshirtColor = (event) => {
@@ -157,7 +167,6 @@ function Upload() {
     else {
       setHColorPrimary("None");
     }
-
   }, [tshirtColors, longSleeveColors, crewneckColors, hoodieColors])
 
   if (admin) {
@@ -195,18 +204,18 @@ function Upload() {
               onChange={(event) => setTags(event.target.value)}
             />
             <br/>
-            <center><h3>Style Location</h3></center>
+            <center><h3>Style Locations: {locations}</h3></center>
             <div className="row">
               <div className="uploadSplit">
                 <span>
-                  <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
+                  <input type="checkbox" id="location" name="location" value="front" onChange={(event) => handleLocation(event.target.value)}/>
                     <label>&nbsp;Front</label>
                     <br />
                 </span>
               </div>
               <div className="uploadSplit">
                 <span>
-                  <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
+                  <input type="checkbox" id="location" name="location" value="back" onChange={(event) => handleLocation(event.target.value)}/>
                     <label>&nbsp;Back</label>
                     <br />
                 </span>
