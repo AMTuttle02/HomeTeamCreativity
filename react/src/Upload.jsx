@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function Upload() {
-  const [file, setFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [productName, setName] = useState('');
   const [price, setPrice] = useState('');
   const [tags, setTags] = useState('');
@@ -18,9 +19,10 @@ function Upload() {
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
   const [location, setLocation] = useState("");
+  const navigate = useNavigate();
 
-  const handleFileInputChange = (event) => {
-    setFile(event.target.files[0]);
+  const handleFileInputChange = (e) => {
+    setSelectedFiles(e.target.files);
   };
 
   const handleTshirtColor = (event) => {
@@ -73,10 +75,13 @@ function Upload() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('image', file);
+    
+    for (const file of selectedFiles) {
+      formData.append('images[]', file);
+    }
     formData.append('productName', productName);
     formData.append('price', price);
     formData.append('tags', tags);
@@ -88,17 +93,19 @@ function Upload() {
     formData.append('default_style', style);
     formData.append('style_location', location);
   
-    fetch('/api/upload.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if(data) {
-        window.location.href="/uploadcomplete";
-      }
-    });
-  };
+    try {
+      const response = await axios.post('/api/upload.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Upload successful', response.data);
+      navigate("/uploadcomplete");
+    } catch (error) {
+      console.error('Error uploading files', error);
+    }
+  }
 
   const [admin, setAdmin] = useState("");
   useEffect(() => {
@@ -392,7 +399,7 @@ function Upload() {
                 ))}
             </div>
             <br/><br/>
-            <input type="file" onChange={handleFileInputChange} />
+            <input type="file" multiple onChange={handleFileInputChange} />
             <br/>
             <br/>
             <button type="submit">Upload</button>
