@@ -3,7 +3,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function Upload() {
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [frontFile, setFrontFile] = useState(null);
+  const [backFile, setBackFile] = useState(null);
   const [productName, setName] = useState('');
   const [price, setPrice] = useState('');
   const [tags, setTags] = useState('');
@@ -18,21 +19,15 @@ function Upload() {
   const [category, setCategory] = useState("All ");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
-  const [locations, setLocations] = useState("");
+  const [location, setLocation] = useState("");
   const navigate = useNavigate();
 
-  const handleFileInputChange = (e) => {
-    setSelectedFiles(e.target.files);
+  const handleFrontFileInputChange = (event) => {
+    setFrontFile(event.target.files[0]);
   };
 
-  const handleLocation = (event) => {
-    if (locations.includes(event)) {
-      const removedLocation = locations.replace(event, "");
-      setLocations(removedLocation);
-    }
-    else {
-      setLocations(locations + ' ' + event);
-    }
+  const handleBackFileInputChange = (event) => {
+    setBackFile(event.target.files[0]);
   };
 
   const handleTshirtColor = (event) => {
@@ -88,9 +83,11 @@ function Upload() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    
-    for (const file of selectedFiles) {
-      formData.append('images[]', file);
+    if (frontFile) {
+      formData.append('frontFile', frontFile);
+    }
+    if (backFile) {
+      formData.append('backFile', backFile);
     }
     formData.append('productName', productName);
     formData.append('price', price);
@@ -203,24 +200,7 @@ function Upload() {
               placeholder="Tags"
               onChange={(event) => setTags(event.target.value)}
             />
-            <br/>
-            <center><h3>Style Locations: {locations}</h3></center>
-            <div className="row">
-              <div className="uploadSplit">
-                <span>
-                  <input type="checkbox" id="location" name="location" value="front" onChange={(event) => handleLocation(event.target.value)}/>
-                    <label>&nbsp;Front</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="checkbox" id="location" name="location" value="back" onChange={(event) => handleLocation(event.target.value)}/>
-                    <label>&nbsp;Back</label>
-                    <br />
-                </span>
-              </div>
-            </div>
+            
             <br />
             <center><h3>Default Style</h3></center>
             <div className="row">
@@ -249,6 +229,24 @@ function Upload() {
                 <span>
                   <input type="radio" id="style" name="style" value="hoodie" onChange={(event) => setStyle(event.target.value)}/>
                     <label>&nbsp;Hoodie</label>
+                    <br />
+                </span>
+              </div>
+            </div>
+            <br/>
+            <center><h3>Default Style Location</h3></center>
+            <div className="row">
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
+                    <label>&nbsp;Front</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
+                    <label>&nbsp;Back</label>
                     <br />
                 </span>
               </div>
@@ -407,10 +405,13 @@ function Upload() {
                     </div>
                 ))}
             </div>
+            <br/>
+            <h3>Front Design</h3>
+            <input type="file" onChange={handleFrontFileInputChange} />
             <br/><br/>
-            <input type="file" multiple onChange={handleFileInputChange} />
-            <br/>
-            <br/>
+            <h3>Back Design</h3>
+            <input type="file" onChange={handleBackFileInputChange} />
+            <br/><br/>
             <button type="submit">Upload</button>
           </form>
         </div>

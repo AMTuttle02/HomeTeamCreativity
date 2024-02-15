@@ -21,34 +21,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $defaultStyle = $_POST["default_style"];
   $styleLocation = $_POST["style_location"];
   $targetDir = UPLOAD_DIR;
-  $uploadedFiles = [];
-  $errorMessages = [];
-  $fileName = "";
+  $frontFile = NULL;
+  $frontTargetFile = NULL;
+  $frontFileName = NULL;
+  $backFile = NULL;
+  $backTargetFile = NULL;
+  $backFileName = NULL;
 
-  foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-    $uploadFile = $targetDir . basename($_FILES['images']['name'][$key]);
-    $fileName .= basename($_FILES['images']['name'][$key]) . ";";
-
-    if (move_uploaded_file($tmp_name, $uploadFile)) {
-      $uploadedFiles[] = $uploadFile;
-    } else {
-      $errorMessages[] = "Failed to upload {$_FILES['images']['name'][$key]}";
+  if ($_FILES['frontFile']) {
+    $frontFile = $_FILES['frontFile'];
+    $frontTargetFile = $targetDir . basename($frontFile["name"]);
+    $frontFileName = basename($frontFile["name"]);
+    if (!move_uploaded_file($frontFile['tmp_name'], $frontTargetFile)) {
+      die(json_encode("ERR: Cannot upload $frontFileName"));
     }
   }
 
-  if (!empty($errorMessages)) {
-    echo json_encode(['error' => $errorMessages]);
-  } else {
-      echo json_encode(['success' => 'Files uploaded successfully', 'files' => $uploadedFiles]);
-      // Attempt to insert new design into table
-    $query = $conn->prepare("INSERT INTO products (product_name, price, filename, tag_list, tColors, lColors, cColors, hColors, categories, default_style, style_locations)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-    $query->bind_param("sssssssssss", $productName, $price, $fileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation);
-    if (!$query->execute()) {
-    // If insertion fails, return error message
-    echo json_encode("ERR: Insertion failed to execute" . $query->error);
+  if ($_FILES['backFile']) {
+    $backFile = $_FILES['backFile'];
+    $backTargetFile = $targetDir . basename($backFile["name"]);
+    $backFileName = basename($backFile["name"]);
+    if (!move_uploaded_file($backFile['tmp_name'], $backTargetFile)) {
+      die(json_encode("ERR: Cannot upload $backFileName"));
     }
-    $_SESSION['recentDesign'] = $fileName;
+  }
+
+  // Attempt to insert new design into table
+  $query = $conn->prepare("INSERT INTO products (product_name, price, filename_front, filename_back, tag_list, tColors, lColors, cColors, hColors, categories, default_style, default_style_location)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+  $query->bind_param("ssssssssssss", $productName, $price, $frontFileName, $backFileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation);
+  if (!$query->execute()) {
+    // If insertion fails, return error message
+    die(json_encode("ERR: Insertion failed to execute" . $query->error));
+  }
+
+  if ($styleLocation === 'front') {
+    $_SESSION['recentDesign'] = $frontFileName;
+  }
+  else if ($styleLocation === 'back') {
+    $_SESSION['recentDesign'] = $backFileName;
   }
 }
 

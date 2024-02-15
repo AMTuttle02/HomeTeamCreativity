@@ -71,8 +71,8 @@ function Upload() {
                           className="tshirt"
                           />
                           <img
-                          src={"api/images/" + product.filename}
-                          alt={product.filename}
+                          src={"api/images/" + product.filename_front}
+                          alt={product.filename_front}
                           className="design"
                           />
                         </div>
