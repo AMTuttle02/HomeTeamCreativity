@@ -186,7 +186,7 @@ function Products() {
 
   const currentColor = (product) => {
     if (product.default_style === "tshirt") {
-      if (product.style_locations === "front") {
+      if (product.default_style_location === "front") {
         const tShirtMap = {
           "Black": BlackTshirt,
           "Gray": GrayTshirt,
@@ -226,7 +226,7 @@ function Products() {
       }
     }
     if (product.default_style === "longsleeve") {
-      if (product.style_locations === "front") {
+      if (product.default_style_location === "front") {
         const lShirtMap = {
           "Black": BlackLongSleeve,
           "Gray": GrayLongSleeve,
@@ -254,7 +254,7 @@ function Products() {
       }
     }
     if (product.default_style === "crewneck") {
-      if (product.style_locations === "front") {
+      if (product.default_style_location === "front") {
         const crewMap = {
           "Black": BlackCrewneck,
           "Gray": GrayCrewneck,
@@ -276,7 +276,7 @@ function Products() {
       }
     }
     if (product.default_style === "hoodie") {
-      if (product.style_locations === "front") {
+      if (product.default_style_location === "front") {
         const hoodieMap = {
           "Black": BlackHoodie,
           "Gray": GrayHoodie,
@@ -450,8 +450,8 @@ function Products() {
                   className="tshirt"
                 />
                 <img
-                  src={window.location.origin + "/api/images/" + product.filename}
-                  alt={product.filename}
+                  src={window.location.origin + "/api/images/" + product.filename_front}
+                  alt={product.filename_front}
                   className="design"
                 />
               </div>
