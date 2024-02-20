@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $backTargetFile = NULL;
   $backFileName = NULL;
 
-  if ($_FILES['frontFile']) {
+  if (isset($_FILES['frontFile'])) {
     $frontFile = $_FILES['frontFile'];
     $frontTargetFile = $targetDir . basename($frontFile["name"]);
     $frontFileName = basename($frontFile["name"]);
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 
-  if ($_FILES['backFile']) {
+  if (isset($_FILES['backFile'])) {
     $backFile = $_FILES['backFile'];
     $backTargetFile = $targetDir . basename($backFile["name"]);
     $backFileName = basename($backFile["name"]);
@@ -57,9 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if ($styleLocation === 'front') {
     $_SESSION['recentDesign'] = $frontFileName;
+    $_SESSION['recentDesignLocation'] = 'filename_front';
   }
   else if ($styleLocation === 'back') {
     $_SESSION['recentDesign'] = $backFileName;
+    $_SESSION['recentDesignLocation'] = 'filename_back';
   }
 }
 

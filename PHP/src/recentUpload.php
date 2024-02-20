@@ -9,12 +9,13 @@ include 'conn.php';
 
 if (isset($_SESSION["recentDesign"])) {
     $fileName = $_SESSION["recentDesign"];
+    $location = $_SESSION["recentDesignLocation"];
 } else {
   die(json_encode("Recent design not set"));
 }
 
 if (isset($fileName)) {
-  $stmt = $conn->prepare ("SELECT * FROM products WHERE filename_front='$fileName'");
+  $stmt = $conn->prepare ("SELECT * FROM products WHERE $location='$fileName'");
   if (!$stmt->execute()) {
     die("Query failed: " . $stmt->error);
   }
