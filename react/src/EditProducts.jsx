@@ -152,7 +152,6 @@ function EditProducts() {
                 <span />
               }
               <br /><br />
-              <p>Click Design To Enlarge</p>
               <h3>{product.product_name}</h3>
               <h2>
                 <button onClick={() => setShowConfirmation(true)} className="CartRemoveProductButton">
