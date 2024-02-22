@@ -19,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $hColors = $_POST["hColors"];
   $categories = $_POST["subcategories"];
   $defaultStyle = $_POST["default_style"];
-  $styleLocation = $_POST["style_location"];
+  $styleLocation = $_POST["default_style_location"];
   $product_id = $_SESSION["product_id"];
 
   // Attempt to insert new design into table
   $query = $conn->prepare("UPDATE products 
-                          SET product_name = ?, price = ?, tag_list = ?, tColors = ?, lColors = ?, cColors = ?, hColors = ?, categories = ?, default_style = ?, style_locations = ?
+                          SET product_name = ?, price = ?, tag_list = ?, tColors = ?, lColors = ?, cColors = ?, hColors = ?, categories = ?, default_style = ?, default_style_location = ?
                           WHERE product_id = ?;");
   $query->bind_param("sssssssssss", $productName, $price, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation, $product_id);
   if (!$query->execute()) {
