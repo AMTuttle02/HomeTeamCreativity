@@ -216,7 +216,7 @@ const DisplaycurrentProduct = ({ product }) => {
           return (window.location.origin + "/api/images/" + currentProduct.filename_front);
         }
       });
-    }, 2000));
+    }, 1500));
   };
 
   const stopInterval = () => {
@@ -226,6 +226,16 @@ const DisplaycurrentProduct = ({ product }) => {
 
   const handleMouseEnter = () => {
     if (currentProduct.filename_front && currentProduct.filename_back) {
+      setCurrentDesign(prevDesign => {
+        if (prevDesign  === window.location.origin + "/api/images/" + currentProduct.filename_front) {
+          setCurrentColor(getColor('back'));
+          return (window.location.origin + "/api/images/" + currentProduct.filename_back);
+        }
+        else {
+          setCurrentColor(getColor('front'));
+          return (window.location.origin + "/api/images/" + currentProduct.filename_front);
+        }
+      });
       startInterval();
     }
   };
