@@ -20,6 +20,7 @@ function Upload() {
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
   const [location, setLocation] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
   const handleFrontFileInputChange = (event) => {
@@ -83,11 +84,20 @@ function Upload() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    if (frontFile) {
+    if (frontFile && location === 'front') {
       formData.append('frontFile', frontFile);
+    } else if (!frontFile && location === 'front') {
+      // Handle case when frontFile is required but not provided
+      setShowConfirmation(true);
+      return;
     }
-    if (backFile) {
+  
+    if (backFile && location === 'back') {
       formData.append('backFile', backFile);
+    } else if (!backFile && location === 'back') {
+      // Handle case when backFile is required but not provided
+      setShowConfirmation(true);
+      return;
     }
     formData.append('productName', productName);
     formData.append('price', price);
@@ -414,6 +424,17 @@ function Upload() {
             <br/><br/>
             <button type="submit">Upload</button>
           </form>
+          {showConfirmation &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Hey Goofball! You're about to mess up.</h3>
+                <p>You have not uploaded a design that matches the default location.</p>
+                <div className="confirmation-buttons">
+                  <button onClick={() => setShowConfirmation(false)}>My Brother Is THE BEST</button>
+                </div>
+              </div>
+            </div>
+          }
         </div>
       </div>
     );
