@@ -148,10 +148,6 @@ function Products() {
     }
   }
 
-  const getDesign = (product) => {
-    return (window.location.origin + "/api/images/" + product.filename_front);
-  }
-
   return (
     <div className="Products">
         <div className="productFilterRow">

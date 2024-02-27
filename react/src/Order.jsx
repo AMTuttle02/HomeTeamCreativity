@@ -1,61 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import BlackTshirt from "./assets/blackTShirt.png";
-import BlackLongSleeve from "./assets/blackLongSleeve.png";
-import BlackCrewneck from "./assets/blackCrewneck.png";
-import BlackHoodie from "./assets/blackHoodie.png";
-import GrayTshirt from "./assets/GreyTShirt.png";
-import GrayLongSleeve from "./assets/GreyLongSleeve.png";
-import GrayCrewneck from "./assets/GreyCrewneckSS.png";
-import GrayHoodie from "./assets/GreyHoodie.png";
-import RedTshirt from "./assets/RedTShirt.png";
-import RedLongSleeve from "./assets/RedLongSleeve.png";
-import RedHoodie from "./assets/RedHoodie.png";
-import YellowTshirt from "./assets/YellowTShirt.png";
-import PinkTshirt from "./assets/PinkTShirt.png";
-import GreenTshirt from "./assets/GreenTShirt.png";
-import MaroonTshirt from "./assets/MaroonTShirt.png";
-import OrangeTshirt from "./assets/OrangeTShirt.png";
-import PurpleTshirt from "./assets/PurpleTShirt.png";
-import RoyalTshirt from "./assets/RoyalTShirt.png";
-import RoyalLongSleeve from "./assets/RoyalLongSleeve.png";
-import NavyTshirt from "./assets/NavyTShirt.png";
-import NavyLongSleeve from "./assets/NavyLongSleece.png";
-import NavyHoodie from "./assets/NavyHoodie.png";
-import WhiteTshirt from "./assets/WhiteTShirt.png";
-import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
-import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
-import WhiteHoodie from "./assets/WhiteHoodie.png";
+import DisplayUserProduct from "./DisplayUserProduct";
 import transparentTshirt from "./assets/transparentTshirt.png";
 import transparentLongSleeve from "./assets/transparentLongSleeve.png";
 import transparentCrewneck from "./assets/transparentCrewneck.png";
 import transparentHoodie from "./assets/transparentHoodie.png";
-import BackBlackTshirt from "./assets/TshirtBackView/TSBbk.png";
-import BackBlackLongSleeve from "./assets/LongSleeveBackView/LSBbk.png";
-import BackBlackCrewneck from "./assets/CrewBackView/CSBbk.png";
-import BackBlackHoodie from "./assets/HoodieBackView/HBb.png";
-import BackGrayTshirt from "./assets/TshirtBackView/TSBg.png";
-import BackGrayLongSleeve from "./assets/LongSleeveBackView/LSBg.png";
-import BackGrayCrewneck from "./assets/CrewBackView/CSBg.png";
-import BackGrayHoodie from "./assets/HoodieBackView/HBg.png";
-import BackRedTshirt from "./assets/TshirtBackView/TSBr.png";
-import BackRedLongSleeve from "./assets/LongSleeveBackView/LSBR.png";
-import BackRedHoodie from "./assets/HoodieBackView/HBr.png";
-import BackYellowTshirt from "./assets/TshirtBackView/TSBy.png";
-import BackPinkTshirt from "./assets/TshirtBackView/TSBpk.png";
-import BackGreenTshirt from "./assets/TshirtBackView/TSBgn.png";
-import BackMaroonTshirt from "./assets/TshirtBackView/TSBm.png";
-import BackOrangeTshirt from "./assets/TshirtBackView/TSBo.png";
-import BackPurpleTshirt from "./assets/TshirtBackView/TSBp.png";
-import BackRoyalTshirt from "./assets/TshirtBackView/TSBb.png";
-import BackRoyalLongSleeve from "./assets/LongSleeveBackView/LSBb.png";
-import BackNavyTshirt from "./assets/TshirtBackView/TSBn.png";
-import BackNavyLongSleeve from "./assets/LongSleeveBackView/LSBn.png";
-import BackNavyHoodie from "./assets/HoodieBackView/HBn.png";
-import BackWhiteTshirt from "./assets/TshirtBackView/TSBw.png";
-import BackWhiteLongSleeve from "./assets/LongSleeveBackView/LSBw.png";
-import BackWhiteCrewneck from "./assets/CrewBackView/CSBw.png";
-import BackWhiteHoodie from "./assets/HoodieBackView/HBw.png";
 import black from "./assets/black.png";
 import red from "./assets/red.png";
 import yellow from "./assets/yellow.png";
@@ -80,16 +29,12 @@ function Failed() {
 }
 
 function Order() {
-  const [tshirt, setTshirt] = useState(BlackTshirt);
-  const [crewneck, setCrewneck] = useState(BlackCrewneck);
-  const [longSleeve, setLongSleeve] = useState(BlackLongSleeve);
-  const [hoodie, setHoodie] = useState(BlackHoodie);
-  const [currentColor, setCurrentColor] = useState("Black");
+  const [currentColor, setCurrentColor] = useState("");
   const [tShirtColor, setTShirtColor] = useState("Black");
   const [longSleeveColor, setLongSleeveColor] = useState("Black");
   const [hoodieColor, setHoodieColor] = useState("Black");
   const [crewneckColor, setCrewneckColor] = useState("Black");
-  const [currentStyle, setCurrentStyle] = useState("Short Sleeve T-Shirt");
+  const [currentStyle, setCurrentStyle] = useState("");
   const [design, setDesign] = useState([]);
   const [currentDesign, setCurrentDesign] = useState("");
   const [defaultDesign, setDefaultDesign] = useState("");
@@ -100,84 +45,16 @@ function Order() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [nameOnBack, setNameOnBack] = useState(false);
   const [numberOnBack, setNumberOnBack] = useState(false);
-  const [location, setLocation] = useState("front");
   const {productKey} = useParams();
-
-  // Tshirt maps
-  const frontTShirtMap = {
-    "Black": BlackTshirt,
-    "Gray": GrayTshirt,
-    "Yellow": YellowTshirt,
-    "Pink": PinkTshirt,
-    "Green": GreenTshirt,
-    "Maroon": MaroonTshirt,
-    "Orange": OrangeTshirt,
-    "Purple": PurpleTshirt,
-    "Red": RedTshirt,
-    "Royal": RoyalTshirt,
-    "White": WhiteTshirt,
-    "Navy": NavyTshirt
-  }
-  const backTShirtMap = {
-    "Black": BackBlackTshirt,
-    "Gray": BackGrayTshirt,
-    "Yellow": BackYellowTshirt,
-    "Pink": BackPinkTshirt,
-    "Green": BackGreenTshirt,
-    "Maroon": BackMaroonTshirt,
-    "Orange": BackOrangeTshirt,
-    "Purple": BackPurpleTshirt,
-    "Red": BackRedTshirt,
-    "Royal": BackRoyalTshirt,
-    "White": BackWhiteTshirt,
-    "Navy": BackNavyTshirt
-  }
-
-  // Long Sleeve maps
-  const frontLShirtMap = {
-    "Black": BlackLongSleeve,
-    "Gray": GrayLongSleeve,
-    "Red": RedLongSleeve,
-    "Royal": RoyalLongSleeve,
-    "White": WhiteLongSleeve,
-    "Navy": NavyLongSleeve
-  }
-  const backLShirtMap = {
-    "Black": BackBlackLongSleeve,
-    "Gray": BackGrayLongSleeve,
-    "Red": BackRedLongSleeve,
-    "Royal": BackRoyalLongSleeve,
-    "White": BackWhiteLongSleeve,
-    "Navy": BackNavyLongSleeve
-  }
-
-  // Crewneck maps
-  const frontCrewMap = {
-    "Black": BlackCrewneck,
-    "Gray": GrayCrewneck,
-    "White": WhiteCrewneck
-  }
-  const backCrewMap = {
-    "Black": BackBlackCrewneck,
-    "Gray": BackGrayCrewneck,
-    "White": BackWhiteCrewneck
-  }
-  
-  // Hoodie maps
-  const frontHoodieMap = {
-    "Black": BlackHoodie,
-    "Gray": GrayHoodie,
-    "Red": RedHoodie,
-    "White": WhiteHoodie,
-    "Navy": NavyHoodie
-  }
-  const backHoodieMap = {
-    "Black": BackBlackHoodie,
-    "Gray": BackGrayHoodie,
-    "Red": BackRedHoodie,
-    "White": BackWhiteHoodie,
-    "Navy": BackNavyHoodie
-  }
+  const navigate = useNavigate();
+  const [productType, setProductType] = useState({description: "Short Sleeve T-Shirt", addedCost: 0});
+  const [size, setSize] = useState({description: "", addedCost: 0});
+  const [invalidSize, setInvalidSize] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [failed, setFailed] = useState(false);
+  const [userId, setUserId] = useState("");
+  const [customDetails, setCustomDetails] = useState("");
+  const [productIsSet, setProductIsSet] = useState(false);
 
   useEffect(() => {
     retrieveProduct();
@@ -213,7 +90,6 @@ function Order() {
           setDesign(data);
           setNameOnBack(data[0].nameOnBack);
           setNumberOnBack(data[0].numberOnBack);
-          setLocation(data[0].style_locations);
           let retrieveDefault = data[0];
           for (let i = 0; i < data.length; ++i) {
             if (data[i].product_id < retrieveDefault.product_id) {
@@ -222,94 +98,48 @@ function Order() {
           }
           setDefaultDesign(retrieveDefault);
           setCurrentDesign(data[0]);
+          setProductIsSet(true);
+          console.log(data[0]);
 
           // Set tshirt color and design location
           const regex = /\S+/;
           if (data[0].tColors) {
             let firstWord = data[0].tColors.match(regex)[0];
             setTShirtColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setTshirt(frontTShirtMap[firstWord]);
-            }
-            else {
-              setTshirt(backTShirtMap[firstWord]);
-            }
           }
           else if (retrieveDefault){
             let firstWord = retrieveDefault.tColors.match(regex)[0];
             setTShirtColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setTshirt(frontTShirtMap[firstWord]);
-            }
-            else {
-              setTshirt(backTShirtMap[firstWord]);
-            }
           }
           
           // Set long sleeve shirt color and design location
           if (data[0].lColors) {
             let firstWord = data[0].lColors.match(regex)[0];
             setLongSleeveColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setLongSleeve(frontLShirtMap[firstWord]);
-            }
-            else {
-              setLongSleeve(backLShirtMap[firstWord]);
-            }
           }
           else {
             let firstWord = retrieveDefault.lColors.match(regex)[0];
             setLongSleeveColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setLongSleeve(frontLShirtMap[firstWord]);
-            }
-            else {
-              setLongSleeve(backLShirtMap[firstWord]);
-            }
           }
 
           // Set crewneck color and design location
           if (data[0].cColors) {
             let firstWord = data[0].cColors.match(regex)[0];
             setCrewneckColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setCrewneck(frontCrewMap[firstWord]);
-            }
-            else {
-              setCrewneck(backCrewMap[firstWord]);
-            }
           }
           else {
             let firstWord = retrieveDefault.cColors.match(regex)[0];
             setCrewneckColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setCrewneck(frontCrewMap[firstWord]);
-            }
-            else {
-              setCrewneck(backCrewMap[firstWord]);
-            }
           }
 
           // Set hoodie color and design location
           if (data[0].hColors) {
             let firstWord = data[0].hColors.match(regex)[0];
             setHoodieColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setHoodie(frontHoodieMap[firstWord]);
-            }
-            else {
-              setHoodie(backHoodieMap[firstWord]);
-            }
           }
           else {
             let firstWord = retrieveDefault.hColors.match(regex)[0];
             setHoodieColor(firstWord);
-            if (data[0].style_locations === "front") {
-              setHoodie(frontHoodieMap[firstWord]);
-            }
-            else {
-              setHoodie(backHoodieMap[firstWord]);
-            }
           }
  
           let colors = data.map(item => item.tColors).flat();
@@ -331,101 +161,44 @@ function Order() {
       });
   }
 
-  const navigate = useNavigate();
-  const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
-  const [size, setSize] = useState({description: "", addedCost: 0});
-  const [invalidSize, setInvalidSize] = useState(false);
-  const [quantity, setQuantity] = useState(1);
-  const [failed, setFailed] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [customDetails, setCustomDetails] = useState("");
-
   const changeColor = (color) => {
     if (currentDesign.tColors.includes(color)) {
-      if (currentDesign.style_locations === "front") {
-        setTshirt(frontTShirtMap[color]);
-      }
-      else {
-        setTshirt(backTShirtMap[color]);
-      }
       setTShirtColor(color);
     }
     else {
       if (currentStyle == "Short Sleeve T-Shirt") {
         const correctDesign = design.find((option) => option.tColors.includes(color));
         setCurrentDesign(correctDesign);
-        if (correctDesign.style_locations === "front") {
-          setTshirt(frontTShirtMap[color]);
-        }
-        else {
-          setTshirt(backTShirtMap[color]);
-        }
         setTShirtColor(color);
       }
     }
     if (currentDesign.cColors.includes(color)) {
-      if (currentDesign.style_locations === "front") {
-        setCrewneck(frontCrewMap[color]);
-      }
-      else {
-        setCrewneck(backCrewMap[color]);
-      }
       setCrewneckColor(color);
     }
     else {
       if (currentStyle == "Crewneck Sweatshirt") {
         const correctDesign = design.find((option) => option.cColors.includes(color));
         setCurrentDesign(correctDesign);
-        if (correctDesign.style_locations === "front") {
-          setCrewneck(frontCrewMap[color]);
-        }
-        else {
-          setCrewneck(backCrewMap[color]);
-        }
         setCrewneckColor(color);
       }
     }
     if (currentDesign.lColors.includes(color)) {
-      if (currentDesign.style_locations === "front") {
-        setLongSleeve(frontLShirtMap[color]);
-      }
-      else {
-        setLongSleeve(backLShirtMap[color]);
-      }
       setLongSleeveColor(color);
     }
     else {
       if (currentStyle == "Long Sleeve T-Shirt") {
         const correctDesign = design.find((option) => option.lColors.includes(color));
         setCurrentDesign(correctDesign);
-        if (correctDesign.style_locations === "front") {
-          setLongSleeve(frontLShirtMap[color]);
-        }
-        else {
-          setLongSleeve(backLShirtMap[color]);
-        }
         setLongSleeveColor(color);
       }
     }
     if (currentDesign.hColors.includes(color)) {
-      if (currentDesign.style_locations === "front") {
-        setHoodie(frontHoodieMap[color]);
-      }
-      else {
-        setHoodie(backHoodieMap[color]);
-      }
       setHoodieColor(color);
     }  
     else {
       if (currentStyle == "Hooded Sweatshirt") {
         const correctDesign = design.find((option) => option.hColors.includes(color));
         setCurrentDesign(correctDesign);
-        if (correctDesign.style_locations === "front") {
-          setHoodie(frontHoodieMap[color]);
-        }
-        else {
-          setHoodie(backHoodieMap[color]);
-        }
         setHoodieColor(color);
       }
     }
@@ -508,63 +281,39 @@ function Order() {
       const regex = /\S+/;
       if (currentStyle == "Short Sleeve T-Shirt") {
         if (currentDesign.tColors.includes(tShirtColor)) {
-          setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+          setProductType({description: "Short Sleeve T-Shirt", addedCost: 0});
           setCurrentColor(tShirtColor);
         }
         else if (currentDesign.tColors){
           const color = currentDesign.tColors.match(regex)[0];
           setTShirtColor(color);
-          if (currentDesign.style_locations === "front") {
-            setTshirt(frontTShirtMap[color]);
-          }
-          else {
-            setTshirt(backTShirtMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+          setProductType({description: "Short Sleeve T-Shirt", addedCost: 0});
         }
         else {
           const color = defaultDesign.tColors.match(regex)[0];
           setTShirtColor(color);
-          if (defaultDesign.style_locations === "front") {
-            setTshirt(frontTShirtMap[color]);
-          }
-          else {
-            setTshirt(backTShirtMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
+          setProductType({description: "Short Sleeve T-Shirt", addedCost: 0});
         }
       }
       else if (currentStyle == "Crewneck Sweatshirt") {
         if (currentDesign.cColors.includes(crewneckColor)) {
-          setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
+          setProductType({description: "Crewneck Sweatshirt", addedCost: 8});
           setCurrentColor(crewneckColor);
         }
         else if (currentDesign.cColors) {
           const color = currentDesign.cColors.match(regex)[0];
           setCrewneckColor(color);
-          if (currentDesign.style_locations === "front") {
-            setCrewneck(frontCrewMap[color]);
-          }
-          else {
-            setCrewneck(backCrewMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
+          setProductType({description: "Crewneck Sweatshirt", addedCost: 8});
         }
         else {
           setCurrentDesign(defaultDesign);
           const color = defaultDesign.cColors.match(regex)[0];
           setCrewneckColor(color);
-          if (defaultDesign.style_locations === "front") {
-            setCrewneck(frontCrewMap[color]);
-          }
-          else {
-            setCrewneck(backCrewMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
+          setProductType({description: "Crewneck Sweatshirt", addedCost: 8});
         }
         if (size.description == "Adult XXX-Large") {
           setSize({description: "Adult XXX-Large", addedCost: 2});
@@ -572,33 +321,21 @@ function Order() {
       }
       else if (currentStyle == "Long Sleeve T-Shirt") {
         if (currentDesign.lColors.includes(longSleeveColor)) {
-          setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
+          setProductType({description: "Long Sleeve T-Shirt", addedCost: 4});
           setCurrentColor(longSleeveColor);
         }
         else if (currentDesign.lColors) {
           const color = currentDesign.lColors.match(regex)[0];
           setLongSleeveColor(color);
-          if (currentDesign.style_locations === "front") {
-            setLongSleeve(frontLShirtMap[color]);
-          }
-          else {
-            setLongSleeve(backLShirtMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
+          setProductType({description: "Long Sleeve T-Shirt", addedCost: 4});
         }
         else {
           setCurrentDesign(defaultDesign);
           const color = defaultDesign.lColors.match(regex)[0];
           setLongSleeveColor(color);
-          if (defaultDesign.style_locations === "front") {
-            setLongSleeve(frontLShirtMap[color]);
-          }
-          else {
-            setLongSleeve(backLShirtMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
+          setProductType({description: "Long Sleeve T-Shirt", addedCost: 4});
         }
         if (size.description == "Adult XXX-Large") {
           setSize({description: "Adult XXX-Large", addedCost: 2});
@@ -606,33 +343,21 @@ function Order() {
       }
       else if (currentStyle == "Hooded Sweatshirt") {
         if (currentDesign.hColors.includes(hoodieColor)) {
-          setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
+          setProductType({description: "Hooded Sweatshirt", addedCost: 12});
           setCurrentColor(hoodieColor);
         }
         else if (currentDesign.hColors) {
           const color = currentDesign.hColors.match(regex)[0];
           setHoodieColor(color);
-          if (currentDesign.style_locations === "front") {
-            setHoodie(frontHoodieMap[color]);
-          }
-          else {
-            setHoodie(backHoodieMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
+          setProductType({description: "Hooded Sweatshirt", addedCost: 12});
         }
         else {
           setCurrentDesign(defaultDesign);
           const color = defaultDesign.hColors.match(regex)[0];
           setHoodieColor(color);
-          if (defaultDesign.style_locations === "front") {
-            setHoodie(frontHoodieMap[color]);
-          }
-          else {
-            setHoodie(backHoodieMap[color]);
-          }
           setCurrentColor(color);
-          setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
+          setProductType({description: "Hooded Sweatshirt", addedCost: 12});
         }
         if (size.description == "Adult XXX-Large") {
           setSize({description: "Adult XXX-Large", addedCost: 2});
@@ -680,20 +405,9 @@ function Order() {
         <div className="orderSide">
           <div className="productDetails">
             <button 
-                  className="magnify"
-                  onClick={() => setShowConfirmation(true)}>
-              <div className="fullDesign">
-                <img
-                src={productType.type}
-                alt="Home Team Creativity Logo"
-                className="tshirt"
-                />
-                <img
-                  src={window.location.origin + "/api/images/" + currentDesign.filename}
-                  alt={currentDesign.product_name}
-                  className="design"
-                />
-              </div>
+              className="magnify"
+              onClick={() => setShowConfirmation(true)}>
+              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} />
             </button>
             <br /><br />
             <p>Click Design To Enlarge</p>
@@ -711,18 +425,7 @@ function Order() {
           <div className="confirmation-modal" onClick={handleOutsideClick}>
             <div className="orderItem-dialog">
               <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
-              <div className="fullDesign">
-                <img
-                src={productType.type}
-                alt="Home Team Creativity Logo"
-                className="tshirt"
-                />
-                <img
-                  src={window.location.origin + "/api/images/" + currentDesign.filename}
-                  alt={currentDesign.product_name}
-                  className="design"
-                />
-              </div>
+              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} />
             </div>
           </div>
         }
