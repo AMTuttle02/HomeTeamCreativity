@@ -134,15 +134,31 @@ const DisplaycurrentProduct = ({ product }) => {
     "Navy": BackNavyHoodie
   }
 
+  const restoreOriginal = () => {
+    if (currentProduct.product_id === 0) {
+      if (currentProduct.color == 'Yellow' || currentProduct.color == 'Gray' || currentProduct.color == 'White') {
+        setCurrentDesign(window.location.origin + "/api/images/customDesignBlack.png");
+        setCurrentColor(getColor('front'));
+      }
+      else {
+        setCurrentDesign('window.location.origin + "/api/images/customDesign.png');
+        setCurrentColor(getColor('front'));
+      }
+    }
+    else {
+      if (currentProduct.default_style_location === 'front') {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
+        setCurrentColor(getColor('front'));
+      }
+      else if (currentProduct.default_style_location === 'back') {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
+        setCurrentColor(getColor('back'));
+      }
+    }
+  }
+
   useEffect(() => {
-    if (currentProduct.default_style_location === 'front') {
-      setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
-      setCurrentColor(getColor('front'));
-    }
-    else if (currentProduct.default_style_location === 'back') {
-      setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
-      setCurrentColor(getColor('back'));
-    }
+    restoreOriginal();
   }, []);
 
   useEffect(() => {
@@ -265,14 +281,7 @@ const DisplaycurrentProduct = ({ product }) => {
 
   const handleMouseLeave = () => {
     stopInterval();
-    if (currentProduct.default_style_location === 'front') {
-      setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
-      setCurrentColor(getColor('front'));
-    }
-    else if (currentProduct.default_style_location === 'back') {
-      setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
-      setCurrentColor(getColor('back'));
-    }
+    restoreOriginal();
   };
 
   return (
