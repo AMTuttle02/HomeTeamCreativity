@@ -141,7 +141,7 @@ const DisplaycurrentProduct = ({ product }) => {
         setCurrentColor(getColor('front'));
       }
       else {
-        setCurrentDesign('window.location.origin + "/api/images/customDesign.png');
+        setCurrentDesign(window.location.origin + "/api/images/customDesign.png");
         setCurrentColor(getColor('front'));
       }
     }
