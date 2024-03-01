@@ -153,53 +153,76 @@ const DisplaycurrentProduct = ({ product }) => {
   }, []);
 
   const getColor = (location) => {
-    if (currentProduct.default_style === "tshirt") {
-      if (location === "front") {
-        const regex = /\S+/;
-        let firstWord = currentProduct.tColors.match(regex)[0];
-        return(tShirtMap[firstWord]);
+    const regex = /\S+/;
+
+    // Used for customer orders
+    if (currentProduct.product_type) {
+      if (currentProduct.product_type === 'Short Sleeve T-Shirt') {
+        if (location === "front") {
+          return(tShirtMap[currentProduct.color]);
+        }
+        else {
+          return(BackTShirtMap[currentProduct.color]);
+        }
       }
-      else {
-        const regex = /\S+/;
-        let firstWord = currentProduct.tColors.match(regex)[0];
-        return(BackTShirtMap[firstWord]);
+      else if (currentProduct.product_type === 'Long Sleeve T-Shirt') {
+        if (location === "front") {
+          return(lShirtMap[currentProduct.color]);
+        }
+        else {
+          return(BacklShirtMap[currentProduct.color]);
+        }
+      }
+      else if (currentProduct.product_type === 'Crewneck Sweatshirt') {
+        if (location === "front") {
+          return(crewMap[currentProduct.color]);
+        }
+        else {
+          return(BackCrewMap[currentProduct.color]);
+        }
+      }
+      else if (currentProduct.product_type === 'Hooded Sweatshirt') {
+        if (location === "front") {
+          return(hoodieMap[currentProduct.color]);
+        }
+        else {
+          return(BackHoodieMap[currentProduct.color]);
+        }
       }
     }
-    if (currentProduct.default_style === "longsleeve") {
-      if (location === "front") {
-        const regex = /\S+/;
-        let firstWord = currentProduct.lColors.match(regex)[0];
-        return(lShirtMap[firstWord]);
+    // Used for default product display
+    else {
+      if (currentProduct.default_style === "tshirt") {
+        if (location === "front") {
+          return(tShirtMap[currentProduct.tColors.match(regex)[0]]);
+        }
+        else {
+          return(BackTShirtMap[currentProduct.tColors.match(regex)[0]]);
+        }
       }
-      else {
-        const regex = /\S+/;
-        let firstWord = currentProduct.lColors.match(regex)[0];
-        return(BacklShirtMap[firstWord]);
+      if (currentProduct.default_style === "longsleeve") {
+        if (location === "front") {
+          return(lShirtMap[currentProduct.lColors.match(regex)[0]]);
+        }
+        else {
+          return(BacklShirtMap[currentProduct.lColors.match(regex)[0]]);
+        }
       }
-    }
-    if (currentProduct.default_style === "crewneck") {
-      if (location === "front") {
-        const regex = /\S+/;
-        let firstWord = currentProduct.cColors.match(regex)[0];
-        return(crewMap[firstWord]);
+      if (currentProduct.default_style === "crewneck") {
+        if (location === "front") {
+          return(crewMap[currentProduct.cColors.match(regex)[0]]);
+        }
+        else {
+          return(BackCrewMap[currentProduct.cColors.match(regex)[0]]);
+        }
       }
-      else {
-        
-        const regex = /\S+/;
-        let firstWord = currentProduct.cColors.match(regex)[0];
-        return(BackCrewMap[firstWord]);
-      }
-    }
-    if (currentProduct.default_style === "hoodie") {
-      if (location === "front") {
-        const regex = /\S+/;
-        let firstWord = currentProduct.hColors.match(regex)[0];
-        return(hoodieMap[firstWord]);
-      }
-      else {
-        const regex = /\S+/;
-        let firstWord = currentProduct.hColors.match(regex)[0];
-        return(BackHoodieMap[firstWord]);
+      if (currentProduct.default_style === "hoodie") {
+        if (location === "front") {
+          return(hoodieMap[currentProduct.hColors.match(regex)[0]]);
+        }
+        else {
+          return(BackHoodieMap[currentProduct.hColors.match(regex)[0]]);
+        }
       }
     }
   }

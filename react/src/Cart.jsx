@@ -330,6 +330,7 @@ function Cart() {
                     <button 
                       className="magnify"
                       onClick={() => confirmEnlarge(product)}>
+                        {console.log(product)}
                       <DisplayProduct product={product} />
                     </button>
                   </div>
