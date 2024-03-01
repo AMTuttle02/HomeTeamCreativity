@@ -1,171 +1,8 @@
 import React, { useEffect, useState } from "react";
-import BlackTshirt from "./assets/blackTShirt.png";
-import BlackLongSleeve from "./assets/blackLongSleeve.png";
-import BlackCrewneck from "./assets/blackCrewneck.png";
-import BlackHoodie from "./assets/blackHoodie.png";
-import GrayTshirt from "./assets/GreyTShirt.png";
-import GrayLongSleeve from "./assets/GreyLongSleeve.png";
-import GrayCrewneck from "./assets/GreyCrewneckSS.png";
-import GrayHoodie from "./assets/GreyHoodie.png";
-import RedTshirt from "./assets/RedTShirt.png";
-import RedLongSleeve from "./assets/RedLongSleeve.png";
-import RedHoodie from "./assets/RedHoodie.png";
-import YellowTshirt from "./assets/YellowTShirt.png";
-import PinkTshirt from "./assets/PinkTShirt.png";
-import GreenTshirt from "./assets/GreenTShirt.png";
-import MaroonTshirt from "./assets/MaroonTShirt.png";
-import OrangeTshirt from "./assets/OrangeTShirt.png";
-import PurpleTshirt from "./assets/PurpleTShirt.png";
-import RoyalTshirt from "./assets/RoyalTShirt.png";
-import RoyalLongSleeve from "./assets/RoyalLongSleeve.png";
-import NavyTshirt from "./assets/NavyTShirt.png";
-import NavyLongSleeve from "./assets/NavyLongSleece.png";
-import NavyHoodie from "./assets/NavyHoodie.png";
-import WhiteTshirt from "./assets/WhiteTShirt.png";
-import WhiteLongSleeve from "./assets/WhiteLongSleeve.png";
-import WhiteCrewneck from "./assets/WhiteCrewneckSS.png";
-import WhiteHoodie from "./assets/WhiteHoodie.png";
-import BackBlackTshirt from "./assets/TshirtBackView/TSBbk.png";
-import BackBlackLongSleeve from "./assets/LongSleeveBackView/LSBbk.png";
-import BackBlackCrewneck from "./assets/CrewBackView/CSBbk.png";
-import BackBlackHoodie from "./assets/HoodieBackView/HBb.png";
-import BackGrayTshirt from "./assets/TshirtBackView/TSBg.png";
-import BackGrayLongSleeve from "./assets/LongSleeveBackView/LSBg.png";
-import BackGrayCrewneck from "./assets/CrewBackView/CSBg.png";
-import BackGrayHoodie from "./assets/HoodieBackView/HBg.png";
-import BackRedTshirt from "./assets/TshirtBackView/TSBr.png";
-import BackRedLongSleeve from "./assets/LongSleeveBackView/LSBR.png";
-import BackRedHoodie from "./assets/HoodieBackView/HBr.png";
-import BackYellowTshirt from "./assets/TshirtBackView/TSBy.png";
-import BackPinkTshirt from "./assets/TshirtBackView/TSBpk.png";
-import BackGreenTshirt from "./assets/TshirtBackView/TSBgn.png";
-import BackMaroonTshirt from "./assets/TshirtBackView/TSBm.png";
-import BackOrangeTshirt from "./assets/TshirtBackView/TSBo.png";
-import BackPurpleTshirt from "./assets/TshirtBackView/TSBp.png";
-import BackRoyalTshirt from "./assets/TshirtBackView/TSBb.png";
-import BackRoyalLongSleeve from "./assets/LongSleeveBackView/LSBb.png";
-import BackNavyTshirt from "./assets/TshirtBackView/TSBn.png";
-import BackNavyLongSleeve from "./assets/LongSleeveBackView/LSBn.png";
-import BackNavyHoodie from "./assets/HoodieBackView/HBn.png";
-import BackWhiteTshirt from "./assets/TshirtBackView/TSBw.png";
-import BackWhiteLongSleeve from "./assets/LongSleeveBackView/LSBw.png";
-import BackWhiteCrewneck from "./assets/CrewBackView/CSBw.png";
-import BackWhiteHoodie from "./assets/HoodieBackView/HBw.png";
-
-function setType(type, color, locations) {
-  // Tshirt maps
-  const frontTShirtMap = {
-    "Black": BlackTshirt,
-    "Gray": GrayTshirt,
-    "Yellow": YellowTshirt,
-    "Pink": PinkTshirt,
-    "Green": GreenTshirt,
-    "Maroon": MaroonTshirt,
-    "Orange": OrangeTshirt,
-    "Purple": PurpleTshirt,
-    "Red": RedTshirt,
-    "Royal": RoyalTshirt,
-    "White": WhiteTshirt,
-    "Navy": NavyTshirt
-  }
-  const backTShirtMap = {
-    "Black": BackBlackTshirt,
-    "Gray": BackGrayTshirt,
-    "Yellow": BackYellowTshirt,
-    "Pink": BackPinkTshirt,
-    "Green": BackGreenTshirt,
-    "Maroon": BackMaroonTshirt,
-    "Orange": BackOrangeTshirt,
-    "Purple": BackPurpleTshirt,
-    "Red": BackRedTshirt,
-    "Royal": BackRoyalTshirt,
-    "White": BackWhiteTshirt,
-    "Navy": BackNavyTshirt
-  }
-
-  // Long Sleeve maps
-  const frontLShirtMap = {
-    "Black": BlackLongSleeve,
-    "Gray": GrayLongSleeve,
-    "Red": RedLongSleeve,
-    "Royal": RoyalLongSleeve,
-    "White": WhiteLongSleeve,
-    "Navy": NavyLongSleeve
-  }
-  const backLShirtMap = {
-    "Black": BackBlackLongSleeve,
-    "Gray": BackGrayLongSleeve,
-    "Red": BackRedLongSleeve,
-    "Royal": BackRoyalLongSleeve,
-    "White": BackWhiteLongSleeve,
-    "Navy": BackNavyLongSleeve
-  }
-
-  // Crewneck maps
-  const frontCrewMap = {
-    "Black": BlackCrewneck,
-    "Gray": GrayCrewneck,
-    "White": WhiteCrewneck
-  }
-  const backCrewMap = {
-    "Black": BackBlackCrewneck,
-    "Gray": BackGrayCrewneck,
-    "White": BackWhiteCrewneck
-  }
-  
-  // Hoodie maps
-  const frontHoodieMap = {
-    "Black": BlackHoodie,
-    "Gray": GrayHoodie,
-    "Red": RedHoodie,
-    "White": WhiteHoodie,
-    "Navy": NavyHoodie
-  }
-  const backHoodieMap = {
-    "Black": BackBlackHoodie,
-    "Gray": BackGrayHoodie,
-    "Red": BackRedHoodie,
-    "White": BackWhiteHoodie,
-    "Navy": BackNavyHoodie
-  }
-
-  if (type == "Crewneck Sweatshirt") {
-    if (locations === "front") {
-      return(frontCrewMap[color]);
-    }
-    else {
-      return(backCrewMap[color]);
-    }
-  }
-  else if (type == "Hooded Sweatshirt") {
-    if (locations === "front") {
-      return(frontHoodieMap[color]);
-    }
-    else {
-      return(backHoodieMap[color]);
-    }
-  }
-  else if (type == "Long Sleeve T-Shirt") {
-    if (locations === "front") {
-      return(frontLShirtMap[color]);
-    }
-    else {
-      return(backLShirtMap[color]);
-    }
-  }
-  else {
-    if (locations === "front") {
-      return(frontTShirtMap[color]);
-    }
-    else {
-      return(backTShirtMap[color]);
-    }
-  }
-}
+import DisplayProduct from "./DisplayProduct";
 
 function Checkout() {
   const [userId, setUserId] = useState("");
-  const [name, setName] = useState("");
   const [products, setProducts] = useState([]);
   const [customHighTotal, setCustomHighTotal] = useState(0);
   const [enlarge, setEnlarge] = useState(false);
@@ -198,7 +35,6 @@ function Checkout() {
       .then((response) => response.json())
       .then((data) => {
         setUserId(data.userId);
-        setName(data.first_name);
       });
   }, []);
 
@@ -287,18 +123,7 @@ function Checkout() {
                     <button 
                           className="magnify"
                           onClick={() => confirmEnlarge(product)}>
-                      <div className="fullDesign">
-                        <img
-                          src={setType(product.product_type, product.color, product.style_locations)}
-                          alt="Home Team Creativity Logo"
-                          className="tshirt"
-                        />
-                        <img
-                          src={"api/images/" + product.filename}
-                          alt={product.filename}
-                          className="design"
-                        />
-                      </div>
+                      <DisplayProduct product={product} />
                     </button>
                   </div>
                   <div className="productsCell">
@@ -329,18 +154,7 @@ function Checkout() {
                     <button 
                           className="magnify"
                           onClick={() => confirmEnlarge(product)}>
-                      <div className="fullDesign">
-                        <img
-                          src={setType(product.product_type, product.color, product.style_locations)}
-                          alt="Home Team Creativity Logo"
-                          className="tshirt"
-                        />
-                        <img
-                          src={"api/images/" + determineDesign(product.color)}
-                          alt={product.filename}
-                          className="design"
-                        />
-                      </div>
+                      <DisplayProduct product={product} />
                     </button>
                   </div>
                   <div className="productsCell">
@@ -370,18 +184,7 @@ function Checkout() {
                 <div className="confirmation-modal" onClick={handleOutsideClick}>
                   <div className="orderItem-dialog">
                     <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
-                    <div className="fullDesign">
-                      <img
-                        src={setType(product.product_type, product.color, product.style_locations)}
-                        alt="Home Team Creativity Logo"
-                        className="tshirt"
-                      />
-                      <img
-                        src={"api/images/" + product.filename}
-                        alt={product.filename}
-                        className="design"
-                      />
-                    </div>
+                    <DisplayProduct product={product} />
                   </div>
                 </div>
               }
