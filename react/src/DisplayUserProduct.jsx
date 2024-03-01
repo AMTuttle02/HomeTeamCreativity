@@ -54,10 +54,10 @@ import BackWhiteHoodie from "./assets/HoodieBackView/HBw.png";
 
 const DisplayUserProduct = (props) => {
   const {currentProduct, color, style} = props;
-  const [currentDesign, setCurrentDesign] = useState(window.location.origin + "/api/images/" + currentProduct.filename_front);
+  const default_location = currentProduct.default_style_location;
+  const [currentDesign, setCurrentDesign] = useState('');
   const [currentColor, setCurrentColor] = useState(null);
-  const [location, setLocation] = useState('front');
-  console.log (color);
+  const [state, setState] = useState(0);
 
   // T-Shirt Color Maps
   const tShirtMap = {
@@ -136,17 +136,29 @@ const DisplayUserProduct = (props) => {
   }
 
   useEffect(() => {
-    if (location === 'front') {
-      setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
-      setCurrentColor(getColor());
-    }
-    else if (location === 'back') {
-      setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
-      setCurrentColor(getColor());
+    if (state === 0) {
+      if (default_location === 'front') {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
+        setCurrentColor(getColor('front'));
+      }
+      else if (default_location === 'back') {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
+        setCurrentColor(getColor('back'));
+      }
+    } 
+    else if (state === 1) {
+      if (default_location === 'front') {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
+        setCurrentColor(getColor('back'));
+      }
+      else if (default_location === 'back') {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
+        setCurrentColor(getColor('front'));
+      }
     }
   }, [currentProduct, color, style]);
 
-  const getColor = () => {
+  const getColor = (location) => {
     if (style === "Short Sleeve T-Shirt") {
       if (location === "front") {
         return(tShirtMap[color]);
