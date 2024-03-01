@@ -53,11 +53,10 @@ import BackWhiteCrewneck from "./assets/CrewBackView/CSBw.png";
 import BackWhiteHoodie from "./assets/HoodieBackView/HBw.png";
 
 const DisplayUserProduct = (props) => {
-  const {currentProduct, color, style} = props;
+  const {currentProduct, color, style, state} = props;
   const default_location = currentProduct.default_style_location;
   const [currentDesign, setCurrentDesign] = useState('');
   const [currentColor, setCurrentColor] = useState(null);
-  const [state, setState] = useState(0);
 
   // T-Shirt Color Maps
   const tShirtMap = {
@@ -156,7 +155,7 @@ const DisplayUserProduct = (props) => {
         setCurrentColor(getColor('front'));
       }
     }
-  }, [currentProduct, color, style]);
+  }, [currentProduct, color, style, state]);
 
   const getColor = (location) => {
     if (style === "Short Sleeve T-Shirt") {

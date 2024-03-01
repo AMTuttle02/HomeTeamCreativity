@@ -55,6 +55,8 @@ function Order() {
   const [userId, setUserId] = useState("");
   const [customDetails, setCustomDetails] = useState("");
   const [productIsSet, setProductIsSet] = useState(false);
+  const [currentDesignState, setCurrentDesignState] = useState(0);
+  const [multipleLocations, setMultipleLocations] = useState(0);
 
   useEffect(() => {
     retrieveProduct();
@@ -75,6 +77,10 @@ function Order() {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
+          if (data[0].filename_front && data[0].filename_back) {
+            setMultipleLocations(1);
+          }
+
           if (data[0].default_style === "tshirt") {
             setCurrentStyle("Short Sleeve T-Shirt");
           }
@@ -403,23 +409,41 @@ function Order() {
       <h1 className="orderHeader">Order Summary</h1>
       <div className="orderRow">
         <div className="orderSide">
-          <div className="productDetails">
-            <button 
-              className="magnify"
-              onClick={() => setShowConfirmation(true)}>
-              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} />
-            </button>
-            <br /><br />
-            <p>Click Design To Enlarge</p>
-            <h3>{currentDesign.product_name}</h3>
-            <br />
-            <p>Details:</p>
-            <p>100% Cotton</p>
-            <p>True To Size</p>
-            <p>Regular Fit</p>
-            <p>Wash Inside Out If Possible</p>
-            <Link to='/returnpolicy'>Return Policy</Link>
+          <div className="orderDesignProduct">
+            <div className="orderDesignButton">
+              {multipleLocations ?
+                <span> 
+                  <button onClick={() => setCurrentDesignState(0)}>{'<'}</button>
+                </span>
+              : <span />
+              }
+            </div>
+            <div className="orderDesignOnly">
+              <button 
+                className="magnify"
+                onClick={() => setShowConfirmation(true)}>
+                <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState}/>
+              </button>
+            </div>
+            <div className="orderDesignButton">
+              {multipleLocations ? 
+                <span>
+                  <button onClick={() => setCurrentDesignState(1)}>{'>'}</button>
+                </span>
+              : <span />
+              }
+            </div>
           </div>
+          <br /><br />
+          <p>Click Design To Enlarge</p>
+          <h3>{currentDesign.product_name}</h3>
+          <br />
+          <p>Details:</p>
+          <p>100% Cotton</p>
+          <p>True To Size</p>
+          <p>Regular Fit</p>
+          <p>Wash Inside Out If Possible</p>
+          <Link to='/returnpolicy'>Return Policy</Link>
         </div>
         {showConfirmation &&
           <div className="confirmation-modal" onClick={handleOutsideClick}>
