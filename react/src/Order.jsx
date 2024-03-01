@@ -449,7 +449,7 @@ function Order() {
           <div className="confirmation-modal" onClick={handleOutsideClick}>
             <div className="orderItem-dialog">
               <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
-              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} />
+              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState}/>
             </div>
           </div>
         }
