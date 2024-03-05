@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import DisplayProduct from "./DisplayProduct";
 import "./index.css";
-import BlackTshirt from "./assets/blackTShirt.png";
-import GrayTshirt from "./assets/GreyTShirt.png";
-import RedTshirt from "./assets/RedTShirt.png";
-import YellowTshirt from "./assets/YellowTShirt.png";
-import PinkTshirt from "./assets/PinkTShirt.png";
-import GreenTshirt from "./assets/GreenTShirt.png";
-import MaroonTshirt from "./assets/MaroonTShirt.png";
-import OrangeTshirt from "./assets/OrangeTShirt.png";
-import PurpleTshirt from "./assets/PurpleTShirt.png";
-import RoyalTshirt from "./assets/RoyalTShirt.png";
-import NavyTshirt from "./assets/NavyTShirt.png";
-import WhiteTshirt from "./assets/WhiteTShirt.png";
 
 function EditProducts() {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(0);
   const [product, setProduct] = useState ([]);
-  const [tshirt, setTshirt] = useState(BlackTshirt);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
@@ -27,10 +15,11 @@ function EditProducts() {
   const [lColors, setLColors] = useState("");
   const [cColors, setCColors] = useState("");
   const [hColors, setHColors] = useState("");
-  const [categories, setCategories] = useState("");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [currentSubcategories, setCurrentSubcategories] = useState("");
   const [style, setStyle] = useState("tshirt");
+  const [location, setLocation] = useState("front");
+  const [productIsSet, setProductIsSet] = useState(false);
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -54,25 +43,7 @@ function EditProducts() {
     fetch("/api/getProductByID.php")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setProduct(data);
-        const tShirtMap = {
-          "Black": BlackTshirt,
-          "Gray": GrayTshirt,
-          "Yellow": YellowTshirt,
-          "Pink": PinkTshirt,
-          "Green": GreenTshirt,
-          "Maroon": MaroonTshirt,
-          "Orange": OrangeTshirt,
-          "Purple": PurpleTshirt,
-          "Red": RedTshirt,
-          "Royal": RoyalTshirt,
-          "White": WhiteTshirt,
-          "Navy": NavyTshirt
-        }
-        const regex = /\S+/;
-        let firstWord = data.tColors.match(regex)[0];
-        setTshirt(tShirtMap[firstWord]);
         setProductName(data.product_name);
         setPrice(data.price);
         setTagList(data.tag_list);
@@ -81,6 +52,8 @@ function EditProducts() {
         setCColors(data.cColors);
         setHColors(data.hColors);
         setStyle(data.default_style);
+        setLocation(data.default_style_location);
+        setProductIsSet(true);
       });
   }, []);
 
@@ -151,6 +124,7 @@ function EditProducts() {
     formData.append('hColors', hColors);
     formData.append('subcategories', currentSubcategories);
     formData.append('default_style', style);
+    formData.append('default_style_location', location);
   
     fetch('/api/updateProductDetails.php', {
       method: 'POST',
@@ -172,21 +146,12 @@ function EditProducts() {
         <div className="orderRow">
           <div className="orderSide">
             <div className="productDetails">
-              <div className="fullDesign">
-                {<img
-                src={tshirt}
-                alt="Home Team Creativity Logo"
-                className="tshirt"
-                />}
-                <img
-                  src={"api/images/" + product.filename}
-                  alt={product.product_name}
-                  className="design"
-                />
-              </div>
-              
+              {productIsSet != [] ?
+                <DisplayProduct product={product} />
+              : 
+                <span />
+              }
               <br /><br />
-              <p>Click Design To Enlarge</p>
               <h3>{product.product_name}</h3>
               <h2>
                 <button onClick={() => setShowConfirmation(true)} className="CartRemoveProductButton">
@@ -236,6 +201,39 @@ function EditProducts() {
                   value={tagList}
                   onChange={(event) => setTagList(event.target.value)}
                 />
+                <label><b>Style Location</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {location === "front" ?
+                      <span>
+                        <input type="radio" id="location" name="front" value="front" checked={true} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Front</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="location" name="front" value="front" checked={false} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Front</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {location === "back" ?
+                      <span>
+                        <input type="radio" id="location" name="back" value="back" checked={true} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Back</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="location" name="back" value="back" checked={false} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Back</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                </div>
                 <label><b>Default Style</b></label>
                 <div className="row">
                   <div className="uploadSplit">

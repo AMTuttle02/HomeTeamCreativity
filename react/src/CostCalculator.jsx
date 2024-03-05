@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link, Navigate, useNavigate } from "react-router-dom";
-import bcrypt from 'bcryptjs';
 
 function CostCalculator() {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [badLogin, setBadLogin] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [loginAttempted, setLoginAttempted] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const navigate = useNavigate();
-
   const [admin, setAdmin] = useState("");
   useEffect(() => {
     fetch("/api/admin.php")
