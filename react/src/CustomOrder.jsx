@@ -67,6 +67,7 @@ function CustomOrder() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
   const [size, setSize] = useState({description: "", addedCost: 0});
   const [invalidSize, setInvalidSize] = useState(false);
+  const [invalidDetails, setInvalidDetails] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [failed, setFailed] = useState(false);
   const [design, setDesign] = useState({
@@ -111,7 +112,10 @@ function CustomOrder() {
       oID = 1;
     }
 
-    if (size.description === "") {
+    if (customDetails === "") {
+      setInvalidDetails(true);
+    }
+    else if (size.description === "") {
       setInvalidSize(true);
     }
     else {
@@ -643,6 +647,17 @@ function CustomOrder() {
               value={customDetails}
             />
           </div>
+          {invalidDetails &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Invalid Custom Details</h3>
+                <p>You must enter custom details to add this item to your cart.</p>
+                <div className="confirmation-buttons">
+                  <button className="delete-button" onClick={() => setInvalidDetails(false)}>Return To Order</button>
+                </div>
+              </div>
+            </div>
+          }
           {userId &&
             <span>
               <h1>Have A Helpful Image?</h1>

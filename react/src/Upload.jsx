@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function Upload() {
-  const [file, setFile] = useState(null);
+  const [frontFile, setFrontFile] = useState(null);
+  const [backFile, setBackFile] = useState(null);
   const [productName, setName] = useState('');
   const [price, setPrice] = useState('');
   const [tags, setTags] = useState('');
@@ -17,9 +19,16 @@ function Upload() {
   const [category, setCategory] = useState("All ");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
+  const [location, setLocation] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const navigate = useNavigate();
 
-  const handleFileInputChange = (event) => {
-    setFile(event.target.files[0]);
+  const handleFrontFileInputChange = (event) => {
+    setFrontFile(event.target.files[0]);
+  };
+
+  const handleBackFileInputChange = (event) => {
+    setBackFile(event.target.files[0]);
   };
 
   const handleTshirtColor = (event) => {
@@ -72,10 +81,24 @@ function Upload() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append('image', file);
+    if (frontFile && location === 'front') {
+      formData.append('frontFile', frontFile);
+    } else if (!frontFile && location === 'front') {
+      // Handle case when frontFile is required but not provided
+      setShowConfirmation(true);
+      return;
+    }
+  
+    if (backFile && location === 'back') {
+      formData.append('backFile', backFile);
+    } else if (!backFile && location === 'back') {
+      // Handle case when backFile is required but not provided
+      setShowConfirmation(true);
+      return;
+    }
     formData.append('productName', productName);
     formData.append('price', price);
     formData.append('tags', tags);
@@ -85,18 +108,21 @@ function Upload() {
     formData.append('hColors', hoodieColors);
     formData.append('subcategories', category);
     formData.append('default_style', style);
+    formData.append('style_location', location);
   
-    fetch('/api/upload.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if(data) {
-        window.location.href="/uploadcomplete";
-      }
-    });
-  };
+    try {
+      const response = await axios.post('/api/upload.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('Upload successful', response.data);
+      navigate("/uploadcomplete");
+    } catch (error) {
+      console.error('Error uploading files', error);
+    }
+  }
 
   const [admin, setAdmin] = useState("");
   useEffect(() => {
@@ -148,7 +174,6 @@ function Upload() {
     else {
       setHColorPrimary("None");
     }
-
   }, [tshirtColors, longSleeveColors, crewneckColors, hoodieColors])
 
   if (admin) {
@@ -185,7 +210,8 @@ function Upload() {
               placeholder="Tags"
               onChange={(event) => setTags(event.target.value)}
             />
-            <br/>
+            
+            <br />
             <center><h3>Default Style</h3></center>
             <div className="row">
               <div className="uploadSplit">
@@ -217,10 +243,28 @@ function Upload() {
                 </span>
               </div>
             </div>
+            <br/>
+            <center><h3>Default Style Location</h3></center>
+            <div className="row">
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
+                    <label>&nbsp;Front</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
+                    <label>&nbsp;Back</label>
+                    <br />
+                </span>
+              </div>
+            </div>
+            <br />
             <center>
               <h3>Color Options</h3>
             </center>
-            <br/>
             <div className="row">
               <div className="uploadSplit">
                 <label>T-Shirt: {tColorsPrimary}</label>
@@ -371,12 +415,26 @@ function Upload() {
                     </div>
                 ))}
             </div>
+            <br/>
+            <h3>Front Design</h3>
+            <input type="file" onChange={handleFrontFileInputChange} />
             <br/><br/>
-            <input type="file" onChange={handleFileInputChange} />
-            <br/>
-            <br/>
+            <h3>Back Design</h3>
+            <input type="file" onChange={handleBackFileInputChange} />
+            <br/><br/>
             <button type="submit">Upload</button>
           </form>
+          {showConfirmation &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Hey Goofball! You're about to mess up.</h3>
+                <p>You have not uploaded a design that matches the default location.</p>
+                <div className="confirmation-buttons">
+                  <button onClick={() => setShowConfirmation(false)}>My Brother Is THE BEST</button>
+                </div>
+              </div>
+            </div>
+          }
         </div>
       </div>
     );
