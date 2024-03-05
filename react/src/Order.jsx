@@ -322,7 +322,7 @@ function Order() {
           setProductType({description: "Crewneck Sweatshirt", addedCost: 8});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XXX-Large", addedCost: 2});
+          setSize({description: "", addedCost: 0});
         }
       }
       else if (currentStyle == "Long Sleeve T-Shirt") {
@@ -344,7 +344,7 @@ function Order() {
           setProductType({description: "Long Sleeve T-Shirt", addedCost: 4});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XXX-Large", addedCost: 2});
+          setSize({description: "", addedCost: 0});
         }
       }
       else if (currentStyle == "Hooded Sweatshirt") {
@@ -366,7 +366,7 @@ function Order() {
           setProductType({description: "Hooded Sweatshirt", addedCost: 12});
         }
         if (size.description == "Adult XXX-Large") {
-          setSize({description: "Adult XXX-Large", addedCost: 2});
+          setSize({description: "", addedCost: 0});
         }
       }
     }
