@@ -84,21 +84,22 @@ function Upload() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    if (frontFile && location === 'front') {
-      formData.append('frontFile', frontFile);
-    } else if (!frontFile && location === 'front') {
+    if (!frontFile && location === 'front') {
       // Handle case when frontFile is required but not provided
       setShowConfirmation(true);
       return;
+    } else if (frontFile) {
+      formData.append('frontFile', frontFile);
     }
   
-    if (backFile && location === 'back') {
-      formData.append('backFile', backFile);
-    } else if (!backFile && location === 'back') {
+    if (!backFile && location === 'back') {
       // Handle case when backFile is required but not provided
       setShowConfirmation(true);
       return;
+    } else if (backFile) {
+      formData.append('backFile', backFile);
     }
+
     formData.append('productName', productName);
     formData.append('price', price);
     formData.append('tags', tags);
