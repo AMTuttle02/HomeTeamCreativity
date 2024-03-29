@@ -192,7 +192,7 @@ function Dashboard() {
               <button type="signUpButton" onClick={() => nav("/costcalculator")}>Cost Calculator</button>
             </div>
             <div className="dashHeader">
-              <button type="signUpButton" onClick={() => nav("/managecoupons")}>Manage Coupons</button>
+              <button type="signUpButton" onClick={() => nav("/coupons")}>Manage Coupons</button>
             </div>
           </div>
         :
