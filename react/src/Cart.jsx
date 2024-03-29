@@ -279,15 +279,24 @@ function Cart() {
     setEnlargeProduct(product);
     setEnlarge(true);
   }
-  
+
+  const goBack = () => {
+    if (localStorage.getItem('lastProductCategory')) {
+      navigate(localStorage.getItem('lastProductCategory'));
+    }
+    else {
+      navigate('/products');
+    }
+  };
+
   return (
     <div className="mycart">
       <br/>
       <div className="cartRow">
         <div className="cartSide">
-          <Link to="/products" className="ReturnShopping">
+          <button onClick={() => goBack()} className="ReturnShopping">
             Continue Shopping
-          </Link>
+          </button>
         </div>
         <div className="cartMain">
           <div className="cartRow">
