@@ -30,6 +30,7 @@ import ResetPassword from "./ResetPassword";
 import EmailConfirmation from "./EmailConfirmation";
 import CostCalculator from "./CostCalculator.jsx";
 import FourOFour from "./404.jsx";
+import ManageCoupons from "./ManageCoupons.jsx";
 
 export default function App() {
   return (
@@ -67,6 +68,7 @@ export default function App() {
           <Route path="/emailconfirmation" element={<EmailConfirmation />} />
           <Route path="/costcalculator" element={<CostCalculator />} />
           <Route path="/404" element={<FourOFour />} />
+          <Route path="/managecoupons" element={<ManageCoupons />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
