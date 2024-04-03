@@ -403,6 +403,15 @@ function Order() {
     setNumberOnBackDetails(event.target.value);
   }
 
+  const updateDesignState = () => {
+    if (currentDesignState === 0) {
+      setCurrentDesignState(1);
+    }
+    else {
+      setCurrentDesignState(0);
+    }
+  }
+
   return (
     <div className="Order">
       <br />
@@ -413,7 +422,7 @@ function Order() {
             <div className="orderDesignButton">
               {multipleLocations ?
                 <span> 
-                  <button onClick={() => setCurrentDesignState(0)}>{'<'}</button>
+                  <button onClick={updateDesignState}>{'<'}</button>
                 </span>
               : <span />
               }
@@ -422,13 +431,13 @@ function Order() {
               <button 
                 className="magnify"
                 onClick={() => setShowConfirmation(true)}>
-                <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState}/>
+                <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState} enlarge={false}/>
               </button>
             </div>
             <div className="orderDesignButton">
               {multipleLocations ? 
                 <span>
-                  <button onClick={() => setCurrentDesignState(1)}>{'>'}</button>
+                  <button onClick={updateDesignState}>{'>'}</button>
                 </span>
               : <span />
               }
@@ -449,7 +458,7 @@ function Order() {
           <div className="confirmation-modal" onClick={handleOutsideClick}>
             <div className="orderItem-dialog">
               <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
-              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState}/>
+              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState} enlarge={true}/>
             </div>
           </div>
         }
