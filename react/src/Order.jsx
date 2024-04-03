@@ -403,6 +403,15 @@ function Order() {
     setNumberOnBackDetails(event.target.value);
   }
 
+  const updateDesignState = () => {
+    if (currentDesignState === 0) {
+      setCurrentDesignState(1);
+    }
+    else {
+      setCurrentDesignState(0);
+    }
+  }
+
   return (
     <div className="Order">
       <br />
@@ -413,7 +422,7 @@ function Order() {
             <div className="orderDesignButton">
               {multipleLocations ?
                 <span> 
-                  <button onClick={() => setCurrentDesignState(0)}>{'<'}</button>
+                  <button onClick={updateDesignState}>{'<'}</button>
                 </span>
               : <span />
               }
@@ -428,7 +437,7 @@ function Order() {
             <div className="orderDesignButton">
               {multipleLocations ? 
                 <span>
-                  <button onClick={() => setCurrentDesignState(1)}>{'>'}</button>
+                  <button onClick={updateDesignState}>{'>'}</button>
                 </span>
               : <span />
               }
