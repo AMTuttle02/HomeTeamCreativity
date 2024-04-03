@@ -225,12 +225,24 @@ const DisplayUserProduct = (props) => {
     }
     else {
       if (state === 0) {
-        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
-        setCurrentColor(getColor('front'));
-      }
-      else {
-        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
-        setCurrentColor(getColor('back'));
+        if (default_location === 'front') {
+          setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
+          setCurrentColor(getColor('front'));
+        }
+        else if (default_location === 'back') {
+          setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
+          setCurrentColor(getColor('back'));
+        }
+      } 
+      else if (state === 1) {
+        if (default_location === 'front') {
+          setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
+          setCurrentColor(getColor('back'));
+        }
+        else if (default_location === 'back') {
+          setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
+          setCurrentColor(getColor('front'));
+        }
       }
     }
   }
