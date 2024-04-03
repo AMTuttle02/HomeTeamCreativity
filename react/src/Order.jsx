@@ -431,7 +431,7 @@ function Order() {
               <button 
                 className="magnify"
                 onClick={() => setShowConfirmation(true)}>
-                <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState}/>
+                <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState} enlarge={false}/>
               </button>
             </div>
             <div className="orderDesignButton">
@@ -458,7 +458,7 @@ function Order() {
           <div className="confirmation-modal" onClick={handleOutsideClick}>
             <div className="orderItem-dialog">
               <span className="close-button" onClick={() => setShowConfirmation(false)}>&times;</span>
-              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState}/>
+              <DisplayUserProduct currentProduct={currentDesign} color={currentColor} style={currentStyle} state={currentDesignState} enlarge={true}/>
             </div>
           </div>
         }

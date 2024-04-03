@@ -53,10 +53,11 @@ import BackWhiteCrewneck from "./assets/CrewBackView/CSBw.png";
 import BackWhiteHoodie from "./assets/HoodieBackView/HBw.png";
 
 const DisplayUserProduct = (props) => {
-  const {currentProduct, color, style, state} = props;
+  const {currentProduct, color, style, state, enlarge} = props;
   const default_location = currentProduct.default_style_location;
   const [currentDesign, setCurrentDesign] = useState('');
   const [currentColor, setCurrentColor] = useState(null);
+  const [intervalId, setIntervalId] = useState(undefined);
 
   // T-Shirt Color Maps
   const tShirtMap = {
@@ -192,9 +193,80 @@ const DisplayUserProduct = (props) => {
     }
   }
 
+  const startInterval = () => {
+    setIntervalId(setInterval(() => {
+      setCurrentDesign(prevDesign => {
+        if (prevDesign  === window.location.origin + "/api/images/" + currentProduct.filename_front) {
+          setCurrentColor(getColor('back'));
+          return (window.location.origin + "/api/images/" + currentProduct.filename_back);
+        }
+        else {
+          setCurrentColor(getColor('front'));
+          return (window.location.origin + "/api/images/" + currentProduct.filename_front);
+        }
+      });
+    }, 1500));
+  };
+
+  useEffect(() => {
+    restoreOriginal();
+  }, []);
+
+  const restoreOriginal = () => {
+    if (currentProduct.product_id === 0) {
+      if (currentProduct.color == 'Yellow' || currentProduct.color == 'Gray' || currentProduct.color == 'White') {
+        setCurrentDesign(window.location.origin + "/api/images/customDesignBlack.png");
+        setCurrentColor(getColor('front'));
+      }
+      else {
+        setCurrentDesign(window.location.origin + "/api/images/customDesign.png");
+        setCurrentColor(getColor('front'));
+      }
+    }
+    else {
+      if (state === 0) {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
+        setCurrentColor(getColor('front'));
+      }
+      else {
+        setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
+        setCurrentColor(getColor('back'));
+      }
+    }
+  }
+
+  const stopInterval = () => {
+    clearInterval(intervalId);
+    setIntervalId(undefined);
+  };
+
+  const handleMouseEnter = () => {
+    if (currentProduct.filename_front && currentProduct.filename_back) {
+      setCurrentDesign(prevDesign => {
+        if (prevDesign  === window.location.origin + "/api/images/" + currentProduct.filename_front) {
+          setCurrentColor(getColor('back'));
+          return (window.location.origin + "/api/images/" + currentProduct.filename_back);
+        }
+        else {
+          setCurrentColor(getColor('front'));
+          return (window.location.origin + "/api/images/" + currentProduct.filename_front);
+        }
+      });
+      startInterval();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    stopInterval();
+    restoreOriginal();
+  };
+
+  if (enlarge) {
   return (
     <div 
-      className="fullDesign">
+      className="fullDesign"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
       <img
         src={currentColor}
         alt="Product Style"
@@ -207,6 +279,24 @@ const DisplayUserProduct = (props) => {
       />
     </div>
   );
+  }
+  else {
+    return (
+      <div 
+        className="fullDesign">
+        <img
+          src={currentColor}
+          alt="Product Style"
+          className="tshirt"
+        />
+        <img
+          src={currentDesign}
+          alt="Product Design"
+          className="design"
+        />
+      </div>
+    );
+  }
 };
 
 export default DisplayUserProduct;
