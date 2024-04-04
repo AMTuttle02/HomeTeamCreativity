@@ -3,10 +3,10 @@ import {Navigate, useNavigate } from "react-router-dom";
 
 function CreateCoupon() {
   const [code, setCode] = useState('');
-  const [description, setDescription] = useState('No Description');
+  const [description, setDescription] = useState('');
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState('');
-  const [minRequired, setMinRequired] = useState('');
+  const [minRequired, setMinRequired] = useState(0);
   const [maxAllowed, setMaxAllowed] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
@@ -16,6 +16,17 @@ function CreateCoupon() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // verify required fields
+    if (code === '' || 
+        description === '' ||
+        amount === 0 ||
+        type === '' ||
+        startTime === '') {
+      setShowConfirmation(true);
+      return;
+    }
+
     const formData = new FormData();
     formData.append('code', code);
     formData.append('description', description);
@@ -41,13 +52,9 @@ function CreateCoupon() {
 
   return (
     <div className='CreateCoupon'>
-      <br />
-      <h1 className="center">Create A Coupon Below</h1>
-      <h2 className="center">Code must be unique</h2>
-      <h3 className="center">Required Fields are marked with a <span className="red">*</span></h3>
       <br/>
-      <form onSubmit={handleSubmit}>
-        <label>Coupon Code<span className="red">*</span></label>
+      <form className="couponForm" onSubmit={handleSubmit}>
+        <label>Coupon Code</label>
           <input
             type="text"
             id="code"
@@ -63,24 +70,15 @@ function CreateCoupon() {
           placeholder="Description"
           onChange={(event) => setDescription(event.target.value)}
         />
-        <label>Type<span className="red">*</span></label>
-        <div className="row">
-          <div className="uploadSplit">
-            <span>
-              <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
-                <label>&nbsp;% Off</label>
-                <br />
-            </span>
-          </div>
-          <div className="uploadSplit">
-            <span>
-              <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
-                <label>&nbsp;$ Amount Off</label>
-                <br />
-            </span>
-          </div>
-        </div>
-        <label>Amount ($ or %)<span className="red">*</span></label>
+        <label>Type</label>
+        <br />
+        <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
+          <label>&nbsp;% Off</label>
+        <br />
+        <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
+          <label>&nbsp;$ Amount Off</label>
+        <br /><br />
+        <label>Amount ($ or %)</label>
         <br />
         <input
           type="number"
@@ -90,7 +88,7 @@ function CreateCoupon() {
           onChange={(event) => setAmount(event.target.value)}
         />
         <br />
-        <label>Minimum Amount Required ($)<span className="red">*</span></label>
+        <label>Minimum Amount Required ($)</label>
         <br />
         <input
           type="number"
@@ -100,7 +98,7 @@ function CreateCoupon() {
           onChange={(event) => setMinRequired(event.target.value)}
         />
         <br />
-        <label>Maximum Discount Total ($)<span className="red">*</span></label>
+        <label>Maximum Discount Total ($)</label>
         <br />
         <input
           type="number"
@@ -110,7 +108,7 @@ function CreateCoupon() {
           onChange={(event) => setMaxAllowed(event.target.value)}
         />
         <br />
-        <label>Start Date & Time<span className="red">*</span></label>
+        <label>Start Date & Time</label>
         <br />
         <input
           type="datetime-local"
@@ -120,7 +118,7 @@ function CreateCoupon() {
           onChange={(event) => setStartTime(event.target.value)}
         />
         <br />
-        <label>End Date & Time<span className="red">*</span></label>
+        <label>End Date & Time</label>
         <br />
         <input
           type="datetime-local"
@@ -131,7 +129,7 @@ function CreateCoupon() {
         />
         <br />
         <br/><br/>
-        <button type="submit">Upload</button>
+        <button type="submit">Create Coupon</button>
       </form>
       {showConfirmation &&
         <div className="confirmation-modal">
