@@ -6,7 +6,7 @@ function CreateCoupon() {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState('');
-  const [minRequired, setMinRequired] = useState(0);
+  const [minRequired, setMinRequired] = useState(1);
   const [maxAllowed, setMaxAllowed] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
@@ -40,7 +40,7 @@ function CreateCoupon() {
     fetch("/api/createCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+      body: formData,
     })
       .then((response) => response.json())
       .then((data) => {
