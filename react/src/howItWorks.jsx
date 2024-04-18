@@ -56,9 +56,9 @@ function HowItWorks() {
             <li>Youth Hoodie: $26 (S-XL)</li>
             <li>Adult Tank Top: $15 (women's cut, S-XL)</li>
             <li>Adult T-Shirt: $16 (S-XL) $18 (XXL-XXXL)</li>
-            <li>Adult Long Sleeve $20 (S-XL) $22 (XXL-XXXL)</li>
-            <li>Adult Crewneck Sweatshirt: $24 (S-XL) $26 (XXL-XXXL)</li>
-            <li>Adult Hoodie: $28 (S-XL) $30 (XXL-XXXL)</li>
+            <li>Adult Long Sleeve $20 (S-XL) $22 (XXL)</li>
+            <li>Adult Crewneck Sweatshirt: $24 (S-XL) $26 (XXL)</li>
+            <li>Adult Hoodie: $28 (S-XL) $30 (XXL)</li>
           </ul>
         </div>
           <div className="howItWorksSide">

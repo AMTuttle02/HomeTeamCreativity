@@ -478,7 +478,9 @@ body {
   flex: 25%;
   padding-top: 10px;
   text-align: center;
-  margin-left: 5%;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  margin: 1%;
 }
 
 .orderSide p {
@@ -1340,6 +1342,46 @@ footer {
   color: white;
   text-decoration: none;
 }
+
+.orderDesignButton {
+    -ms-flex: 10%; /* IE10 */
+    flex: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.orderDesignButton button {
+  color: white;
+  font-size: 3vw;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  margin-left: 5%;
+}
+
+.orderDesignButton button:hover {
+  color: blue;
+  
+}
+
+.orderDesignProduct {
+  -ms-flex: 100%; /* IE10 */
+  flex: 100%;
+  text-align: center;
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+}
+
+.orderDesignOnly {
+  -ms-flex: 80%; /* IE10 */
+  flex: 80%;
+  text-align: center;
+}
+
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {

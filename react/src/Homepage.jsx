@@ -34,16 +34,12 @@ function Homepage() {
   }
   
   const [firstName, setFirstName] = useState("");
-  const [admin, setAdmin] = useState(0);
-  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);
-        setAdmin(data.admin);
-        setUserId(data.userId);
         let oID = 0;
         if (localStorage.getItem("oID")) {
           oID = localStorage.getItem("oID");

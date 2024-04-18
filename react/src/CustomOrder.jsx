@@ -67,6 +67,7 @@ function CustomOrder() {
   const [productType, setProductType] = useState({type: tshirt, description: "Short Sleeve T-Shirt", addedCost: 0});
   const [size, setSize] = useState({description: "", addedCost: 0});
   const [invalidSize, setInvalidSize] = useState(false);
+  const [invalidDetails, setInvalidDetails] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [failed, setFailed] = useState(false);
   const [design, setDesign] = useState({
@@ -111,7 +112,10 @@ function CustomOrder() {
       oID = 1;
     }
 
-    if (size.description === "") {
+    if (customDetails === "") {
+      setInvalidDetails(true);
+    }
+    else if (size.description === "") {
       setInvalidSize(true);
     }
     else {
@@ -559,14 +563,23 @@ function CustomOrder() {
     else if (currentStyle == "Crewneck Sweatshirt") {
       setProductType({type: crewneck, description: "Crewneck Sweatshirt", addedCost: 8});
       setCurrentColor(crewneckColor);
+      if (size.description == "Adult XXX-Large") {
+        setSize({description: "", addedCost: 0});
+      }
     }
     else if (currentStyle == "Long Sleeve T-Shirt") {
       setProductType({type: longSleeve, description: "Long Sleeve T-Shirt", addedCost: 4});
       setCurrentColor(longSleeveColor);
+      if (size.description == "Adult XXX-Large") {
+        setSize({description: "", addedCost: 0});
+      }
     }
     else if (currentStyle == "Hooded Sweatshirt") {
       setProductType({type: hoodie, description: "Hooded Sweatshirt", addedCost: 12});
       setCurrentColor(hoodieColor);
+      if (size.description == "Adult XXX-Large") {
+        setSize({description: "", addedCost: 0});
+      }
     }
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size]);
 
@@ -643,6 +656,17 @@ function CustomOrder() {
               value={customDetails}
             />
           </div>
+          {invalidDetails &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Invalid Custom Details</h3>
+                <p>You must enter custom details to add this item to your cart.</p>
+                <div className="confirmation-buttons">
+                  <button className="delete-button" onClick={() => setInvalidDetails(false)}>Return To Order</button>
+                </div>
+              </div>
+            </div>
+          }
           {userId &&
             <span>
               <h1>Have A Helpful Image?</h1>

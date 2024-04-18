@@ -17,7 +17,8 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['admin']) {
     $input = json_decode(file_get_contents('php://input'), true);
 
-    $file_path = UPLOAD_DIR;
+    $file_path_front = UPLOAD_DIR;
+    $file_path_back = UPLOAD_DIR;
 
     $query = $conn->prepare(
                         "SELECT * FROM products WHERE product_id = ?");
@@ -36,34 +37,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['admin']) {
         }
 
         if ($result->num_rows > 0) {
-            // Set the session variables
             $row = $result->fetch_assoc();
-            $file_path .= $row['filename'];
-        }
-
-        if (file_exists($file_path)) {
-            if (unlink($file_path)) {
-                $query = $conn->prepare(
-                                        "DELETE FROM products
-                                        WHERE product_id = ?");
-                $query->bind_param(
-                                "i",
-                                $input['id']);
-
-                if (!$query->execute()) {
-                echo json_encode("Result set failed: " . $conn->error);
-                }
-                else {
-                    echo json_encode(1);
-                }
-            } else {
-                echo json_encode('Unable to delete the file.');
+            if ($row['filename_front']) {
+                $file_path_front .= $row['filename_front'];
             }
-        } else {
-            echo json_encode('File does not exist.');
+            if ($row['filename_back']) {
+                $file_path_back .= $row['filename_back'];
+            }
         }
 
-        
+        if ($file_path_front != UPLOAD_DIR) {
+            if (!unlink($file_path_front)) {
+                die(json_encode('Unable to delete the front file.' . $file_path_front));
+            }
+        }
+        if ($file_path_back != UPLOAD_DIR) {
+            if (!unlink($file_path_back)) {
+                die(json_encode('Unable to delete the back file.'));
+            }
+        }
+
+        $query = $conn->prepare(
+                                "DELETE FROM products
+                                WHERE product_id = ?");
+        $query->bind_param(
+                        "i",
+                        $input['id']);
+
+        if (!$query->execute()) {
+        echo json_encode("Result set failed: " . $conn->error);
+        }
+        else {
+            echo json_encode(1);
+        }
     }
 }
 

@@ -23,7 +23,6 @@ import ReturnPolicy from "./ReturnPolicy";
 import CheckoutDetails from "./CheckoutDetails";
 import PayLater from "./PayLater";
 import Dashboard from "./Dashboard";
-import PreviousOrder from "./PreviousOrder";
 import CreateCategories from "./CreateCategories";
 import EditProducts from "./EditProducts";
 import ForgotPassword from "./ForgotPassword";
@@ -61,7 +60,6 @@ export default function App() {
           <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="paylater" element={<PayLater />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="previousOrder" element={<PreviousOrder />} />
           <Route path="categories" element={<CreateCategories />} />
           <Route path="editproducts" element={<EditProducts />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />

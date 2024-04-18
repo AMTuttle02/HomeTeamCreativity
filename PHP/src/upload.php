@@ -19,62 +19,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $hColors = $_POST["hColors"];
   $categories = $_POST["subcategories"];
   $defaultStyle = $_POST["default_style"];
-  $file = $_FILES['image'];
+  $styleLocation = $_POST["style_location"];
   $targetDir = UPLOAD_DIR;
-  $targetFile = $targetDir . basename($file["name"]);
-  $fileName = basename($file["name"]);
-  $uploadOk = 1;
-  $imageFileType = strtolower(pathinfo($targetFile,PATHINFO_EXTENSION));
-  
-  // Check if image file is a actual image or fake image
-  if(isset($_POST["submit"])) {
-    $check = getimagesize($file["tmp_name"]);
-    if($check !== false) {
-      $uploadOk = 1;
-    } else {
-      echo json_encode("File is not an image.");
-      $uploadOk = 0;
+  $frontFile = NULL;
+  $frontTargetFile = NULL;
+  $frontFileName = NULL;
+  $backFile = NULL;
+  $backTargetFile = NULL;
+  $backFileName = NULL;
+
+  if (isset($_FILES['frontFile'])) {
+    $frontFile = $_FILES['frontFile'];
+    $frontTargetFile = $targetDir . basename($frontFile["name"]);
+    $frontFileName = basename($frontFile["name"]);
+    if (!move_uploaded_file($frontFile['tmp_name'], $frontTargetFile)) {
+      die(json_encode("ERR: Cannot upload $frontFileName"));
     }
   }
-  
-  // Check if file already exists
-  if (file_exists($targetFile)) {
-    echo json_encode("Sorry, file already exists.");
-    $uploadOk = 0;
-  }
-  
-  // Check file size
-  if ($file["size"] > 500000) {
-    echo json_encode("Sorry, your file is too large.");
-    $uploadOk = 0;
-  }
-  
-  // Allow certain file formats
-  if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-  && $imageFileType != "gif" ) {
-    echo json_encode("Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
-    $uploadOk = 0;
-  }
-  
-  // Check if $uploadOk is set to 0 by an error
-  if ($uploadOk == 0) {
-    echo json_encode("Sorry, your file was not uploaded.");
-  // if everything is ok, try to upload file
-  } else {
-    if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-      echo json_encode("The file has been uploaded with name " . $productName . " and price $" . $price . "with filename: " . $fileName);
-      // Attempt to insert new design into table
-      $query = $conn->prepare("INSERT INTO products (product_name, price, filename, tag_list, tColors, lColors, cColors, hColors, categories, default_style)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-      $query->bind_param("ssssssssss", $productName, $price, $fileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle);
-      if (!$query->execute()) {
-        // If insertion fails, return error message
-        echo json_encode("ERR: Insertion failed to execute" . $query->error);
-      }
-      $_SESSION['recentDesign'] = $fileName;
-    } else {
-      echo json_encode("Sorry, there was an error uploading your file from " . $file["tmp_name"] . " to " . $targetFile);
+
+  if (isset($_FILES['backFile'])) {
+    $backFile = $_FILES['backFile'];
+    $backTargetFile = $targetDir . basename($backFile["name"]);
+    $backFileName = basename($backFile["name"]);
+    if (!move_uploaded_file($backFile['tmp_name'], $backTargetFile)) {
+      die(json_encode("ERR: Cannot upload $backFileName"));
     }
+  }
+
+  // Attempt to insert new design into table
+  $query = $conn->prepare("INSERT INTO products (product_name, price, filename_front, filename_back, tag_list, tColors, lColors, cColors, hColors, categories, default_style, default_style_location)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+  $query->bind_param("ssssssssssss", $productName, $price, $frontFileName, $backFileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation);
+  if (!$query->execute()) {
+    // If insertion fails, return error message
+    die(json_encode("ERR: Insertion failed to execute" . $query->error));
+  }
+
+  if ($styleLocation === 'front') {
+    $_SESSION['recentDesign'] = $frontFileName;
+    $_SESSION['recentDesignLocation'] = 'filename_front';
+  }
+  else if ($styleLocation === 'back') {
+    $_SESSION['recentDesign'] = $backFileName;
+    $_SESSION['recentDesignLocation'] = 'filename_back';
   }
 }
 
