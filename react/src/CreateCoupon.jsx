@@ -12,8 +12,28 @@ function CreateCoupon() {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [allSubcategories, setAllSubcategories] = useState([]);
+  const [category, setCategory] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    fetch("/api/getCats.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAllSubcategories(data);
+      }
+    );
+  }, []);
+  
+  const handleCategory = (event) => {
+    if (category.includes(event)) {
+      const removeCat = category.replace(event, "");
+      setCategory(removeCat);
+    }
+    else {
+      setCategory(category + ' ' + event);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,7 +43,8 @@ function CreateCoupon() {
         description === '' ||
         amount === 0 ||
         type === '' ||
-        startTime === '') {
+        startTime === '' ||
+        category === '') {
       setShowConfirmation(true);
       return;
     }
@@ -33,20 +54,34 @@ function CreateCoupon() {
     formData.append('description', description);
     formData.append('amount', amount);
     formData.append('type', type);
-    formData.append('min_required', minRequired);
-    formData.append('max_allowed', maxAllowed);
+    formData.append('minimum_required', minRequired);
+    formData.append('maximum_allowed', maxAllowed);
     formData.append('start_time', startTime);
     formData.append('end_time', endTime);
+    formData.append('categories', category);
   
     fetch("/api/createCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: formData,
+      body: JSON.stringify({ 
+        'code': code, 
+        'description': description,
+        'amount': amount,
+        'type': type,
+        'minimum_required': minRequired,
+        'maximum_allowed': maxAllowed,
+        'start_time': startTime,
+        'end_time': endTime,
+        'categories': category
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data === 1) {
           navigate('/coupons');
+        }
+        else {
+          console.log(data);
         }
       });
   }
@@ -131,6 +166,21 @@ function CreateCoupon() {
             placeholder="End Time"
             onChange={(event) => setEndTime(event.target.value)}
           />
+          <label>Subcategories Of Products To Include</label>
+            <div className="row">
+              <div className="createSubCatCheckbox">
+                <input type="checkbox" value={"All"} name="subcats" onChange={() => handleCategory('All')}/>
+                <label>&nbsp;{"All Products"}</label>
+              </div>
+            </div>
+            <div className="row">
+              {allSubcategories.map((subcategory) => (
+                <div className="createSubCatCheckbox">
+                  <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                </div>
+              ))}
+            </div>
           <br />
           <br/><br/>
           <button type="submit">Create Coupon</button>
