@@ -11,7 +11,7 @@ function CreateCoupon() {
   const [maxAllowed, setMaxAllowed] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState('false');
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [category, setCategory] = useState("");
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ function CreateCoupon() {
         type === '' ||
         startTime === '' ||
         category === '') {
-      setShowConfirmation(true);
+      setShowConfirmation('required');
       return;
     }
 
@@ -81,7 +81,7 @@ function CreateCoupon() {
           navigate('/coupons');
         }
         else {
-          console.log(data);
+          setShowConfirmation('failed');
         }
       });
   }
@@ -185,13 +185,24 @@ function CreateCoupon() {
           <br/><br/>
           <button type="submit">Create Coupon</button>
         </form>
-        {showConfirmation &&
+        {showConfirmation === 'required' &&
           <div className="confirmation-modal">
             <div className="confirmation-dialog">
               <h3>Sorry, you've missed a required field.</h3>
               <p>Please review the form and try agin.</p>
               <div className="confirmation-buttons">
-                <button onClick={() => setShowConfirmation(false)}>Review</button>
+                <button onClick={() => setShowConfirmation('false')}>Review</button>
+              </div>
+            </div>
+          </div>
+        }
+        {showConfirmation === 'failed' &&
+          <div className="confirmation-modal">
+            <div className="confirmation-dialog">
+              <h3>Sorry, something went wrong.</h3>
+              <p>Please review the form and try agin.</p>
+              <div className="confirmation-buttons">
+                <button onClick={() => setShowConfirmation('false')}>Review</button>
               </div>
             </div>
           </div>
