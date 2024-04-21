@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AllCoupons from "./AllCoupons";
-import CreateCoupon from "./CreateCoupon";
 
 function Coupons() {
   const navigate = useNavigate();
@@ -11,7 +10,6 @@ function Coupons() {
   }
 
   const [admin, setAdmin] = useState(0);
-  const [couponComponent, setCouponComponent] = useState(<AllCoupons />)
 
   useEffect(() => {
     fetch("/api/admin.php")
@@ -29,23 +27,19 @@ function Coupons() {
   if (admin) {
     return (
       <div className='Dashboard'>
-        <br />
-        <div className="dashboardContainer">
-          <div className="row">
-            <div className="dashHeader">
-              <button type="signUpButton" onClick={() => setCouponComponent(<CreateCoupon />)}>Create Coupon</button>
-            </div>
-            <div className="dashHeader">
-              <h1>Coupons</h1>
-            </div>
-            <div className="dashHeader">
-              <button type="signUpButton" onClick={() => setCouponComponent(<AllCoupons />)}>Manage Coupons</button>
-            </div>
+        <div className="row">
+          <div className="dashHeader">
+            <button type="signUpButton" onClick={() => navigate('create')}>Create Coupon</button>
           </div>
-          <br />
-          <div className="BlackLine" />
-          {couponComponent}
+          <div className="dashHeader">
+            <h1>Coupons</h1>
+          </div>
+          <div className="dashHeader">
+            <button type="signUpButton" onClick={() => navigate('/coupons')}>Manage Coupons</button>
+          </div>
         </div>
+        <br />
+        <div className="BlackLine" />
       </div>
     );
   }
