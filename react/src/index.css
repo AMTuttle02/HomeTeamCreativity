@@ -1393,9 +1393,54 @@ footer {
   text-align: center;
 }
 
+.coupon-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.coupon-table th,
+.coupon-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.coupon-table th {
+  background-color: #f2f2f2;
+}
+
+.coupon-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.coupon-table tr:hover {
+  background-color: #ddd;
+}
+
+.edit-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .coupon-table th,
+  .coupon-table td {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .edit-button {
+    padding: 6px 10px;
+  }
 
   .productsRight button {
     font-size: 2vw;
