@@ -29,7 +29,7 @@ function Coupons() {
       <div className='Dashboard'>
         <div className="row">
           <div className="dashHeader">
-            <button type="signUpButton" onClick={() => navigate('create')}>Create Coupon</button>
+            <button type="signUpButton" onClick={() => navigate('/coupons/create')}>Create Coupon</button>
           </div>
           <div className="dashHeader">
             <h1>Coupons</h1>
