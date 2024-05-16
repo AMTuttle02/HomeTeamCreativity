@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AllCoupons from "./AllCoupons";
 
 function Coupons() {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Navigate, useNavigate } from "react-router-dom";
+import moment from "moment-timezone";
 import Coupons from "./Coupons";
 
 function CreateCoupon() {
@@ -49,16 +50,8 @@ function CreateCoupon() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('code', code);
-    formData.append('description', description);
-    formData.append('amount', amount);
-    formData.append('type', type);
-    formData.append('minimum_required', minRequired);
-    formData.append('maximum_allowed', maxAllowed);
-    formData.append('start_time', startTime);
-    formData.append('end_time', endTime);
-    formData.append('categories', category);
+    const startUTC = moment.tz(startTime, moment.tz.guess()).utc().format();
+    const endUTC = moment.tz(endTime, moment.tz.guess()).utc().format();
   
     fetch("/api/createCoupon.php", {
       method: "POST",
@@ -70,8 +63,8 @@ function CreateCoupon() {
         'type': type,
         'minimum_required': minRequired,
         'maximum_allowed': maxAllowed,
-        'start_time': startTime,
-        'end_time': endTime,
+        'start_time': startUTC,
+        'end_time': endUTC,
         'categories': category
       }),
     })
