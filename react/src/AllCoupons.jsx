@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Coupons from "./Coupons";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function AllCoupons() {
   const [coupons, setCoupons] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/api/getCoupons.php")
@@ -57,7 +59,7 @@ function AllCoupons() {
                 <td>{formatTime(coupon.end_time)}</td>
                 <td>{coupon.categories}</td>
                 <td>
-                  <button className="edit-button">Edit</button>
+                  <button className="edit-button" onClick={() => navigate('/coupons/edit')()}>Edit</button>
                 </td>
               </tr>
             ))}

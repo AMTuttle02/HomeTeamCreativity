@@ -32,6 +32,7 @@ import CostCalculator from "./CostCalculator.jsx";
 import FourOFour from "./404.jsx";
 import AllCoupons from "./AllCoupons.jsx";
 import CreateCoupon from "./CreateCoupon.jsx";
+import EditCoupons from "./EditCoupons.jsx";
 
 export default function App() {
   return (
@@ -71,6 +72,7 @@ export default function App() {
           <Route path="/404" element={<FourOFour />} />
           <Route path="/coupons" element={<AllCoupons />} />
           <Route path="/coupons/create" element={<CreateCoupon />} />
+          <Route path="/coupons/edit" element={<EditCoupons />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>
