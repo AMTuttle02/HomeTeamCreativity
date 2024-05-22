@@ -72,7 +72,7 @@ export default function App() {
           <Route path="/404" element={<FourOFour />} />
           <Route path="/coupons" element={<AllCoupons />} />
           <Route path="/coupons/create" element={<CreateCoupon />} />
-          <Route path="/coupons/edit/:couponCode" element={<EditCoupons />} />
+          <Route path="/coupons/edit/:code" element={<EditCoupons />} />
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>

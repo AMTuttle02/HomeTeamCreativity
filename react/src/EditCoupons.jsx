@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {Navigate, useNavigate } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import moment from "moment-timezone";
 import Coupons from "./Coupons";
 
 function CreateCoupon() {
-  const [code, setCode] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState('');
@@ -16,6 +15,20 @@ function CreateCoupon() {
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [category, setCategory] = useState("");
   const navigate = useNavigate();
+  const {code} = useParams();
+
+  function formatDate(isoString) {
+    const date = new Date(isoString);
+  
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() is zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
 
   useEffect(() => {
     fetch("/api/getCats.php")
@@ -24,6 +37,30 @@ function CreateCoupon() {
         setAllSubcategories(data);
       }
     );
+
+    fetch("/api/getCoupon.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({code: code}),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          setDescription(data.description);
+          setAmount(data.amount);
+          setType(data.type);
+          setMinRequired(data.minimum_required);
+          setMaxAllowed(data.maximum_allowed);
+          setStartTime(formatDate(data.start_time));
+          setEndTime(formatDate(data.end_time));
+          setCategory(data.categories);
+        }
+      })
+      .catch((error) => {
+        console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
+        console.log(error);
+        navigate('/404');
+      });
   }, []);
   
   const handleCategory = (event) => {
@@ -40,8 +77,7 @@ function CreateCoupon() {
     event.preventDefault();
 
     // verify required fields
-    if (code === '' || 
-        description === '' ||
+    if (description === '' ||
         amount === 0 ||
         type === '' ||
         startTime === '' ||
@@ -86,20 +122,20 @@ function CreateCoupon() {
         <Coupons />
         <br/>
         <form className="couponForm" onSubmit={handleSubmit}>
-          <label>Coupon Code</label>
+          <label>Coupon Code (Read Only)</label>
             <input
               type="text"
               id="code"
               name="code"
-              placeholder="Coupon Code"
-              onChange={(event) => setCode(event.target.value)}
+              value={code}
+              readOnly
             />
           <label>Description</label>
           <input
             type="text"
             id="description"
             name="description"
-            placeholder="Description"
+            value={description}
             onChange={(event) => setDescription(event.target.value)}
           />
           <label>Type</label>
@@ -116,7 +152,7 @@ function CreateCoupon() {
             type="number"
             id="amount"
             name="amount"
-            placeholder="Amount"
+            value={amount}
             onChange={(event) => setAmount(event.target.value)}
           />
           <br />
@@ -126,7 +162,7 @@ function CreateCoupon() {
             type="number"
             id="min_amt"
             name="min_amt"
-            placeholder="Minimum Amount"
+            value={minRequired}
             onChange={(event) => setMinRequired(event.target.value)}
           />
           <br />
@@ -136,7 +172,7 @@ function CreateCoupon() {
             type="number"
             id="max_amt"
             name="max_amt"
-            placeholder="Maximum Amount"
+            value={maxAllowed}
             onChange={(event) => setMaxAllowed(event.target.value)}
           />
           <br />
@@ -146,7 +182,7 @@ function CreateCoupon() {
             type="datetime-local"
             id="start_time"
             name="start_time"
-            placeholder="Start Time"
+            value={startTime}
             onChange={(event) => setStartTime(event.target.value)}
           />
           <br />
@@ -156,7 +192,7 @@ function CreateCoupon() {
             type="datetime-local"
             id="end_time"
             name="end_time"
-            placeholder="End Time"
+            value={endTime}
             onChange={(event) => setEndTime(event.target.value)}
           />
           <label>Subcategories Of Products To Include</label>
@@ -176,7 +212,7 @@ function CreateCoupon() {
             </div>
           <br />
           <br/><br/>
-          <button type="submit">Create Coupon</button>
+          <button type="submit">Update Coupon</button>
         </form>
         {showConfirmation === 'required' &&
           <div className="confirmation-modal">
