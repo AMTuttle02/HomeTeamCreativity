@@ -59,7 +59,7 @@ function AllCoupons() {
                 <td>{formatTime(coupon.end_time)}</td>
                 <td>{coupon.categories}</td>
                 <td>
-                  <button className="edit-button" onClick={() => navigate('/coupons/edit')()}>Edit</button>
+                  <button className="edit-button" onClick={() => navigate('/coupons/edit/' + coupon.code)}>Edit</button>
                 </td>
               </tr>
             ))}
