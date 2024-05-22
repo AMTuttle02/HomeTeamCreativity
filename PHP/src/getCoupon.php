@@ -13,26 +13,26 @@ include 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
 
-    $code = $inputs['code'];
-    // Obtain order details
-    $query = $conn->prepare(
-                          "SELECT *
-                          FROM coupons
-                          WHERE code = ?");
-    
-    $query->bind_param('s', $code);
-    
-    if (!$query->execute()) {
-      die("Query failed: " . $stmt->error);
-    }
+  $code = $inputs['code'];
+  // Obtain order details
+  $query = $conn->prepare(
+                        "SELECT *
+                        FROM coupons
+                        WHERE code = ?");
+  
+  $query->bind_param('s', $code);
+  
+  if (!$query->execute()) {
+    die("Query failed: " . $stmt->error);
+  }
 
-    $result = mysqli_fetch_assoc($query->get_result());
+  $result = mysqli_fetch_assoc($query->get_result());
 
-    if (!$result) {
-      die("Result set failed: " . $conn->error);
-    }
+  if (!$result) {
+    die("Result set failed: " . $conn->error);
+  }
 
-    echo json_encode($result);
+  echo json_encode($result);
 }
 
 mysqli_close($conn);

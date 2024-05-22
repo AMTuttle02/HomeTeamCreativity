@@ -78,7 +78,7 @@ function CreateCoupon() {
 
     // verify required fields
     if (description === '' ||
-        amount === 0 ||
+        amount < 0.01 ||
         type === '' ||
         startTime === '' ||
         category === '') {
@@ -89,7 +89,7 @@ function CreateCoupon() {
     const startUTC = moment.tz(startTime, moment.tz.guess()).utc().format();
     const endUTC = moment.tz(endTime, moment.tz.guess()).utc().format();
   
-    fetch("/api/createCoupon.php", {
+    fetch("/api/updateCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
@@ -246,7 +246,14 @@ function CreateCoupon() {
             </div>
           <br />
           <br/><br/>
-          <button type="submit">Update Coupon</button>
+          <div className="row">
+            <div className="dashHeader">
+              <button type="signUpButton" onClick={() => navigate('/coupons')}>Cancel</button>
+            </div>
+            <div className="dashHeader">
+              <button type="submit">Update Coupon</button>
+            </div>
+          </div>
         </form>
         {showConfirmation === 'required' &&
           <div className="confirmation-modal">
