@@ -140,11 +140,29 @@ function CreateCoupon() {
           />
           <label>Type</label>
           <br />
-          <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
-            <label>&nbsp;% Off</label>
+          {type === "percent" ?
+            <span>
+              <input type="radio" id="type" name="type" value="percent" checked={true} onChange={(event) => setType(event.target.value)}/>
+              <label>&nbsp;% Off</label>
+            </span>
+          :
+            <span>
+              <input type="radio" id="type" name="type" value="percent" checked={false} onChange={(event) => setType(event.target.value)}/>
+              <label>&nbsp;% Off</label>
+            </span>
+          }
           <br />
-          <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
-            <label>&nbsp;$ Amount Off</label>
+          {type === "amount" ?
+            <span>
+              <input type="radio" id="type" name="type" value="amount" checked={true} onChange={(event) => setType(event.target.value)}/>
+              <label>&nbsp;$ Amount Off</label>
+            </span>
+          :
+            <span>
+              <input type="radio" id="type" name="type" value="amount" checked={false} onChange={(event) => setType(event.target.value)}/>
+              <label>&nbsp;$ Amount Off</label>
+            </span>
+          }
           <br /><br />
           <label>Amount ($ or %)</label>
           <br />
@@ -197,16 +215,32 @@ function CreateCoupon() {
           />
           <label>Subcategories Of Products To Include</label>
             <div className="row">
-              <div className="createSubCatCheckbox">
-                <input type="checkbox" value={"All"} name="subcats" onChange={() => handleCategory('All')}/>
-                <label>&nbsp;{"All Products"}</label>
-              </div>
+              {category.includes('All') ? 
+                <div className="createSubCatCheckbox">
+                  <input type="checkbox" value={"All"} name="subcats" checked={true} onChange={() => handleCategory('All')}/>
+                  <label>&nbsp;{"All Products"}</label>
+                </div>
+              :
+                <div className="createSubCatCheckbox">
+                  <input type="checkbox" value={"All"} name="subcats" checked={false} onChange={() => handleCategory('All')}/>
+                  <label>&nbsp;{"All Products"}</label>
+                </div>
+              }
             </div>
             <div className="row">
               {allSubcategories.map((subcategory) => (
-                <div className="createSubCatCheckbox">
-                  <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                <div className="subCatCheckbox">
+                  {category.includes(subcategory.name) ? 
+                  <span>
+                    <input type="checkbox" value={subcategory.name} name="subcats" checked={true} onChange={(event) => handleCategory(event.target.value)}/>
+                    <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                  </span>
+                  :
+                  <span>
+                    <input type="checkbox" value={subcategory.name} name="subcats" checked={false} onChange={(event) => handleCategory(event.target.value)}/>
+                    <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                  </span>
+                  }
                 </div>
               ))}
             </div>
