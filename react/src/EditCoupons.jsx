@@ -81,7 +81,8 @@ function CreateCoupon() {
         amount < 0.01 ||
         type === '' ||
         startTime === '' ||
-        category === '') {
+        category === ''||
+        minRequired < 1) {
       setShowConfirmation('required');
       return;
     }

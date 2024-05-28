@@ -18,9 +18,16 @@ function CheckoutDetails() {
     const [locationError, setLocationError] = useState("");
     const [nameError, setNameError] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [couponError, setCouponError] = useState("");
     const [processingFee, setProcessingFee] = useState(0);
     const [tax, setTax] = useState(0);
+    const [discount, setDiscount] = useState((0.00).toFixed(2));
+    const [code, setCode] = useState("");
     
+    const validateCoupon = () => {
+        setCouponError("Sorry, that discount is invalid.")
+    }
+
     const handleValidation = () => {
         if (!first || !last) {
             setNameError("Please provide a first and last name.");
@@ -303,7 +310,7 @@ function CheckoutDetails() {
                                         <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
                                     </label>
                                 </div>
-                            </div> 
+                            </div>
                         : 
                             <div />
                         }
@@ -315,7 +322,16 @@ function CheckoutDetails() {
                                     </div>
                                     <div className="split50">
                                         <div className="RightAlign">
+                                            <label> &nbsp;</label>
+                                            <span className="CouponCode">
+                                                <input type="text" placeholder="Discount Code" onChange={(event) => setCode(event)}></input>
+                                                <button onClick={validateCoupon}>Apply</button>
+                                            </span>
+                                            <div className="red">
+                                                {couponError}
+                                            </div>
                                             <p> Subtotal: ${order.total_cost}</p>
+                                            <p> Discount: ${discount}</p>
                                             <p> Shipping: $0.00</p>
                                             <p> Online Processing Fee: ${processingFee}</p>
                                             <p> Estimated Tax: ${tax}</p>

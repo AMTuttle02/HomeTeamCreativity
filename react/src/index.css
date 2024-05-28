@@ -1430,6 +1430,32 @@ footer {
   background-color: #45a049;
 }
 
+.CouponCode input{
+  box-sizing: border-box;
+  color: black;
+  background-color: white;
+  margin: 8px 0;
+  border-radius: 4px;
+  width: 50%;
+  padding: 2px;
+  border: 2px solid #ccc;
+  border-radius: 0px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  text-align: right;
+}
+
+.CouponCode button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 5px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 15%;
+}
+
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
   .coupon-table th,
