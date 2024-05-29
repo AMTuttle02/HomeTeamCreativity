@@ -25,7 +25,24 @@ function CheckoutDetails() {
     const [code, setCode] = useState("");
     
     const validateCoupon = () => {
-        setCouponError("Sorry, that discount is invalid.")
+        fetch("/api/getCoupon.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({code: code})
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data) {
+                console.log(data);
+                if (order.total_cost < data.minimum_required) {
+                    throw(order.total_cost);
+                }
+              }
+            })
+            .catch((error) => {
+                console.log(error);
+                setCouponError("Sorry, that discount is invalid.");
+            });
     }
 
     const handleValidation = () => {
@@ -324,7 +341,7 @@ function CheckoutDetails() {
                                         <div className="RightAlign">
                                             <label> &nbsp;</label>
                                             <span className="CouponCode">
-                                                <input type="text" placeholder="Discount Code" onChange={(event) => setCode(event)}></input>
+                                                <input type="text" placeholder="Discount Code" onChange={(event) => setCode(event.target.value)}></input>
                                                 <button onClick={validateCoupon}>Apply</button>
                                             </span>
                                             <div className="red">
