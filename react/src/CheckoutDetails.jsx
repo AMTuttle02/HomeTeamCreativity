@@ -23,7 +23,16 @@ function CheckoutDetails() {
     const [tax, setTax] = useState(0);
     const [discount, setDiscount] = useState((0.00).toFixed(2));
     const [code, setCode] = useState("");
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000); // Update every second
     
+        return () => clearInterval(intervalId); // Cleanup interval on component unmount
+    }, []);
+
     const validateCoupon = () => {
         fetch("/api/getCoupon.php", {
             method: "POST",
@@ -33,17 +42,44 @@ function CheckoutDetails() {
             .then((response) => response.json())
             .then((data) => {
               if (data) {
-                console.log(data);
+                // verify minimum amount required is hit
                 if (order.total_cost < data.minimum_required) {
                     throw(order.total_cost);
                 }
+                // verify code is active
+                if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
+                    throw(data.start_time + " - " + data.end_time);
+                }
+                if (data.categories.includes("All")) {
+                    let amount = 0.00;
+                    if (data.type === 'percent') {
+                        let percent = (data.amount * 1) / 100;
+                        amount = (order.total_cost * 1 * percent).toFixed(2);
+                    }
+                    setDiscount(amount);
+                }
+                else {
+
+                }
+
               }
             })
             .catch((error) => {
                 console.log(error);
                 setCouponError("Sorry, that discount is invalid.");
+                setDiscount((0.00).toFixed(2));
             });
     }
+
+    const formatTime = (timeString) => {
+        const date = new Date(timeString);
+        if (isNaN(date.getTime())) {
+          // Check if date is invalid
+          return "No End Date";
+        } else {
+          return date.toLocaleString();
+        }
+    };    
 
     const handleValidation = () => {
         if (!first || !last) {
@@ -93,7 +129,6 @@ function CheckoutDetails() {
             })
             .then((response) => response.json())
             .then((data) => {
-                // If the email and password are valid, redirect to the homepage
                 if (data) {
                     window.location.href = "/api/stripeCheckout.php";
                 }
@@ -212,15 +247,15 @@ function CheckoutDetails() {
             setTax((order.total_cost * 0.0725).toFixed(2));
         }
         else {
-            setProcessingFee((order.total_cost * 0.029 + 0.31).toFixed(2));
-            let temp = (order.total_cost * 1 + (order.total_cost * 0.029 + 0.31)).toFixed(2);
+            setProcessingFee(((order.total_cost * 1 - discount * 1) * 0.029 + 0.31).toFixed(2));
+            let temp = ((order.total_cost * 1 - discount * 1) + ((order.total_cost * 1 - discount * 1) * 0.029 + 0.31)).toFixed(2);
             // sales tax
             setTax((temp * 0.0725).toFixed(2));
         }
-    }, [paying, notCustomOrder, order])
+    }, [paying, notCustomOrder, order, discount])
 
     const onlineTotalCost = (subtotal) => {
-        let total = (subtotal * 1 + tax * 1 + processingFee * 1);
+        let total = (subtotal * 1 - discount * 1 + tax * 1 + processingFee * 1);
         return (total);
     }
 
