@@ -33,6 +33,54 @@ function CheckoutDetails() {
         return () => clearInterval(intervalId); // Cleanup interval on component unmount
     }, []);
 
+    const determineDiscount = async (discount) => {
+        let orderTotal = order.total_cost;
+        let finalAmount = 0.00;
+    
+        if (!discount.categories.includes("All")) {
+            orderTotal = 0;
+            let oID = localStorage.getItem("oID") || 0;
+    
+            try {
+                const response = await fetch("/api/getCart.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ order_id: oID }),
+                });
+                const data = await response.json();
+    
+                for (let i = 0; i < data.length; ++i) {
+                    let categories = data[i].categories
+                        .split(' ')
+                        .filter(item => item.trim().length > 0)
+                        .map(item => item.trim());
+    
+                    for (let j = 0; j < categories.length; ++j) {
+                        if (discount.categories.includes(categories[j])) {
+                            orderTotal += (data[i].price * 1);
+                            j = categories.length;  // Exit the inner loop
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching cart data:", error);
+            }
+        }
+    
+        if (discount.type === 'percent') {
+            let percent = (discount.amount * 1) / 100;
+            finalAmount = (orderTotal * 1 * percent).toFixed(2);
+            if (finalAmount * 1 > discount.maximum_allowed * 1) {
+                finalAmount = (discount.maximum_allowed * 1).toFixed(2);
+            }
+        } else if (discount.type === 'amount') {
+            finalAmount = (discount.amount * 1).toFixed(2);
+        }
+    
+        setDiscount(finalAmount);
+    };
+    
+
     const validateCoupon = () => {
         fetch("/api/getCoupon.php", {
             method: "POST",
@@ -50,18 +98,7 @@ function CheckoutDetails() {
                 if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
                     throw(data.start_time + " - " + data.end_time);
                 }
-                if (data.categories.includes("All")) {
-                    let amount = 0.00;
-                    if (data.type === 'percent') {
-                        let percent = (data.amount * 1) / 100;
-                        amount = (order.total_cost * 1 * percent).toFixed(2);
-                    }
-                    setDiscount(amount);
-                }
-                else {
-
-                }
-
+                determineDiscount(data);
               }
             })
             .catch((error) => {
