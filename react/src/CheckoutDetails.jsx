@@ -164,10 +164,11 @@ function CheckoutDetails() {
             else if (userId) {
                 oID = 0;
             }
+            let total = (onlineTotalCost(order.total_cost)).toFixed(2);
             fetch("/api/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID}),
+                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total}),
             })
             .then((response) => response.json())
             .then((data) => {

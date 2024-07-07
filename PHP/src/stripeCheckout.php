@@ -31,11 +31,6 @@ if ($_SESSION["order_id"]) {
     if (!$result) {
         die("Result set failed: " . $conn->error);
     }
-
-    $subTotal = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
-    $total_cost = number_format(($subTotal * 1) + ($subTotal * 0.0725), 2);
-
-    $total_cost = $total_cost * 100;
 }
 else {
     $userId = $_SESSION["userId"];
@@ -57,11 +52,11 @@ else {
     }
 
     $orderId = $result['order_id'];
-    $subTotal = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
-    $total_cost = number_format(($subTotal * 1) + ($subTotal * 0.0725), 2);
-
-    $total_cost = $total_cost * 100;
 }
+
+$total_cost = $_SESSION['total'];
+
+$total_cost *= 100;
 
 // stripe integration
 require_once 'vendor/autoload.php';
