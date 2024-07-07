@@ -58,7 +58,7 @@ function CheckoutDetails() {
                     for (let j = 0; j < categories.length; ++j) {
                         if (discount.categories.includes(categories[j])) {
                             orderTotal += (data[i].price * 1);
-                            j = categories.length;  // Exit the inner loop
+                            j = categories.length;
                         }
                     }
                 }
@@ -76,8 +76,13 @@ function CheckoutDetails() {
         } else if (discount.type === 'amount') {
             finalAmount = (discount.amount * 1).toFixed(2);
         }
-    
-        setDiscount(finalAmount);
+
+        if (finalAmount > 0) {
+            setDiscount(finalAmount);
+        } else {
+            setCouponError("Sorry, that discount is invalid.");
+            setDiscount((0.00).toFixed(2));
+        }
     };
     
 
