@@ -54,9 +54,16 @@ else {
     $orderId = $result['order_id'];
 }
 
-$total_cost = $_SESSION['total'];
+
+if (isset($_SESSION['total'])) {
+    $total_cost = $_SESSION['total'];
+} else {
+    header("Location: " . '/404');
+}
 
 $total_cost *= 100;
+
+unset($_SESSION['total']);
 
 // stripe integration
 require_once 'vendor/autoload.php';
