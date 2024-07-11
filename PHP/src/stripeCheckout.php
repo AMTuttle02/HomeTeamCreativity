@@ -4,6 +4,10 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 require_once 'secrets.php';
 
 if (session_status() === PHP_SESSION_ACTIVE) {
@@ -63,8 +67,6 @@ if (isset($_SESSION['total'])) {
 
 $total_cost *= 100;
 
-unset($_SESSION['total']);
-
 // stripe integration
 require_once 'vendor/autoload.php';
 //require_once '../secrets.php';
@@ -90,7 +92,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
     ],
 'mode' => 'payment',
 'success_url' => $YOUR_DOMAIN . '/api/checkout.php',
-'cancel_url' => $YOUR_DOMAIN . '/cart',
+'cancel_url' => $YOUR_DOMAIN . '/api/clearTotal.php',
 ]);
 
 header("HTTP/1.1 303 See Other");

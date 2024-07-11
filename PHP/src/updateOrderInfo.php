@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ship = $inputs['shipping'];
     $location = $inputs['dbLocation'];
     $total = $inputs['total'];
+    $discount = $inputs['discount'];
 
     if ($inputs["order_id"]) {
         $orderId = $inputs["order_id"];
@@ -79,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     mysqli_close($conn);
 
     $_SESSION['total'] = floatval($total);
+    $_SESSION['discount'] = floatval($discount);
 
     echo 1;
 }

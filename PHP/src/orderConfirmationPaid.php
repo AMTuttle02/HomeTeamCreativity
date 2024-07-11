@@ -22,6 +22,9 @@ date_default_timezone_set('America/New_York');
 // Obtain cart
 $inputs = json_decode(file_get_contents('php://input'), true);
 
+$total = $_SESSION['total'];
+$discount = $_SESSION['discount'];
+
 function setPrice ($price, $type, $size) {
     $price = $price * 1;
     if ($type == "Crewneck Sweatshirt") {
@@ -104,9 +107,9 @@ $last = $result['last_name'];
 $email = $result['email'];
 
 $subTotal = number_format($result['total_cost'], 2);
-$temp = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
-$total_cost = number_format(($temp * 1) + ($temp * 0.0725), 2);
-$processingFee = number_format($result['total_cost'] * 0.029 + 0.31, 2);
+$subTotal_after_discount = number_format((($subTotal * 1) - ($discount * 1)), 2);
+$temp = number_format(($subTotal_after_discount * 1) + ($subTotal_after_discount * 0.029 + 0.31), 2);
+$processingFee = number_format($subTotal_after_discount * 0.029 + 0.31, 2);
 $tax = number_format(($temp * 0.0725), 2);
 
 $query = $conn->prepare(
@@ -356,7 +359,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$'.number_format($subTotal, 2).'<br>$00.00<br>$00.00<br>$'.$processingFee.'<br>$'.$tax.'</p>
+                                                                                                        <p>$'.number_format($subTotal, 2).'<br>$'.$discount.'<br>$0.00<br>$'.$processingFee.'<br>$'.$tax.'</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -432,7 +435,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text es-m-txt-r">
-                                                                                                        <h3>$'.number_format($total_cost, 2).'</h3>
+                                                                                                        <h3>$'.number_format($total, 2).'</h3>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>

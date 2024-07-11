@@ -168,7 +168,7 @@ function CheckoutDetails() {
             fetch("/api/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total}),
+                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount}),
             })
             .then((response) => response.json())
             .then((data) => {
