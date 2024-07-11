@@ -81,6 +81,7 @@ function Products() {
         for (let i = 0; i < subcategories.length; i++) {
           if (subcategories[i].name === subcategory) {
             setDisplay(subcategory);
+            localStorage.setItem('lastProductCategory', '/products/' + category + '/' + subcategory);
             i = subcategories.length + 1;
             valid = 1;
           }
@@ -101,8 +102,10 @@ function Products() {
       || (category === "Seasons") 
       || (category === "Sports")) {
         setDisplay(category);
+        localStorage.setItem('lastProductCategory', '/products/' + category);
       }
       else {
+        localStorage.setItem('lastProductCategory', '/products');
         navigate("/products");
         setDisplay("All");
       }

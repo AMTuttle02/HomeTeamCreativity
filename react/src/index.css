@@ -742,15 +742,35 @@ body {
   background-color:rgb(207, 207, 207);
 }
 
-input[type=text] {
+input[type=text], input[type=number], input[type=datetime-local], input[type="password"]  {
   box-sizing: border-box;
-  border: 2px solid black;
-  border-radius: 10px;
   font-size: 16px;
   color: black;
   background-color: #B7C9E2;
-  padding: 12px 20px 12px 40px;
   transition: width 0.4s ease-in-out;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.couponForm label {
+  font-weight: bold;
+}
+
+.CreateCoupon button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.CreateCoupon button:hover {
+  background-color: #45a049;
 }
 
 .container {
@@ -790,15 +810,6 @@ input[type=text] {
 .container h2 {
   text-align: center;
   color: #3b3b3b;
-}
-
-input[type="text"], input[type="password"] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
 }
 
 .container button {
@@ -1382,9 +1393,80 @@ footer {
   text-align: center;
 }
 
+.coupon-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.coupon-table th,
+.coupon-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.coupon-table th {
+  background-color: #f2f2f2;
+}
+
+.coupon-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.coupon-table tr:hover {
+  background-color: #ddd;
+}
+
+.edit-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
+
+.CouponCode input{
+  box-sizing: border-box;
+  color: black;
+  background-color: white;
+  margin: 8px 0;
+  border-radius: 4px;
+  width: 50%;
+  padding: 2px;
+  border: 2px solid #ccc;
+  border-radius: 0px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  text-align: right;
+}
+
+.CouponCode button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 5px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 15%;
+}
 
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
+  .coupon-table th,
+  .coupon-table td {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .edit-button {
+    padding: 6px 10px;
+  }
 
   .productsRight button {
     font-size: 2vw;

@@ -99,17 +99,23 @@ function Upload() {
     } else if (backFile) {
       formData.append('backFile', backFile);
     }
-
-    formData.append('productName', productName);
-    formData.append('price', price);
-    formData.append('tags', tags);
-    formData.append('tColors', tshirtColors);
-    formData.append('lColors', longSleeveColors);
-    formData.append('cColors', crewneckColors);
-    formData.append('hColors', hoodieColors);
-    formData.append('subcategories', category);
-    formData.append('default_style', style);
-    formData.append('style_location', location);
+    
+    if (!productName || !price || !style || !location) {
+      setShowConfirmation(true);
+      return;
+    }
+    else {
+      formData.append('productName', productName);
+      formData.append('price', price);
+      formData.append('tags', tags);
+      formData.append('tColors', tshirtColors);
+      formData.append('lColors', longSleeveColors);
+      formData.append('cColors', crewneckColors);
+      formData.append('hColors', hoodieColors);
+      formData.append('subcategories', category);
+      formData.append('default_style', style);
+      formData.append('style_location', location);
+    }
   
     try {
       const response = await axios.post('/api/upload.php', formData, {
@@ -183,11 +189,11 @@ function Upload() {
         <br />
         <div className="container">
           <h1>Upload Designs Below</h1>
-          <br />
-          <h2>Remember: Design must be 500px by 500px</h2>
+          <h2>Design must be 500px by 500px</h2>
+          <h3 className="center">Required Fields are marked with a <span className="red">*</span></h3>
           <br/>
           <form onSubmit={handleSubmit}>
-            <label>Product Display Name</label>
+            <label>Product Display Name<span className="red">*</span></label>
               <input
                 type="text"
                 id="product_name"
@@ -195,7 +201,7 @@ function Upload() {
                 placeholder="Product Name"
                 onChange={(event) => setName(event.target.value)}
               />
-            <label>Price (Do Not Include $) (Pricing Default is for an Adult Medium)</label>
+            <label>Price<span className="red">*</span> (Do Not Include $) (Pricing Default is for an Adult Medium)</label>
             <input
               type="text"
               id="price"
@@ -213,7 +219,7 @@ function Upload() {
             />
             
             <br />
-            <center><h3>Default Style</h3></center>
+            <center><h3>Default Style<span className="red">*</span></h3></center>
             <div className="row">
               <div className="uploadSplit">
                 <span>
@@ -245,7 +251,7 @@ function Upload() {
               </div>
             </div>
             <br/>
-            <center><h3>Default Style Location</h3></center>
+            <center><h3>Default Style Location<span className="red">*</span></h3></center>
             <div className="row">
               <div className="uploadSplit">
                 <span>
@@ -417,10 +423,10 @@ function Upload() {
                 ))}
             </div>
             <br/>
-            <h3>Front Design</h3>
+            <h3>Front Design{location === 'front' && <span className="red">*</span>}</h3>
             <input type="file" onChange={handleFrontFileInputChange} />
             <br/><br/>
-            <h3>Back Design</h3>
+            <h3>Back Design{location === 'back' && <span className="red">*</span>}</h3>
             <input type="file" onChange={handleBackFileInputChange} />
             <br/><br/>
             <button type="submit">Upload</button>
@@ -428,10 +434,10 @@ function Upload() {
           {showConfirmation &&
             <div className="confirmation-modal">
               <div className="confirmation-dialog">
-                <h3>Hey Goofball! You're about to mess up.</h3>
-                <p>You have not uploaded a design that matches the default location.</p>
+                <h3>Sorry, you've missed a required field.</h3>
+                <p>Please review the form and try agin.</p>
                 <div className="confirmation-buttons">
-                  <button onClick={() => setShowConfirmation(false)}>My Brother Is THE BEST</button>
+                  <button onClick={() => setShowConfirmation(false)}>Review</button>
                 </div>
               </div>
             </div>
