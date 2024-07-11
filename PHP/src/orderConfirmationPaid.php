@@ -359,7 +359,7 @@ $productHTML.='                                                      </td>
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="right" class="esd-block-text">
-                                                                                                        <p>$'.number_format($subTotal, 2).'<br>$'.$discount.'<br>$0.00<br>$'.$processingFee.'<br>$'.$tax.'</p>
+                                                                                                        <p>$'.number_format($subTotal, 2).'<br>$'.number_format($discount, 2).'<br>$0.00<br>$'.$processingFee.'<br>$'.$tax.'</p>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
