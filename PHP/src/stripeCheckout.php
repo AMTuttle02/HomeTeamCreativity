@@ -4,6 +4,10 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 require_once 'secrets.php';
 
 if (session_status() === PHP_SESSION_ACTIVE) {
@@ -31,11 +35,6 @@ if ($_SESSION["order_id"]) {
     if (!$result) {
         die("Result set failed: " . $conn->error);
     }
-
-    $subTotal = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
-    $total_cost = number_format(($subTotal * 1) + ($subTotal * 0.0725), 2);
-
-    $total_cost = $total_cost * 100;
 }
 else {
     $userId = $_SESSION["userId"];
@@ -57,11 +56,16 @@ else {
     }
 
     $orderId = $result['order_id'];
-    $subTotal = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.029 + 0.31), 2);
-    $total_cost = number_format(($subTotal * 1) + ($subTotal * 0.0725), 2);
-
-    $total_cost = $total_cost * 100;
 }
+
+
+if (isset($_SESSION['total'])) {
+    $total_cost = $_SESSION['total'];
+} else {
+    header("Location: " . '/404');
+}
+
+$total_cost *= 100;
 
 // stripe integration
 require_once 'vendor/autoload.php';
@@ -88,7 +92,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
     ],
 'mode' => 'payment',
 'success_url' => $YOUR_DOMAIN . '/api/checkout.php',
-'cancel_url' => $YOUR_DOMAIN . '/cart',
+'cancel_url' => $YOUR_DOMAIN . '/api/clearTotal.php',
 ]);
 
 header("HTTP/1.1 303 See Other");

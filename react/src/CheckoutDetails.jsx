@@ -18,9 +18,111 @@ function CheckoutDetails() {
     const [locationError, setLocationError] = useState("");
     const [nameError, setNameError] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [couponError, setCouponError] = useState("");
     const [processingFee, setProcessingFee] = useState(0);
     const [tax, setTax] = useState(0);
+    const [discount, setDiscount] = useState((0.00).toFixed(2));
+    const [code, setCode] = useState("");
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000); // Update every second
     
+        return () => clearInterval(intervalId); // Cleanup interval on component unmount
+    }, []);
+
+    const determineDiscount = async (discount) => {
+        let orderTotal = order.total_cost;
+        let finalAmount = 0.00;
+    
+        if (!discount.categories.includes("All")) {
+            orderTotal = 0;
+            let oID = localStorage.getItem("oID") || 0;
+    
+            try {
+                const response = await fetch("/api/getCart.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ order_id: oID }),
+                });
+                const data = await response.json();
+    
+                for (let i = 0; i < data.length; ++i) {
+                    let categories = data[i].categories
+                        .split(' ')
+                        .filter(item => item.trim().length > 0)
+                        .map(item => item.trim());
+    
+                    for (let j = 0; j < categories.length; ++j) {
+                        if (discount.categories.includes(categories[j])) {
+                            orderTotal += (data[i].price * 1);
+                            j = categories.length;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching cart data:", error);
+            }
+        }
+    
+        if (discount.type === 'percent') {
+            let percent = (discount.amount * 1) / 100;
+            finalAmount = (orderTotal * 1 * percent).toFixed(2);
+            if (finalAmount * 1 > discount.maximum_allowed * 1) {
+                finalAmount = (discount.maximum_allowed * 1).toFixed(2);
+            }
+        } else if (discount.type === 'amount') {
+            finalAmount = (discount.amount * 1).toFixed(2);
+        }
+
+        if (finalAmount > 0) {
+            setDiscount(finalAmount);
+        } else {
+            setCouponError("Sorry, that discount is invalid.");
+            setDiscount((0.00).toFixed(2));
+        }
+    };
+    
+
+    const validateCoupon = () => {
+        fetch("/api/getCoupon.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({code: code})
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data) {
+                // verify minimum amount required is hit
+                if (order.total_cost < data.minimum_required) {
+                    throw(order.total_cost);
+                }
+                // verify code is active
+                if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
+                    throw(data.start_time + " - " + data.end_time);
+                }
+                determineDiscount(data);
+              }
+            })
+            .catch((error) => {
+                console.log(error);
+                setCouponError("Sorry, that discount is invalid.");
+                setDiscount((0.00).toFixed(2));
+            });
+    }
+
+    const formatTime = (timeString) => {
+        const date = new Date(timeString);
+        if (isNaN(date.getTime())) {
+          // Check if date is invalid
+          return "No End Date";
+        } else {
+          return date.toLocaleString();
+        }
+    };    
+
     const handleValidation = () => {
         if (!first || !last) {
             setNameError("Please provide a first and last name.");
@@ -62,14 +164,14 @@ function CheckoutDetails() {
             else if (userId) {
                 oID = 0;
             }
+            let total = (onlineTotalCost(order.total_cost)).toFixed(2);
             fetch("/api/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID}),
+                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount}),
             })
             .then((response) => response.json())
             .then((data) => {
-                // If the email and password are valid, redirect to the homepage
                 if (data) {
                     window.location.href = "/api/stripeCheckout.php";
                 }
@@ -188,15 +290,15 @@ function CheckoutDetails() {
             setTax((order.total_cost * 0.0725).toFixed(2));
         }
         else {
-            setProcessingFee((order.total_cost * 0.029 + 0.31).toFixed(2));
-            let temp = (order.total_cost * 1 + (order.total_cost * 0.029 + 0.31)).toFixed(2);
+            setProcessingFee(((order.total_cost * 1 - discount * 1) * 0.029 + 0.31).toFixed(2));
+            let temp = ((order.total_cost * 1 - discount * 1) + ((order.total_cost * 1 - discount * 1) * 0.029 + 0.31)).toFixed(2);
             // sales tax
             setTax((temp * 0.0725).toFixed(2));
         }
-    }, [paying, notCustomOrder, order])
+    }, [paying, notCustomOrder, order, discount])
 
     const onlineTotalCost = (subtotal) => {
-        let total = (subtotal * 1 + tax * 1 + processingFee * 1);
+        let total = (subtotal * 1 - discount * 1 + tax * 1 + processingFee * 1);
         return (total);
     }
 
@@ -303,7 +405,7 @@ function CheckoutDetails() {
                                         <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
                                     </label>
                                 </div>
-                            </div> 
+                            </div>
                         : 
                             <div />
                         }
@@ -315,7 +417,16 @@ function CheckoutDetails() {
                                     </div>
                                     <div className="split50">
                                         <div className="RightAlign">
+                                            <label> &nbsp;</label>
+                                            <span className="CouponCode">
+                                                <input type="text" placeholder="Discount Code" onChange={(event) => setCode(event.target.value)}></input>
+                                                <button onClick={validateCoupon}>Apply</button>
+                                            </span>
+                                            <div className="red">
+                                                {couponError}
+                                            </div>
                                             <p> Subtotal: ${order.total_cost}</p>
+                                            <p> Discount: ${discount}</p>
                                             <p> Shipping: $0.00</p>
                                             <p> Online Processing Fee: ${processingFee}</p>
                                             <p> Estimated Tax: ${tax}</p>
