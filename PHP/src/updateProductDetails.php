@@ -20,13 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $categories = $_POST["subcategories"];
   $defaultStyle = $_POST["default_style"];
   $styleLocation = $_POST["default_style_location"];
+  $customDetailsRequired = $_POST["customFieldRequired"];
   $product_id = $_SESSION["product_id"];
 
   // Attempt to insert new design into table
   $query = $conn->prepare("UPDATE products 
-                          SET product_name = ?, price = ?, tag_list = ?, tColors = ?, lColors = ?, cColors = ?, hColors = ?, categories = ?, default_style = ?, default_style_location = ?
+                          SET product_name = ?, price = ?, tag_list = ?, tColors = ?, lColors = ?, cColors = ?, hColors = ?, categories = ?, default_style = ?, default_style_location = ?, CustomDetailsRequired = ?
                           WHERE product_id = ?;");
-  $query->bind_param("sssssssssss", $productName, $price, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation, $product_id);
+  $query->bind_param("ssssssssssss", $productName, $price, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation, $customDetailsRequired, $product_id);
   if (!$query->execute()) {
     // If insertion fails, return error message
     echo json_encode("ERR: Insertion failed to execute" . $query->error);
