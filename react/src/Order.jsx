@@ -57,6 +57,8 @@ function Order() {
   const [productIsSet, setProductIsSet] = useState(false);
   const [currentDesignState, setCurrentDesignState] = useState(0);
   const [multipleLocations, setMultipleLocations] = useState(0);
+  const [invalidDetails, setInvalidDetails] = useState(false);
+  const [customDetailsRequired, setCustomDetailsRequired] = useState(false);
 
   useEffect(() => {
     retrieveProduct();
@@ -77,6 +79,9 @@ function Order() {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
+          if (data[0].CustomDetailsRequired) {
+            setCustomDetailsRequired(true);
+          }
           if (data[0].filename_front && data[0].filename_back) {
             setMultipleLocations(1);
           }
@@ -215,8 +220,14 @@ function Order() {
   }
 
   const addToCart = () => {
-    if (customDetails === "") {
-      setCustomDetails("No custom details");
+    if (customDetails === "" && customDetailsRequired) {
+      if (customDetailsRequired) {
+        setInvalidDetails(true);
+        return;
+      }
+      else {
+        setCustomDetails("No custom details.");
+      }
     }
     let oID = 0;
     if (nameOnBack && numberOnBack) {
@@ -885,6 +896,17 @@ function Order() {
               placeholder="No Custom Details."
             />
           </div>
+          {invalidDetails && customDetailsRequired &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Invalid Custom Details</h3>
+                <p>This item required custom details.</p>
+                <div className="confirmation-buttons">
+                  <button className="delete-button" onClick={() => setInvalidDetails(false)}>Return To Order</button>
+                </div>
+              </div>
+            </div>
+          }
           {nameOnBack && 
             <>
               <h2>Name: {' '}
