@@ -21,6 +21,7 @@ function Upload() {
   const [style, setStyle] = useState("");
   const [location, setLocation] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [customFieldRequired, setCustomFieldRequired] = useState(null);
   const navigate = useNavigate();
 
   const handleFrontFileInputChange = (event) => {
@@ -100,7 +101,7 @@ function Upload() {
       formData.append('backFile', backFile);
     }
     
-    if (!productName || !price || !style || !location) {
+    if (!productName || !price || !style || !location || customFieldRequired === null) {
       setShowConfirmation(true);
       return;
     }
@@ -115,6 +116,7 @@ function Upload() {
       formData.append('subcategories', category);
       formData.append('default_style', style);
       formData.append('style_location', location);
+      formData.append('customFieldRequired', customFieldRequired);
     }
   
     try {
@@ -428,6 +430,25 @@ function Upload() {
             <br/><br/>
             <h3>Back Design{location === 'back' && <span className="red">*</span>}</h3>
             <input type="file" onChange={handleBackFileInputChange} />
+            <h3>Custom Design Box Required<span className="red">*</span></h3>
+            <div className="row">
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value="1" onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                    <label>&nbsp;Yes</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value="0" onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                    <label>&nbsp;No</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit"/>
+              <div className="uploadSplit"/>
+            </div>
             <br/><br/>
             <button type="submit">Upload</button>
           </form>
