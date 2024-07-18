@@ -434,14 +434,14 @@ function Upload() {
             <div className="row">
               <div className="uploadSplit">
                 <span>
-                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value="1" onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value={1} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
                     <label>&nbsp;Yes</label>
                     <br />
                 </span>
               </div>
               <div className="uploadSplit">
                 <span>
-                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value="0" onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value={0} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
                     <label>&nbsp;No</label>
                     <br />
                 </span>
