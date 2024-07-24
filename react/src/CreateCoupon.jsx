@@ -16,6 +16,7 @@ function CreateCoupon() {
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [category, setCategory] = useState("");
   const navigate = useNavigate();
+  const cats = ["Faith", "Family", "Health", "Holiday", "Ohio", "Other", "Patriotic", "School", "Seasons", "Sports"];
 
   useEffect(() => {
     fetch("/api/getCats.php")
@@ -160,13 +161,22 @@ function CreateCoupon() {
             placeholder="End Time"
             onChange={(event) => setEndTime(event.target.value)}
           />
-          <label>Subcategories Of Products To Include</label>
+          <label>Categories Of Products To Include</label>
             <div className="row">
               <div className="createSubCatCheckbox">
                 <input type="checkbox" value={"All"} name="subcats" onChange={() => handleCategory('All')}/>
                 <label>&nbsp;{"All Products"}</label>
               </div>
             </div>
+            <div className="row">
+              {cats.map((category) => (
+                <div className="createSubCatCheckbox">
+                  <input type="checkbox" value={category} name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;{category}</label>
+                </div>
+              ))}
+            </div>
+          <label>Subcategories Of Products To Include</label>
             <div className="row">
               {allSubcategories.map((subcategory) => (
                 <div className="createSubCatCheckbox">
