@@ -159,7 +159,7 @@ const DisplayUserProduct = (props) => {
   }, [currentProduct, color, style, state]);
 
   const getColor = (location) => {
-    if (style === "Short Sleeve T-Shirt") {
+    if (style === "Short Sleeve T-Shirt" || style === "Other") {
       if (location === "front") {
         return(tShirtMap[color]);
       }
@@ -273,29 +273,13 @@ const DisplayUserProduct = (props) => {
     restoreOriginal();
   };
 
-  if (enlarge) {
-  return (
-    <div 
-      className="fullDesign"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}>
-      <img
-        src={currentColor}
-        alt="Product Style"
-        className="tshirt"
-      />
-      <img
-        src={currentDesign}
-        alt="Product Design"
-        className="design"
-      />
-    </div>
-  );
-  }
-  else {
+  if (style !== "Other") {
+    if (enlarge) {
     return (
       <div 
-        className="fullDesign">
+        className="fullDesign"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
         <img
           src={currentColor}
           alt="Product Style"
@@ -308,6 +292,52 @@ const DisplayUserProduct = (props) => {
         />
       </div>
     );
+    }
+    else {
+      return (
+        <div 
+          className="fullDesign">
+          <img
+            src={currentColor}
+            alt="Product Style"
+            className="tshirt"
+          />
+          <img
+            src={currentDesign}
+            alt="Product Design"
+            className="design"
+          />
+        </div>
+      );
+    }
+  }
+  else {
+    if (enlarge) {
+      return (
+        <div 
+          className="fullDesign"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}>
+        <img
+          src={currentDesign}
+          alt="Product Design"
+          className="tshirt"
+        />
+        </div>
+      );
+      }
+      else {
+        return (
+          <div 
+            className="fullDesign">
+          <img
+          src={currentDesign}
+          alt="Product Design"
+          className="tshirt"
+          />
+          </div>
+        );
+      }
   }
 };
 

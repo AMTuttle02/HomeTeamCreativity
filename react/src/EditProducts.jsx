@@ -299,6 +299,21 @@ function EditProducts() {
                       </span>
                     }
                   </div>
+                  <div className="uploadSplit">
+                    {style === "other" ?
+                      <span>
+                        <input type="radio" id="style" name="other" value="other" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Other</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="other" value="other" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Other</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
                 </div>
                 <label><b>Colors</b></label>
                 <div className="row">
