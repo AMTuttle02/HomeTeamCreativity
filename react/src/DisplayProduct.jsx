@@ -284,23 +284,39 @@ const DisplaycurrentProduct = ({ product }) => {
     restoreOriginal();
   };
 
-  return (
-    <div 
-      className="fullDesign"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}>
-      <img
-        src={currentColor}
-        alt="Product Style"
-        className="tshirt"
-      />
-      <img
-        src={currentDesign}
-        alt="Product Design"
-        className="design"
-      />
-    </div>
-  );
+  if (product.default_style !== 'other') {
+    return (
+      <div 
+        className="fullDesign"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
+        <img
+          src={currentColor}
+          alt="Product Style"
+          className="tshirt"
+        />
+        <img
+          src={currentDesign}
+          alt="Product Design"
+          className="design"
+        />
+      </div>
+    );
+  }
+  else {
+    return (
+      <div 
+        className="fullDesign"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
+        <img
+          src={currentDesign}
+          alt="Product Design"
+          className="tshirt"
+        />
+      </div>
+    );
+  }
 };
 
 export default DisplaycurrentProduct;
