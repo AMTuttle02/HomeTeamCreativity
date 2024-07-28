@@ -219,8 +219,59 @@ function Upload() {
               placeholder="Tags"
               onChange={(event) => setTags(event.target.value)}
             />
-            
             <br />
+            <center><h3>Categories</h3></center>
+            <div className="row">
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Faith" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Faith*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Family" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Family*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Health" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Health</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Holiday" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Holiday</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Ohio" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Ohio*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Other" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Other</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Patriotic" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Patriotic*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="School" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;School</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Seasons" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Seasons</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Sports" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Sports</label>
+              </div>
+            </div>
+            <center><h3>Subcategories</h3></center>
+            <div className="row">
+                {allSubcategories.map((subcategory) => (
+                    <div className="createSubCatCheckbox">
+                        <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
+                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                    </div>
+                ))}
+            </div>
             <center><h3>Default Style<span className="red">*</span></h3></center>
             <div className="row">
               <div className="uploadSplit">
@@ -251,32 +302,37 @@ function Upload() {
                     <br />
                 </span>
               </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="style" name="style" value="other" onChange={(event) => setStyle(event.target.value)}/>
+                    <label>&nbsp;Other</label>
+                    <br />
+                </span>
+              </div>
             </div>
-            <br/>
             <center><h3>Default Style Location<span className="red">*</span></h3></center>
+              <div className="row">
+                <div className="uploadSplit" />
+                <div className="uploadSplit">
+                  <span>
+                    <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
+                      <label>&nbsp;Front</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="uploadSplit">
+                  <span>
+                    <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
+                      <label>&nbsp;Back</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="uploadSplit" />
+              </div>
+            <center><h3>Color Options</h3></center>
             <div className="row">
               <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
-                    <label>&nbsp;Front</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
-                    <label>&nbsp;Back</label>
-                    <br />
-                </span>
-              </div>
-            </div>
-            <br />
-            <center>
-              <h3>Color Options</h3>
-            </center>
-            <div className="row">
-              <div className="uploadSplit">
-                <label>T-Shirt: {tColorsPrimary}</label>
+                <label>T-Shirt (Other): {tColorsPrimary}</label>
                 <br />
                 <input type="checkbox" id="tBlack" name="tBlack" value="Black" onChange={(event) => handleTshirtColor(event.target.value)}/>
                   <label>&nbsp;Black</label>
@@ -370,68 +426,9 @@ function Upload() {
                   <br />
               </div>
             </div>
-            <br/>
-            <center><h3>Categories</h3></center>
+            <center><h3>Custom Details Required<span className="red">*</span></h3></center>
             <div className="row">
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Faith" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Faith*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Family" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Family*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Health" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Health</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Holiday" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Holiday</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Ohio" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Ohio*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Other" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Other</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Patriotic" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Patriotic*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="School" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;School</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Seasons" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Seasons</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Sports" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Sports</label>
-              </div>
-            </div>
-            <br/>
-            <center><h3>Subcategories</h3></center>
-            <div className="row">
-                {allSubcategories.map((subcategory) => (
-                    <div className="createSubCatCheckbox">
-                        <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
-                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
-                    </div>
-                ))}
-            </div>
-            <br/>
-            <h3>Front Design{location === 'front' && <span className="red">*</span>}</h3>
-            <input type="file" onChange={handleFrontFileInputChange} />
-            <br/><br/>
-            <h3>Back Design{location === 'back' && <span className="red">*</span>}</h3>
-            <input type="file" onChange={handleBackFileInputChange} />
-            <h3>Custom Design Box Required<span className="red">*</span></h3>
-            <div className="row">
+              <div className="uploadSplit"/>
               <div className="uploadSplit">
                 <span>
                   <input type="radio" id="customBoxRequired" name="customBoxRequired" value={1} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
@@ -447,8 +444,12 @@ function Upload() {
                 </span>
               </div>
               <div className="uploadSplit"/>
-              <div className="uploadSplit"/>
             </div>
+            <h3>Front Design{location === 'front' && <span className="red">*</span>}</h3>
+            <input type="file" onChange={handleFrontFileInputChange} />
+            <br/><br/>
+            <h3>Back Design{location === 'back' && <span className="red">*</span>}</h3>
+            <input type="file" onChange={handleBackFileInputChange} />
             <br/><br/>
             <button type="submit">Upload</button>
           </form>
