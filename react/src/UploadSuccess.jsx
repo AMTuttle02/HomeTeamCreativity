@@ -241,8 +241,10 @@ function UploadSuccess() {
             <h1>Upload Complete!</h1>
             <h2>Design Preview:</h2>
             <div className="productsRow">
-              {designs.map((design) => (
-                  <div key={design} className="productsCell">
+              {product.default_style !== 'other' ?
+                <>
+                  {designs.map((design) => (
+                    <div key={design} className="productsCell">
                       <div className="productDetails">
                         <div className="fullDesign">
                           <img
@@ -261,8 +263,30 @@ function UploadSuccess() {
                         <p>{"$" + product.price}</p>
                         </center>
                       </div>
-                  </div>
-              ))}
+                    </div>
+                  ))}
+                </>
+              :
+                <>
+                  {designs.map((design) => (
+                    <div key={design} className="productsCell">
+                      <div className="productDetails">
+                        <div className="fullDesign">
+                          <img
+                          src={"api/images/" + design}
+                          alt={design}
+                          className="tshirt"
+                          />
+                        </div>
+                        <center>
+                        <p>{product.product_name}</p>
+                        <p>{"$" + product.price}</p>
+                        </center>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              }
             </div>
           </div>
         </div>
