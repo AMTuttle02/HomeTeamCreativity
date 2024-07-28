@@ -241,7 +241,7 @@ function UploadSuccess() {
             <h1>Upload Complete!</h1>
             <h2>Design Preview:</h2>
             <div className="productsRow">
-              {product.default_style !== 'other' ?
+              {style !== 'other' ?
                 <>
                   {designs.map((design) => (
                     <div key={design} className="productsCell">
