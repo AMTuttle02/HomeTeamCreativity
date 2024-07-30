@@ -50,11 +50,13 @@ function HomeContents() {
         <div className="homeSide">
           <div className="orderLinks">
             <br /><br /><br />
-            <Link to='/order' className="OrderButton">ORDER NOW</Link>
-            <br /><br /><br /><br /><br />
-            <Link to='/about' className="OrderButton">ABOUT US</Link>
-            <br /><br /><br /><br /><br />
-            <Link to="https://linktr.ee/hometeamcreativity" target="_blank" className="OrderButton">CONTACT US</Link>
+            <Link to='/order' className="OrderButton">Order Now</Link>
+            <br /><br />
+            <Link to='/products/School/St.%20Joseph' className="OrderButton">St. Joseph Products</Link>
+            <br /><br />
+            <Link to='/about' className="OrderButton">About Us</Link>
+            <br /><br />
+            <Link to="https://linktr.ee/hometeamcreativity" target="_blank" className="OrderButton">Contact Us</Link>
           </div>
         </div>
         <div className="homeMain">
