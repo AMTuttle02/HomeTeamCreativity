@@ -22,6 +22,7 @@ function Upload() {
   const [location, setLocation] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [customFieldRequired, setCustomFieldRequired] = useState(null);
+  const [sizesAvailable, setSizesAvailable] = useState(1);
   const navigate = useNavigate();
 
   const handleFrontFileInputChange = (event) => {
@@ -117,6 +118,7 @@ function Upload() {
       formData.append('default_style', style);
       formData.append('style_location', location);
       formData.append('customFieldRequired', customFieldRequired);
+      formData.append('sizeAvailable', sizesAvailable);
     }
   
     try {
@@ -439,6 +441,25 @@ function Upload() {
               <div className="uploadSplit">
                 <span>
                   <input type="radio" id="customBoxRequired" name="customBoxRequired" value={0} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                    <label>&nbsp;No</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit"/>
+            </div>
+            <center><h3>Sizes Available</h3></center>
+            <div className="row">
+              <div className="uploadSplit"/>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="sizesAvailable" name="sizesAvailable" value={1} onChange={(event) => setSizesAvailable(event.target.value)}/>
+                    <label>&nbsp;Yes</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="sizesAvailable" name="sizesAvailable" value={0} onChange={(event) => setSizesAvailable(event.target.value)}/>
                     <label>&nbsp;No</label>
                     <br />
                 </span>

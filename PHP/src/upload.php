@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $defaultStyle = $_POST["default_style"];
   $styleLocation = $_POST["style_location"];
   $customFieldRequired = $_POST['customFieldRequired'];
+  $sizeAvailable = $_POST['sizeAvailable'];
   $targetDir = UPLOAD_DIR;
   $frontFile = NULL;
   $frontTargetFile = NULL;
@@ -48,9 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   // Attempt to insert new design into table
-  $query = $conn->prepare("INSERT INTO products (product_name, price, filename_front, filename_back, tag_list, tColors, lColors, cColors, hColors, categories, default_style, default_style_location, CustomDetailsRequired)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-  $query->bind_param("sssssssssssss", $productName, $price, $frontFileName, $backFileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation, $customFieldRequired);
+  $query = $conn->prepare("INSERT INTO products (product_name, price, filename_front, filename_back, tag_list, tColors, lColors, cColors, hColors, categories, default_style, default_style_location, CustomDetailsRequired, sizesAvailable)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+  $query->bind_param("ssssssssssssss", $productName, $price, $frontFileName, $backFileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $defaultStyle, $styleLocation, $customFieldRequired, $sizeAvailable);
   if (!$query->execute()) {
     // If insertion fails, return error message
     die(json_encode("ERR: Insertion failed to execute" . $query->error));
