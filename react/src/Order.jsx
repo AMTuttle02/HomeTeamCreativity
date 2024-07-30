@@ -59,6 +59,7 @@ function Order() {
   const [multipleLocations, setMultipleLocations] = useState(0);
   const [invalidDetails, setInvalidDetails] = useState(false);
   const [customDetailsRequired, setCustomDetailsRequired] = useState(false);
+  const [sizesAvailable, setSizesAvailable] = useState(1);
 
   useEffect(() => {
     retrieveProduct();
@@ -113,6 +114,10 @@ function Order() {
           setDefaultDesign(retrieveDefault);
           setCurrentDesign(data[0]);
           setProductIsSet(true);
+          setSizesAvailable(data[0].sizesAvailable);
+          if (data[0].sizesAvailable === 0) {
+            setSize({description: "Other", addedCost: 0});
+          }
           console.log(data[0]);
 
           // Set tshirt color and design location
@@ -839,6 +844,7 @@ function Order() {
             </button>
             : <div /> }
           </div>
+          {sizesAvailable === 1 ? <>
           <h1>Size: {size.description}</h1>
           <div className="typeOptionRow">
             <p className="size">YOUTH:</p>
@@ -911,6 +917,7 @@ function Order() {
               </div>
             }
           </div>
+          </>:<></>}
           <h1>Additional Request Details{customDetailsRequired && <span className="red">*</span>}</h1>
           <h3>This may increase the price. Any additional cost will be informed to you via email.</h3>
           <div className="customOrderBox">
