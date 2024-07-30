@@ -21,6 +21,7 @@ function EditProducts() {
   const [location, setLocation] = useState("front");
   const [productIsSet, setProductIsSet] = useState(false);
   const [customFieldRequired, setCustomFieldRequired] = useState(0);
+  const [sizesAvailable, setSizesAvailable] = useState(1);
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -56,6 +57,7 @@ function EditProducts() {
         setLocation(data.default_style_location);
         setProductIsSet(true);
         setCustomFieldRequired(data.CustomDetailsRequired.toString());
+        setSizesAvailable(data.sizesAvailable.toString());
       });
   }, []);
 
@@ -128,6 +130,7 @@ function EditProducts() {
     formData.append('default_style', style);
     formData.append('default_style_location', location);
     formData.append('customFieldRequired', customFieldRequired);
+    formData.append('sizeAvailable', sizesAvailable);
   
     fetch('/api/updateProductDetails.php', {
       method: 'POST',
@@ -833,6 +836,41 @@ function EditProducts() {
                     :
                     <span>
                       <input type="radio" id="customBoxRequired" name="customBoxRequired" checked={false} value='0' onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                        <label>&nbsp;No</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+                  <div className="uploadSplit"/>
+                  <div className="uploadSplit"/>
+                </div>
+                <label><b>Sizes Available</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {sizesAvailable === '1' ?
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={true} value='1' onChange={(event) => setSizesAvailable(event.target.value)}/>
+                        <label>&nbsp;Yes</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={false} value='1' onChange={(event) => setSizesAvailable(event.target.value)}/>
+                        <label>&nbsp;Yes</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {sizesAvailable === '0' ?
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={true} value='0' onChange={(event) => setSizesAvailable(event.target.value)}/>
+                        <label>&nbsp;No</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={false} value='0' onChange={(event) => setSizesAvailable(event.target.value)}/>
                         <label>&nbsp;No</label>
                         <br />
                     </span>
