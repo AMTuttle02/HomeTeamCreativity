@@ -501,7 +501,9 @@ function Order() {
           <h3>Style Your Product With The Options Below</h3>
           <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
           <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
-          <h1>Style: {currentStyle}</h1>
+          {currentStyle !== "Other" ? 
+            <><h1>Style: {currentStyle}</h1></>
+          :<></>}
           <div className="typeOptionRow">
             {(validStyle(tColors) && currentStyle !== "Other")  ? <>
               <button 
