@@ -43,7 +43,7 @@ function SearchResults() {
   }, [filteredProducts, page]);
 
   const getPrice = (price, style) => {
-    if (style === "tshirt") {
+    if (style === "tshirt" || style === "other") {
       return ((price * 1 + 0) + ".00");
     }
     else if (style === "longsleeve") {
