@@ -57,6 +57,9 @@ function Order() {
   const [productIsSet, setProductIsSet] = useState(false);
   const [currentDesignState, setCurrentDesignState] = useState(0);
   const [multipleLocations, setMultipleLocations] = useState(0);
+  const [invalidDetails, setInvalidDetails] = useState(false);
+  const [customDetailsRequired, setCustomDetailsRequired] = useState(false);
+  const [sizesAvailable, setSizesAvailable] = useState(1);
 
   useEffect(() => {
     retrieveProduct();
@@ -77,6 +80,9 @@ function Order() {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
+          if (data[0].CustomDetailsRequired) {
+            setCustomDetailsRequired(true);
+          }
           if (data[0].filename_front && data[0].filename_back) {
             setMultipleLocations(1);
           }
@@ -93,6 +99,9 @@ function Order() {
           else if (data[0].default_style === "hoodie") {
             setCurrentStyle("Hooded Sweatshirt");
           }
+          else if (data[0].default_style === "other") {
+            setCurrentStyle("Other");
+          }
           setDesign(data);
           setNameOnBack(data[0].nameOnBack);
           setNumberOnBack(data[0].numberOnBack);
@@ -105,6 +114,10 @@ function Order() {
           setDefaultDesign(retrieveDefault);
           setCurrentDesign(data[0]);
           setProductIsSet(true);
+          setSizesAvailable(data[0].sizesAvailable);
+          if (data[0].sizesAvailable === 0) {
+            setSize({description: "Other", addedCost: 0});
+          }
           console.log(data[0]);
 
           // Set tshirt color and design location
@@ -117,45 +130,46 @@ function Order() {
             let firstWord = retrieveDefault.tColors.match(regex)[0];
             setTShirtColor(firstWord);
           }
-          
-          // Set long sleeve shirt color and design location
-          if (data[0].lColors) {
-            let firstWord = data[0].lColors.match(regex)[0];
-            setLongSleeveColor(firstWord);
-          }
-          else {
-            let firstWord = retrieveDefault.lColors.match(regex)[0];
-            setLongSleeveColor(firstWord);
-          }
-
-          // Set crewneck color and design location
-          if (data[0].cColors) {
-            let firstWord = data[0].cColors.match(regex)[0];
-            setCrewneckColor(firstWord);
-          }
-          else {
-            let firstWord = retrieveDefault.cColors.match(regex)[0];
-            setCrewneckColor(firstWord);
-          }
-
-          // Set hoodie color and design location
-          if (data[0].hColors) {
-            let firstWord = data[0].hColors.match(regex)[0];
-            setHoodieColor(firstWord);
-          }
-          else {
-            let firstWord = retrieveDefault.hColors.match(regex)[0];
-            setHoodieColor(firstWord);
-          }
- 
           let colors = data.map(item => item.tColors).flat();
           setTColors(colors.join(' '));
-          colors = data.map(item => item.lColors).flat();
-          setLColors(colors.join(' '));
-          colors = data.map(item => item.cColors).flat();
-          setCColors(colors.join(' '));
-          colors = data.map(item => item.hColors).flat();
-          setHColors(colors.join(' '));
+          
+          if (data[0].default_style !== 'other') {
+            // Set long sleeve shirt color and design location
+            if (data[0].lColors) {
+              let firstWord = data[0].lColors.match(regex)[0];
+              setLongSleeveColor(firstWord);
+            }
+            else {
+              let firstWord = retrieveDefault.lColors.match(regex)[0];
+              setLongSleeveColor(firstWord);
+            }
+
+            // Set crewneck color and design location
+            if (data[0].cColors) {
+              let firstWord = data[0].cColors.match(regex)[0];
+              setCrewneckColor(firstWord);
+            }
+            else {
+              let firstWord = retrieveDefault.cColors.match(regex)[0];
+              setCrewneckColor(firstWord);
+            }
+
+            // Set hoodie color and design location
+            if (data[0].hColors) {
+              let firstWord = data[0].hColors.match(regex)[0];
+              setHoodieColor(firstWord);
+            }
+            else {
+              let firstWord = retrieveDefault.hColors.match(regex)[0];
+              setHoodieColor(firstWord);
+            }
+            colors = data.map(item => item.lColors).flat();
+            setLColors(colors.join(' '));
+            colors = data.map(item => item.cColors).flat();
+            setCColors(colors.join(' '));
+            colors = data.map(item => item.hColors).flat();
+            setHColors(colors.join(' '));
+          }
         }
       })
       .catch((error) => {
@@ -172,7 +186,7 @@ function Order() {
       setTShirtColor(color);
     }
     else {
-      if (currentStyle == "Short Sleeve T-Shirt") {
+      if (currentStyle == "Short Sleeve T-Shirt" || currentStyle == "Other") {
         const correctDesign = design.find((option) => option.tColors.includes(color));
         setCurrentDesign(correctDesign);
         setTShirtColor(color);
@@ -215,8 +229,14 @@ function Order() {
   }
 
   const addToCart = () => {
-    if (customDetails === "") {
-      setCustomDetails("No custom details");
+    if (customDetails === "" && customDetailsRequired) {
+      if (customDetailsRequired) {
+        setInvalidDetails(true);
+        return;
+      }
+      else {
+        setCustomDetails("No custom details.");
+      }
     }
     let oID = 0;
     if (nameOnBack && numberOnBack) {
@@ -369,11 +389,29 @@ function Order() {
           setSize({description: "", addedCost: 0});
         }
       }
+      else if (currentStyle == "Other") {
+        if (currentDesign.tColors.includes(tShirtColor)) {
+          setProductType({description: "Other", addedCost: 0});
+          setCurrentColor(tShirtColor);
+        }
+        else if (currentDesign.tColors){
+          const color = currentDesign.tColors.match(regex)[0];
+          setTShirtColor(color);
+          setCurrentColor(color);
+          setProductType({description: "Other", addedCost: 0});
+        }
+        else {
+          const color = defaultDesign.tColors.match(regex)[0];
+          setTShirtColor(color);
+          setCurrentColor(color);
+          setProductType({description: "Other", addedCost: 0});
+        }
+      }
     }
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size, currentDesign]);
 
   const validStyle = (colors) => {
-    if (colors == 'None') {
+    if (colors === '') {
       return false;
     }
     else {
@@ -447,11 +485,13 @@ function Order() {
           <p>Click Design To Enlarge</p>
           <h3>{currentDesign.product_name}</h3>
           <br />
-          <p>Details:</p>
-          <p>100% Cotton</p>
-          <p>True To Size</p>
-          <p>Regular Fit</p>
-          <p>Wash Inside Out If Possible</p>
+          {currentStyle !== "Other" ? <>
+            <p>Details:</p>
+            <p>100% Cotton</p>
+            <p>True To Size</p>
+            <p>Regular Fit</p>
+            <p>Wash Inside Out If Possible</p>
+          </>:<></>}
           <Link to='/returnpolicy'>Return Policy</Link>
         </div>
         {showConfirmation &&
@@ -466,9 +506,11 @@ function Order() {
           <h3>Style Your Product With The Options Below</h3>
           <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
           <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
-          <h1>Style: {currentStyle}</h1>
+          {currentStyle !== "Other" ? 
+            <><h1>Style: {currentStyle}</h1></>
+          :<></>}
           <div className="typeOptionRow">
-            {validStyle(tColors) ? <>
+            {(validStyle(tColors) && currentStyle !== "Other")  ? <>
               <button 
                 onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
                 className="productTypes">
@@ -513,10 +555,9 @@ function Order() {
               </button>
             </> : <></>}
           </div>
-          <br />
           <h1>Color: {currentColor}</h1>
           <div className="typeOptionRow">
-            {tColors.includes("Black") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Black") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Black")}
               className="productTypes">
@@ -560,7 +601,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Gray") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Gray") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Gray")}
               className="productTypes">
@@ -604,7 +645,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("White") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("White") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("White")}
               className="productTypes">
@@ -648,7 +689,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Navy") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Navy") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Navy")}
               className="productTypes">
@@ -681,7 +722,7 @@ function Order() {
               />
             </button> 
             : <div /> }
-            {tColors.includes("Royal") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Royal") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Royal")}
               className="productTypes">
@@ -703,7 +744,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Red") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Red") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Red")}
               className="productTypes">
@@ -736,7 +777,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Maroon") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Maroon") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Maroon")}
               className="productTypes">
@@ -747,7 +788,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Yellow") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Yellow") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Yellow")}
               className="productTypes">
@@ -758,7 +799,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Pink") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Pink") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Pink")}
               className="productTypes">
@@ -769,7 +810,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Green") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Green") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Green")}
               className="productTypes">
@@ -780,7 +821,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Orange") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Orange") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Orange")}
               className="productTypes">
@@ -791,7 +832,7 @@ function Order() {
               />
             </button>
             : <div /> }
-            {tColors.includes("Purple") && currentStyle == "Short Sleeve T-Shirt" ?
+            {tColors.includes("Purple") && (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") ?
             <button 
               onClick={() => changeColor("Purple")}
               className="productTypes">
@@ -803,7 +844,7 @@ function Order() {
             </button>
             : <div /> }
           </div>
-          <br />
+          {sizesAvailable === 1 ? <>
           <h1>Size: {size.description}</h1>
           <div className="typeOptionRow">
             <p className="size">YOUTH:</p>
@@ -876,7 +917,8 @@ function Order() {
               </div>
             }
           </div>
-          <h1>Additional Request Details</h1>
+          </>:<></>}
+          <h1>Additional Request Details{customDetailsRequired && <span className="red">*</span>}</h1>
           <h3>This may increase the price. Any additional cost will be informed to you via email.</h3>
           <div className="customOrderBox">
             <textarea 
@@ -885,6 +927,17 @@ function Order() {
               placeholder="No Custom Details."
             />
           </div>
+          {invalidDetails && customDetailsRequired &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Invalid Custom Details</h3>
+                <p>This item required custom details.</p>
+                <div className="confirmation-buttons">
+                  <button className="delete-button" onClick={() => setInvalidDetails(false)}>Return To Order</button>
+                </div>
+              </div>
+            </div>
+          }
           {nameOnBack && 
             <>
               <h2>Name: {' '}

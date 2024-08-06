@@ -6,9 +6,8 @@ session_start();
 
 include 'conn.php';
 
-$admin = $_SESSION['admin'];
-
-if ($admin) {
+if (isset($_SESSION['admin'])) {
+    $admin = $_SESSION['admin'];
     echo json_encode(array('admin' => $admin));
 }
 else {

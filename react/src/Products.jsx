@@ -81,6 +81,7 @@ function Products() {
         for (let i = 0; i < subcategories.length; i++) {
           if (subcategories[i].name === subcategory) {
             setDisplay(subcategory);
+            localStorage.setItem('lastProductCategory', '/products/' + category + '/' + subcategory);
             i = subcategories.length + 1;
             valid = 1;
           }
@@ -101,8 +102,10 @@ function Products() {
       || (category === "Seasons") 
       || (category === "Sports")) {
         setDisplay(category);
+        localStorage.setItem('lastProductCategory', '/products/' + category);
       }
       else {
+        localStorage.setItem('lastProductCategory', '/products');
         navigate("/products");
         setDisplay("All");
       }
@@ -134,7 +137,7 @@ function Products() {
   }, [filteredProducts, page]);
 
   const getPrice = (price, style) => {
-    if (style === "tshirt") {
+    if (style === "tshirt" || style === "other") {
       return ((price * 1 + 0));
     }
     else if (style === "longsleeve") {
@@ -150,92 +153,92 @@ function Products() {
 
   return (
     <div className="Products">
-        <div className="productFilterRow">
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Faith")}>Faith</button>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Family")}>Family</button>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Health")}>Health {isMobile ? <></> : <>&#9660;</>}</button>
-            <div className="subcategories">
-            {subcategories.map((subcategory) => (
-              <span key={subcategory.id}>
-                {subcategory.category === "Health" &&
-                  <><button onClick={() => navigate("/products/Health/" + subcategory.name)}>{subcategory.name}</button></>
-                }
-              </span>
-            ))}
-            </div>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Holiday")}>Holiday {isMobile ? <></> : <>&#9660;</>}</button>
-            <div className="subcategories">
-            {subcategories.map((subcategory) => (
-              <span key={subcategory.id}>
-                {subcategory.category === "Holiday" &&
-                  <><button onClick={() => navigate("/products/Holiday/" + subcategory.name)}>{subcategory.name}</button></>
-                }
-              </span>
-            ))}
-            </div>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Ohio")}>Ohio</button>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Other")}>Other {isMobile ? <></> : <>&#9660;</>}</button>
-            <div className="subcategories">
-              {subcategories.map((subcategory) => (
-                <span key={subcategory.id}>
-                  {subcategory.category === "Other" &&
-                    <><button onClick={() => navigate("/products/Other/" + subcategory.name)}>{subcategory.name}</button></>
-                  }
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Patriotic")}>Patriotic</button>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/School")}>School {isMobile ? <></> : <>&#9660;</>}</button>
-            <div className="subcategories">
-              {subcategories.map((subcategory) => (
-                <span key={subcategory.id}>
-                  {subcategory.category === "School" &&
-                    <><button onClick={() => navigate("/products/School/" + subcategory.name)}>{subcategory.name}</button></>
-                  }
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Seasons")}>Seasons {isMobile ? <></> : <>&#9660;</>}</button>
-            <div className="subcategories">
-              {subcategories.map((subcategory) => (
-                <span key={subcategory.id}>
-                  {subcategory.category === "Seasons" &&
-                    <><button onClick={() => navigate("/products/Seasons/" + subcategory.name)}>{subcategory.name}</button></>
-                  }
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={() => navigate("/products/Sports")}>Sports {isMobile ? <></> : <>&#9660;</>}</button>
-            <div className="subcategories">
-              {subcategories.map((subcategory) => (
-                <span key={subcategory.id}>
-                  {subcategory.category === "Sports" &&
-                    <><button onClick={() => navigate("/products/Sports/" + subcategory.name)}>{subcategory.name}</button></>
-                  }
-                </span>
-              ))}
-            </div>
+      <div className="productFilterRow">
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Faith")}>Faith</button>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Family")}>Family</button>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Health")}>Health {isMobile ? <></> : <>&#9660;</>}</button>
+          <div className="subcategories">
+          {subcategories.map((subcategory) => (
+            <span key={subcategory.id}>
+              {subcategory.category === "Health" &&
+                <><button onClick={() => navigate("/products/Health/" + subcategory.name)}>{subcategory.name}</button></>
+              }
+            </span>
+          ))}
           </div>
         </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Holiday")}>Holiday {isMobile ? <></> : <>&#9660;</>}</button>
+          <div className="subcategories">
+          {subcategories.map((subcategory) => (
+            <span key={subcategory.id}>
+              {subcategory.category === "Holiday" &&
+                <><button onClick={() => navigate("/products/Holiday/" + subcategory.name)}>{subcategory.name}</button></>
+              }
+            </span>
+          ))}
+          </div>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Ohio")}>Ohio</button>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Other")}>Other {isMobile ? <></> : <>&#9660;</>}</button>
+          <div className="subcategories">
+            {subcategories.map((subcategory) => (
+              <span key={subcategory.id}>
+                {subcategory.category === "Other" &&
+                  <><button onClick={() => navigate("/products/Other/" + subcategory.name)}>{subcategory.name}</button></>
+                }
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Patriotic")}>Patriotic</button>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/School")}>School {isMobile ? <></> : <>&#9660;</>}</button>
+          <div className="subcategories">
+            {subcategories.map((subcategory) => (
+              <span key={subcategory.id}>
+                {subcategory.category === "School" &&
+                  <><button onClick={() => navigate("/products/School/" + subcategory.name)}>{subcategory.name}</button></>
+                }
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Seasons")}>Seasons {isMobile ? <></> : <>&#9660;</>}</button>
+          <div className="subcategories">
+            {subcategories.map((subcategory) => (
+              <span key={subcategory.id}>
+                {subcategory.category === "Seasons" &&
+                  <><button onClick={() => navigate("/products/Seasons/" + subcategory.name)}>{subcategory.name}</button></>
+                }
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="button-wrapper">
+          <button onClick={() => navigate("/products/Sports")}>Sports {isMobile ? <></> : <>&#9660;</>}</button>
+          <div className="subcategories">
+            {subcategories.map((subcategory) => (
+              <span key={subcategory.id}>
+                {subcategory.category === "Sports" &&
+                  <><button onClick={() => navigate("/products/Sports/" + subcategory.name)}>{subcategory.name}</button></>
+                }
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
       <div className="ProductHeaderRow">
         <div className="productsLeft">
           {page > 1 &&

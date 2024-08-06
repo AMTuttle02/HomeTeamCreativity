@@ -21,6 +21,8 @@ function Upload() {
   const [style, setStyle] = useState("");
   const [location, setLocation] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [customFieldRequired, setCustomFieldRequired] = useState(null);
+  const [sizesAvailable, setSizesAvailable] = useState(1);
   const navigate = useNavigate();
 
   const handleFrontFileInputChange = (event) => {
@@ -99,17 +101,25 @@ function Upload() {
     } else if (backFile) {
       formData.append('backFile', backFile);
     }
-
-    formData.append('productName', productName);
-    formData.append('price', price);
-    formData.append('tags', tags);
-    formData.append('tColors', tshirtColors);
-    formData.append('lColors', longSleeveColors);
-    formData.append('cColors', crewneckColors);
-    formData.append('hColors', hoodieColors);
-    formData.append('subcategories', category);
-    formData.append('default_style', style);
-    formData.append('style_location', location);
+    
+    if (!productName || !price || !style || !location || customFieldRequired === null) {
+      setShowConfirmation(true);
+      return;
+    }
+    else {
+      formData.append('productName', productName);
+      formData.append('price', price);
+      formData.append('tags', tags);
+      formData.append('tColors', tshirtColors);
+      formData.append('lColors', longSleeveColors);
+      formData.append('cColors', crewneckColors);
+      formData.append('hColors', hoodieColors);
+      formData.append('subcategories', category);
+      formData.append('default_style', style);
+      formData.append('style_location', location);
+      formData.append('customFieldRequired', customFieldRequired);
+      formData.append('sizeAvailable', sizesAvailable);
+    }
   
     try {
       const response = await axios.post('/api/upload.php', formData, {
@@ -183,11 +193,11 @@ function Upload() {
         <br />
         <div className="container">
           <h1>Upload Designs Below</h1>
-          <br />
-          <h2>Remember: Design must be 500px by 500px</h2>
+          <h2>Design must be 500px by 500px</h2>
+          <h3 className="center">Required Fields are marked with a <span className="red">*</span></h3>
           <br/>
           <form onSubmit={handleSubmit}>
-            <label>Product Display Name</label>
+            <label>Product Display Name<span className="red">*</span></label>
               <input
                 type="text"
                 id="product_name"
@@ -195,7 +205,7 @@ function Upload() {
                 placeholder="Product Name"
                 onChange={(event) => setName(event.target.value)}
               />
-            <label>Price (Do Not Include $) (Pricing Default is for an Adult Medium)</label>
+            <label>Price<span className="red">*</span> (Do Not Include $) (Pricing Default is for an Adult Medium)</label>
             <input
               type="text"
               id="price"
@@ -211,9 +221,60 @@ function Upload() {
               placeholder="Tags"
               onChange={(event) => setTags(event.target.value)}
             />
-            
             <br />
-            <center><h3>Default Style</h3></center>
+            <center><h3>Categories</h3></center>
+            <div className="row">
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Faith" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Faith*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Family" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Family*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Health" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Health</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Holiday" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Holiday</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Ohio" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Ohio*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Other" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Other</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Patriotic" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Patriotic*</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="School" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;School</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Seasons" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Seasons</label>
+              </div>
+              <div className="createCatCheckbox">
+                  <input type="checkbox" value="Sports" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;Sports</label>
+              </div>
+            </div>
+            <center><h3>Subcategories</h3></center>
+            <div className="row">
+                {allSubcategories.map((subcategory) => (
+                    <div className="createSubCatCheckbox">
+                        <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
+                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                    </div>
+                ))}
+            </div>
+            <center><h3>Default Style<span className="red">*</span></h3></center>
             <div className="row">
               <div className="uploadSplit">
                 <span>
@@ -243,32 +304,37 @@ function Upload() {
                     <br />
                 </span>
               </div>
-            </div>
-            <br/>
-            <center><h3>Default Style Location</h3></center>
-            <div className="row">
               <div className="uploadSplit">
                 <span>
-                  <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
-                    <label>&nbsp;Front</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
-                    <label>&nbsp;Back</label>
+                  <input type="radio" id="style" name="style" value="other" onChange={(event) => setStyle(event.target.value)}/>
+                    <label>&nbsp;Other</label>
                     <br />
                 </span>
               </div>
             </div>
-            <br />
-            <center>
-              <h3>Color Options</h3>
-            </center>
+            <center><h3>Default Style Location<span className="red">*</span></h3></center>
+              <div className="row">
+                <div className="uploadSplit" />
+                <div className="uploadSplit">
+                  <span>
+                    <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
+                      <label>&nbsp;Front</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="uploadSplit">
+                  <span>
+                    <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
+                      <label>&nbsp;Back</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="uploadSplit" />
+              </div>
+            <center><h3>Color Options</h3></center>
             <div className="row">
               <div className="uploadSplit">
-                <label>T-Shirt: {tColorsPrimary}</label>
+                <label>T-Shirt (Other): {tColorsPrimary}</label>
                 <br />
                 <input type="checkbox" id="tBlack" name="tBlack" value="Black" onChange={(event) => handleTshirtColor(event.target.value)}/>
                   <label>&nbsp;Black</label>
@@ -362,65 +428,48 @@ function Upload() {
                   <br />
               </div>
             </div>
-            <br/>
-            <center><h3>Categories</h3></center>
+            <center><h3>Custom Details Required<span className="red">*</span></h3></center>
             <div className="row">
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Faith" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Faith*</label>
+              <div className="uploadSplit"/>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value={1} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                    <label>&nbsp;Yes</label>
+                    <br />
+                </span>
               </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Family" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Family*</label>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value={0} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                    <label>&nbsp;No</label>
+                    <br />
+                </span>
               </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Health" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Health</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Holiday" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Holiday</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Ohio" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Ohio*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Other" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Other</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Patriotic" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Patriotic*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="School" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;School</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Seasons" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Seasons</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Sports" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Sports</label>
-              </div>
+              <div className="uploadSplit"/>
             </div>
-            <br/>
-            <center><h3>Subcategories</h3></center>
+            <center><h3>Sizes Available</h3></center>
             <div className="row">
-                {allSubcategories.map((subcategory) => (
-                    <div className="createSubCatCheckbox">
-                        <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
-                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
-                    </div>
-                ))}
+              <div className="uploadSplit"/>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="sizesAvailable" name="sizesAvailable" value={1} onChange={(event) => setSizesAvailable(event.target.value)}/>
+                    <label>&nbsp;Yes</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit">
+                <span>
+                  <input type="radio" id="sizesAvailable" name="sizesAvailable" value={0} onChange={(event) => setSizesAvailable(event.target.value)}/>
+                    <label>&nbsp;No</label>
+                    <br />
+                </span>
+              </div>
+              <div className="uploadSplit"/>
             </div>
-            <br/>
-            <h3>Front Design</h3>
+            <h3>Front Design{location === 'front' && <span className="red">*</span>}</h3>
             <input type="file" onChange={handleFrontFileInputChange} />
             <br/><br/>
-            <h3>Back Design</h3>
+            <h3>Back Design{location === 'back' && <span className="red">*</span>}</h3>
             <input type="file" onChange={handleBackFileInputChange} />
             <br/><br/>
             <button type="submit">Upload</button>
@@ -428,10 +477,10 @@ function Upload() {
           {showConfirmation &&
             <div className="confirmation-modal">
               <div className="confirmation-dialog">
-                <h3>Hey Goofball! You're about to mess up.</h3>
-                <p>You have not uploaded a design that matches the default location.</p>
+                <h3>Sorry, you've missed a required field.</h3>
+                <p>Please review the form and try agin.</p>
                 <div className="confirmation-buttons">
-                  <button onClick={() => setShowConfirmation(false)}>My Brother Is THE BEST</button>
+                  <button onClick={() => setShowConfirmation(false)}>Review</button>
                 </div>
               </div>
             </div>
