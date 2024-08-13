@@ -30,10 +30,10 @@ function Failed() {
 
 function Order() {
   const [currentColor, setCurrentColor] = useState("");
-  const [tShirtColor, setTShirtColor] = useState("Black");
-  const [longSleeveColor, setLongSleeveColor] = useState("Black");
-  const [hoodieColor, setHoodieColor] = useState("Black");
-  const [crewneckColor, setCrewneckColor] = useState("Black");
+  const [tShirtColor, setTShirtColor] = useState("");
+  const [longSleeveColor, setLongSleeveColor] = useState("");
+  const [hoodieColor, setHoodieColor] = useState("");
+  const [crewneckColor, setCrewneckColor] = useState("");
   const [currentStyle, setCurrentStyle] = useState("");
   const [design, setDesign] = useState([]);
   const [currentDesign, setCurrentDesign] = useState("");
@@ -122,11 +122,11 @@ function Order() {
 
           // Set tshirt color and design location
           const regex = /\S+/;
-          if (data[0].tColors) {
+          if (data[0].tColors && data[0].tColors.trim() !== "") {
             let firstWord = data[0].tColors.match(regex)[0];
             setTShirtColor(firstWord);
           }
-          else if (retrieveDefault){
+          else if (retrieveDefault.tColors && retrieveDefault.tColors.trim() !== ""){
             let firstWord = retrieveDefault.tColors.match(regex)[0];
             setTShirtColor(firstWord);
           }
@@ -135,31 +135,31 @@ function Order() {
           
           if (data[0].default_style !== 'other') {
             // Set long sleeve shirt color and design location
-            if (data[0].lColors) {
+            if (data[0].lColors && data[0].lColors.trim() !== "") {
               let firstWord = data[0].lColors.match(regex)[0];
               setLongSleeveColor(firstWord);
             }
-            else {
+            else if (retrieveDefault.lColors && retrieveDefault.lColors.trim() !== "") {
               let firstWord = retrieveDefault.lColors.match(regex)[0];
               setLongSleeveColor(firstWord);
             }
 
             // Set crewneck color and design location
-            if (data[0].cColors) {
+            if (data[0].cColors && data[0].cColors.trim() !== "") {
               let firstWord = data[0].cColors.match(regex)[0];
               setCrewneckColor(firstWord);
             }
-            else {
+            else if (retrieveDefault.cColors && retrieveDefault.cColors.trim() !== "") {
               let firstWord = retrieveDefault.cColors.match(regex)[0];
               setCrewneckColor(firstWord);
             }
 
             // Set hoodie color and design location
-            if (data[0].hColors) {
+            if (data[0].hColors && data[0].hColors.trim() !== "") {
               let firstWord = data[0].hColors.match(regex)[0];
               setHoodieColor(firstWord);
             }
-            else {
+            else if (retrieveDefault.hColors && retrieveDefault.hColors.trim() !== "") {
               let firstWord = retrieveDefault.hColors.match(regex)[0];
               setHoodieColor(firstWord);
             }
@@ -411,7 +411,7 @@ function Order() {
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size, currentDesign]);
 
   const validStyle = (colors) => {
-    if (colors === '') {
+    if (colors.trim() === '') {
       return false;
     }
     else {
@@ -919,7 +919,6 @@ function Order() {
           </div>
           </>:<></>}
           <h1>Additional Request Details{customDetailsRequired && <span className="red">*</span>}</h1>
-          <h3>This may increase the price. Any additional cost will be informed to you via email.</h3>
           <div className="customOrderBox">
             <textarea 
               onChange={handleOrderDetails}
