@@ -22,6 +22,7 @@ function EditProducts() {
   const [productIsSet, setProductIsSet] = useState(false);
   const [customFieldRequired, setCustomFieldRequired] = useState(0);
   const [sizesAvailable, setSizesAvailable] = useState(1);
+  const [failToUpdate, setFailToUpdate] = useState(false);
 
   useEffect(() => {
     fetch("/api/session.php")
@@ -116,32 +117,42 @@ function EditProducts() {
     setCurrentSubcategories(removedCat);
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append('productName', productName);
-    formData.append('price', price);
-    formData.append('tags', tagList);
-    formData.append('tColors', tColors);
-    formData.append('lColors', lColors);
-    formData.append('cColors', cColors);
-    formData.append('hColors', hColors);
-    formData.append('subcategories', currentSubcategories);
-    formData.append('default_style', style);
-    formData.append('default_style_location', location);
-    formData.append('customFieldRequired', customFieldRequired);
-    formData.append('sizeAvailable', sizesAvailable);
-  
-    fetch('/api/updateProductDetails.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if(data) {
-        window.location.href="/products";
-      }
-    });
+    if (style === 'tshirt' && tColors.trim() === '') {
+      setFailToUpdate(true);
+    } else if (style === 'longsleeve' && lColors.trim() === '') {
+      setFailToUpdate(true);
+    } else if (style === 'crewneck' && cColors.trim() === '') {
+      setFailToUpdate(true);
+    } else if (style === 'hoodie' && hColors.trim() === '') {
+      setFailToUpdate(true);
+    } else {
+      const formData = new FormData();
+      formData.append('productName', productName);
+      formData.append('price', price);
+      formData.append('tags', tagList);
+      formData.append('tColors', tColors);
+      formData.append('lColors', lColors);
+      formData.append('cColors', cColors);
+      formData.append('hColors', hColors);
+      formData.append('subcategories', currentSubcategories);
+      formData.append('default_style', style);
+      formData.append('default_style_location', location);
+      formData.append('customFieldRequired', customFieldRequired);
+      formData.append('sizeAvailable', sizesAvailable);
+    
+      fetch('/api/updateProductDetails.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if(data) {
+          window.location.href="/products";
+        }
+      });
+    }
   };
 
   if (admin) {
@@ -883,6 +894,17 @@ function EditProducts() {
                 <br/>
                 <button type="submit" className="defaultButton">Update Product</button>
               </form>
+              {failToUpdate &&
+                <div className="confirmation-modal">
+                  <div className="confirmation-dialog">
+                    <h3>Sorry, you've missed a required field.</h3>
+                    <p>Please review the form and try agin.</p>
+                    <div className="confirmation-buttons">
+                      <button className="delete-button" onClick={() => setFailToUpdate(false)}>Review</button>
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
           </div>
         </div>
