@@ -919,7 +919,6 @@ function Order() {
           </div>
           </>:<></>}
           <h1>Additional Request Details{customDetailsRequired && <span className="red">*</span>}</h1>
-          <h3>This may increase the price. Any additional cost will be informed to you via email.</h3>
           <div className="customOrderBox">
             <textarea 
               onChange={handleOrderDetails}
