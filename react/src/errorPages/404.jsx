@@ -22,7 +22,6 @@ const styles = {
         color: '#333',
         textAlign: 'center',
         padding: '50px',
-        margin: '0',
         maxWidth: '800px',
         margin: '0 auto',
     },

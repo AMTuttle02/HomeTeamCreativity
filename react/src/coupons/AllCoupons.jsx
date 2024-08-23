@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Coupons from "./Coupons";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AllCoupons() {
   const [coupons, setCoupons] = useState([]);
@@ -47,8 +47,8 @@ function AllCoupons() {
             </tr>
           </thead>
           <tbody>
-            {coupons.map((coupon, index) => (
-              <tr key={index}>
+            {coupons.map((coupon) => (
+              <tr key={coupon.code}>
                 <td>{coupon.code}</td>
                 <td>{coupon.description}</td>
                 <td>{coupon.amount}</td>

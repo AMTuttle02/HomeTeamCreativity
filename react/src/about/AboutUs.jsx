@@ -1,7 +1,6 @@
-import React, { useState,useEffect } from "react";
-import "./index.css";
-import maggie from "./assets/maggie.jpg";
-import info from "./assets/aboutUsInfo.png"
+import React from "react";
+import maggie from "../assets/maggie.jpg";
+import info from "../assets/aboutUsInfo.png"
 
 function AboutUs() {
 

@@ -6,7 +6,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import Products from "./Products";
 import HowItWorks from "./howItWorks";
-import About from "./AboutUs";
+import About from "./about/AboutUs.jsx";
 import "./index.css";
 import LoginSuccess from "./LoginSuccess";
 import LogOut from "./LogOut";
@@ -29,10 +29,10 @@ import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import EmailConfirmation from "./EmailConfirmation";
 import CostCalculator from "./CostCalculator.jsx";
-import FourOFour from "./404.jsx";
-import AllCoupons from "./AllCoupons.jsx";
-import CreateCoupon from "./CreateCoupon.jsx";
-import EditCoupons from "./EditCoupons.jsx";
+import FourOFour from "./errorPages/404.jsx";
+import AllCoupons from "./coupons/AllCoupons.jsx";
+import CreateCoupon from "./coupons/CreateCoupon.jsx";
+import EditCoupons from "./coupons/EditCoupons.jsx";
 
 export default function App() {
   return (

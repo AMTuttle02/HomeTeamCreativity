@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {useNavigate, useParams } from "react-router-dom";
 import moment from "moment-timezone";
-import Coupons from "./Coupons";
+import Coupons from "./Coupons.jsx";
 
 function CreateCoupon() {
   const [description, setDescription] = useState('');
@@ -230,7 +230,7 @@ function CreateCoupon() {
             </div>
             <div className="row">
               {allSubcategories.map((subcategory) => (
-                <div className="subCatCheckbox">
+                <div className="subCatCheckbox" key={subcategory}>
                   {category.includes(subcategory.name) ? 
                   <span>
                     <input type="checkbox" value={subcategory.name} name="subcats" checked={true} onChange={(event) => handleCategory(event.target.value)}/>

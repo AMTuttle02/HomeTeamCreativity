@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from "moment-timezone";
 import Coupons from "./Coupons";
 
@@ -170,7 +170,7 @@ function CreateCoupon() {
             </div>
             <div className="row">
               {cats.map((category) => (
-                <div className="createSubCatCheckbox">
+                <div className="createSubCatCheckbox" key={category}>
                   <input type="checkbox" value={category} name="cats" onChange={(event) => handleCategory(event.target.value)}/>
                   <label>&nbsp;{category}</label>
                 </div>
@@ -179,7 +179,7 @@ function CreateCoupon() {
           <label>Subcategories Of Products To Include</label>
             <div className="row">
               {allSubcategories.map((subcategory) => (
-                <div className="createSubCatCheckbox">
+                <div className="createSubCatCheckbox" key={subcategory}>
                   <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
                   <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
                 </div>
