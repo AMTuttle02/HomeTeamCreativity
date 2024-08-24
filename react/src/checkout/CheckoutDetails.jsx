@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
@@ -49,15 +48,15 @@ function CheckoutDetails() {
                 });
                 const data = await response.json();
     
-                for (let i = 0; i < data.length; ++i) {
-                    let categories = data[i].categories
+                for (const element of data) {
+                    let categories = element.categories
                         .split(' ')
                         .filter(item => item.trim().length > 0)
                         .map(item => item.trim());
     
                     for (let j = 0; j < categories.length; ++j) {
                         if (discount.categories.includes(categories[j])) {
-                            orderTotal += (data[i].price * 1);
+                            orderTotal += (element.price * 1);
                             j = categories.length;
                         }
                     }
@@ -97,11 +96,11 @@ function CheckoutDetails() {
               if (data) {
                 // verify minimum amount required is hit
                 if (order.total_cost < data.minimum_required) {
-                    throw(order.total_cost);
+                    throw(new Error(order.total_cost));
                 }
                 // verify code is active
                 if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
-                    throw(data.start_time + " - " + data.end_time);
+                    throw(new Error(data.start_time + " - " + data.end_time));
                 }
                 determineDiscount(data);
               }
@@ -253,10 +252,10 @@ function CheckoutDetails() {
     .then((data) => {
         console.log(data);
         let total = 0;
-        for (let i = 0; i < data.length; ++i) {
-            if (data[i].product_id == 0) {
+        for (const element of data) {
+            if (element.product_id == 0) {
                 setNotCustomOrder(0);
-                total += (6 * data[i].product_quantity);
+                total += (6 * element.product_quantity);
             }
             setCustomHighTotal(total);
         }

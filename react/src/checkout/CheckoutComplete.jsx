@@ -1,40 +1,26 @@
 import React, { useEffect, useState } from "react";
-import DisplayProduct from "./DisplayProduct";
+import DisplayProduct from "../DisplayProduct";
 
 function Checkout() {
-  const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
   const [customHighTotal, setCustomHighTotal] = useState(0);
   const [enlarge, setEnlarge] = useState(false);
   const [enlargeProduct, setEnlargeProduct] = useState(false);
 
   useEffect(() => {
-    let oID = 0;
     if (localStorage.getItem("oID")) {
-        oID = localStorage.getItem("oID");
         localStorage.clear();
-    }
-    else if (userId) {
-        oID = 0;
     }
     fetch("/api/recentOrderDetails.php")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
-        for (let i = 0; i < data.length; ++i) {
-          if (data[i].product_id == 0) {
+        for (const element of data) {
+          if (element.product_id == 0) {
             const temp = customHighTotal;
-            setCustomHighTotal(temp + (6 * data[i].product_quantity));
+            setCustomHighTotal(temp + (6 * element.product_quantity));
           }
         }
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/session.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setUserId(data.userId);
       });
   }, []);
 
@@ -42,49 +28,22 @@ function Checkout() {
     price = price * 1;
     if (type == "Crewneck Sweatshirt") {
       price += 8;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
     else if (type == "Hooded Sweatshirt") {
       price += 12;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
     else if (type == "Long Sleeve T-Shirt") {
       price += 4;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
-    else {
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
-    }
-    return price;
-  }
 
-  const determineDesign = (color) => {
-    if (color == 'Yellow' || color == 'Gray' || color == 'White') {
-      return ('customDesignBlack.png')
+    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+      price -= 2;
     }
-    else {
-      return ('customDesign.png')
+    else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
+      price += 2;
     }
+
+    return price;
   }
 
   const handleOutsideClick = (event) => {
