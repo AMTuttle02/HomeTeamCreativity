@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
-import "./index.css";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -166,7 +165,7 @@ function Products() {
           {subcategories.map((subcategory) => (
             <span key={subcategory.id}>
               {subcategory.category === "Health" &&
-                <><button onClick={() => navigate("/products/Health/" + subcategory.name)}>{subcategory.name}</button></>
+                <span><button onClick={() => navigate("/products/Health/" + subcategory.name)}>{subcategory.name}</button></span>
               }
             </span>
           ))}
@@ -178,7 +177,7 @@ function Products() {
           {subcategories.map((subcategory) => (
             <span key={subcategory.id}>
               {subcategory.category === "Holiday" &&
-                <><button onClick={() => navigate("/products/Holiday/" + subcategory.name)}>{subcategory.name}</button></>
+                <span><button onClick={() => navigate("/products/Holiday/" + subcategory.name)}>{subcategory.name}</button></span>
               }
             </span>
           ))}
@@ -193,7 +192,7 @@ function Products() {
             {subcategories.map((subcategory) => (
               <span key={subcategory.id}>
                 {subcategory.category === "Other" &&
-                  <><button onClick={() => navigate("/products/Other/" + subcategory.name)}>{subcategory.name}</button></>
+                  <span><button onClick={() => navigate("/products/Other/" + subcategory.name)}>{subcategory.name}</button></span>
                 }
               </span>
             ))}
@@ -208,7 +207,7 @@ function Products() {
             {subcategories.map((subcategory) => (
               <span key={subcategory.id}>
                 {subcategory.category === "School" &&
-                  <><button onClick={() => navigate("/products/School/" + subcategory.name)}>{subcategory.name}</button></>
+                  <span><button onClick={() => navigate("/products/School/" + subcategory.name)}>{subcategory.name}</button></span>
                 }
               </span>
             ))}
@@ -220,7 +219,7 @@ function Products() {
             {subcategories.map((subcategory) => (
               <span key={subcategory.id}>
                 {subcategory.category === "Seasons" &&
-                  <><button onClick={() => navigate("/products/Seasons/" + subcategory.name)}>{subcategory.name}</button></>
+                  <span><button onClick={() => navigate("/products/Seasons/" + subcategory.name)}>{subcategory.name}</button></span>
                 }
               </span>
             ))}
@@ -232,7 +231,7 @@ function Products() {
             {subcategories.map((subcategory) => (
               <span key={subcategory.id}>
                 {subcategory.category === "Sports" &&
-                  <><button onClick={() => navigate("/products/Sports/" + subcategory.name)}>{subcategory.name}</button></>
+                  <span><button onClick={() => navigate("/products/Sports/" + subcategory.name)}>{subcategory.name}</button></span>
                 }
               </span>
             ))}

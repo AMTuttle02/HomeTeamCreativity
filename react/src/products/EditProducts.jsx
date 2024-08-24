@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
-import "./index.css";
 
 function EditProducts() {
   const navigate = useNavigate();
@@ -858,7 +857,7 @@ function EditProducts() {
                 <label><b>Sizes Available</b></label>
                 <div className="row">
                   <div className="uploadSplit">
-                    {sizesAvailable === '1' ?
+                    {sizesAvailable == '1' ?
                     <span>
                       <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={true} value='1' onChange={(event) => setSizesAvailable(event.target.value)}/>
                         <label>&nbsp;Yes</label>
@@ -873,7 +872,7 @@ function EditProducts() {
                     }
                   </div>
                   <div className="uploadSplit">
-                    {sizesAvailable === '0' ?
+                    {sizesAvailable == '0' ?
                     <span>
                       <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={true} value='0' onChange={(event) => setSizesAvailable(event.target.value)}/>
                         <label>&nbsp;No</label>

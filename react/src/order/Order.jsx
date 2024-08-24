@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import DisplayUserProduct from "../DisplayUserProduct";
+import DisplayUserProduct from "../products/DisplayUserProduct";
 import transparentTshirt from "../assets/transparentTshirt.png";
 import transparentLongSleeve from "../assets/transparentLongSleeve.png";
 import transparentCrewneck from "../assets/transparentCrewneck.png";

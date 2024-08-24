@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DisplayProduct from "../DisplayProduct";
+import DisplayProduct from "../products/DisplayProduct";
 
 function Dashboard() {
   const navigate = useNavigate();

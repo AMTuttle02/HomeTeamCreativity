@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import cart from "../assets/cart.png";
-import DisplayProduct from "../DisplayProduct";
+import DisplayProduct from "../products/DisplayProduct";
 
 function Cart() {
   const [products, setProducts] = useState([]);
