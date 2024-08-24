@@ -28,7 +28,7 @@ import EditProducts from "./EditProducts";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import EmailConfirmation from "./EmailConfirmation.jsx";
-import CostCalculator from "./CostCalculator.jsx";
+import CostCalculator from "./calculator/CostCalculator.jsx";
 import FourOFour from "./errorPages/404.jsx";
 import AllCoupons from "./coupons/AllCoupons.jsx";
 import CreateCoupon from "./coupons/CreateCoupon.jsx";
