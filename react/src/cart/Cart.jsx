@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import cart from "./assets/cart.png";
-import DisplayProduct from "./DisplayProduct";
+import { useNavigate } from "react-router-dom";
+import cart from "../assets/cart.png";
+import DisplayProduct from "../DisplayProduct";
 
 function Cart() {
   const [products, setProducts] = useState([]);
@@ -25,38 +25,19 @@ function Cart() {
     price = price * 1;
     if (type == "Crewneck Sweatshirt") {
       price += 8;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
     else if (type == "Hooded Sweatshirt") {
       price += 12;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
     else if (type == "Long Sleeve T-Shirt") {
       price += 4;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
-    else {
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
+
+    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+      price -= 2;
+    }
+    else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
+      price += 2;
     }
     return price;
   }
@@ -166,15 +147,6 @@ function Cart() {
     })
   }
 
-  const determineDesign = (color) => {
-    if (color == 'Yellow' || color == 'Gray' || color == 'White') {
-      return ('customDesignBlack.png')
-    }
-    else {
-      return ('customDesign.png')
-    }
-  }
-
   useEffect(() => {
     fetch("/api/session.php")
       .then((response) => response.json())
@@ -212,9 +184,6 @@ function Cart() {
     if (localStorage.getItem("oID")) {
       oID = localStorage.getItem("oID");
     }
-    else if (userId) {
-      oID = 0;
-    }
     fetch("/api/getCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -227,10 +196,10 @@ function Cart() {
       setProducts(data);
       console.log(data);
       let total = 0;
-      for (let i = 0; i < data.length; ++i) {
-        console.log(data[i].product_id);
-        if (data[i].product_id == 0) {
-          total += (6 * data[i].product_quantity)
+      for (const product of data) {
+        console.log(product.product_id);
+        if (product.product_id == 0) {
+          total += (6 * product.product_quantity)
         }
       }
       setCustomHighTotal(total);
@@ -241,9 +210,6 @@ function Cart() {
     let oID = 0;
     if (localStorage.getItem("oID")) {
       oID = localStorage.getItem("oID");
-    }
-    else if (userId) {
-      oID = 0;
     }
     fetch("/api/totalItems.php", {
       method: "POST",
@@ -301,13 +267,13 @@ function Cart() {
         <div className="cartMain">
           <div className="cartRow">
             <div className="myCartSide">
-              <img src={cart} alt="Cart Image" className="cartImg"/>
+              <img src={cart} alt="Cart" className="cartImg"/>
             </div>
             <div className="myCartMain">
               <h1>My Cart</h1>
             </div> 
             <div className="myCartSide">
-              <img src={cart} alt="Cart Image" className="cartImg"/>
+              <img src={cart} alt="Cart" className="cartImg"/>
             </div>
           </div>
         </div>
@@ -355,9 +321,9 @@ function Cart() {
                     <h2>${(setPrice(product.price, product.product_type, product.size)).toFixed(2)} </h2>
                     <br /><br />
                     <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size).toFixed(2)}>-</button>
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>-</button>
                       {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size).toFixed(2)}>+</button>
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size)}>+</button>
                     </h2>
                     <br /><br />
                     <h2>

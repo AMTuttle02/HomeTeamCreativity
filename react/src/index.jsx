@@ -14,7 +14,7 @@ import Upload from "./Upload";
 import UploadSuccess from "./UploadSuccess";
 import SearchResults from "./SearchResults";
 import NoResults from "./NoResults";
-import Cart from "./Cart";
+import Cart from "./cart/Cart";
 import Order from "./Order";
 import CustomOrder from "./CustomOrder";
 import Checkout from "./CheckoutComplete";
