@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import DisplayUserProduct from "./DisplayUserProduct";
-import transparentTshirt from "./assets/transparentTshirt.png";
-import transparentLongSleeve from "./assets/transparentLongSleeve.png";
-import transparentCrewneck from "./assets/transparentCrewneck.png";
-import transparentHoodie from "./assets/transparentHoodie.png";
-import black from "./assets/black.png";
-import red from "./assets/red.png";
-import yellow from "./assets/yellow.png";
-import royal from "./assets/royal.png";
-import gray from "./assets/gray.png";
-import pink from "./assets/pink.png";
-import green from "./assets/green.png";
-import maroon from "./assets/maroon.png";
-import orange from "./assets/orange.png";
-import purple from "./assets/purple.png";
-import white from "./assets/white.png";
-import navy from "./assets/navy.png";
+import DisplayUserProduct from "../DisplayUserProduct";
+import transparentTshirt from "../assets/transparentTshirt.png";
+import transparentLongSleeve from "../assets/transparentLongSleeve.png";
+import transparentCrewneck from "../assets/transparentCrewneck.png";
+import transparentHoodie from "../assets/transparentHoodie.png";
+import black from "../assets/black.png";
+import red from "../assets/red.png";
+import yellow from "../assets/yellow.png";
+import royal from "../assets/royal.png";
+import gray from "../assets/gray.png";
+import pink from "../assets/pink.png";
+import green from "../assets/green.png";
+import maroon from "../assets/maroon.png";
+import orange from "../assets/orange.png";
+import purple from "../assets/purple.png";
+import white from "../assets/white.png";
+import navy from "../assets/navy.png";
 
 function Failed() {
   return (
@@ -54,7 +54,6 @@ function Order() {
   const [failed, setFailed] = useState(false);
   const [userId, setUserId] = useState("");
   const [customDetails, setCustomDetails] = useState("");
-  const [productIsSet, setProductIsSet] = useState(false);
   const [currentDesignState, setCurrentDesignState] = useState(0);
   const [multipleLocations, setMultipleLocations] = useState(0);
   const [invalidDetails, setInvalidDetails] = useState(false);
@@ -66,7 +65,7 @@ function Order() {
   }, []);
 
   function retrieveProduct() {
-    var data = { id: 0 };
+    let data = { id: 0 };
     
     if (productKey) {
       data = { id: productKey };
@@ -106,14 +105,13 @@ function Order() {
           setNameOnBack(data[0].nameOnBack);
           setNumberOnBack(data[0].numberOnBack);
           let retrieveDefault = data[0];
-          for (let i = 0; i < data.length; ++i) {
-            if (data[i].product_id < retrieveDefault.product_id) {
-              retrieveDefault = data[i];
+          for (const element of data) {
+            if (element.product_id < retrieveDefault.product_id) {
+              retrieveDefault = element;
             }
           }
           setDefaultDesign(retrieveDefault);
           setCurrentDesign(data[0]);
-          setProductIsSet(true);
           setSizesAvailable(data[0].sizesAvailable);
           if (data[0].sizesAvailable === 0) {
             setSize({description: "Other", addedCost: 0});
@@ -175,7 +173,6 @@ function Order() {
       .catch((error) => {
         console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
         console.log(error);
-        const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
         // Append the current URL to the target path
         navigate('/404');
       });
@@ -239,15 +236,6 @@ function Order() {
       }
     }
     let oID = 0;
-    if (nameOnBack && numberOnBack) {
-      details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
-    }
-    else if (nameOnBack) {
-      details = "Name: " + nameOnBackDetails;
-    }
-    else if (numberOnBack) {
-      details = "Number: " + numberOnBackDetails;
-    }
     if (userId) {
       oID = 0;
     }
@@ -411,12 +399,7 @@ function Order() {
   }, [currentStyle, tShirtColor, longSleeveColor, crewneckColor, hoodieColor, size, currentDesign]);
 
   const validStyle = (colors) => {
-    if (colors.trim() === '') {
-      return false;
-    }
-    else {
-      return true;
-    }
+    return colors.trim() !== '';
   }
 
   const decreaseQuantity = () => {
@@ -507,10 +490,10 @@ function Order() {
           <h3>Click <Link to="/customOrder" className="customDesignButton">Here</Link> To Order a Custom Design</h3>
           <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
           {currentStyle !== "Other" ? 
-            <><h1>Style: {currentStyle}</h1></>
+            <span><h1>Style: {currentStyle}</h1></span>
           :<></>}
           <div className="typeOptionRow">
-            {(validStyle(tColors) && currentStyle !== "Other")  ? <>
+            {(validStyle(tColors) && currentStyle !== "Other")  ? <span>
               <button 
                 onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
                 className="productTypes">
@@ -520,8 +503,8 @@ function Order() {
                 className="shirtOptions"
               />
               </button>
-            </> : <></>}
-            {validStyle(lColors) ? <>
+            </span> : <></>}
+            {validStyle(lColors) ? <span>
               <button 
                 onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
                 className="productTypes">
@@ -531,8 +514,8 @@ function Order() {
                 className="shirtOptions"
               />
               </button>
-            </> : <></>}
-            {validStyle(cColors) ? <>
+            </span> : <></>}
+            {validStyle(cColors) ? <span>
               <button 
                 onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
                 className="productTypes">
@@ -542,8 +525,8 @@ function Order() {
                 className="shirtOptions"
               />
               </button>
-            </> : <></>}
-            {validStyle(hColors) ? <>
+            </span> : <></>}
+            {validStyle(hColors) ? <span>
               <button 
                 onClick={() => setCurrentStyle("Hooded Sweatshirt")}
                 className="productTypes">
@@ -553,7 +536,7 @@ function Order() {
                 className="shirtOptions"
               />
               </button>
-            </> : <></>}
+            </span> : <></>}
           </div>
           <h1>Color: {currentColor}</h1>
           <div className="typeOptionRow">
@@ -938,7 +921,7 @@ function Order() {
             </div>
           }
           {nameOnBack && 
-            <>
+            <span>
               <h2>Name: {' '}
                 <input
                   type="text"
@@ -948,10 +931,10 @@ function Order() {
                   className="lastNameOrderPage"
                 />
               </h2>
-            </>
+            </span>
           }
           {numberOnBack && 
-            <>
+            <span>
               <h2>Number:{' '}
               <input
                 type="number"
@@ -961,7 +944,7 @@ function Order() {
                 max={99}
               />
               </h2>
-            </>
+            </span>
           }
           <br />
           <h1>Quantity: {" "}
