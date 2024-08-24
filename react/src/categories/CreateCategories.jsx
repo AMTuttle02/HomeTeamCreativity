@@ -126,7 +126,7 @@ function CreateCategories() {
             :
             <div className="row">
                 {allSubcategories.map((subcategory) => (
-                    <div className="createSubCatCheckbox">
+                    <div className="createSubCatCheckbox" key={subcategory.name}>
                         <input type="radio" value={subcategory.name} name="subcats" onChange={(event) => setSubcategory(event.target.value)}/>
                         <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
                     </div>
