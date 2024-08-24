@@ -23,8 +23,8 @@ function ResetPassword() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailError, setemailError] = useState("");
-  const [passwordError, setpasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [badLogin, setBadLogin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const {token} = useParams();
@@ -39,19 +39,19 @@ function ResetPassword() {
       setBadLogin("password");
       return false;
     }
-    if (!email.match(/^.+@.+\..+$/) || !email) {
-      setemailError("Email Not Valid");
+    if (!RegExp(/^.+@.+\..+$/).exec(email) || !email) {
+      setEmailError("Email Not Valid");
       return false;
     } else {
-      setemailError("");
+      setEmailError("");
     }
-    if (!password.match(/^[\w\S]{8,}$/) || !password) {
-      setpasswordError(
+    if (!RegExp(/^[\w\S]{8,}$/).exec(password) || !password) {
+      setPasswordError(
         "Password must be at least 8 characters."
       );
       return false;
     } else {
-      setpasswordError("");
+      setPasswordError("");
     }
     return true;
   };
@@ -96,11 +96,11 @@ function ResetPassword() {
   }, []);
 
   useEffect(() => {
-    setemailError("");
+    setEmailError("");
   }, [email]);
 
   useEffect(() => {
-    setpasswordError("");
+    setPasswordError("");
   }, [password]);
 
   useEffect(() => {
@@ -161,13 +161,13 @@ function ResetPassword() {
             { badLogin === "email" && <EmailFailed /> }
             <br />
             {localStorage.getItem("oID") ?
-                <>
+                <span>
                 <button type="submit" onClick={(event) => confirmLogin(event)}>Update Password</button>
-                </>
+                </span>
               :
-                <>
+                <span>
                 <button type="submit" onClick={(event) => passwordResetSubmit(event)}>Update Password</button>
-                </>
+                </span>
               }
           </form>
           {showConfirmation &&

@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function Upload() {
   const [frontFile, setFrontFile] = useState(null);
   const [backFile, setBackFile] = useState(null);
-  const [productName, setName] = useState('');
+  const [productName, setProductName] = useState('');
   const [price, setPrice] = useState('');
   const [tags, setTags] = useState('');
   const [tshirtColors, setTshirtColors] = useState('');
   const [longSleeveColors, setLongSleeveColors] = useState('');
   const [crewneckColors, setCrewneckColors] = useState('');
   const [hoodieColors, setHoodieColors] = useState('');
-  const [tColorsPrimary, setTColorPrimary] = useState("None");
-  const [lColorsPrimary, setLColorPrimary] = useState("None");
-  const [cColorsPrimary, setCColorPrimary] = useState("None");
-  const [hColorsPrimary, setHColorPrimary] = useState("None");
+  const [tColorsPrimary, setTColorsPrimary] = useState("None");
+  const [lColorsPrimary, setLColorsPrimary] = useState("None");
+  const [cColorsPrimary, setCColorsPrimary] = useState("None");
+  const [hColorsPrimary, setHColorsPrimary] = useState("None");
   const [category, setCategory] = useState("All ");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
@@ -159,31 +159,31 @@ function Upload() {
     const hColors = hoodieColors.trim();
 
     if (tColors) {
-      setTColorPrimary(tColors.split(" ")[0]);
+      setTColorsPrimary(tColors.split(" ")[0]);
     }
     else {
-      setTColorPrimary("None");
+      setTColorsPrimary("None");
     }
 
     if (lColors) {
-      setLColorPrimary(lColors.split(" ")[0]);
+      setLColorsPrimary(lColors.split(" ")[0]);
     }
     else {
-      setLColorPrimary("None");
+      setLColorsPrimary("None");
     }
 
     if (cColors) {
-      setCColorPrimary(cColors.split(" ")[0]);
+      setCColorsPrimary(cColors.split(" ")[0]);
     }
     else {
-      setCColorPrimary("None");
+      setCColorsPrimary("None");
     }
 
     if (hColors) {
-      setHColorPrimary(hColors.split(" ")[0]);
+      setHColorsPrimary(hColors.split(" ")[0]);
     }
     else {
-      setHColorPrimary("None");
+      setHColorsPrimary("None");
     }
   }, [tshirtColors, longSleeveColors, crewneckColors, hoodieColors])
 
@@ -203,7 +203,7 @@ function Upload() {
                 id="product_name"
                 name="product_name"
                 placeholder="Product Name"
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) => setProductName(event.target.value)}
               />
             <label>Price<span className="red">*</span> (Do Not Include $) (Pricing Default is for an Adult Medium)</label>
             <input
@@ -268,7 +268,7 @@ function Upload() {
             <center><h3>Subcategories</h3></center>
             <div className="row">
                 {allSubcategories.map((subcategory) => (
-                    <div className="createSubCatCheckbox">
+                    <div className="createSubCatCheckbox" key={subcategory.name}>
                         <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
                         <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
                     </div>

@@ -14,12 +14,12 @@ function SignUpFailed() {
 function SignUp() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [fname, setFName] = useState("");
-  const [lname, setLName] = useState("");
-  const [passwordError, setpasswordError] = useState("");
-  const [emailError, setemailError] = useState("");
-  const [fnameError, setfnameError] = useState("");
-  const [lnameError, setlnameError] = useState("");
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [fnameError, setFnameError] = useState("");
+  const [lnameError, setLnameError] = useState("");
   const [badLogin, setBadLogin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -29,61 +29,50 @@ function SignUp() {
   }
 
   const handleValidation = (event) => {
-    let formIsValid = true;
-    if (!fname) {
-      formIsValid = false;
-      setfnameError(
+    if (!fName) {
+      setFnameError(
         "First Name is required."
       );
       return false;
     }
-    else if (!fname.match(/^[a-zA-Z]{1,50}$/)) {
-      formIsValid = false;
-      setfnameError(
+    else if (!RegExp(/^[a-zA-Z]{1,50}$/).exec(fName)) {
+      setFnameError(
         "Sorry, your first name is too long. Try a shorter one."
       );
       return false;
     } else {
-      setfnameError("");
-      formIsValid = true;
+      setFnameError("");
     }
-    if (!lname) {
-      formIsValid = false;
-      setlnameError(
+    if (!lName) {
+      setLnameError(
         "Last Name is required."
       );
       return false;
     }
-    else if (!lname.match(/^[a-zA-Z]{1,50}$/)) {
-      formIsValid = false;
-      setlnameError(
+    else if (!RegExp(/^[a-zA-Z]{1,50}$/).exec(lName)) {
+      setLnameError(
         "Sorry, your last name is too long. Can you shorten it?"
       );
       return false;
     } else {
-      setlnameError("");
-      formIsValid = true;
+      setLnameError("");
     }
     
-    if (!email.match(/^.+@.+\..+$/) || !email) {
-      formIsValid = false;
-      setemailError("Email Not Valid");
+    if (!RegExp(/^.+@.+\..+$/).exec(email) || !email) {
+      setEmailError("Email Not Valid");
       return false;
     } else {
-      setemailError("");
-      formIsValid = true;
+      setEmailError("");
     }
-    if (!password.match(/^[\w\S]{8,}$/) || !password) {
-      formIsValid = false;
-      setpasswordError(
+    if (!RegExp(/^[\w\S]{8,}$/).exec(password) || !password) {
+      setPasswordError(
         "Password must be at least 8 characters."
       );
       return false;
     } else {
-      setpasswordError("");
-      formIsValid = true;
+      setPasswordError("");
     }
-    return formIsValid;
+    return true;
   };
   const signUpSubmit = (e) => {
     e.preventDefault();
@@ -95,8 +84,8 @@ function SignUp() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          "fname":fname, 
-          "lname" :lname,
+          "fname":fName, 
+          "lname" :lName,
           "email" : email,
           "password" : hashedPassword
         }),
@@ -124,24 +113,24 @@ function SignUp() {
   }, []);
 
   useEffect(() => {
-    if (fname && fname.length < 51) {
-      setfnameError("");
+    if (fName && fName.length < 51) {
+      setFnameError("");
     }
     
-  }, [fname]);
+  }, [fName]);
 
   useEffect(() => {
-    if (lname && lname.length < 51) {
-      setlnameError("");
+    if (lName && lName.length < 51) {
+      setLnameError("");
     }
-  }, [lname]);
+  }, [lName]);
 
   useEffect(() => {
-    setemailError("");
+    setEmailError("");
   }, [email]);
 
   useEffect(() => {
-    setpasswordError("");
+    setPasswordError("");
   }, [password]);
 
   if (firstName) {
@@ -211,13 +200,13 @@ function SignUp() {
             { badLogin && <SignUpFailed /> }
             <br />
             {localStorage.getItem("oID") ?
-                <>
+                <span>
                 <button type="submit" onClick={(event) => confirmLogin(event)}>Sign Up</button>
-                </>
+                </span>
               :
-                <>
+                <span>
                 <button type="submit" onClick={(event) => signUpSubmit(event)}>Sign Up</button>
-                </>
+                </span>
               }
           </form>
           {showConfirmation &&

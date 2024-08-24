@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import DisplayProduct from "./products/DisplayProduct";
-import { Outlet, Link } from "react-router-dom";
+import DisplayProduct from "../products/DisplayProduct";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 
 function HomeContents() {
   const [firstName, setFirstName] = useState("");

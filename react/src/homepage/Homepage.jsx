@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import logo from "./assets/logo.png";
-import cart from "./assets/cart.png";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import cart from "../assets/cart.png";
 
 function Homepage() {
   const navigate = useNavigate();
@@ -99,8 +98,8 @@ function Homepage() {
               <div className="imageSize">
                 <img src={cart} alt="Cart" className="cart" />
                 {totalItems ? 
-                  <div class="circle">
-                    <span class="number">{totalItems}</span>
+                  <div className="circle">
+                    <span className="number">{totalItems}</span>
                   </div>
                 :
                   <span />

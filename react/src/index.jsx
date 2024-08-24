@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 
-import About from "./about/AboutUs.jsx";
+import About from "./static/AboutUs.jsx";
 import AllCoupons from "./coupons/AllCoupons.jsx";
 import Cart from "./cart/Cart";
 import Checkout from "./checkout/CheckoutComplete.jsx";
@@ -15,25 +15,24 @@ import CustomOrder from "./order/CustomOrder.jsx";
 import Dashboard from "./dashboard/Dashboard";
 import EditCoupons from "./coupons/EditCoupons.jsx";
 import EditProducts from "./products/EditProducts";
-import EmailConfirmation from "./EmailConfirmation.jsx";
-import ForgotPassword from "./ForgotPassword";
+import EmailConfirmation from "./login/EmailConfirmation.jsx";
+import ForgotPassword from "./login/ForgotPassword.jsx";
 import FourOFour from "./errorPages/404.jsx";
-import HomeContents from "./HomeContents.jsx";
-import Homepage from "./Homepage";
-import HowItWorks from "./howItWorks";
-import Login from "./Login";
-import LogOut from "./LogOut";
-import LoginSuccess from "./LoginSuccess";
+import HomeContents from "./homepage/HomeContents.jsx";
+import Homepage from "./homepage/Homepage.jsx";
+import HowItWorks from "./static/howItWorks.jsx";
+import Login from "./login/Login.jsx";
+import LogOut from "./login/LogOut.jsx";
 import NoResults from "./products/NoResults.jsx";
 import Order from "./order/Order";
 import Products from "./products/Products";
-import PayLater from "./PayLater";
+import PayLater from "./static/PayLater.jsx";
 import SearchResults from "./products/SearchResults";
-import SignUp from "./SignUp";
-import ResetPassword from "./ResetPassword";
-import ReturnPolicy from "./ReturnPolicy";
-import Upload from "./Upload";
-import UploadSuccess from "./UploadSuccess";
+import SignUp from "./login/SignUp.jsx";
+import ResetPassword from "./login/ResetPassword.jsx";
+import ReturnPolicy from "./static/ReturnPolicy.jsx";
+import Upload from "./upload/Upload.jsx";
+import UploadSuccess from "./upload/UploadSuccess.jsx";
 
 export default function App() {
   return (
@@ -42,7 +41,6 @@ export default function App() {
         <Route path="/" element={<Homepage />}>
           <Route index element={<HomeContents />} />
           <Route path="login" element={<Login />} />
-          <Route path="loggedin" element={<LoginSuccess />} />
           <Route path="loggedout" element={<LogOut />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="products" element={<Products />} />
