@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DisplayProduct from "./DisplayProduct";
+import DisplayProduct from "../DisplayProduct";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -75,39 +75,21 @@ function Dashboard() {
     price = price * 1;
     if (type == "Crewneck Sweatshirt") {
       price += 8;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
     else if (type == "Hooded Sweatshirt") {
       price += 12;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
     else if (type == "Long Sleeve T-Shirt") {
       price += 4;
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
     }
-    else {
-      if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-        price -= 2;
-      }
-      else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-        price += 2;
-      }
+
+    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
+      price -= 2;
     }
+    else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
+      price += 2;
+    }
+
     return price;
   }
 
@@ -123,8 +105,8 @@ function Dashboard() {
   }
 
   const isCustom = (order) => {
-    for(let i = 0; i < products.length; ++i) {
-      if (products[i].order_id === order && products[i].product_id === 0) {
+    for(const element of products) {
+      if (element.order_id === order && element.product_id === 0) {
         return true;
       }
     }
@@ -133,9 +115,9 @@ function Dashboard() {
 
   const findHighEndCost = (order) => {
     let total = order.total_cost * 1;
-    for(let i = 0; i < products.length; ++i) {
-      if (products[i].order_id === order.order_id && products[i].product_id === 0) {
-        total += (6 * products[i].product_quantity);
+    for(const element of products) {
+      if (element.order_id === order.order_id && element.product_id === 0) {
+        total += (6 * element.product_quantity);
       }
     }
     return total.toFixed(2);

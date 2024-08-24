@@ -22,7 +22,7 @@ import CheckoutFailed from "./checkout/CheckoutFailed.jsx";
 import ReturnPolicy from "./ReturnPolicy";
 import CheckoutDetails from "./checkout/CheckoutDetails.jsx";
 import PayLater from "./PayLater";
-import Dashboard from "./Dashboard";
+import Dashboard from "./dashboard/Dashboard";
 import CreateCategories from "./categories/CreateCategories.jsx";
 import EditProducts from "./EditProducts";
 import ForgotPassword from "./ForgotPassword";
