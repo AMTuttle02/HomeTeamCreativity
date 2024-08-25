@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./calculator.css";
 
 function CostCalculator() {
   const [admin, setAdmin] = useState("");
@@ -26,9 +27,9 @@ function CostCalculator() {
 
   if (admin) {
     return (
-      <div className="UpdatedLogin">
+      <div className="CostCalculator">
         <br />
-        <div className="LoginPage">
+        <div className="CalcPage">
           <div className="container">
             <h1>
               Cost Calculator
