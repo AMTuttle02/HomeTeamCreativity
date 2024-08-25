@@ -92,6 +92,15 @@ body {
   text-decoration: none;
 }
 
+footer {
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-style: italic;
+  font-size: 2vw;
+  display: block;
+}
+
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
   .homeLink {
