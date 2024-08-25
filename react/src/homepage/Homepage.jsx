@@ -3,6 +3,8 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import cart from "../assets/cart.png";
 
+import "./homepage.css";
+
 function Homepage() {
   const navigate = useNavigate();
 
@@ -74,39 +76,37 @@ function Homepage() {
 
   return (
     <div className="HomePage">
-      <div className="App">
-        <div className="navbar">
-          <Link to="/" className="homeLink">
-              <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
-          </Link>
-          <Link to="products" className="navLink">
-            Products
-          </Link>
-          <Link to="howitworks" className="navLink">
-            How It Works
-          </Link>
-          <Link to="about" className="navLink">
-            About Us
-          </Link>
-          <Link to="login" className="navLink">
-            {Login}
-          </Link>
-          <form id="search" className="searchBox">
-            <input type="text" placeholder="Search..." value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
-          </form>
-          <Link to="cart" className="cartLink">
-              <div className="imageSize">
-                <img src={cart} alt="Cart" className="cart" />
-                {totalItems ? 
-                  <div className="circle">
-                    <span className="number">{totalItems}</span>
-                  </div>
-                :
-                  <span />
-                }
-              </div>
-          </Link>
-        </div>
+      <div className="navbar">
+        <Link to="/" className="homeLink">
+            <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
+        </Link>
+        <Link to="products" className="navLink">
+          Products
+        </Link>
+        <Link to="howitworks" className="navLink">
+          How It Works
+        </Link>
+        <Link to="about" className="navLink">
+          About Us
+        </Link>
+        <Link to="login" className="navLink">
+          {Login}
+        </Link>
+        <form id="search" className="searchBox">
+          <input type="text" className="search" placeholder="Search..." value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
+        </form>
+        <Link to="cart" className="cartLink">
+            <div className="imageSize">
+              <img src={cart} alt="Cart" className="cart" />
+              {totalItems ? 
+                <div className="circle">
+                  <span className="number">{totalItems}</span>
+                </div>
+              :
+                <span />
+              }
+            </div>
+        </Link>
       </div>
       <Outlet/>
       <footer>
