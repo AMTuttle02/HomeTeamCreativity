@@ -1,0 +1,87 @@
+.container {
+  margin: 0 auto;
+  width: 50%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.container h1 {
+  text-align: center;
+  color: #3b3b3b;
+}
+
+.container h2 {
+  text-align: center;
+  color: #3b3b3b;
+}
+
+.container button {
+  background-color: #4c77af;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.container button:hover {
+  background-color: #45a049;
+}
+
+.row {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.row h2 {
+  color: white;
+  text-align: center;
+  padding: 50px;
+}
+
+.createCatButtonWidth {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+.createCatButtonWidth button{
+  margin: 1%;
+}
+
+.createSubCatCheckbox {
+  -ms-flex: 33%;
+  flex: 33%;
+}
+
+.createSubCatCheckbox input {
+  margin: 1%;
+}
+
+input[type=text] {
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #000;
+  background-color: #b7c9e2;
+  transition: width .4s ease-in-out;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+@media screen and (max-width: 1199px) {
+  .container {
+    width: 90%;
+  }
+
+  .row {   
+    flex-direction: column;
+    margin: auto;
+  }
+}
