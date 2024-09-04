@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import cart from "../assets/cart.png";
 import DisplayProduct from "../products/DisplayProduct";
+import "./cart.css";
 
 function Cart() {
   const [products, setProducts] = useState([]);
