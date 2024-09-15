@@ -1,0 +1,101 @@
+.success {
+  color: white;
+  text-align: center;
+  padding: 50px;
+}
+
+.white {
+  color: blue;
+}
+
+.CartPage{
+  border-bottom: 5px solid white;
+}
+
+.cartMain {   
+  -ms-flex: 33%; /* IE10 */
+  flex: 33%;
+  text-align: center;
+  color: white;
+}
+
+.cartProductRow {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: nowrap; /* IE10 */
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.productsCell h2 {
+  margin-left: 10px;
+  padding: 20px;
+}
+
+.productsCell {
+  width: 25%;
+  max-width: 100%;
+  height: auto;
+}
+
+.magnify {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+  width: 100%;
+  color: white;
+}
+
+.magnify:hover {
+  background-color: #858585;
+}
+
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.orderItem-dialog {
+  max-height: 100%;
+  width: 50%;
+  text-align: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 36px;
+  color: white;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: darkred;
+}
+
+@media screen and (max-width: 1199px) {
+  .productsCell {
+    width: 50%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .orderItem-dialog {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 481px) {
+  .orderItem-dialog {
+    width: 100%;
+  }
+}
