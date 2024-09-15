@@ -48,6 +48,7 @@ function CheckoutDetails() {
                     body: JSON.stringify({ order_id: oID }),
                 });
                 const data = await response.json();
+                console.log(data);
     
                 for (let i = 0; i < data.length; ++i) {
                     let categories = data[i].categories
@@ -57,7 +58,7 @@ function CheckoutDetails() {
     
                     for (let j = 0; j < categories.length; ++j) {
                         if (discount.categories.includes(categories[j])) {
-                            orderTotal += (data[i].price * 1);
+                            orderTotal += (data[i].price * 1 * data[i].product_quantity);
                             j = categories.length;
                         }
                     }
@@ -193,10 +194,11 @@ function CheckoutDetails() {
             else if (userId) {
                 oID = 0;
             }
+            const total = onlineTotalCost(order.total_cost).toFixed(2);
             fetch("/api/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID}),
+                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount}),
             })
             .then((response) => response.json())
             .then((data) => {
