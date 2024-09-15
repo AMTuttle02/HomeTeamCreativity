@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./checkout.css";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
@@ -82,8 +83,7 @@ function CheckoutDetails() {
             setCouponError("Sorry, that discount is invalid.");
             setDiscount((0.00).toFixed(2));
         }
-    };
-    
+    }; 
 
     const validateCoupon = () => {
         fetch("/api/getCoupon.php", {
@@ -229,8 +229,7 @@ function CheckoutDetails() {
         .then((data) => {
           setOrder(data);
         });
-      }, []);
-
+    }, []);
     
     const [customHighTotal, setCustomHighTotal] = useState(0);
     useEffect(() => {
