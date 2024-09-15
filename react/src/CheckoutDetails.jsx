@@ -68,14 +68,22 @@ function CheckoutDetails() {
             }
         }
     
+        console.log("Initial");
+        console.log(finalAmount);
         if (discount.type === 'percent') {
             let percent = (discount.amount * 1) / 100;
             finalAmount = (orderTotal * 1 * percent).toFixed(2);
-            if (finalAmount * 1 > discount.maximum_allowed * 1) {
-                finalAmount = (discount.maximum_allowed * 1).toFixed(2);
-            }
         } else if (discount.type === 'amount') {
             finalAmount = (discount.amount * 1).toFixed(2);
+        }
+
+        console.log("After calculation")
+
+        if (finalAmount * 1 > discount.maximum_allowed * 1) {
+            finalAmount = (discount.maximum_allowed * 1).toFixed(2);
+        }
+        if (orderTotal * 1 < discount.minimum_required * 1) {
+            finalAmount = 0;
         }
 
         if (finalAmount > 0) {
@@ -96,10 +104,6 @@ function CheckoutDetails() {
             .then((response) => response.json())
             .then((data) => {
               if (data) {
-                // verify minimum amount required is hit
-                if (order.total_cost < data.minimum_required) {
-                    throw(order.total_cost);
-                }
                 // verify code is active
                 if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
                     throw(data.start_time + " - " + data.end_time);
