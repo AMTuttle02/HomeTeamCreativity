@@ -18,14 +18,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             AND product_id = ?
                             AND color = ? 
                             AND product_type = ?
-                            AND size = ?");
+                            AND size = ?
+                            AND product_details = ?");
   $query->bind_param(
-    "sssss",
+    "ssssss",
     $input['order_id'],
     $input['product_id'],
     $input['color'],
     $input['product_type'],
-    $input['size']);
+    $input['size'],
+    $input['product_details']);
 
   if (!$query->execute()) {
     die(json_encode('Top Failed'));
@@ -54,14 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             AND product_id = ?
                             AND color = ? 
                             AND product_type = ?
-                            AND size = ?");
+                            AND size = ?
+                            AND product_details = ?");
       $query->bind_param(
-                        "sssss",
+                        "ssssss",
                         $input['order_id'],
                         $input['product_id'],
                         $input['color'],
                         $input['product_type'],
-                        $input['size']);
+                        $input['size'],
+                        $input['product_details']);
 
       if (!$query->execute()) {
         echo json_encode(0);
@@ -89,19 +93,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   else {
     $query = $conn->prepare(
-                            "DELETE FROM product_orders
-                            WHERE order_id = ? 
-                            AND product_id = ?
-                            AND color = ? 
-                            AND product_type = ?
-                            AND size = ?");
+      "DELETE FROM product_orders
+      WHERE order_id = ? 
+      AND product_id = ?
+      AND color = ? 
+      AND product_type = ?
+      AND size = ?
+      AND product_details = ?");
+      
     $query->bind_param(
-                      "sssss",
-                      $input['order_id'],
-                      $input['product_id'],
-                      $input['color'],
-                      $input['product_type'],
-                      $input['size']);
+      "ssssss",
+      $input['order_id'],
+      $input['product_id'],
+      $input['color'],
+      $input['product_type'],
+      $input['size'],
+      $input['product_details']);
 
     if (!$query->execute()) {
       echo json_encode(0);
