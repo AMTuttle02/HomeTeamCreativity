@@ -72,7 +72,8 @@ function Cart() {
         color: product.color,
         product_type: product.product_type,
         size: product.size,
-        price: setPrice(product.price, product.product_type, product.size) * product.product_quantity}),
+        price: setPrice(product.price, product.product_type, product.size) * product.product_quantity,
+        product_details: product.product_details})
     })
     .then((response) => response.json())
     .then((data) => {
@@ -82,7 +83,7 @@ function Cart() {
     })
   }
 
-  const increaseQuantity = (product, productId, quantity, price, style, color, size) => {
+  const increaseQuantity = (product, productId, quantity, price, style, color, size, product_details) => {
     fetch("/api/increaseQuantity.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -93,7 +94,8 @@ function Cart() {
         color: product.color,
         product_type: product.product_type,
         size: product.size,
-        price: setPrice(product.price, product.product_type, product.size)}),
+        price: setPrice(product.price, product.product_type, product.size),
+        product_details: product.product_details}),
     })
     .then((response) => response.json())
     .then((data) => {
@@ -110,7 +112,7 @@ function Cart() {
     setAddedItems((addedItems * 1) + 1);
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
-        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size) {
+        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size && product.product_details === product_details) {
           return {
             ...product,
             product_quantity: quantity + 1
@@ -123,7 +125,7 @@ function Cart() {
     })
   }
 
-  const decreaseQuantity = (product, productId, quantity, price, style, color, size) => {
+  const decreaseQuantity = (product, productId, quantity, price, style, color, size, product_details) => {
     if (quantity > 1) {
       fetch("/api/decreaseQuantity.php", {
         method: "POST",
@@ -135,7 +137,8 @@ function Cart() {
           color: product.color,
           product_type: product.product_type,
           size: product.size,
-          price: setPrice(product.price, product.product_type, product.size)}),
+          price: setPrice(product.price, product.product_type, product.size),
+          product_details: product.product_details}),
       })
       .then((response) => response.json())
       .then((data) => {
@@ -153,7 +156,7 @@ function Cart() {
     }
     setProducts(prevData => {
       const updatedData = prevData.map(product => {
-        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size && quantity > 1) {
+        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size && quantity > 1 && product.product_details === product_details) {
           return {
             ...product,
             product_quantity: quantity - 1
@@ -164,15 +167,6 @@ function Cart() {
       })
       return updatedData;
     })
-  }
-
-  const determineDesign = (color) => {
-    if (color == 'Yellow' || color == 'Gray' || color == 'White') {
-      return ('customDesignBlack.png')
-    }
-    else {
-      return ('customDesign.png')
-    }
   }
 
   useEffect(() => {
@@ -331,7 +325,7 @@ function Cart() {
       <br />
       <div className="CartPage" />
         {products.map((product) => (
-          <div key={[product.product_id, product.product_type, product.size, product.color]}>
+          <div key={[product.product_id, product.product_type, product.size, product.color, product.product_details]}>
             {product.product_id ?
               <div className="customProduct">
                 <div className="cartProductRow">
@@ -355,9 +349,9 @@ function Cart() {
                     <h2>${(setPrice(product.price, product.product_type, product.size)).toFixed(2)} </h2>
                     <br /><br />
                     <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size).toFixed(2)}>-</button>
+                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>-</button>
                       {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size).toFixed(2)}>+</button>
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>+</button>
                     </h2>
                     <br /><br />
                     <h2>
@@ -420,7 +414,7 @@ function Cart() {
                     <h2> 
                       Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, (setPrice(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size)}>-</button>
                       {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, (setPrice(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size)}>+</button>
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, (setPrice(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size, product.product_details)}>+</button>
                     </h2>
                     <br /><br />
                     <h2>
