@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
   if (!$query->execute()) {
     // If insertion fails, return error message
-    die(json_encode("Result set failed: " . $conn->error));
+    die(json_encode(0));
   }
   $totalCost = $totalCost + $productCost;
   $query = $conn->prepare(

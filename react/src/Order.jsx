@@ -228,40 +228,69 @@ function Order() {
     setCustomDetails(event.target.value);
   }
 
-  const addToCart = () => {
-    if (customDetails === "" && customDetailsRequired) {
+  function validateAdditionToCart () {
+    if (customDetails === "") {
       if (customDetailsRequired) {
         setInvalidDetails(true);
-        return;
+        return false;
       }
       else {
         setCustomDetails("No custom details.");
       }
     }
-    let oID = 0;
-    if (nameOnBack && numberOnBack) {
-      details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
-    }
-    else if (nameOnBack) {
-      details = "Name: " + nameOnBackDetails;
-    }
-    else if (numberOnBack) {
-      details = "Number: " + numberOnBackDetails;
-    }
-    if (userId) {
-      oID = 0;
-    }
-    else if (localStorage.getItem("oID")) {
-      oID = localStorage.getItem("oID")
-    }
-    else {
-      oID = 1;
-    }
-
     if (size.description === "") {
       setInvalidSize(true);
+      return false;
+    }
+
+    let oID = 0;
+    if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID");
+    }
+    let cart = "";
+    fetch("/api/getCart.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: oID
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      cart = data;
+    })
+    if (cart) {
+      return false;
     }
     else {
+      return true;
+    }
+  }
+
+  const addToCart = () => {
+    console.log(validateAdditionToCart());
+
+    if (validateAdditionToCart()) {
+      let oID = 0;
+      if (nameOnBack && numberOnBack) {
+        details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
+      }
+      else if (nameOnBack) {
+        details = "Name: " + nameOnBackDetails;
+      }
+      else if (numberOnBack) {
+        details = "Number: " + numberOnBackDetails;
+      }
+      if (userId) {
+        oID = 0;
+      }
+      else if (localStorage.getItem("oID")) {
+        oID = localStorage.getItem("oID")
+      }
+      else {
+        oID = 1;
+      }
       const formData = new FormData();
         formData.append('image', "");
         formData.append('order_id', oID); 
