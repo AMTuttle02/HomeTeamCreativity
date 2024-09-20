@@ -8,7 +8,7 @@ function CheckoutDetails() {
     const [order, setOrder] = useState([]);
     const [email, setEmail] = useState("");
     const [shipping, setShipping] = useState(0);
-    const [paying, setPaying] = useState(1);
+    const [paying, setPaying] = useState(0);
     const [location, setLocation] = useState("");
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
@@ -395,9 +395,10 @@ function CheckoutDetails() {
                         <input type="text" id="adr" name="address" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
                         {notCustomOrder ?
                             <div className="row">
+                                <p className="red">Pay Now is currently disabled due to an unresolved error.</p>
                                 <div className="split50Center">
-                                    <label>
-                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
+                                    <label className="grayOut">
+                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(0)}/> Pay Now
                                     </label>
                                 </div>
                                 <div className="split50Center">

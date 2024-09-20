@@ -1456,6 +1456,10 @@ footer {
   width: 15%;
 }
 
+.grayOut {
+  color: gray;
+}
+
 /* Responsive layout - when the screen is less than 1199px wide */
 @media screen and (max-width: 1199px) {
   .coupon-table th,
