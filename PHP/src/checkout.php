@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($_SESSION["order_id"]) {}
-        else {
+        else if (isset($_SESSION["userId"])) {
             $query = $conn->prepare(
                                     "INSERT INTO orders (user_id, total_cost, is_cart)
                                     VALUES (?, 0, 1);");

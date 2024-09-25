@@ -10,37 +10,43 @@ function Checkout() {
   const { orderId } = useParams();
 
   useEffect(() => {
-    fetch("/api/checkout.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({orderId}),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data === 1) {
-        let oID = 0;
-        if (localStorage.getItem("oID")) {
-            oID = localStorage.getItem("oID");
-            localStorage.clear();
-        }
-        fetch("/api/recentOrderDetails.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({orderId}),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          setProducts(data);
-          for (let i = 0; i < data.length; ++i) {
-            if (data[i].product_id == 0) {
-              const temp = customHighTotal;
-              setCustomHighTotal(temp + (6 * data[i].product_quantity));
-            }
+    const checkout = () => {
+      fetch("/api/checkout.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({orderId}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data === 1) {
+          let oID = 0;
+          if (localStorage.getItem("oID")) {
+              oID = localStorage.getItem("oID");
+              localStorage.clear();
           }
-        });
-      }
-    });
-  }, []);
+          fetch("/api/recentOrderDetails.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({orderId}),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            setProducts(data);
+            for (let i = 0; i < data.length; ++i) {
+              if (data[i].product_id == 0) {
+                const temp = customHighTotal;
+                setCustomHighTotal(temp + (6 * data[i].product_quantity));
+              }
+            }
+          });
+        }
+      });
+    }
+
+    if (orderId) {
+      checkout();
+    }
+  }, [orderId]);
 
   const setPrice = (price, type, size) => {
     price = price * 1;
