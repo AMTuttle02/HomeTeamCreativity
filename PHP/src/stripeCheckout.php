@@ -4,9 +4,6 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
-header("Cache-Control: no-cache, no-store, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
 
 require_once 'secrets.php';
 
