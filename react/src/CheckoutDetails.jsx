@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
@@ -24,6 +24,7 @@ function CheckoutDetails() {
     const [discount, setDiscount] = useState((0.00).toFixed(2));
     const [code, setCode] = useState("");
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const navigate = useNavigate();
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -177,8 +178,14 @@ function CheckoutDetails() {
             })
             .then((response) => response.json())
             .then((data) => {
-                if (data) {
-                    window.location.href = "/api/stripeCheckout.php";
+                if (data > 0) {
+                    fetch("/api/stripeCheckout.php")
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.href = data.checkout;
+                        });
+                } else {
+                    navigate("/500");
                 }
             });
         }
@@ -206,9 +213,10 @@ function CheckoutDetails() {
             })
             .then((response) => response.json())
             .then((data) => {
-                // If the email and password are valid, redirect to the homepage
-                if (data) {
-                    window.location.href = "/api/checkoutNoPay.php";
+                if (data > 0) {
+                    window.location.href = "/ordercomplete/" + data;
+                } else {
+                    navigate("/500");
                 }
             });
         }
@@ -404,7 +412,7 @@ function CheckoutDetails() {
                                 <p className="red">Pay Now is currently disabled due to an unresolved error.</p>
                                 <div className="split50Center">
                                     <label className="grayOut">
-                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(0)}/> Pay Now
+                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
                                     </label>
                                 </div>
                                 <div className="split50Center">
