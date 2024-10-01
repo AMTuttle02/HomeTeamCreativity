@@ -58,8 +58,7 @@ export default function App() {
           <Route path="order" element={<Order />} />
           <Route path="order/:productKey" element={<Order />} />
           <Route path="customOrder" element={<CustomOrder />} />
-          <Route path="ordercomplete" element={<Checkout />} />
-          <Route path="ordercomplete/:orderId" element={<Checkout />} />
+          <Route path="ordercomplete/:orderId/:paid/:stripe" element={<Checkout />} />
           <Route path="orderfailed" element={<CheckoutFailed />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />

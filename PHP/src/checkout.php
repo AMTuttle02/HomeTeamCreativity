@@ -12,6 +12,8 @@ include 'conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputs = json_decode(file_get_contents('php://input'), true);
     $orderId = $inputs['orderId'];
+    $paid = $inputs['paid'];
+    $stripeId = $inputs['stripe'];
 
     // Obtain order details
     $query = $conn->prepare(
@@ -33,11 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($result['status'] == 'active') {
         $query = $conn->prepare(
                             "UPDATE orders
-                            SET is_cart = 0, paid = 1, status = 'processing'
-                            WHERE order_id = ?");
+                            SET is_cart = 0, paid = ?, status = 'processing'
+                            WHERE order_id = ? AND stripeId = ?");
         $query->bind_param(
-                        "s",
-                        $orderId);
+                        "sss",
+                        $paid,
+                        $orderId,
+                        $stripeId);
         if (!$query->execute()) {
             die("Query failed: " . $stmt->error);
         }
@@ -54,7 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 die("Query failed: " . $query->error);
             }
         }
-        include 'orderConfirmationPaid.php';
+
+        if ($paid === '1') {
+            include 'orderConfirmationPaid.php';
+        } else if ($paid === '0') {
+            include 'orderConfirmation.php';
+        }
 
         mysqli_close($conn);
     }

@@ -7,46 +7,55 @@ function Checkout() {
   const [customHighTotal, setCustomHighTotal] = useState(0);
   const [enlarge, setEnlarge] = useState(false);
   const [enlargeProduct, setEnlargeProduct] = useState(false);
-  const { orderId } = useParams();
+  const { orderId, paid, stripe } = useParams();
 
   useEffect(() => {
+    console.log(orderId);
+    console.log(paid);
+    console.log(stripe);
     const checkout = () => {
       fetch("/api/checkout.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({orderId, paid, stripe}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data === 1) {
+          getDetails();
+        } else {
+          console.log(data);
+        }
+      });
+    }
+
+    const getDetails = () => {
+      let oID = 0;
+      if (localStorage.getItem("oID")) {
+          oID = localStorage.getItem("oID");
+          localStorage.clear();
+      }
+      fetch("/api/recentOrderDetails.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({orderId}),
       })
       .then((response) => response.json())
       .then((data) => {
-        if (data === 1) {
-          let oID = 0;
-          if (localStorage.getItem("oID")) {
-              oID = localStorage.getItem("oID");
-              localStorage.clear();
+        setProducts(data);
+        for (let i = 0; i < data.length; ++i) {
+          if (data[i].product_id == 0) {
+            const temp = customHighTotal;
+            setCustomHighTotal(temp + (6 * data[i].product_quantity));
           }
-          fetch("/api/recentOrderDetails.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({orderId}),
-          })
-          .then((response) => response.json())
-          .then((data) => {
-            setProducts(data);
-            for (let i = 0; i < data.length; ++i) {
-              if (data[i].product_id == 0) {
-                const temp = customHighTotal;
-                setCustomHighTotal(temp + (6 * data[i].product_quantity));
-              }
-            }
-          });
         }
       });
     }
 
-    if (orderId) {
+    if (orderId && paid && stripe) {
       checkout();
     }
-  }, [orderId]);
+  }, [orderId, paid, stripe]);
 
   const setPrice = (price, type, size) => {
     price = price * 1;

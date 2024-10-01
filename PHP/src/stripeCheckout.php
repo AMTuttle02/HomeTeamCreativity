@@ -86,7 +86,7 @@ $checkout_session = \Stripe\Checkout\Session::create([
         ]
     ],
 'mode' => 'payment',
-'success_url' => $YOUR_DOMAIN . '/orderComplete/' . $orderId,
+'success_url' => $YOUR_DOMAIN . '/orderComplete/' . $orderId . '/'. 1 . '/{CHECKOUT_SESSION_ID}',
 'cancel_url' => $YOUR_DOMAIN . '/500',
 ]);
 
@@ -95,6 +95,19 @@ $response = [
     'checkout' => $checkout_session->url,
 ];
 
-header('Content-Type: application/json');
-echo json_encode($response);
+$query = $conn->prepare(
+                    "UPDATE orders
+                    SET stripeId = ?
+                    WHERE order_id = ?");
 
+$query->bind_param(
+                "ss",
+                $checkout_session->id,
+                $orderId,);
+
+if (!$query->execute()) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Location: '. $YOUR_DOMAIN . '/500');
+} else {
+    echo json_encode($response);
+}
