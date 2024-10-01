@@ -82,6 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['total'] = floatval($total);
     $_SESSION['discount'] = floatval($discount);
 
-    echo 1;
+    echo $orderId;
 }
 ?>

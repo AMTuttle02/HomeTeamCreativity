@@ -1,23 +1,42 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
 
 function Checkout() {
-  const [userId, setUserId] = useState("");
   const [products, setProducts] = useState([]);
   const [customHighTotal, setCustomHighTotal] = useState(0);
   const [enlarge, setEnlarge] = useState(false);
   const [enlargeProduct, setEnlargeProduct] = useState(false);
+  const { orderId, paid, stripe } = useParams();
 
   useEffect(() => {
-    let oID = 0;
-    if (localStorage.getItem("oID")) {
-        oID = localStorage.getItem("oID");
-        localStorage.clear();
+    const checkout = () => {
+      fetch("/api/checkout.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({orderId, paid, stripe}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data === 1) {
+          getDetails();
+        } else {
+          console.log(data);
+        }
+      });
     }
-    else if (userId) {
-        oID = 0;
-    }
-    fetch("/api/recentOrderDetails.php")
+
+    const getDetails = () => {
+      let oID = 0;
+      if (localStorage.getItem("oID")) {
+          oID = localStorage.getItem("oID");
+          localStorage.clear();
+      }
+      fetch("/api/recentOrderDetails.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({orderId}),
+      })
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -28,15 +47,12 @@ function Checkout() {
           }
         }
       });
-  }, []);
+    }
 
-  useEffect(() => {
-    fetch("/api/session.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setUserId(data.userId);
-      });
-  }, []);
+    if (orderId && paid && stripe) {
+      checkout();
+    }
+  }, [orderId, paid, stripe]);
 
   const setPrice = (price, type, size) => {
     price = price * 1;
@@ -76,15 +92,6 @@ function Checkout() {
       }
     }
     return price;
-  }
-
-  const determineDesign = (color) => {
-    if (color == 'Yellow' || color == 'Gray' || color == 'White') {
-      return ('customDesignBlack.png')
-    }
-    else {
-      return ('customDesign.png')
-    }
   }
 
   const handleOutsideClick = (event) => {

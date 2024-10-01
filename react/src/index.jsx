@@ -33,6 +33,7 @@ import FourOFour from "./404.jsx";
 import AllCoupons from "./AllCoupons.jsx";
 import CreateCoupon from "./CreateCoupon.jsx";
 import EditCoupons from "./EditCoupons.jsx";
+import FiveHundred from "./500.jsx";
 
 export default function App() {
   return (
@@ -57,7 +58,7 @@ export default function App() {
           <Route path="order" element={<Order />} />
           <Route path="order/:productKey" element={<Order />} />
           <Route path="customOrder" element={<CustomOrder />} />
-          <Route path="ordercomplete" element={<Checkout />} />
+          <Route path="ordercomplete/:orderId/:paid/:stripe" element={<Checkout />} />
           <Route path="orderfailed" element={<CheckoutFailed />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />
@@ -70,6 +71,7 @@ export default function App() {
           <Route path="/emailconfirmation" element={<EmailConfirmation />} />
           <Route path="/costcalculator" element={<CostCalculator />} />
           <Route path="/404" element={<FourOFour />} />
+          <Route path="/500" element={<FiveHundred />} />
           <Route path="/coupons" element={<AllCoupons />} />
           <Route path="/coupons/create" element={<CreateCoupon />} />
           <Route path="/coupons/edit/:code" element={<EditCoupons />} />
