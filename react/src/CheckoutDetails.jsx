@@ -213,11 +213,21 @@ function CheckoutDetails() {
             })
             .then((response) => response.json())
             .then((data) => {
+                oID = data;
+                const stripe = Math.floor(Math.random() * 100000) + 1;
+                fetch("/api/createStripeKey.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ order_id: oID, stripe: stripe}),
+                })
+                .then((response) => response.json())
+                .then((data) => {
                 if (data > 0) {
-                    window.location.href = "/ordercomplete/" + data;
+                    window.location.href = "/ordercomplete/" + oID + "/0/" + stripe;
                 } else {
                     navigate("/500");
                 }
+                });
             });
         }
     };

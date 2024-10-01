@@ -10,9 +10,6 @@ function Checkout() {
   const { orderId, paid, stripe } = useParams();
 
   useEffect(() => {
-    console.log(orderId);
-    console.log(paid);
-    console.log(stripe);
     const checkout = () => {
       fetch("/api/checkout.php", {
         method: "POST",
