@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
@@ -8,7 +8,7 @@ function CheckoutDetails() {
     const [order, setOrder] = useState([]);
     const [email, setEmail] = useState("");
     const [shipping, setShipping] = useState(0);
-    const [paying, setPaying] = useState(0);
+    const [paying, setPaying] = useState(1);
     const [location, setLocation] = useState("");
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
@@ -24,6 +24,7 @@ function CheckoutDetails() {
     const [discount, setDiscount] = useState((0.00).toFixed(2));
     const [code, setCode] = useState("");
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const navigate = useNavigate();
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -177,8 +178,14 @@ function CheckoutDetails() {
             })
             .then((response) => response.json())
             .then((data) => {
-                if (data) {
-                    window.location.href = "/api/stripeCheckout.php";
+                if (data > 0) {
+                    fetch("/api/stripeCheckout.php")
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.href = data.checkout;
+                        });
+                } else {
+                    navigate("/500");
                 }
             });
         }
@@ -206,10 +213,21 @@ function CheckoutDetails() {
             })
             .then((response) => response.json())
             .then((data) => {
-                // If the email and password are valid, redirect to the homepage
-                if (data) {
-                    window.location.href = "/api/checkoutNoPay.php";
+                oID = data;
+                const stripe = Math.floor(Math.random() * 100000) + 1;
+                fetch("/api/createStripeKey.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ order_id: oID, stripe: stripe}),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                if (data > 0) {
+                    window.location.href = "/ordercomplete/" + oID + "/0/" + stripe;
+                } else {
+                    navigate("/500");
                 }
+                });
             });
         }
     };
@@ -401,10 +419,9 @@ function CheckoutDetails() {
                         <input type="text" id="adr" name="address" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
                         {notCustomOrder ?
                             <div className="row">
-                                <p className="red">Pay Now is currently disabled due to an unresolved error.</p>
                                 <div className="split50Center">
-                                    <label className="grayOut">
-                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(0)}/> Pay Now
+                                    <label>
+                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
                                     </label>
                                 </div>
                                 <div className="split50Center">
