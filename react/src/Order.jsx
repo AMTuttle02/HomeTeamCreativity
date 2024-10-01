@@ -229,7 +229,16 @@ function Order() {
       return false;
     }
   
-    const oID = localStorage.getItem("oID") || 0;
+    var oID = 0;
+    if (userId) {
+      oID = 0;
+    }
+    else if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID");
+    }
+    else {
+      oID = 1;
+    }
   
     try {
       const response = await fetch("/api/getCart.php", {
@@ -255,6 +264,7 @@ function Order() {
   
       return true;
     } catch (e) {
+      console.log(e);
       setFailed("Failed To Add Item");
       return false;
     }
@@ -277,7 +287,7 @@ function Order() {
         oID = 0;
       }
       else if (localStorage.getItem("oID")) {
-        oID = localStorage.getItem("oID")
+        oID = localStorage.getItem("oID");
       }
       else {
         oID = 1;
@@ -307,6 +317,7 @@ function Order() {
           window.location.href = "/cart";
         }
         else {
+          console.log(data);
           setFailed("Failed To Add Item");
         }
       })
