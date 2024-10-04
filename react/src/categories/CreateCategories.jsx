@@ -10,13 +10,13 @@ function CreateCategories() {
   const [allSubcategories, setAllSubcategories] = useState([]);
 
   useEffect(() => {
-    fetch("/api/admin.php")
+    fetch("/api/admin/admin.php")
         .then((response) => response.json())
         .then((data) => {
         setAdmin(data.admin);
         }
     );
-    fetch("/api/getCats.php")
+    fetch("/api/category/getCats.php")
         .then((response) => response.json())
         .then((data) => {
             setAllSubcategories(data);
@@ -28,7 +28,7 @@ function CreateCategories() {
   const handleSubmit = () => {
     if (option === "Create") {
         const data = { subcategory: subcategory, category: category };
-        fetch("/api/createSubcat.php", {
+        fetch("/api/category/createSubcat.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -40,7 +40,7 @@ function CreateCategories() {
     }
     else {
         const data = { subcategory: subcategory};
-        fetch("/api/removeSubcat.php", {
+        fetch("/api/category/removeSubcat.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),

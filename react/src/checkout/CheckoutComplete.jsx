@@ -11,7 +11,7 @@ function Checkout() {
     if (localStorage.getItem("oID")) {
         localStorage.clear();
     }
-    fetch("/api/recentOrderDetails.php")
+    fetch("/api/order/recentOrderDetails.php")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

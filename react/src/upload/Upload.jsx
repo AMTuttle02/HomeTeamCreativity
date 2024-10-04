@@ -137,13 +137,13 @@ function Upload() {
 
   const [admin, setAdmin] = useState("");
   useEffect(() => {
-    fetch("/api/admin.php")
+    fetch("/api/admin/admin.php")
       .then((response) => response.json())
       .then((data) => {
         setAdmin(data.admin);
       });
     
-    fetch("/api/getCats.php")
+    fetch("/api/category/getCats.php")
       .then((response) => response.json())
       .then((data) => {
           setAllSubcategories(data);

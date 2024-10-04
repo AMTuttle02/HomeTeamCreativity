@@ -4,7 +4,7 @@ function CheckoutFailed() {
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);

@@ -62,7 +62,7 @@ function ResetPassword() {
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
     if (handleValidation()) {
-      fetch('/api/resetPassword.php', {  
+      fetch('/api/login/resetPassword.php', {  
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -88,7 +88,7 @@ function ResetPassword() {
 
   const [firstName, setFirstName] = useState("");
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);

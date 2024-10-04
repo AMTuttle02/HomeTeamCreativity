@@ -24,25 +24,25 @@ function EditProducts() {
   const [failToUpdate, setFailToUpdate] = useState(false);
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setAdmin(data.admin);
       });
     
-    fetch("/api/getCats.php")
+    fetch("/api/category/getCats.php")
       .then((response) => response.json())
       .then((data) => {
         setAllSubcategories(data);
       });
     
-    fetch("/api/getProductCats.php")
+    fetch("/api/category/getProductCats.php")
       .then((response) => response.json())
       .then((data) => {
         setCurrentSubcategories(data.categories);
       });
     
-    fetch("/api/getProductByID.php")
+    fetch("/api/category/getProductByID.php")
       .then((response) => response.json())
       .then((data) => {
         setProduct(data);
@@ -63,7 +63,7 @@ function EditProducts() {
 
   const removeProduct = (productId) => {
     const data = { id: productId };
-    fetch("/api/deleteProduct.php", {
+    fetch("/api/product/deleteProduct.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -141,7 +141,7 @@ function EditProducts() {
       formData.append('customFieldRequired', customFieldRequired);
       formData.append('sizeAvailable', sizesAvailable);
     
-      fetch('/api/updateProductDetails.php', {
+      fetch('/api/product/updateProductDetails.php', {
         method: 'POST',
         body: formData
       })

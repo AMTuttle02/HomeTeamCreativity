@@ -6,7 +6,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const logout = (e) => {
-    fetch("/api/logout.php")
+    fetch("/api/login/logout.php")
     .then((response) => response.json())
     .then((data) => {
       window.location.href='/loggedout';
@@ -14,7 +14,7 @@ function Dashboard() {
   }
 
   const completeOrder = (order) => {
-    fetch("/api/completeOrder.php", {
+    fetch("/api/order/completeOrder.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({order}),
@@ -37,7 +37,7 @@ function Dashboard() {
   const [enlargeProduct, setEnlargeProduct] = useState(false);
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);
@@ -45,12 +45,12 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/admin.php")
+    fetch("/api/admin/admin.php")
       .then((response) => response.json())
       .then((data) => {
         setAdmin(data.admin);
       });
-    fetch("/api/allOrders.php", {
+    fetch("/api/order/allOrders.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(),
@@ -59,7 +59,7 @@ function Dashboard() {
       .then((data) => {
         setOrders(data);
         });
-    fetch("/api/allProducts.php", {
+    fetch("/api/product/allProducts.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(),

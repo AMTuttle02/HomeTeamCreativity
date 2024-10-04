@@ -80,7 +80,7 @@ function SignUp() {
     const saltRounds = 10;
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
     if (handleValidation()) {
-      fetch('/api/signup.php', {  
+      fetch('/api/login/signup.php', {  
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -105,7 +105,7 @@ function SignUp() {
   };
   const [firstName, setFirstName] = useState("");
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);

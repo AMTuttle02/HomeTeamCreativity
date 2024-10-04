@@ -19,7 +19,7 @@ function CreateCoupon() {
   const cats = ["Faith", "Family", "Health", "Holiday", "Ohio", "Other", "Patriotic", "School", "Seasons", "Sports"];
 
   useEffect(() => {
-    fetch("/api/getCats.php")
+    fetch("/api/category/getCats.php")
       .then((response) => response.json())
       .then((data) => {
         setAllSubcategories(data);
@@ -55,7 +55,7 @@ function CreateCoupon() {
     const startUTC = moment.tz(startTime, moment.tz.guess()).utc().format();
     const endUTC = moment.tz(endTime, moment.tz.guess()).utc().format();
   
-    fetch("/api/createCoupon.php", {
+    fetch("/api/coupon/createCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 

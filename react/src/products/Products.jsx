@@ -39,7 +39,7 @@ function Products() {
 
   const editProduct = (productId) => {
     const data = { id: productId };
-    fetch("/api/setCurrentProduct.php", {
+    fetch("/api/product/setCurrentProduct.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -54,19 +54,19 @@ function Products() {
   }
 
   useEffect(() => {
-    fetch("/api/products.php")
+    fetch("/api/product/products.php")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
       });
 
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setAdmin(data.admin);
       });
     
-    fetch("/api/getSubCats.php")
+    fetch("/api/category/getSubCats.php")
       .then((response) => response.json())
       .then((data) => {
         setSubcategories(data);

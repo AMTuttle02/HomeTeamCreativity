@@ -26,7 +26,7 @@ function Login() {
   const loginSubmit = (e) => {
     e.preventDefault();
     setShowConfirmation(false);
-    fetch("/api/loginDetails.php", {
+    fetch("/api/login/loginDetails.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -37,7 +37,7 @@ function Login() {
           bcrypt.compare(password, data.pswrd, (err, isMatch) => {
             if (isMatch) {
               // Passwords match, authentication successful
-              fetch("/api/login.php", {
+              fetch("/api/login/login.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
@@ -68,7 +68,7 @@ function Login() {
 
   const [firstName, setFirstName] = useState("");
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);

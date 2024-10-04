@@ -43,7 +43,11 @@ function Cart() {
   }
 
   const deleteFromCart = (product, order) => {
-    fetch("/api/deleteFromCart.php", {
+    console.log("product: ");
+    console.log(product);
+    console.log("order: ");
+    console.log(order);
+    fetch("/api/cart/deleteFromCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
@@ -64,7 +68,7 @@ function Cart() {
   }
 
   const increaseQuantity = (product, productId, quantity, price, style, color, size) => {
-    fetch("/api/increaseQuantity.php", {
+    fetch("/api/cart/increaseQuantity.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
@@ -106,7 +110,7 @@ function Cart() {
 
   const decreaseQuantity = (product, productId, quantity, price, style, color, size) => {
     if (quantity > 1) {
-      fetch("/api/decreaseQuantity.php", {
+      fetch("/api/cart/decreaseQuantity.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -148,7 +152,7 @@ function Cart() {
   }
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setUserId(data.userId);
@@ -166,7 +170,7 @@ function Cart() {
     else {
       setOrder({total_cost: 0});
     }
-    fetch("/api/getOrder.php", {
+    fetch("/api/order/getOrder.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -184,7 +188,7 @@ function Cart() {
     if (localStorage.getItem("oID")) {
       oID = localStorage.getItem("oID");
     }
-    fetch("/api/getCart.php", {
+    fetch("/api/cart/getCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -211,7 +215,7 @@ function Cart() {
     if (localStorage.getItem("oID")) {
       oID = localStorage.getItem("oID");
     }
-    fetch("/api/totalItems.php", {
+    fetch("/api/order/totalItems.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -3,8 +3,6 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import cart from "../assets/cart.png";
 
-import "./homepage.css";
-
 function Homepage() {
   const navigate = useNavigate();
 
@@ -14,7 +12,7 @@ function Homepage() {
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       event.preventDefault();
-      fetch("/api/search.php", {
+      fetch("/api/product/search.php", {
         method: "POST",
         body: JSON.stringify({ searchContents }),
       })
@@ -37,7 +35,7 @@ function Homepage() {
   const [firstName, setFirstName] = useState("");
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);
@@ -48,7 +46,7 @@ function Homepage() {
         else if (data.userId) {
           oID = 0;
         }
-        fetch("/api/totalItems.php", {
+        fetch("/api/order/totalItems.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

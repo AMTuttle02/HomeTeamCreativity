@@ -41,7 +41,7 @@ function CheckoutDetails() {
             let oID = localStorage.getItem("oID") || 0;
     
             try {
-                const response = await fetch("/api/getCart.php", {
+                const response = await fetch("/api/cart/getCart.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ order_id: oID }),
@@ -85,7 +85,7 @@ function CheckoutDetails() {
     }; 
 
     const validateCoupon = () => {
-        fetch("/api/getCoupon.php", {
+        fetch("/api/coupon/getCoupon.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({code: code})
@@ -163,7 +163,7 @@ function CheckoutDetails() {
                 oID = 0;
             }
             let total = (onlineTotalCost(order.total_cost)).toFixed(2);
-            fetch("/api/updateOrderInfo.php", {
+            fetch("/api/order/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount}),
@@ -171,7 +171,7 @@ function CheckoutDetails() {
             .then((response) => response.json())
             .then((data) => {
                 if (data) {
-                    window.location.href = "/api/stripeCheckout.php";
+                    window.location.href = "/api/order/stripeCheckout.php";
                 }
             });
         }
@@ -191,7 +191,7 @@ function CheckoutDetails() {
             else if (userId) {
                 oID = 0;
             }
-            fetch("/api/updateOrderInfo.php", {
+            fetch("/api/order/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID}),
@@ -200,7 +200,7 @@ function CheckoutDetails() {
             .then((data) => {
                 // If the email and password are valid, redirect to the homepage
                 if (data) {
-                    window.location.href = "/api/checkoutNoPay.php";
+                    window.location.href = "/api/order/checkoutNoPay.php";
                 }
             });
         }
@@ -217,7 +217,7 @@ function CheckoutDetails() {
         else {
           setOrder({total_cost: 0});
         }
-        fetch("/api/getOrder.php", {
+        fetch("/api/order/getOrder.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -239,7 +239,7 @@ function CheckoutDetails() {
     else if (userId) {
         oID = 0;
     }
-    fetch("/api/getCart.php", {
+    fetch("/api/cart/getCart.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -261,7 +261,7 @@ function CheckoutDetails() {
     }, []);
 
     useEffect(() => {
-        fetch("/api/session.php")
+        fetch("/api/admin/session.php")
         .then((response) => response.json())
         .then((data) => {
             setUserId(data.userId);

@@ -71,7 +71,7 @@ function Order() {
       data = { id: productKey };
     }
 
-    fetch("/api/singleProduct.php", {
+    fetch("/api/product/singleProduct.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -261,7 +261,7 @@ function Order() {
         formData.append('price', (((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2));
         formData.append('product_details', customDetails);
 
-      fetch("/api/addToCart.php", {
+      fetch("/api/cart/addToCart.php", {
         method: "POST",
         body: formData,
       })
@@ -283,7 +283,7 @@ function Order() {
   };
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setUserId(data.userId);

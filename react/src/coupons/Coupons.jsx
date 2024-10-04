@@ -11,7 +11,7 @@ function Coupons() {
   const [admin, setAdmin] = useState(0);
 
   useEffect(() => {
-    fetch("/api/admin.php")
+    fetch("/api/admin/admin.php")
       .then((response) => response.json())
       .then((data) => {
         if (data) {

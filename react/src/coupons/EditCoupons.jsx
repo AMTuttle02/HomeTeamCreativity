@@ -31,14 +31,14 @@ function CreateCoupon() {
   }
 
   useEffect(() => {
-    fetch("/api/getCats.php")
+    fetch("/api/categorygetCats.php")
       .then((response) => response.json())
       .then((data) => {
         setAllSubcategories(data);
       }
     );
 
-    fetch("/api/getCoupon.php", {
+    fetch("/api/coupongetCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({code: code}),
@@ -90,7 +90,7 @@ function CreateCoupon() {
     const startUTC = moment.tz(startTime, moment.tz.guess()).utc().format();
     const endUTC = moment.tz(endTime, moment.tz.guess()).utc().format();
   
-    fetch("/api/updateCoupon.php", {
+    fetch("/api/coupon/updateCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 

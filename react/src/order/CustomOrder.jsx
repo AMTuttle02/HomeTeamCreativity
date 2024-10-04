@@ -135,7 +135,7 @@ function CustomOrder() {
         formData.append('price', ((design.price * 1) + productType.addedCost + size.addedCost) * quantity);
         formData.append('product_details', customDetails);
 
-      fetch("/api/addToCart.php", {
+      fetch("/api/cart/addToCart.php", {
         method: "POST",
         body: formData,
       })
@@ -548,7 +548,7 @@ function CustomOrder() {
   };
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setUserId(data.userId);

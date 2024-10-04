@@ -25,7 +25,7 @@ function Login() {
   const loginSubmit = (e) => {
     e.preventDefault();
     setShowConfirmation(false);
-    fetch("/api/newPasswordRequest.php", {
+    fetch("/api/login/newPasswordRequest.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -44,7 +44,7 @@ function Login() {
 
   const [firstName, setFirstName] = useState("");
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);

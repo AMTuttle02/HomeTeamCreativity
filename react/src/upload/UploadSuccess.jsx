@@ -58,7 +58,7 @@ function UploadSuccess() {
 
   // Set Admin State
   useEffect(() => {
-    fetch("/api/admin.php")
+    fetch("/api/admin/admin.php")
       .then((response) => response.json())
       .then((data) => {
         setAdmin(data.admin);
@@ -147,7 +147,7 @@ function UploadSuccess() {
 
 
   useEffect(() => {
-    fetch("/api/recentUpload.php")
+    fetch("/api/product/recentUpload.php")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

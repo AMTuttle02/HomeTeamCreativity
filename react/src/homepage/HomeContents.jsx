@@ -32,12 +32,12 @@ function HomeContents() {
   }
 
   useEffect(() => {
-    fetch("/api/session.php")
+    fetch("/api/admin/session.php")
       .then((response) => response.json())
       .then((data) => {
         setFirstName(data.first_name);
       });
-    fetch("/api/featuredProducts.php")
+    fetch("/api/product/featuredProducts.php")
       .then((response) => response.json())
       .then((data) => setProducts(data));
   }, []);

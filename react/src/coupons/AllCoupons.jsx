@@ -7,7 +7,7 @@ function AllCoupons() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/api/getCoupons.php")
+    fetch("/api/coupon/getCoupons.php")
       .then((response) => response.json())
       .then((data) => {
         setCoupons(data);

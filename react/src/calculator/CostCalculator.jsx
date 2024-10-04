@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 function CostCalculator() {
   const [admin, setAdmin] = useState("");
   useEffect(() => {
-    fetch("/api/admin.php")
+    fetch("/api/admin/admin.php")
       .then((response) => response.json())
       .then((data) => {
         setAdmin(data.admin);
