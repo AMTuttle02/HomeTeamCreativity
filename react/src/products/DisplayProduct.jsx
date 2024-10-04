@@ -51,7 +51,6 @@ import BackWhiteTshirt from "../assets/TshirtBackView/TSBw.png";
 import BackWhiteLongSleeve from "../assets/LongSleeveBackView/LSBw.png";
 import BackWhiteCrewneck from "../assets/CrewBackView/CSBw.png";
 import BackWhiteHoodie from "../assets/HoodieBackView/HBw.png";
-import "./displayProduct.css";
 
 const DisplaycurrentProduct = ({ product }) => {
   const currentProduct = product;

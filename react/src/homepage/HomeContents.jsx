@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DisplayProduct from "../products/DisplayProduct";
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import "./homeContents.css";
 
 function HomeContents() {
   const [firstName, setFirstName] = useState("");

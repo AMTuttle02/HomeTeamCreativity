@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DisplayProduct from "../products/DisplayProduct";
-import "./checkout.css";
 
 function Checkout() {
   const [products, setProducts] = useState([]);

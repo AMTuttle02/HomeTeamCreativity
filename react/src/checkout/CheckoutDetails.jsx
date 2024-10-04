@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./checkout.css";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
