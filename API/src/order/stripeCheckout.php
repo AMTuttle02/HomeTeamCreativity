@@ -5,14 +5,14 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
 
-require_once '../admin/secrets.php';
+require_once '../secrets.php';
 
 if (session_status() === PHP_SESSION_ACTIVE) {
 } else {
     session_start();
 }
 
-include 'conn.php';
+include '../admin/conn.php';
 
 if ($_SESSION["order_id"]) {
     $orderId = $_SESSION["order_id"];
@@ -65,7 +65,7 @@ if (isset($_SESSION['total'])) {
 $total_cost *= 100;
 
 // stripe integration
-require_once 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 \Stripe\Stripe::setApiKey(STRIPE_KEY);
 
