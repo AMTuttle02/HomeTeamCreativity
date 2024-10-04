@@ -49,14 +49,12 @@ function Order() {
   const navigate = useNavigate();
   const [productType, setProductType] = useState({description: "Short Sleeve T-Shirt", addedCost: 0});
   const [size, setSize] = useState({description: "", addedCost: 0});
-  const [invalidSize, setInvalidSize] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [failed, setFailed] = useState(false);
   const [userId, setUserId] = useState("");
   const [customDetails, setCustomDetails] = useState("");
   const [currentDesignState, setCurrentDesignState] = useState(0);
   const [multipleLocations, setMultipleLocations] = useState(0);
-  const [invalidDetails, setInvalidDetails] = useState(false);
   const [customDetailsRequired, setCustomDetailsRequired] = useState(false);
   const [sizesAvailable, setSizesAvailable] = useState(1);
 
@@ -225,31 +223,82 @@ function Order() {
     setCustomDetails(event.target.value);
   }
 
-  const addToCart = () => {
-    if (customDetails === "" && customDetailsRequired) {
+  async function validateAdditionToCart() {
+    if (customDetails === "") {
       if (customDetailsRequired) {
-        setInvalidDetails(true);
-        return;
-      }
-      else {
-        setCustomDetails("No custom details.");
+        setFailed("Invalid Custom Details");
+        return false;
       }
     }
-    let oID = 0;
+  
+    if (size.description === "") {
+      setFailed("Invalid Size");
+      return false;
+    }
+  
+    var oID = 0;
     if (userId) {
       oID = 0;
     }
     else if (localStorage.getItem("oID")) {
-      oID = localStorage.getItem("oID")
+      oID = localStorage.getItem("oID");
     }
     else {
       oID = 1;
     }
-
-    if (size.description === "") {
-      setInvalidSize(true);
+  
+    try {
+      const response = await fetch("/api/getCart.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order_id: oID
+        }),
+      });
+  
+      const data = await response.json();
+  
+      for (const product of data) {
+        if (product.product_id === currentDesign.product_id &&
+            product.color === currentColor &&
+            product.product_type === productType.description &&
+            product.size === size.description &&
+            product.product_details === customDetails) {
+          setFailed("Item Already In Cart");
+          return false;
+        }
+      }
+  
+      return true;
+    } catch (e) {
+      console.log(e);
+      setFailed("Failed To Add Item");
+      return false;
     }
-    else {
+  }
+
+  const addToCart = async () => {
+    const valid = await validateAdditionToCart();
+    if (valid) {
+      let oID = 0;
+      if (nameOnBack && numberOnBack) {
+        details = "Name: " + nameOnBackDetails + " Number: " + numberOnBackDetails;
+      }
+      else if (nameOnBack) {
+        details = "Name: " + nameOnBackDetails;
+      }
+      else if (numberOnBack) {
+        details = "Number: " + numberOnBackDetails;
+      }
+      if (userId) {
+        oID = 0;
+      }
+      else if (localStorage.getItem("oID")) {
+        oID = localStorage.getItem("oID");
+      }
+      else {
+        oID = 1;
+      }
       const formData = new FormData();
         formData.append('image', "");
         formData.append('order_id', oID); 
@@ -276,7 +325,7 @@ function Order() {
         }
         else {
           console.log(data);
-          setFailed(true);
+          setFailed("Failed To Add Item");
         }
       })
     }
@@ -888,17 +937,6 @@ function Order() {
             :
             <div />
             }
-            {invalidSize &&
-              <div className="confirmation-modal">
-                <div className="confirmation-dialog">
-                  <h3>Invalid Size</h3>
-                  <p>You must select a size to add this item to your cart.</p>
-                  <div className="confirmation-buttons">
-                    <button className="delete-button" onClick={() => setInvalidSize(false)}>Return To Order</button>
-                  </div>
-                </div>
-              </div>
-            }
           </div>
           </>:<></>}
           <h1>Additional Request Details{customDetailsRequired && <span className="red">*</span>}</h1>
@@ -909,17 +947,17 @@ function Order() {
               placeholder="No Custom Details."
             />
           </div>
-          {invalidDetails && customDetailsRequired &&
-            <div className="confirmation-modal">
-              <div className="confirmation-dialog">
-                <h3>Invalid Custom Details</h3>
-                <p>This item required custom details.</p>
-                <div className="confirmation-buttons">
-                  <button className="delete-button" onClick={() => setInvalidDetails(false)}>Return To Order</button>
+          {failed != false ?
+              <div className="confirmation-modal">
+                <div className="confirmation-dialog">
+                  <h3>{failed}</h3>
+                  <p>Please review your order and try again.</p>
+                  <div className="confirmation-buttons">
+                    <button className="delete-button" onClick={() => setFailed(false)}>Return To Order</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          }
+            :<></>}
           {nameOnBack && 
             <span>
               <h2>Name: {' '}
@@ -969,7 +1007,6 @@ function Order() {
             </button>
             <br /><br />
             <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
-            { failed && <Failed /> }
           </center>
         </div>
       </div>

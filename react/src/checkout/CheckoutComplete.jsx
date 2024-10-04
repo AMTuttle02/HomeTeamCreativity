@@ -1,17 +1,42 @@
 import React, { useEffect, useState } from "react";
-import DisplayProduct from "../products/DisplayProduct";
+import { useParams } from "react-router-dom";
+import DisplayProduct from "./DisplayProduct";
 
 function Checkout() {
   const [products, setProducts] = useState([]);
   const [customHighTotal, setCustomHighTotal] = useState(0);
   const [enlarge, setEnlarge] = useState(false);
   const [enlargeProduct, setEnlargeProduct] = useState(false);
+  const { orderId, paid, stripe } = useParams();
 
   useEffect(() => {
-    if (localStorage.getItem("oID")) {
-        localStorage.clear();
+    const checkout = () => {
+      fetch("/api/order/checkout.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({orderId, paid, stripe}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data === 1) {
+          getDetails();
+        } else {
+          console.log(data);
+        }
+      });
     }
-    fetch("/api/order/recentOrderDetails.php")
+
+    const getDetails = () => {
+      let oID = 0;
+      if (localStorage.getItem("oID")) {
+          oID = localStorage.getItem("oID");
+          localStorage.clear();
+      }
+      fetch("/api/order/recentOrderDetails.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({orderId}),
+      })
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -22,7 +47,12 @@ function Checkout() {
           }
         }
       });
-  }, []);
+    }
+
+    if (orderId && paid && stripe) {
+      checkout();
+    }
+  }, [orderId, paid, stripe]);
 
   const setPrice = (price, type, size) => {
     price = price * 1;

@@ -4,9 +4,6 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
-header("Cache-Control: no-cache, no-store, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
 
 require_once '../admin/secrets.php';
 
@@ -69,10 +66,8 @@ $total_cost *= 100;
 
 // stripe integration
 require_once 'vendor/autoload.php';
-//require_once '../secrets.php';
 
 \Stripe\Stripe::setApiKey(STRIPE_KEY);
-header('Content-Type: application/json');
 
 $YOUR_DOMAIN = DOMAIN;
 
@@ -91,10 +86,28 @@ $checkout_session = \Stripe\Checkout\Session::create([
         ]
     ],
 'mode' => 'payment',
-'success_url' => $YOUR_DOMAIN . '/api/checkout.php',
-'cancel_url' => $YOUR_DOMAIN . '/api/clearTotal.php',
+'success_url' => $YOUR_DOMAIN . '/orderComplete/' . $orderId . '/'. 1 . '/{CHECKOUT_SESSION_ID}',
+'cancel_url' => $YOUR_DOMAIN . '/500',
 ]);
 
-header("HTTP/1.1 303 See Other");
-header("Location: " . $checkout_session->url);
+// Return the checkout session ID as a JSON response
+$response = [
+    'checkout' => $checkout_session->url,
+];
 
+$query = $conn->prepare(
+                    "UPDATE orders
+                    SET stripeId = ?
+                    WHERE order_id = ?");
+
+$query->bind_param(
+                "ss",
+                $checkout_session->id,
+                $orderId,);
+
+if (!$query->execute()) {
+    header('HTTP/1.1 500 Internal Server Error');
+    header('Location: '. $YOUR_DOMAIN . '/500');
+} else {
+    echo json_encode($response);
+}

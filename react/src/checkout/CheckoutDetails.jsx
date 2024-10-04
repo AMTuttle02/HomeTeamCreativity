@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
@@ -23,6 +24,7 @@ function CheckoutDetails() {
     const [discount, setDiscount] = useState((0.00).toFixed(2));
     const [code, setCode] = useState("");
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const navigate = useNavigate();
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -47,6 +49,7 @@ function CheckoutDetails() {
                     body: JSON.stringify({ order_id: oID }),
                 });
                 const data = await response.json();
+                console.log(data);
     
                 for (const element of data) {
                     let categories = element.categories
@@ -56,7 +59,7 @@ function CheckoutDetails() {
     
                     for (let j = 0; j < categories.length; ++j) {
                         if (discount.categories.includes(categories[j])) {
-                            orderTotal += (element.price * 1);
+                            orderTotal += (data[i].price * 1 * data[i].product_quantity);
                             j = categories.length;
                         }
                     }
@@ -66,14 +69,22 @@ function CheckoutDetails() {
             }
         }
     
+        console.log("Initial");
+        console.log(finalAmount);
         if (discount.type === 'percent') {
             let percent = (discount.amount * 1) / 100;
             finalAmount = (orderTotal * 1 * percent).toFixed(2);
-            if (finalAmount * 1 > discount.maximum_allowed * 1) {
-                finalAmount = (discount.maximum_allowed * 1).toFixed(2);
-            }
         } else if (discount.type === 'amount') {
             finalAmount = (discount.amount * 1).toFixed(2);
+        }
+
+        console.log("After calculation")
+
+        if (finalAmount * 1 > discount.maximum_allowed * 1) {
+            finalAmount = (discount.maximum_allowed * 1).toFixed(2);
+        }
+        if (orderTotal * 1 < discount.minimum_required * 1) {
+            finalAmount = 0;
         }
 
         if (finalAmount > 0) {
@@ -93,10 +104,6 @@ function CheckoutDetails() {
             .then((response) => response.json())
             .then((data) => {
               if (data) {
-                // verify minimum amount required is hit
-                if (order.total_cost < data.minimum_required) {
-                    throw(new Error(order.total_cost));
-                }
                 // verify code is active
                 if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
                     throw(new Error(data.start_time + " - " + data.end_time));
@@ -170,8 +177,14 @@ function CheckoutDetails() {
             })
             .then((response) => response.json())
             .then((data) => {
-                if (data) {
-                    window.location.href = "/api/order/stripeCheckout.php";
+                if (data > 0) {
+                    fetch("/api/order/stripeCheckout.php")
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.href = data.checkout;
+                        });
+                } else {
+                    navigate("/500");
                 }
             });
         }
@@ -191,17 +204,29 @@ function CheckoutDetails() {
             else if (userId) {
                 oID = 0;
             }
+            const total = onlineTotalCost(order.total_cost).toFixed(2);
             fetch("/api/order/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID}),
+                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount}),
             })
             .then((response) => response.json())
             .then((data) => {
-                // If the email and password are valid, redirect to the homepage
-                if (data) {
-                    window.location.href = "/api/order/checkoutNoPay.php";
+                oID = data;
+                const stripe = Math.floor(Math.random() * 100000) + 1;
+                fetch("/api/order/createStripeKey.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ order_id: oID, stripe: stripe}),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                if (data > 0) {
+                    window.location.href = "/ordercomplete/" + oID + "/0/" + stripe;
+                } else {
+                    navigate("/500");
                 }
+                });
             });
         }
     };

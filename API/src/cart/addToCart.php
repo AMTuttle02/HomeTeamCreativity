@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       "INSERT INTO orders (user_id, total_cost, is_cart)
       VALUES ($uID, 0, 1);");
     if (!$query->execute()) {
-      die("Query failed: " . $stmt->error);
+      die("Query failed: " . $query->error);
     }
     $query = $conn->prepare(
       "SELECT order_id, total_cost
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       ORDER BY order_date DESC
       LIMIT 1");
     if (!$query->execute()) {
-      die("Query failed: " . $stmt->error);
+      die("Query failed: " . $query->error);
     }
 
     $result = $query->get_result();
@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     );
   if (!$query->execute()) {
     // If insertion fails, return error message
-    die(json_encode("Result set failed: " . $conn->error));
+    die(json_encode(0));
   }
   $totalCost = $totalCost + $productCost;
   $query = $conn->prepare(
