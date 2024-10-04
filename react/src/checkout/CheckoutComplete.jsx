@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DisplayProduct from "./DisplayProduct";
+import DisplayProduct from "../products/DisplayProduct";
 
 function Checkout() {
   const [products, setProducts] = useState([]);
