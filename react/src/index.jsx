@@ -32,6 +32,7 @@ import ResetPassword from "./login/ResetPassword.jsx";
 import ReturnPolicy from "./static/ReturnPolicy.jsx";
 import Upload from "./upload/Upload.jsx";
 import UploadSuccess from "./upload/UploadSuccess.jsx";
+import "./index.css";
 
 export default function App() {
   return (
