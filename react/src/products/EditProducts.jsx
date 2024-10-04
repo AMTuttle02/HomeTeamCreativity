@@ -1,0 +1,914 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import DisplayProduct from "./DisplayProduct";
+
+function EditProducts() {
+  const navigate = useNavigate();
+  const [admin, setAdmin] = useState(0);
+  const [product, setProduct] = useState ([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
+  const [tagList, setTagList] = useState("");
+  const [tColors, setTColors] = useState("");
+  const [lColors, setLColors] = useState("");
+  const [cColors, setCColors] = useState("");
+  const [hColors, setHColors] = useState("");
+  const [allSubcategories, setAllSubcategories] = useState([]);
+  const [currentSubcategories, setCurrentSubcategories] = useState("");
+  const [style, setStyle] = useState("tshirt");
+  const [location, setLocation] = useState("front");
+  const [productIsSet, setProductIsSet] = useState(false);
+  const [customFieldRequired, setCustomFieldRequired] = useState(0);
+  const [sizesAvailable, setSizesAvailable] = useState(1);
+  const [failToUpdate, setFailToUpdate] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/session.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAdmin(data.admin);
+      });
+    
+    fetch("/api/category/getCats.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAllSubcategories(data);
+      });
+    
+    fetch("/api/category/getProductCats.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setCurrentSubcategories(data.categories);
+      });
+    
+    fetch("/api/category/getProductByID.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setProduct(data);
+        setProductName(data.product_name);
+        setPrice(data.price);
+        setTagList(data.tag_list);
+        setTColors(data.tColors);
+        setLColors(data.lColors);
+        setCColors(data.cColors);
+        setHColors(data.hColors);
+        setStyle(data.default_style);
+        setLocation(data.default_style_location);
+        setProductIsSet(true);
+        setCustomFieldRequired(data.CustomDetailsRequired.toString());
+        setSizesAvailable(data.sizesAvailable.toString());
+      });
+  }, []);
+
+  const removeProduct = (productId) => {
+    const data = { id: productId };
+    fetch("/api/product/deleteProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data == 1) {
+          navigate('/products');
+        }
+        else {
+          console.log(data);
+        }
+      })
+  }
+
+  const addTshirtColor = (color) => {
+    setTColors(tColors + ' ' + color);
+  }
+  const removeTshirtColor = (color) => {
+    const removedColor = tColors.replace(color, "");
+    setTColors(removedColor);
+  }
+  const addLColor = (color) => {
+    setLColors(lColors + ' ' + color);
+  }
+  const removeLColor = (color) => {
+    const removedColor = lColors.replace(color, "");
+    setLColors(removedColor);
+  }
+  const addCColor = (color) => {
+    setCColors(cColors + ' ' + color);
+  }
+  const removeCColor = (color) => {
+    const removedColor = cColors.replace(color, "");
+    setCColors(removedColor);
+  }
+  const addHColor = (color) => {
+    setHColors(hColors + ' ' + color);
+  }
+  const removeHColor = (color) => {
+    const removedColor = hColors.replace(color, "");
+    setHColors(removedColor);
+  }
+
+  const addSubcategory = (category) => {
+    setCurrentSubcategories(currentSubcategories + ' ' + category);
+  }
+  const removeSubCategory = (category) => {
+    const removedCat = currentSubcategories.replace(category, "");
+    setCurrentSubcategories(removedCat);
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (style === 'tshirt' && tColors.trim() === '') {
+      setFailToUpdate(true);
+    } else if (style === 'longsleeve' && lColors.trim() === '') {
+      setFailToUpdate(true);
+    } else if (style === 'crewneck' && cColors.trim() === '') {
+      setFailToUpdate(true);
+    } else if (style === 'hoodie' && hColors.trim() === '') {
+      setFailToUpdate(true);
+    } else {
+      const formData = new FormData();
+      formData.append('productName', productName);
+      formData.append('price', price);
+      formData.append('tags', tagList);
+      formData.append('tColors', tColors);
+      formData.append('lColors', lColors);
+      formData.append('cColors', cColors);
+      formData.append('hColors', hColors);
+      formData.append('subcategories', currentSubcategories);
+      formData.append('default_style', style);
+      formData.append('default_style_location', location);
+      formData.append('customFieldRequired', customFieldRequired);
+      formData.append('sizeAvailable', sizesAvailable);
+    
+      fetch('/api/product/updateProductDetails.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if(data) {
+          window.location.href="/products";
+        }
+      });
+    }
+  };
+
+  if (admin) {
+    return (
+      <div className="EditProducts">
+        <br />
+        <h1 className="orderHeader">Edit Product Details</h1>
+        <div className="orderRow">
+          <div className="orderSide">
+            <div className="productDetails">
+              {productIsSet != [] ?
+                <DisplayProduct product={product} />
+              : 
+                <span />
+              }
+              <br /><br />
+              <h3>{product.product_name}</h3>
+              <h2>
+                <button onClick={() => setShowConfirmation(true)} className="CartRemoveProductButton">
+                  Delete Product
+                </button>
+              </h2>
+              {showConfirmation &&
+                <div className="confirmation-modal">
+                  <div className="confirmation-dialog">
+                    <h3>Confirm Delete</h3>
+                    <p>Are you sure you want to delete "{product.product_name}" permanetly?</p>
+                    <div className="confirmation-buttons">
+                      <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                      <button onClick={() => removeProduct(product.product_id)} className="delete-button">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          <div className="orderMain">
+            <div className="EditProductsContainer">
+              <h1>Edit Product Details Below</h1>
+              <br/>
+              <form className="alignLeft" onSubmit={handleSubmit}>
+                <label><b>Product Display Name</b></label>
+                <input
+                  type="text"
+                  id="product_name"
+                  name="product_name"
+                  value={productName}
+                  onChange={(event) => setProductName(event.target.value)}
+                />
+                <label><b>Price (Do Not Include $) (Pricing Default is for an Adult Medium T-Shirt)</b></label>
+                <input
+                  type="text"
+                  id="price"
+                  name="price"
+                  value={price}
+                  onChange={(event) => setPrice(event.target.value)}
+                />
+                <label><b>Tags</b></label>
+                <input
+                  type="text"
+                  id="product_name"
+                  name="product_name"
+                  value={tagList}
+                  onChange={(event) => setTagList(event.target.value)}
+                />
+                <label><b>Style Location</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {location === "front" ?
+                      <span>
+                        <input type="radio" id="location" name="front" value="front" checked={true} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Front</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="location" name="front" value="front" checked={false} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Front</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {location === "back" ?
+                      <span>
+                        <input type="radio" id="location" name="back" value="back" checked={true} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Back</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="location" name="back" value="back" checked={false} onChange={(event) => setLocation(event.target.value)}/>
+                          <label>&nbsp;Back</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                </div>
+                <label><b>Default Style</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {style === "tshirt" ?
+                      <span>
+                        <input type="radio" id="style" name="tshirt" value="tshirt" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;T-Shirt</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="tshirt" value="tshirt" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;T-Shirt</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {style === "longsleeve" ?
+                      <span>
+                        <input type="radio" id="style" name="longsleeve" value="longsleeve" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Long Sleeve</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="longsleeve" value="longsleeve" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Long Sleeve</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {style === "crewneck" ?
+                      <span>
+                        <input type="radio" id="style" name="crewneck" value="crewneck" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Crewneck</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="crewneck" value="crewneck" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Crewneck</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {style === "hoodie" ?
+                      <span>
+                        <input type="radio" id="style" name="hoodie" value="hoodie" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Hoodie</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="hoodie" value="hoodie" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Hoodie</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {style === "other" ?
+                      <span>
+                        <input type="radio" id="style" name="other" value="other" checked={true} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Other</label>
+                          <br />
+                      </span>
+                      :
+                      <span>
+                        <input type="radio" id="style" name="other" value="other" checked={false} onChange={(event) => setStyle(event.target.value)}/>
+                          <label>&nbsp;Other</label>
+                          <br />
+                      </span>
+                    }
+                  </div>
+                </div>
+                <label><b>Colors</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    <label><b>T-Shirt: </b>{tColors}</label>
+                    <br />
+                    {tColors.includes("Black") ? 
+                    <span>
+                      <input type="checkbox" id="tBlack" name="tBlack" value="Black" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tBlack" name="tBlack" value="Black" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Yellow") ? 
+                    <span>
+                      <input type="checkbox" id="tYellow" name="tYellow" value="Yellow" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Yellow</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tYellow" name="tYellow" value="Yellow" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Yellow</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Pink") ? 
+                    <span>
+                      <input type="checkbox" id="tPink" name="tPink" value="Pink" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Pink</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tPink" name="tPink" value="Pink" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Pink</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Gray") ? 
+                    <span>
+                      <input type="checkbox" id="tGray" name="tGray" value="Gray" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tGray" name="tGray" value="Gray" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Maroon") ? 
+                    <span>
+                      <input type="checkbox" id="tMaroon" name="tMaroon" value="Maroon" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Maroon</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tMaroon" name="tMaroon" value="Maroon" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Maroon</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Orange") ? 
+                    <span>
+                      <input type="checkbox" id="tOrange" name="tOrange" value="Orange" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Orange</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tOrange" name="tOrange" value="Orange" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Orange</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Purple") ? 
+                    <span>
+                      <input type="checkbox" id="tPurple" name="tPurple" value="Purple" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Purple</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tPurple" name="tPurple" value="Purple" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Purple</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Red") ? 
+                    <span>
+                      <input type="checkbox" id="tRed" name="tRed" value="Red" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Red</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tRed" name="tRed" value="Red" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Red</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Royal") ? 
+                    <span>
+                      <input type="checkbox" id="tRoyal" name="tRoyal" value="Royal" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Royal</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tRoyal" name="tRoyal" value="Royal" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Royal</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Green") ? 
+                    <span>
+                      <input type="checkbox" id="tGreen" name="tGreen" value="Green" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Green</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tGreen" name="tGreen" value="Green" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Green</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("White") ? 
+                    <span>
+                      <input type="checkbox" id="tWhite" name="tWhite" value="White" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tWhite" name="tWhite" value="White" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    }
+                    {tColors.includes("Navy") ? 
+                    <span>
+                      <input type="checkbox" id="tNavy" name="tNavy" value="Navy" checked={true} onChange={(event) => removeTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Navy</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="tNavy" name="tNavy" value="Navy" checked={false} onChange={(event) => addTshirtColor(event.target.value)}/>
+                        <label>&nbsp;Navy</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+
+                  <div className="uploadSplit">
+                    <label><b>Long Sleeve: </b>{lColors}</label>
+                    <br />
+                    {lColors.includes("Black") ? 
+                    <span>
+                      <input type="checkbox" id="lBlack" name="lNavy" value="Black" checked={true} onChange={(event) => removeLColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="lBlack" name="lBlack" value="Black" checked={false} onChange={(event) => addLColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    }
+                    {lColors.includes("Navy") ? 
+                    <span>
+                      <input type="checkbox" id="lNavy" name="lNavy" value="Navy" checked={true} onChange={(event) => removeLColor(event.target.value)}/>
+                        <label>&nbsp;Navy</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="lNavy" name="lNavy" value="Navy" checked={false} onChange={(event) => addLColor(event.target.value)}/>
+                        <label>&nbsp;Navy</label>
+                        <br />
+                    </span>
+                    }
+                    {lColors.includes("Red") ? 
+                    <span>
+                      <input type="checkbox" id="lRed" name="lRed" value="Red" checked={true} onChange={(event) => removeLColor(event.target.value)}/>
+                        <label>&nbsp;Red</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="lRed" name="lRed" value="Red" checked={false} onChange={(event) => addLColor(event.target.value)}/>
+                        <label>&nbsp;Red</label>
+                        <br />
+                    </span>
+                    }
+                    {lColors.includes("Royal") ? 
+                    <span>
+                      <input type="checkbox" id="lRoyal" name="lRoyal" value="Royal" checked={true} onChange={(event) => removeLColor(event.target.value)}/>
+                        <label>&nbsp;Royal</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="lRoyal" name="lRoyal" value="Royal" checked={false} onChange={(event) => addLColor(event.target.value)}/>
+                        <label>&nbsp;Royal</label>
+                        <br />
+                    </span>
+                    }
+                    {lColors.includes("Gray") ? 
+                    <span>
+                      <input type="checkbox" id="lGray" name="lGray" value="Gray" checked={true} onChange={(event) => removeLColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="lGray" name="lGray" value="Gray" checked={false} onChange={(event) => addLColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    }
+                    {lColors.includes("White") ? 
+                    <span>
+                      <input type="checkbox" id="lWhite" name="lWhite" value="White" checked={true} onChange={(event) => removeLColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="lWhite" name="lWhite" value="White" checked={false} onChange={(event) => addLColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+
+                  <div className="uploadSplit">
+                    <label><b>Crewneck: </b>{cColors}</label>
+                    <br />
+                    {cColors.includes("Black") ? 
+                    <span>
+                      <input type="checkbox" id="cBlack" name="cBlack" value="Black" checked={true} onChange={(event) => removeCColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="cBlack" name="cBlack" value="Black" checked={false} onChange={(event) => addCColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    }
+                    {cColors.includes("Gray") ? 
+                    <span>
+                      <input type="checkbox" id="cGray" name="cGray" value="Gray" checked={true} onChange={(event) => removeCColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="cGray" name="cGray" value="Gray" checked={false} onChange={(event) => addCColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    }
+                    {cColors.includes("White") ? 
+                    <span>
+                      <input type="checkbox" id="cWhite" name="cWhite" value="White" checked={true} onChange={(event) => removeCColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="cWhite" name="cWhite" value="White" checked={false} onChange={(event) => addCColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+
+                  <div className="uploadSplit">
+                    <label><b>Hoodie: </b>{hColors}</label>
+                    <br />
+                    {hColors.includes("Black") ? 
+                    <span>
+                      <input type="checkbox" id="hBlack" name="hBlack" value="Black" checked={true} onChange={(event) => removeHColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="hBlack" name="hBlack" value="Black" checked={false} onChange={(event) => addHColor(event.target.value)}/>
+                        <label>&nbsp;Black</label>
+                        <br />
+                    </span>
+                    }
+                    {hColors.includes("Gray") ? 
+                    <span>
+                      <input type="checkbox" id="hGray" name="hGray" value="Gray" checked={true} onChange={(event) => removeHColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="hGray" name="hGray" value="Gray" checked={false} onChange={(event) => addHColor(event.target.value)}/>
+                        <label>&nbsp;Gray</label>
+                        <br />
+                    </span>
+                    }
+                    {hColors.includes("Red") ? 
+                    <span>
+                      <input type="checkbox" id="hRed" name="hRed" value="Red" checked={true} onChange={(event) => removeHColor(event.target.value)}/>
+                        <label>&nbsp;Red</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="hRed" name="hRed" value="Red" checked={false} onChange={(event) => addHColor(event.target.value)}/>
+                        <label>&nbsp;Red</label>
+                        <br />
+                    </span>
+                    }
+                    {hColors.includes("Navy") ? 
+                    <span>
+                      <input type="checkbox" id="hNavy" name="hNavy" value="Navy" checked={true} onChange={(event) => removeHColor(event.target.value)}/>
+                        <label>&nbsp;Navy</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="hNavy" name="hNavy" value="Navy" checked={false} onChange={(event) => addHColor(event.target.value)}/>
+                        <label>&nbsp;Navy</label>
+                        <br />
+                    </span>
+                    }
+                    {hColors.includes("White") ? 
+                    <span>
+                      <input type="checkbox" id="hWhite" name="hWhite" value="White" checked={true} onChange={(event) => removeHColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="checkbox" id="hWhite" name="hWhite" value="White" checked={false} onChange={(event) => addHColor(event.target.value)}/>
+                        <label>&nbsp;White</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+                </div>
+                <label><b>Categories</b></label>
+                <div className="row">
+                  {currentSubcategories.includes("Faith") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Faith" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Faith*</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Faith" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Faith*</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Family") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Family" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Family*</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Family" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Family*</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Health") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Health" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Health</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Health" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Health</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Holiday") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Holiday" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Holiday</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Holiday" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Holiday</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Ohio") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Ohio" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Ohio*</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Ohio" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Ohio*</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Other") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Other" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Other</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Other" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Other</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Patriotic") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Patriotic" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Patriotic*</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Patriotic" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Patriotic*</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("School") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="School" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;School</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="School" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;School</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Seasons") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Seasons" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Seasons</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Seasons" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Seasons</label>
+                  </div>
+                  }
+                  {currentSubcategories.includes("Sports") ? 
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Sports" name="cats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                    <label>&nbsp;Sports</label>
+                  </div>
+                  :
+                  <div className="subCatCheckbox">
+                    <input type="checkbox" value="Sports" name="cats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                    <label>&nbsp;Sports</label>
+                  </div>
+                  }
+                </div>
+                <label><b>Subcategories</b></label>
+                <div className="row">
+                  {allSubcategories.map((subcategory) => (
+                    <div className="subCatCheckbox">
+                      {currentSubcategories.includes(subcategory.name) ? 
+                      <span>
+                        <input type="checkbox" value={subcategory.name} name="subcats" checked={true} onChange={(event) => removeSubCategory(event.target.value)}/>
+                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                      </span>
+                      :
+                      <span>
+                        <input type="checkbox" value={subcategory.name} name="subcats" checked={false} onChange={(event) => addSubcategory(event.target.value)}/>
+                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                      </span>
+                      }
+                    </div>
+                  ))}
+                </div>
+                <label><b>Custom Design Box Required</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {customFieldRequired === '1' ?
+                    <span>
+                      <input type="radio" id="customBoxRequired" name="customBoxRequired" checked={true} value='1' onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                        <label>&nbsp;Yes</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="radio" id="customBoxRequired" name="customBoxRequired" checked={false} value='1' onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                        <label>&nbsp;Yes</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {customFieldRequired === '0' ?
+                    <span>
+                      <input type="radio" id="customBoxRequired" name="customBoxRequired" checked={true} value='0' onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                        <label>&nbsp;No</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="radio" id="customBoxRequired" name="customBoxRequired" checked={false} value='0' onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                        <label>&nbsp;No</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+                  <div className="uploadSplit"/>
+                  <div className="uploadSplit"/>
+                </div>
+                <label><b>Sizes Available</b></label>
+                <div className="row">
+                  <div className="uploadSplit">
+                    {sizesAvailable == '1' ?
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={true} value='1' onChange={(event) => setSizesAvailable(event.target.value)}/>
+                        <label>&nbsp;Yes</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={false} value='1' onChange={(event) => setSizesAvailable(event.target.value)}/>
+                        <label>&nbsp;Yes</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+                  <div className="uploadSplit">
+                    {sizesAvailable == '0' ?
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={true} value='0' onChange={(event) => setSizesAvailable(event.target.value)}/>
+                        <label>&nbsp;No</label>
+                        <br />
+                    </span>
+                    :
+                    <span>
+                      <input type="radio" id="sizesAvailable" name="sizesAvailable" checked={false} value='0' onChange={(event) => setSizesAvailable(event.target.value)}/>
+                        <label>&nbsp;No</label>
+                        <br />
+                    </span>
+                    }
+                  </div>
+                  <div className="uploadSplit"/>
+                  <div className="uploadSplit"/>
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" className="defaultButton">Update Product</button>
+              </form>
+              {failToUpdate &&
+                <div className="confirmation-modal">
+                  <div className="confirmation-dialog">
+                    <h3>Sorry, you've missed a required field.</h3>
+                    <p>Please review the form and try agin.</p>
+                    <div className="confirmation-buttons">
+                      <button className="delete-button" onClick={() => setFailToUpdate(false)}>Review</button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+export default EditProducts;
