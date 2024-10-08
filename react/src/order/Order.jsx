@@ -248,7 +248,7 @@ function Order() {
     }
   
     try {
-      const response = await fetch("/api/getCart.php", {
+      const response = await fetch("/api/cart/getCart.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

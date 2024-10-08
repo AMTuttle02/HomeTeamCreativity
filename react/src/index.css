@@ -693,7 +693,7 @@ body {
   background-color:rgb(207, 207, 207);
 }
 
-input[type=text], input[type=number], input[type=datetime-local], input[type="password"]  {
+/* input[type=text], input[type=number], input[type=datetime-local], input[type="password"]  {
   box-sizing: border-box;
   font-size: 16px;
   color: black;
@@ -704,7 +704,7 @@ input[type=text], input[type=number], input[type=datetime-local], input[type="pa
   margin: 8px 0;
   border: 2px solid #ccc;
   border-radius: 4px;
-}
+} */
 
 .couponForm label {
   font-weight: bold;
@@ -931,9 +931,9 @@ input[type=text], input[type=number], input[type=datetime-local], input[type="pa
   font-size: large;
 }
 
-input[type="checkbox"]{
+/* input[type="checkbox"]{
   cursor: pointer;
-}
+} */
 
 /* Footer */
 footer {

@@ -73,17 +73,11 @@ function Navbar() {
       event.target.blur();
     }
   }
-  
-  let Login = 'Login';
-
-  if (firstName) {
-    Login = 'Dashboard';
-  }
 
   if (navbarContent != []) {
     return (
       <div className="HomePage">
-        <div className="navbar">
+        <div className="navBar">
           <Link to="/" className="homeLink">
               <img src={logo} alt="Home Team Creativity Logo" className="logo"/>
           </Link>
@@ -93,8 +87,11 @@ function Navbar() {
               </Link>
           ))}
           <form id="search" className="searchBox">
-            <input type="text" className="search" placeholder="Search..." value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
+            <input type="text" className="search" value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
           </form>
+          <Link to="/login" className="cartLink">
+              Login
+          </Link>
           <Link to="cart" className="cartLink">
               <div className="imageSize">
                 <img src={cart} alt="Cart" className="cart" />
