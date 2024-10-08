@@ -18,7 +18,7 @@ import EmailConfirmation from "./login/EmailConfirmation.jsx";
 import ForgotPassword from "./login/ForgotPassword.jsx";
 import FourOFour from "./errorPages/404.jsx";
 import HomeContents from "./homepage/HomeContents.jsx";
-import Homepage from "./homepage/Homepage.jsx";
+import Navbar from "./homepage/Navbar.jsx";
 import HowItWorks from "./static/howItWorks.jsx";
 import Login from "./login/Login.jsx";
 import LogOut from "./login/LogOut.jsx";
@@ -39,7 +39,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage />}>
+        <Route path="/" element={<Navbar />}>
           <Route index element={<HomeContents />} />
           <Route path="login" element={<Login />} />
           <Route path="loggedout" element={<LogOut />} />
@@ -74,7 +74,7 @@ export default function App() {
           <Route path="/coupons" element={<AllCoupons />} />
           <Route path="/coupons/create" element={<CreateCoupon />} />
           <Route path="/coupons/edit/:code" element={<EditCoupons />} />
-          <Route path="*" element={<Homepage />} />
+          <Route path="*" element={<Navbar />} />
         </Route>
       </Routes>
     </BrowserRouter>
