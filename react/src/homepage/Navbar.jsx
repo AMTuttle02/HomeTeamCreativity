@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import cart from "../assets/cart.png";
+import profile from "../assets/profile.png";
+import searchGlass from "../assets/Magnifyingglass.png";
 import './homepage.css';
 
 function Navbar() {
@@ -88,9 +90,10 @@ function Navbar() {
           ))}
           <form id="search" className="searchBox">
             <input type="text" className="search" value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
+            <img src={searchGlass} alt="Magnifying Glass" className="magnifyingGlass" />
           </form>
-          <Link to="/login" className="cartLink">
-              Login
+          <Link to="/login" className="profileLink">
+              <img src={profile} alt="Profile" className="profile" />
           </Link>
           <Link to="cart" className="cartLink">
               <div className="imageSize">
