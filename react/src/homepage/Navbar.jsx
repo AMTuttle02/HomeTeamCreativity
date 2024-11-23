@@ -5,6 +5,7 @@ import cart from "../assets/cart.png";
 import profile from "../assets/profile.png";
 import './homepage.css';
 import searchGlass from "../assets/Magnifyingglass.png";
+import editIcon from "../assets/editIcon.svg";
 
 function Navbar() {
   const [totalItems, setTotalItems] = useState(0);
@@ -12,6 +13,7 @@ function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 500);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchContents, setSearchContents] = useState("");
+  const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,7 +63,12 @@ function Navbar() {
           }
         })
       });
-      
+    fetch("/api/admin/admin.php")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.admin);
+      setAdmin(data.admin);
+    });
   }, []);
 
   const handleSearchClick = () => {
@@ -169,6 +176,12 @@ function Navbar() {
                   }
                 </div>
             </Link>
+            {/* {admin && 
+            <> */}
+              <Link to="editNavbar" className="editLink">
+                  <img src={editIcon} alt="Edit Icon" className="editIcon" />
+              </Link>
+            {/* </>} */}
           </div>
         }
         <Outlet/>

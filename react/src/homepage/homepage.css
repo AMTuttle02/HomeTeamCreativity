@@ -12,10 +12,6 @@
   z-index: 999;
 }
 
-.oneThird {
-  width: 33%;
-}
-
 .homeLink {
   margin-left: 5px;
   width: 7%;
@@ -99,6 +95,14 @@
   /* Styling for the number inside the circle */
   color: white;
   text-decoration: none;
+}
+
+.editLink {
+  width: 2%;
+  margin-right: 1%;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
 }
 
 .searchBox {
