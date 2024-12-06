@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import './homepage.css';
 import axios from 'axios';
 import { reportError } from "../errorPages/errorHandling";
 
 function EditNavbar() {
+  const file = "homepage/EditNavbar.jsx";
   const [admin, setAdmin] = useState(0);
   const [id, setId] = useState(0);
   const [tagName, setTagName] = useState("Tag Name");
@@ -13,7 +13,6 @@ function EditNavbar() {
   const [navbar, setNavbar] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [deleteLink, setDeleteLink] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/api/admin/session.php")
@@ -60,7 +59,7 @@ function EditNavbar() {
           throw("ERR: Navbar Link insertion failed with tagName: " + tagName + ", link: " + link + ", position: " + position + ". " + response.data);
         }
       } catch (error) {
-        reportError(error);
+        reportError(error, file);
       }
     } else {
       formData.append('id', id);
@@ -76,7 +75,7 @@ function EditNavbar() {
           throw("ERR: Navbar Link insertion failed with tagName: " + tagName + ", link: " + link + ", position: " + position + ". " + response.data);
         }
       } catch (error) {
-        reportError(error);
+        reportError(error, file);
       }
     }
   }
@@ -103,7 +102,7 @@ function EditNavbar() {
         throw("ERR: Navbar Link deletion failed with tagName: " + tagName + ", link: " + link + ", position: " + position + ". " + response.data);
       }
     } catch (error) {
-      console.log(error);
+      reportError(error, file);
     }
   }
 
@@ -206,9 +205,6 @@ function EditNavbar() {
         </div>
       </div>
     );
-  }
-  else {
-    navigate("/404");
   }
 }
 export default EditNavbar;

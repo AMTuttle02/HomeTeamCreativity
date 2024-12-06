@@ -1,6 +1,11 @@
 <?php
 require_once '../secrets.php';
 
+if (session_status() === PHP_SESSION_ACTIVE) {
+} else {
+    session_start();
+}
+
 $servername = SERVER;
 $user = MYSQL_USER;
 $pass = MYSQL_PASSWORD;
