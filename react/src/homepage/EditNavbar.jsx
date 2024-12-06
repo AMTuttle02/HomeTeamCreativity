@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import './homepage.css';
 import axios from 'axios';
 import { reportError } from "../errorPages/errorHandling";
+import { getAdmin } from "../admin/getAdmin";
 
 function EditNavbar() {
   const file = "homepage/EditNavbar.jsx";
-  const [admin, setAdmin] = useState(0);
   const [id, setId] = useState(0);
   const [tagName, setTagName] = useState("Tag Name");
   const [position, setPosition] = useState(1);
@@ -15,11 +15,6 @@ function EditNavbar() {
   const [deleteLink, setDeleteLink] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/session.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setAdmin(data.admin);
-      });
     fetch("/api/admin/getNavbar.php")
       .then((response) => response.json())
       .then((data) => {
@@ -113,7 +108,7 @@ function EditNavbar() {
     setPosition(1);
   }
 
-  if (admin) {
+  if (getAdmin()) {
     return (
       <div className='editNavbar'>
         <br />
