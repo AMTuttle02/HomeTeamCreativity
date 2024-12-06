@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import './homepage.css';
 import axios from 'axios';
-import { reportError } from "./errorHandling";
+import { reportError } from "../errorPages/errorHandling";
 
 function EditNavbar() {
   const [admin, setAdmin] = useState(0);
