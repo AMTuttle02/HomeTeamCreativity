@@ -124,6 +124,7 @@ function Navbar() {
             {isSearchActive ? <>
               <form id="search" className="searchBox">
                 <input type="text" className="search" value={searchContents} onChange={(event) => setSearchContents(event.target.value)} onKeyDown={handleKeyDown} />
+                <button className='noDecoration' onClick={() => setIsSearchActive(false)}>X</button>
               </form>
               </>
             : <>
@@ -176,12 +177,12 @@ function Navbar() {
                   }
                 </div>
             </Link>
-            {/* {admin && 
-            <> */}
+            {admin && 
+            <>
               <Link to="editNavbar" className="editLink">
                   <img src={editIcon} alt="Edit Icon" className="editIcon" />
               </Link>
-            {/* </>} */}
+            </>}
           </div>
         }
         <Outlet/>

@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from "react";
 import { Outlet, Link, useParams } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import bcrypt from 'bcryptjs';
 
 function NoMatchPassword() {
