@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import DisplayProduct from "../products/DisplayProduct";
 import { Outlet, Link, useNavigate } from "react-router-dom";
+import { getFirstName } from "../admin/getName";
+import axios  from "axios";
 
 function HomeContents() {
   const [firstName, setFirstName] = useState("");
   const [products, setProducts] = useState([]);
+  const [welcome, setWelcome] = useState("");
   const navigate = useNavigate();
 
   const orderProduct = (productId) => {
@@ -32,19 +35,59 @@ function HomeContents() {
   }
 
   useEffect(() => {
-    fetch("/api/admin/session.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setFirstName(data.first_name);
-      });
+    const fetchData = async () => {
+      const fetchedFirstName = await getFirstName(); 
+      setFirstName(fetchedFirstName);
+    };
+    fetchData();
+
     fetch("/api/product/featuredProducts.php")
       .then((response) => response.json())
       .then((data) => setProducts(data));
   }, []);
 
+  useEffect(() => {
+    const fetchWelcome = async () => {
+      if (firstName) {
+        try {
+          const formData = new FormData();
+          formData.append('page', 'homepage');
+          formData.append('location', 'welcomeLogin');
+          const response = await axios.post('/api/admin/getStaticText.php', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          setWelcome(response.data);
+        } catch (error) {
+          reportError(error, "HomeContents.jsx");
+        }
+      } else {
+        try {
+          const formData = new FormData();
+          formData.append('page', 'homepage');
+          formData.append('location', 'welcomeNoLogin');
+          const response = await axios.post('/api/admin/getStaticText.php', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          setWelcome(response.data);
+        } catch (error) {
+          reportError(error, "HomeContents.jsx");
+        }
+      }
+    }
+    fetchWelcome();
+  }, [firstName]);
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
     <div className="index">
-      {firstName ? <h1>Welcome Back {firstName}!</h1> : <h1><b>Welcome to Home Team Creativity!</b></h1>}
+      <h1 className="center">{welcome.replace('{firstName}', firstName)}</h1>
       <div className="HomeRow">
         <div className="homeSide">
           <div className="orderLinks">
@@ -63,7 +106,7 @@ function HomeContents() {
           <br />
           <div className="productsRow">
             {products.map((product) => (
-              <div key={product.filename} className="homeProductsCell">
+              <div key={product.product_id} className="homeProductsCell">
                 <div className="productDetails">
                   <button onClick={() => orderProduct(product.product_id)} className="magnify">
                   <DisplayProduct product={product} />
