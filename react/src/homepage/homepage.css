@@ -316,19 +316,29 @@
   cursor: pointer;
 }
 
-/* .container button {
-  background-color: #4c77af;
-  color: #fff;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.editNavbarTable {
   width: 100%;
+  border-collapse: collapse;
 }
 
-.container button:hover {
-  background-color: #45a049;
-} */
+.editNavbarTable th,
+.editNavbarTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.editNavbarTable th {
+  background-color: #f2f2f2;
+}
+
+.editNavbarTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.editNavbarTable tr:hover {
+  background-color: #ddd;
+}
 
 @media screen and (max-width: 500px) {
   .magnifyingGlass {

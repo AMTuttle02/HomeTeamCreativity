@@ -113,8 +113,8 @@ function EditNavbar() {
       <div className='editNavbar'>
         <br />
         <div className="container">
-          <h1>Edit Navbar Details</h1>
-          <table className="coupon-table">
+          <h1 className="center">Edit Navbar Details</h1>
+          <table className="editNavbarTable">
             <thead>
               <tr>
                 <th>Tag Display Name</th>
