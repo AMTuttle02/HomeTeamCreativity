@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import cart from "../assets/cart.png";
 import profile from "../assets/profile.png";
-import './homepage.css';
+import './navbar.css';
 import searchGlass from "../assets/Magnifyingglass.png";
 import editIcon from "../assets/editIcon.svg";
 

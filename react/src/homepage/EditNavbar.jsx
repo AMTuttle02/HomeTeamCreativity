@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './homepage.css';
+import './navbar.css';
 import axios from 'axios';
 import { reportError } from "../errorPages/errorHandling";
 import { getAdmin } from "../admin/getAdmin";
