@@ -3,11 +3,14 @@ import DisplayProduct from "../products/DisplayProduct";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { getFirstName } from "../admin/getName";
 import axios  from "axios";
+import "./homepage.css";
 
 function HomeContents() {
   const [firstName, setFirstName] = useState("");
   const [products, setProducts] = useState([]);
   const [welcome, setWelcome] = useState("");
+  const [headerLinks, setHeaderLinks] = useState([]);
+  const [featured, setFeatured] = useState("");
   const navigate = useNavigate();
 
   const orderProduct = (productId) => {
@@ -42,8 +45,43 @@ function HomeContents() {
     fetchData();
 
     fetch("/api/product/featuredProducts.php")
-      .then((response) => response.json())
-      .then((data) => setProducts(data));
+    .then((response) => response.json())
+    .then((data) => setProducts(data));
+
+    const fetchHeaderLinks = async () => {
+      const formData = new FormData();
+      formData.append('page', 'homepage');
+      formData.append('location', 'headerLinks');
+      const response = await axios.post('/api/admin/getStaticText.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const inputString = response.data;
+      const links = inputString
+                              .split(';')
+                              .map(item => {
+                                const [namePart, linkPart] = item.split(',');
+                                const name = namePart.split('=')[1];
+                                const link = linkPart.split('=')[1];
+                                return { name, link };
+                              });
+      setHeaderLinks(links);
+    };
+    fetchHeaderLinks();
+
+    const fetchFeatured = async () => {
+      const formData = new FormData();
+      formData.append('page', 'homepage');
+      formData.append('location', 'featured');
+      const response = await axios.post('/api/admin/getStaticText.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setFeatured(response.data);
+    };
+    fetchFeatured();
   }, []);
 
   useEffect(() => {
@@ -87,37 +125,28 @@ function HomeContents() {
 
   return (
     <div className="index">
-      <h1 className="center">{welcome.replace('{firstName}', firstName)}</h1>
-      <div className="HomeRow">
-        <div className="homeSide">
-          <div className="orderLinks">
-            <br /><br /><br />
-            <Link to='/order' className="OrderButton">Order Now</Link>
-            <br /><br />
-            <Link to='/products/School/St.%20Joseph' className="OrderButton">St. Joseph Products</Link>
-            <br /><br />
-            <Link to='/about' className="OrderButton">About Us</Link>
-            <br /><br />
-            <Link to="https://linktr.ee/hometeamcreativity" target="_blank" className="OrderButton">Contact Us</Link>
+      <h1 className="welcome">{welcome.replace('{firstName}', firstName)}</h1>
+      <div className="row">
+          {headerLinks.map((item) => (
+            <Link to={item.link} className="homepageLink" key={item.name}>
+              {item.name}
+            </Link>
+          ))}
+      </div>
+      <div className="row">
+        <h1 className="featured">{featured}</h1>
+      </div>
+      
+      <div className="row">
+        {products.map((product) => (
+          <div key={product.product_id} className="homeProductsCell">
+            <button onClick={() => orderProduct(product.product_id)} className="magnify">
+              <DisplayProduct product={product} />
+              <p>{product.product_name}</p>
+              <p>{"$" + (getPrice(product.price, product.default_style)).toFixed(2)}</p>
+            </button>
           </div>
-        </div>
-        <div className="homeMain">
-          <h2>Featured Products</h2>
-          <br />
-          <div className="productsRow">
-            {products.map((product) => (
-              <div key={product.product_id} className="homeProductsCell">
-                <div className="productDetails">
-                  <button onClick={() => orderProduct(product.product_id)} className="magnify">
-                  <DisplayProduct product={product} />
-                  <p>{product.product_name}</p>
-                  <p>{"$" + (getPrice(product.price, product.default_style)).toFixed(2)}</p>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
       <Outlet />
     </div>
