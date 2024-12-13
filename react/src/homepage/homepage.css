@@ -37,7 +37,7 @@
 }
 
 .featured {
-  text-decoration: underline;
+  text-decoration: none;
   padding-top: 15px;
   padding-bottom: 15px;
   font-size: 2vw;
