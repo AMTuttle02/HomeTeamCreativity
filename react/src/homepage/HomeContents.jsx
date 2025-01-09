@@ -4,6 +4,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import { getFirstName } from "../admin/getName";
 import axios  from "axios";
 import "./homepage.css";
+import { GetProductPrice } from "../products/GetProductPrice";
 
 function HomeContents() {
   const [firstName, setFirstName] = useState("");
@@ -11,6 +12,8 @@ function HomeContents() {
   const [welcome, setWelcome] = useState("");
   const [headerLinks, setHeaderLinks] = useState([]);
   const [featured, setFeatured] = useState("");
+  const [featuredBelow, setFeaturedBelow] = useState("");
+  const [categoryLinks, setCategoryLinks] = useState([]);
   const navigate = useNavigate();
 
   const orderProduct = (productId) => {
@@ -21,21 +24,6 @@ function HomeContents() {
       navigate("/customOrder");
     }
   };
-
-  const getPrice = (price, style) => {
-    if (style === "tshirt") {
-      return ((price * 1 + 0));
-    }
-    else if (style === "longsleeve") {
-      return ((price * 1 + 4));
-    }
-    else if (style === "crewneck") {
-      return ((price * 1 + 8));
-    }
-    else if (style === "hoodie") {
-      return ((price * 1 + 12)); 
-    }
-  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,6 +70,30 @@ function HomeContents() {
       setFeatured(response.data);
     };
     fetchFeatured();
+
+    const fetchFeaturedBelow = async () => {
+      const formData = new FormData();
+      formData.append('page', 'homepage');
+      formData.append('location', 'featuredBelow');
+      const response = await axios.post('/api/admin/getStaticText.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setFeaturedBelow(response.data);
+    };
+    fetchFeaturedBelow();
+
+    const fetchCategoryLinks = async () => {
+      fetch("/api/category/getCategories.php", {
+        method: "GET"
+      })
+      .then((response) => response.json())
+      .then((categories) => {
+        setCategoryLinks(categories);
+      });
+    };
+    fetchCategoryLinks();
   }, []);
 
   useEffect(() => {
@@ -119,13 +131,12 @@ function HomeContents() {
     fetchWelcome();
   }, [firstName]);
 
-  useEffect(() => {
-    
-  }, []);
-
   return (
     <div className="index">
+      {/* Welcome Message */}
       <h1 className="welcome">{welcome.replace('{firstName}', firstName)}</h1>
+
+      {/* Welcome Links */}
       <div className="row">
           {headerLinks.map((item) => (
             <Link to={item.link} className="homepageLink" key={item.name}>
@@ -133,23 +144,38 @@ function HomeContents() {
             </Link>
           ))}
       </div>
+
+      {/* Featured Products */}
       <div className="row">
         <h1 className="featured">{featured}</h1>
       </div>
-      
       <div className="row">
         {products.map((product) => (
           <div key={product.product_id} className="homeProductsCell">
             <button onClick={() => orderProduct(product.product_id)} className="magnify">
               <DisplayProduct product={product} />
               <p>{product.product_name}</p>
-              <p>{"$" + (getPrice(product.price, product.default_style)).toFixed(2)}</p>
+              <p>{"$" + (GetProductPrice(product.price, product.default_style)).toFixed(2)}</p>
             </button>
           </div>
         ))}
       </div>
+
+      {/* Featured Categories */}
+      <div className="row">
+        <h1 className="featuredBelow">{featuredBelow}</h1>
+      </div>
+      <div className="doubleRow">
+          {categoryLinks.map((item) => (
+            <Link to={"/products/" + item.category} className="categoryLink" key={item.category}>
+              {item.category}
+            </Link>
+          ))}
+      </div>
       <Outlet />
     </div>
+
+
   );
 }
 

@@ -28,6 +28,25 @@
   background-color: #003f64;
 }
 
+.categoryLink {
+  width: 15%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: inline-block;
+  text-align: center;
+  background-color: #005E96;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+  font-size: 2vw;
+  margin: 2%;
+}
+
+.categoryLink:hover {
+  background-color: #003f64;
+}
+
 .welcomeLinksRow {
   display: flex;
   flex-wrap: wrap;
@@ -44,11 +63,20 @@
   font-weight: 100;
 }
 
+.featuredBelow {
+  text-decoration: none;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 2vw;
+  font-weight: 100;
+}
+
 .homeProductsCell {
   width: 30%;
   max-width: 90%;
   height: auto;
   color: white;
+  font-size: large;
 }
 
 @media screen and (max-width: 500px) {
@@ -61,7 +89,16 @@
     font-size: large;
   }
 
+  .categoryLink {
+    width: 40%;
+    font-size: large;
+  }
+
   .featured {
+    font-size: large;
+  }
+
+  .featuredBelow {
     font-size: large;
   }
 

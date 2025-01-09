@@ -8,24 +8,25 @@ header('Content-Type: application/json');
 include '../admin/conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $page = $_POST["page"];
-  $location = $_POST["location"];
+  try {
+    $page = $_POST["page"];
+    $location = $_POST["location"];
 
-  $query = $conn->prepare("SELECT * FROM staticText WHERE page = ? AND location = ?;");
-  $query->bind_param("ss" 
-                      , $page
-                      , $location);
-  if (!$query->execute()) {
+    $query = $conn->prepare("SELECT * FROM staticText WHERE page = ? AND location = ?;");
+    $query->bind_param("ss" 
+                        , $page
+                        , $location);
+    $query->execute();
+    $result = $query->get_result();
+    $row = $result->fetch_assoc();
+
+    echo json_encode($row["text"]);
+  } catch (Exception $e) {
     throw(json_encode("ERR: Get static text failed with page " . $page 
-                    . ", location: " . $location
-                    . ". " . $query->error
-                  ));
+                      . ", location: " . $location
+                      . ". " . $e
+                    ));
   }
-
-  $result = $query->get_result();
-  $row = $result->fetch_assoc();
-
-  echo json_encode($row["text"]);
 }
 
 ?>
