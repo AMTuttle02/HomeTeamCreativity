@@ -47,6 +47,25 @@
   background-color: #003f64;
 }
 
+.footerLink {
+  width: 15%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: inline-block;
+  text-align: center;
+  background-color: #005E96;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+  font-size: 2vw;
+  margin: 2%;
+}
+
+.footerLink:hover {
+  background-color: #003f64;
+}
+
 .welcomeLinksRow {
   display: flex;
   flex-wrap: wrap;
@@ -64,7 +83,6 @@
 }
 
 .featuredBelow {
-  text-decoration: none;
   padding-top: 15px;
   padding-bottom: 15px;
   font-size: 2vw;
@@ -78,6 +96,34 @@
   height: auto;
   color: white;
   font-size: large;
+}
+
+footer {
+  text-align: center;
+  color: black;
+  font-style: italic;
+  font-size: 2vw;
+  display: block;
+}
+
+.footerHeaderLink {
+  text-decoration: underline;
+  color: black;
+  margin: 1%;
+  font-size: 1.5vw;
+}
+
+.socialMediaLink {
+  width: 28%;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.socialMediaImg {
+  width: 100%;
 }
 
 @media screen and (max-width: 500px) {
@@ -95,6 +141,13 @@
     font-size: large;
   }
 
+  .footerLink {
+    width: 40%;
+    margin-left: 30%;
+    margin-right: 30%;
+    font-size: large;
+  }
+
   .featured {
     font-size: large;
   }
@@ -106,4 +159,14 @@
   .homeProductsCell {
     width: 75%;
   }
+
+  .socialLinks {
+    margin-left: 35%;
+    margin-right: 35%;
+  }
+
+  .footerHeaderLink {
+    width: 100%;
+  }
+
 }

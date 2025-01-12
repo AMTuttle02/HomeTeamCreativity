@@ -6,6 +6,7 @@ import profile from "../assets/profile.png";
 import './navbar.css';
 import searchGlass from "../assets/Magnifyingglass.png";
 import editIcon from "../assets/editIcon.svg";
+import axios from "axios";
 
 function Navbar() {
   const [totalItems, setTotalItems] = useState(0);
@@ -14,6 +15,8 @@ function Navbar() {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchContents, setSearchContents] = useState("");
   const [admin, setAdmin] = useState(0);
+  const [footer, setFooter] = useState("");
+  const [footerLinks, setFooterLinks] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,39 +39,76 @@ function Navbar() {
     .then((navbarValues) => {
       setNavbarContent(navbarValues);
     });
+
     fetch("/api/admin/session.php")
+    .then((response) => response.json())
+    .then((data) => {
+      let oID = 0;
+      if (localStorage.getItem("oID")) {
+        oID = localStorage.getItem("oID");
+      }
+      else if (data.userId) {
+        oID = 0;
+      }
+      fetch("/api/order/totalItems.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order_id: oID
+        }),
+      })
       .then((response) => response.json())
       .then((data) => {
-        let oID = 0;
-        if (localStorage.getItem("oID")) {
-          oID = localStorage.getItem("oID");
+        if (data["SUM(product_quantity)"]) {
+          setTotalItems(data["SUM(product_quantity)"]);
         }
-        else if (data.userId) {
-          oID = 0;
+        else {
+          setTotalItems(0);
         }
-        fetch("/api/order/totalItems.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            order_id: oID
-          }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data["SUM(product_quantity)"]) {
-            setTotalItems(data["SUM(product_quantity)"]);
-          }
-          else {
-            setTotalItems(0);
-          }
-        })
-      });
+      })
+    });
+    
     fetch("/api/admin/admin.php")
     .then((response) => response.json())
     .then((data) => {
       console.log(data.admin);
       setAdmin(data.admin);
     });
+
+    const fetchFooter = async () => {
+      const formData = new FormData();
+      formData.append('page', 'homepage');
+      formData.append('location', 'footer');
+      const response = await axios.post('/api/admin/getStaticText.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setFooter(response.data);
+    };
+    fetchFooter();
+
+    const fetchFooterLinks = async () => {
+      const formData = new FormData();
+      formData.append('page', 'homepage');
+      formData.append('location', 'footerLinks');
+      const response = await axios.post('/api/admin/getStaticText.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const inputString = response.data;
+      const links = inputString
+                              .split(';')
+                              .map(item => {
+                                const [namePart, linkPart] = item.split(',');
+                                const name = namePart.split('=')[1];
+                                const link = linkPart.split('=')[1];
+                                return { name, link };
+                              });
+      setFooterLinks(links);
+    };
+    fetchFooterLinks();
   }, []);
 
   const handleSearchClick = () => {
@@ -187,8 +227,39 @@ function Navbar() {
         }
         <Outlet/>
         <footer>
+          {/* Footer Message */}
           <br/>
-          <h1>Thank you for supporting small businesses!</h1>
+          <p>{footer}</p>
+          {/* Footer Contents */}
+          <div className="doubleRow">
+            {footerLinks.map((item) => (
+              <Link to={item.link} onClick={() => window.scrollTo(0,0)} className="footerLink" key={item.id}>
+                {item.name}
+              </Link>
+            ))}
+
+            {/* Social Media Image Link Placeholders */}
+            <div className="socialLinks">
+              <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+                  <img src={profile} alt="Profile" className="socialMediaImg" />
+              </Link>
+              <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+                  <img src={profile} alt="Profile" className="socialMediaImg" />
+              </Link>
+              <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+                  <img src={profile} alt="Profile" className="socialMediaImg" />
+              </Link>
+            </div>
+
+            {navbarContent.map((item) => (
+              <Link to={item.link} onClick={() => window.scrollTo(0,0)} className="footerHeaderLink" key={item.id}>
+                {item.name}
+              </Link>
+            ))}
+            <Link to={"/login"} onClick={() => window.scrollTo(0,0)} className="footerHeaderLink" key={"Login"}>
+              Login
+            </Link>
+          </div>
         </footer>
       </div>
     );
