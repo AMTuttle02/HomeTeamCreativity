@@ -242,13 +242,13 @@ function Navbar() {
             ))}
 
             {/* Social Media Image Links */}
-            <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+            <Link to="https://www.facebook.com/hometeamcreativity?mibextid=ZbWKwL" target="_blank" className="socialMediaLink">
                 <img src={facebook} alt="Facebook" className="socialMediaImg" />
             </Link>
-            <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+            <Link to="https://www.instagram.com/hometeamcreativity?igsh=bGw1Z3lwcTcydzAx" target="_blank" className="socialMediaLink">
                 <img src={instagram} alt="Instragram" className="socialMediaImg" />
             </Link>
-            <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+            <Link to="mailto:admin@hometeamcreativity.com" target="_blank" className="socialMediaLink">
                 <img src={email} alt="Email" className="socialMediaImg" />
             </Link>
 
