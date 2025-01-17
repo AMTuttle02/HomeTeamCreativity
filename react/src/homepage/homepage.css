@@ -114,12 +114,12 @@ footer {
 }
 
 .socialMediaLink {
-  width: 28%;
+  width: 4%;
   text-decoration: none;
   position: relative;
   display: inline-block;
-  margin-left: 2%;
-  margin-right: 2%;
+  margin-left: 1%;
+  margin-right: 1%;
 }
 
 .socialMediaImg {
@@ -160,9 +160,8 @@ footer {
     width: 75%;
   }
 
-  .socialLinks {
-    margin-left: 35%;
-    margin-right: 35%;
+  .socialMediaLink {
+    width: 10%;
   }
 
   .footerHeaderLink {

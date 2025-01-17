@@ -7,6 +7,9 @@ import './navbar.css';
 import searchGlass from "../assets/Magnifyingglass.png";
 import editIcon from "../assets/editIcon.svg";
 import axios from "axios";
+import email from "../assets/email.png";
+import facebook from "../assets/facebook.png";
+import instagram from "../assets/instagram.png";
 
 function Navbar() {
   const [totalItems, setTotalItems] = useState(0);
@@ -144,15 +147,15 @@ function Navbar() {
       <div className="HomePage">
         {isMobile ? 
           <div className="navBar">
-            <div class="dropdown">
-              <button class="dropbtn">
-              <div class="dots">
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
+            <div className="dropdown">
+              <button className="dropbtn">
+              <div className="dots">
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
               </div>
               </button>
-              <div class="dropdown-content">
+              <div className="dropdown-content">
                 {navbarContent.map((item) => (
                 <Link to={item.link} key={item.id}>
                   {item.name}
@@ -238,18 +241,16 @@ function Navbar() {
               </Link>
             ))}
 
-            {/* Social Media Image Link Placeholders */}
-            <div className="socialLinks">
-              <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
-                  <img src={profile} alt="Profile" className="socialMediaImg" />
-              </Link>
-              <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
-                  <img src={profile} alt="Profile" className="socialMediaImg" />
-              </Link>
-              <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
-                  <img src={profile} alt="Profile" className="socialMediaImg" />
-              </Link>
-            </div>
+            {/* Social Media Image Links */}
+            <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+                <img src={facebook} alt="Facebook" className="socialMediaImg" />
+            </Link>
+            <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+                <img src={instagram} alt="Instragram" className="socialMediaImg" />
+            </Link>
+            <Link to="/login" onClick={() => window.scrollTo(0,0)} className="socialMediaLink">
+                <img src={email} alt="Email" className="socialMediaImg" />
+            </Link>
 
             {navbarContent.map((item) => (
               <Link to={item.link} onClick={() => window.scrollTo(0,0)} className="footerHeaderLink" key={item.id}>
