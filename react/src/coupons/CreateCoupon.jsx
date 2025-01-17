@@ -19,7 +19,7 @@ function CreateCoupon() {
   const cats = ["Faith", "Family", "Health", "Holiday", "Ohio", "Other", "Patriotic", "School", "Seasons", "Sports"];
 
   useEffect(() => {
-    fetch("/api/category/getCats.php")
+    fetch("/api/category/getSubCats.php")
       .then((response) => response.json())
       .then((data) => {
         setAllSubcategories(data);

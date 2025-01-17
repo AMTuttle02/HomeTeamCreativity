@@ -31,7 +31,7 @@ function CreateCoupon() {
   }
 
   useEffect(() => {
-    fetch("/api/categorygetCats.php")
+    fetch("/api/category/getSubCats.php")
       .then((response) => response.json())
       .then((data) => {
         setAllSubcategories(data);

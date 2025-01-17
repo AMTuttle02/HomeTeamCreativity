@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
+import "./products.css";
+import { GetProductPrice } from "./GetProductPrice";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [display, setDisplay] = useState("");
   const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
@@ -12,11 +15,14 @@ function Products() {
   const amountPerPage = 20;
   const [page, setPage] = useState(1);
   const { category, subcategory } = useParams();
+  const [displayProducts, setDisplayProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
+  // Mobile Check
   useEffect(() => {
     // Function to update the isMobile state variable based on screen size
     function handleResize() {
-      setIsMobile(window.innerWidth <= 1199);
+      setIsMobile(window.innerWidth <= 500);
     }
 
     // Attach the event listener
@@ -28,59 +34,42 @@ function Products() {
     };
   }, []);
 
-  const orderProduct = (productId) => {
-    if (productId != 0) {
-      navigate("/order/" + productId);
-    }
-    else {
-      navigate("/customOrder");
-    }
-  };
-
-  const editProduct = (productId) => {
-    const data = { id: productId };
-    fetch("/api/product/setCurrentProduct.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          navigate("/editproducts");
-        }
-      })
-      .catch((error) => console.error(error));
-  }
-
+  // API Calls
   useEffect(() => {
     fetch("/api/product/products.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-      });
+    .then((response) => response.json())
+    .then((data) => {
+      setProducts(data);
+    });
 
     fetch("/api/admin/session.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setAdmin(data.admin);
-      });
+    .then((response) => response.json())
+    .then((data) => {
+      setAdmin(data.admin);
+    })
     
     fetch("/api/category/getSubCats.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setSubcategories(data);
-      })
+    .then((response) => response.json())
+    .then((data) => {
+      setSubcategories(data);
+    })
+
+    fetch("/api/category/getCategories.php")
+    .then((response) => response.json())
+    .then((data) => {
+      setCategories(data);
+    })
   }, []);
 
+  // Page setup based on category and subcategory in link
   useEffect(() => {
-    if (subcategories.length > 0) {
-      if (subcategory) {
+    if (subcategory) {
+      if (subcategories.length > 0) {
         let valid = 0;
         for (let i = 0; i < subcategories.length; i++) {
-          if (subcategories[i].name === subcategory) {
-            setDisplay(subcategory);
-            localStorage.setItem('lastProductCategory', '/products/' + category + '/' + subcategory);
+          if ((subcategories[i].name).toLowerCase() === subcategory.toLowerCase()) {
+            setDisplay(subcategories[i].name);
+            localStorage.setItem('lastProductCategory', '/products/' + category + '/' + subcategories[i].name);
             i = subcategories.length + 1;
             valid = 1;
           }
@@ -90,30 +79,33 @@ function Products() {
           setDisplay("All");
         }
       }
-      else if ((category === "Faith")
-      || (category === "Family")
-      || (category === "Health") 
-      || (category === "Holiday") 
-      || (category === "Ohio") 
-      || (category === "Other") 
-      || (category === "Patriotic") 
-      || (category === "School") 
-      || (category === "Seasons") 
-      || (category === "Sports")) {
-        setDisplay(category);
-        localStorage.setItem('lastProductCategory', '/products/' + category);
-      }
-      else {
-        localStorage.setItem('lastProductCategory', '/products');
-        navigate("/products");
-        setDisplay("All");
+    }
+    else if (category) {
+      if (categories.length > 0) {
+        console.log(categories);
+        let valid = 0;
+        for (let i = 0; i < categories.length; i++) {
+          if ((categories[i].category).toLowerCase() === category.toLowerCase()) {
+            setDisplay(categories[i].category);
+            localStorage.setItem('lastProductCategory', '/products/' + categories[i].category);
+            i = categories.length + 1;
+            valid = 1;
+          }
+        }
+        if (!valid) {
+          navigate("/products");
+          setDisplay("All");
+        }
       }
     }
-  }, [category, subcategory, subcategories]);
+    else {
+      localStorage.setItem('lastProductCategory', '/products');
+      navigate("/products");
+      setDisplay("All");
+    }
+  }, [category, subcategory, subcategories, categories]);
 
-  const [displayProducts, setDisplayProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-
+  // Displays appropriate products based on category
   useEffect(() => {
     const filters = products.filter((product) =>
       product.categories.includes(display)
@@ -122,6 +114,7 @@ function Products() {
     setPage(1);
   }, [products, display]);
 
+  // Displays 20 products per page and determines which to display based on page number
   useEffect(() => {
     let temp = [];
     let tempLocation = 0;
@@ -135,110 +128,63 @@ function Products() {
     window.scrollTo(0, 0);
   }, [filteredProducts, page]);
 
-  const getPrice = (price, style) => {
-    if (style === "tshirt" || style === "other") {
-      return ((price * 1 + 0));
+  // Navigates to order page
+  const orderProduct = (productId) => {
+    if (productId != 0) {
+      navigate("/order/" + productId);
     }
-    else if (style === "longsleeve") {
-      return ((price * 1 + 4));
+    else {
+      navigate("/customOrder");
     }
-    else if (style === "crewneck") {
-      return ((price * 1 + 8));
-    }
-    else if (style === "hoodie") {
-      return ((price * 1 + 12)); 
-    }
+  };
+
+  // Navigates to edit page
+  const editProduct = (productId) => {
+    const data = { id: productId };
+    fetch("/api/product/setCurrentProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data) {
+        navigate("/editproducts");
+      }
+    })
+    .catch((error) => console.error(error));
   }
+
+  // Determine whether category needs a drop down. Values are cached for faster access
+  const useMemoizedValidSubCategories = useMemo(() => {
+    const memoizedValidSubCategories = (categoryName) => {
+        return subcategories.find(subcategory => subcategory.category === categoryName) !== undefined;
+    };
+    return memoizedValidSubCategories;
+  }, [categories, subcategories]); 
 
   return (
     <div className="Products">
       <div className="productFilterRow">
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Faith")}>Faith</button>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Family")}>Family</button>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Health")}>Health {isMobile ? <></> : <>&#9660;</>}</button>
-          <div className="subcategories">
-          {subcategories.map((subcategory) => (
-            <span key={subcategory.id}>
-              {subcategory.category === "Health" &&
-                <span><button onClick={() => navigate("/products/Health/" + subcategory.name)}>{subcategory.name}</button></span>
-              }
-            </span>
-          ))}
-          </div>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Holiday")}>Holiday {isMobile ? <></> : <>&#9660;</>}</button>
-          <div className="subcategories">
-          {subcategories.map((subcategory) => (
-            <span key={subcategory.id}>
-              {subcategory.category === "Holiday" &&
-                <span><button onClick={() => navigate("/products/Holiday/" + subcategory.name)}>{subcategory.name}</button></span>
-              }
-            </span>
-          ))}
-          </div>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Ohio")}>Ohio</button>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Other")}>Other {isMobile ? <></> : <>&#9660;</>}</button>
-          <div className="subcategories">
+        {categories.map((category) => (
+          <div className="button-wrapper" key={category.id}>
+            <button onClick={() => navigate("/products/" + category.category)}>
+              {category.category}{(!isMobile && useMemoizedValidSubCategories(category.category)) ? <>&#9660;</> : <></>}
+            </button>
+            <div className="subcategories">
             {subcategories.map((subcategory) => (
               <span key={subcategory.id}>
-                {subcategory.category === "Other" &&
-                  <span><button onClick={() => navigate("/products/Other/" + subcategory.name)}>{subcategory.name}</button></span>
+                {subcategory.category === category.category &&
+                  <span><button onClick={() => navigate("/products/" + category.category + "/" + subcategory.name)}>{subcategory.name}</button></span>
                 }
               </span>
             ))}
+            </div>
           </div>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Patriotic")}>Patriotic</button>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/School")}>School {isMobile ? <></> : <>&#9660;</>}</button>
-          <div className="subcategories">
-            {subcategories.map((subcategory) => (
-              <span key={subcategory.id}>
-                {subcategory.category === "School" &&
-                  <span><button onClick={() => navigate("/products/School/" + subcategory.name)}>{subcategory.name}</button></span>
-                }
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Seasons")}>Seasons {isMobile ? <></> : <>&#9660;</>}</button>
-          <div className="subcategories">
-            {subcategories.map((subcategory) => (
-              <span key={subcategory.id}>
-                {subcategory.category === "Seasons" &&
-                  <span><button onClick={() => navigate("/products/Seasons/" + subcategory.name)}>{subcategory.name}</button></span>
-                }
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="button-wrapper">
-          <button onClick={() => navigate("/products/Sports")}>Sports {isMobile ? <></> : <>&#9660;</>}</button>
-          <div className="subcategories">
-            {subcategories.map((subcategory) => (
-              <span key={subcategory.id}>
-                {subcategory.category === "Sports" &&
-                  <span><button onClick={() => navigate("/products/Sports/" + subcategory.name)}>{subcategory.name}</button></span>
-                }
-              </span>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
       <div className="ProductHeaderRow">
+        {/* Page Navigation */}
         <div className="productsLeft">
           {page > 1 &&
             <span>
@@ -246,6 +192,7 @@ function Products() {
             </span>
           }
         </div>
+        {/* Header text to say what cateogry is being displayed */}
         <div className="productsMain">
           {display === ("All") ? 
             <span>
@@ -254,14 +201,11 @@ function Products() {
             :
             <span>
               <h1>{display}</h1>
-            </span>
-          }
-          {display !== ("All") &&
-            <span>
               <button onClick={() => navigate("/products")}>See All Products</button>
             </span>
           }
         </div>
+        {/* Page Navigation */}
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 
             <span>
@@ -270,6 +214,7 @@ function Products() {
           }
         </div>
       </div>
+      {/* Products */}
       <div className="productsRow">
         {displayProducts.map((product) => (
           <div key={product.product_id} className="productsCell">
@@ -277,7 +222,7 @@ function Products() {
               <button onClick={() => orderProduct(product.product_id)} className="magnify">
               <DisplayProduct product={product} />
               <p>{product.product_name}</p>
-              <p>{"$" + (getPrice(product.price, product.default_style)).toFixed(2)}</p>
+              <p>{"$" + (GetProductPrice(product.price, product.default_style)).toFixed(2)}</p>
               </button>
               {admin ?
                 <div className="center">
@@ -290,14 +235,16 @@ function Products() {
           </div>
         ))}
       </div>
+      {/* Page Navigation */}
       <div className="ProductHeaderRow">
         <div className="productsLeft">
           {page > 1 &&
             <span>
-              <button onClick={() => setPage(page-1)}>{'<'}{/*&#129046;*/} Previous Page</button>
+              <button onClick={() => setPage(page-1)}>{'<'} Previous Page</button>
             </span>
           }
         </div>
+        {/* Return to all products link if in a category */}
         <div className="productsMain">
           {display !== ("All") &&
             <span>
@@ -305,10 +252,11 @@ function Products() {
             </span>
           }
         </div>
+        {/* Page Navigation */}
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 
             <span>
-              <button onClick={() => setPage(page+1)}>Next Page {'>'}{/*&#129046;*/}</button>
+              <button onClick={() => setPage(page+1)}>Next Page {'>'}</button>
             </span>
           }
         </div>

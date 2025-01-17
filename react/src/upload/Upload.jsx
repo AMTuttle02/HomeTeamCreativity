@@ -143,7 +143,7 @@ function Upload() {
         setAdmin(data.admin);
       });
     
-    fetch("/api/category/getCats.php")
+    fetch("/api/category/getSubCats.php")
       .then((response) => response.json())
       .then((data) => {
           setAllSubcategories(data);

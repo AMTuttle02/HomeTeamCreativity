@@ -1,0 +1,47 @@
+.fullDesign {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: auto;
+  background-color: transparent;
+}
+
+.tshirt {
+  top: 0%;
+  left: 0%;
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.design {
+  position: absolute;
+  top: 22%;
+  left: 31.5%;
+  width: 35%;
+  height: auto;
+}
+
+.productDetails {
+  background-color: transparent;
+}
+
+.magnify {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+  width: 100%;
+  color: black;
+  font-size: 1.5vw;
+}
+
+.magnify:hover {
+  cursor: pointer;
+  background-color: #858585;
+}
+
+@media screen and (max-width: 500px) {
+  .magnify {
+    font-size: large;
+  }
+}
