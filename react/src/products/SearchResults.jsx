@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
+import { GetProductPrice } from "./GetProductPrice";
 
 function SearchResults() {
   const { state } = useLocation();
@@ -42,21 +43,6 @@ function SearchResults() {
     window.scrollTo(0, 0);
   }, [filteredProducts, page]);
 
-  const getPrice = (price, style) => {
-    if (style === "tshirt" || style === "other") {
-      return ((price * 1 + 0) + ".00");
-    }
-    else if (style === "longsleeve") {
-      return ((price * 1 + 4) + ".00");
-    }
-    else if (style === "crewneck") {
-      return ((price * 1 + 8) + ".00");
-    }
-    else if (style === "hoodie") {
-      return ((price * 1 + 12) + ".00"); 
-    }
-  }
-
   if (result) {
     return (
       <div className="Products">
@@ -87,7 +73,7 @@ function SearchResults() {
               <button onClick={() => orderProduct(product.product_id)} className="magnify">
               <DisplayProduct product={product} />
               <p>{product.product_name}</p>
-              <p>{"$" + getPrice(product.price, product.default_style)}</p>
+              <p>{"$" + GetProductPrice(product.price, product.default_style)}</p>
               </button>
             </div>
           </div>
