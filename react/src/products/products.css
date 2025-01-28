@@ -178,6 +178,12 @@
   white-space: nowrap;
 }
 
+.editWidth {
+  margin-left: 25%;
+  margin-right: 25%;
+  width: 50%;
+}
+
 @media screen and (max-width: 500px) {
   .productFilterRow {
     flex-wrap: wrap;

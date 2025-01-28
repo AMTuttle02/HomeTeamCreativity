@@ -140,19 +140,7 @@ function Products() {
 
   // Navigates to edit page
   const editProduct = (productId) => {
-    const data = { id: productId };
-    fetch("/api/product/setCurrentProduct.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data) {
-        navigate("/editproducts");
-      }
-    })
-    .catch((error) => console.error(error));
+    navigate("/editProduct/" + productId);
   }
 
   // Determine whether category needs a drop down. Values are cached for faster access
@@ -225,8 +213,8 @@ function Products() {
               <p>{"$" + (GetProductPrice(product.price, product.default_style)).toFixed(2)}</p>
               </button>
               {admin ?
-                <div className="center">
-                  <button onClick={() => editProduct(product.product_id)} className="RemoveProductButton">Edit</button>
+                <div className="editWidth">
+                  <button onClick={() => editProduct(product.product_id)} className="default-button">Edit</button>
                 </div>
               : 
                 <div />

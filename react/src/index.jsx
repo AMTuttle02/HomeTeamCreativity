@@ -65,7 +65,7 @@ export default function App() {
           <Route path="paylater" element={<PayLater />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="categories" element={<CreateCategories />} />
-          <Route path="editproducts" element={<EditProducts />} />
+          <Route path="editproduct/:productId" element={<EditProducts />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/emailconfirmation" element={<EmailConfirmation />} />

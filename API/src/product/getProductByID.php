@@ -22,21 +22,27 @@ if (!$conn) {
 $inputs = json_decode(file_get_contents('php://input'), true);
 
 if (isset($_SESSION['product_id'])) {
-  $query = $conn->prepare("SELECT * FROM products WHERE product_id = ?;");
-  $query->bind_param("s", $_SESSION["product_id"]);
-  if (!$query->execute()) {
-    // If insertion fails, return error message
-    echo json_encode("ERR: Insertion failed to execute" . $query->error);
-  }
-  else {
-    $result = $query->get_result();
-    $products = mysqli_fetch_assoc($result);
-
-    echo json_encode($products);
-  }
+  $id = $_SESSION['product_id'];
+}
+else if (isset($inputs['product_id'])) {
+  $id = $inputs['product_id'];
 }
 else {
-  echo json_encode(0);
+  echo json_encode("ERR: No product_id provided");
+  exit();
+}
+
+$query = $conn->prepare("SELECT * FROM products WHERE product_id = ?;");
+$query->bind_param("s", $id);
+if (!$query->execute()) {
+  // If insertion fails, return error message
+  echo json_encode("ERR: Insertion failed to execute" . $query->error);
+}
+else {
+  $result = $query->get_result();
+  $products = mysqli_fetch_assoc($result);
+
+  echo json_encode($products);
 }
 
 mysqli_close($conn);

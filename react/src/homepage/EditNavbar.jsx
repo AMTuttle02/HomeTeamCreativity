@@ -180,7 +180,7 @@ function EditNavbar() {
                 <h3>Sorry, you've missed a required field.</h3>
                 <p>Please review the form and try agin.</p>
                 <div className="confirmation-buttons">
-                  <button onClick={() => setShowConfirmation(false)}>Review</button>
+                  <button onClick={() => setShowConfirmation(false)} className="delete-button">Review</button>
                 </div>
               </div>
             </div>
@@ -191,8 +191,8 @@ function EditNavbar() {
                     <h3>Confirm Delete</h3>
                     <p>Are you sure you want to delete "{deleteLink.name}" permanetly?</p>
                     <div className="confirmation-buttons">
-                      <button onClick={() => setDeleteLink(false)}>Cancel</button>
-                      <button onClick={() => deleteNavbarButton(deleteLink.id)}>Delete</button>
+                      <button onClick={() => setDeleteLink(false)} className="default-button">Cancel</button>
+                      <button onClick={() => deleteNavbarButton(deleteLink.id)} className="delete-button">Delete</button>
                     </div>
                   </div>
                 </div>
