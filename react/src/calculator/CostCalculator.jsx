@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./calculator.css"; // currently empty as default styling is used
 
 function CostCalculator() {
   const [admin, setAdmin] = useState("");
