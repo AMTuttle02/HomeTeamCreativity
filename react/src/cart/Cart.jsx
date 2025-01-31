@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import cart from "../assets/cart.png";
 import DisplayProduct from "../products/DisplayProduct";
+import { GetProductPriceWithSize } from "../products/GetProductPriceWithSize";
+import "./cart.css";
 
 function Cart() {
   const [products, setProducts] = useState([]);
@@ -15,38 +17,107 @@ function Cart() {
   const [enlargeProduct, setEnlargeProduct] = useState(false);
   const [userId, setUserId] = useState("");
 
+  // API Calls
+  useEffect(() => {
+    getSession();
+
+    let oID = 0;
+    if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID");
+    }
+
+    getCart(oID);
+    getTotalItems(oID);
+  }, []);
+
+  // Get Order based on userID
+  useEffect(() => {
+    let oID = 0;
+    if (localStorage.getItem("oID")) {
+      oID = localStorage.getItem("oID");
+    }
+    else if (userId) {
+      oID = 0;
+    }
+    else {
+      setOrder({total_cost: 0});
+    }
+    fetch("/api/order/getOrder.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: oID
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setOrder(data);
+    });
+  }, [userId]);
+
+  // get userID
+  const getSession = () => {
+    fetch("/api/admin/session.php")
+    .then((response) => response.json())
+    .then((data) => {
+      setUserId(data.userId);
+    });
+  }
+
+  // get products in cart
+  const getCart = (oID) => {
+    fetch("/api/cart/getCart.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: oID
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setProducts(data);
+      console.log(data);
+      let total = 0;
+      for (const product of data) {
+        console.log(product.product_id);
+        if (product.product_id == 0) {
+          total += (6 * product.product_quantity)
+        }
+      }
+      setCustomHighTotal(total);
+    });
+  }
+
+  // get total number of items in cart
+  const getTotalItems = (oID) => {
+    fetch("/api/order/totalItems.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: oID
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data["SUM(product_quantity)"]) {
+        setAddedItems(data["SUM(product_quantity)"]);
+      }
+      else {
+        setAddedItems(0);
+      }
+    });
+  }
+
+  // proceed to checkout
+  // TODO - lock cart until checkout session is complete
   const checkout = (order) => {
     if (order['total_cost'] > 0) {
       navigate("/checkout");
     }
   }
 
-  const setPrice = (price, type, size) => {
-    price = price * 1;
-    if (type == "Crewneck Sweatshirt") {
-      price += 8;
-    }
-    else if (type == "Hooded Sweatshirt") {
-      price += 12;
-    }
-    else if (type == "Long Sleeve T-Shirt") {
-      price += 4;
-    }
-
-    if (size == "Youth Small" || size == "Youth Medium" || size == "Youth Large" || size == "Youth X-Large") {
-      price -= 2;
-    }
-    else if (size == "Adult XX-Large" || size == "Adult XXX-Large") {
-      price += 2;
-    }
-    return price;
-  }
-
+  // delete product from cart
   const deleteFromCart = (product, order) => {
-    console.log("product: ");
-    console.log(product);
-    console.log("order: ");
-    console.log(order);
     fetch("/api/cart/deleteFromCart.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -57,7 +128,7 @@ function Cart() {
         color: product.color,
         product_type: product.product_type,
         size: product.size,
-        price: setPrice(product.price, product.product_type, product.size) * product.product_quantity,
+        price: GetProductPriceWithSize(product.price, product.product_type, product.size) * product.product_quantity,
         product_details: product.product_details})
     })
     .then((response) => response.json())
@@ -68,6 +139,7 @@ function Cart() {
     })
   }
 
+  // increase quantity of a product in cart
   const increaseQuantity = (product, productId, quantity, price, style, color, size, product_details) => {
     fetch("/api/cart/increaseQuantity.php", {
       method: "POST",
@@ -79,7 +151,7 @@ function Cart() {
         color: product.color,
         product_type: product.product_type,
         size: product.size,
-        price: setPrice(product.price, product.product_type, product.size),
+        price: GetProductPriceWithSize(product.price, product.product_type, product.size),
         product_details: product.product_details}),
     })
     .then((response) => response.json())
@@ -87,7 +159,6 @@ function Cart() {
       if (productId == 0) {
         const temp = customHighTotal;
         setCustomHighTotal(temp + 6);
-        console.log(customHighTotal);
       }
       window.location.reload();
     })
@@ -110,6 +181,7 @@ function Cart() {
     })
   }
 
+  // decrease quantity of a product in cart
   const decreaseQuantity = (product, productId, quantity, price, style, color, size, product_details) => {
     if (quantity > 1) {
       fetch("/api/cart/decreaseQuantity.php", {
@@ -122,7 +194,7 @@ function Cart() {
           color: product.color,
           product_type: product.product_type,
           size: product.size,
-          price: setPrice(product.price, product.product_type, product.size),
+          price: GetProductPriceWithSize(product.price, product.product_type, product.size),
           product_details: product.product_details}),
       })
       .then((response) => response.json())
@@ -130,7 +202,6 @@ function Cart() {
         if (productId == 0) {
           const temp = customHighTotal;
           setCustomHighTotal(temp - 6);
-          console.log(customHighTotal);
         }
         window.location.reload();
       })
@@ -154,105 +225,26 @@ function Cart() {
     })
   }
 
-  useEffect(() => {
-    fetch("/api/admin/session.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setUserId(data.userId);
-      });
-  }, []);
-
-  useEffect(() => {
-    let oID = 0;
-    if (localStorage.getItem("oID")) {
-      oID = localStorage.getItem("oID");
-    }
-    else if (userId) {
-      oID = 0;
-    }
-    else {
-      setOrder({total_cost: 0});
-    }
-    fetch("/api/order/getOrder.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_id: oID
-      }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setOrder(data);
-    });
-  }, []);
-
-  useEffect(() => {
-    let oID = 0;
-    if (localStorage.getItem("oID")) {
-      oID = localStorage.getItem("oID");
-    }
-    fetch("/api/cart/getCart.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_id: oID
-      }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setProducts(data);
-      console.log(data);
-      let total = 0;
-      for (const product of data) {
-        console.log(product.product_id);
-        if (product.product_id == 0) {
-          total += (6 * product.product_quantity)
-        }
-      }
-      setCustomHighTotal(total);
-    });
-  }, []);
-
-  useEffect(() => { 
-    let oID = 0;
-    if (localStorage.getItem("oID")) {
-      oID = localStorage.getItem("oID");
-    }
-    fetch("/api/order/totalItems.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_id: oID
-      }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data["SUM(product_quantity)"]) {
-        setAddedItems(data["SUM(product_quantity)"]);
-      }
-      else {
-        setAddedItems(0);
-      }
-    })
-  }, []);
-
-
+  // show confirmation message before removing product from cart
   const confirmDelete = (product) => {
     setDeleteProduct(product);
     setShowConfirmation(true);
   }
 
+  // close enlarged product view
   const handleOutsideClick = (event) => {
     if (!event.target.closest('.fullDesign')) {
       setEnlarge(false);
     }
   };
 
+  // enlarge product view
   const confirmEnlarge = (product) => {
     setEnlargeProduct(product);
     setEnlarge(true);
   }
 
+  // return to previous page
   const goBack = () => {
     if (localStorage.getItem('lastProductCategory')) {
       navigate(localStorage.getItem('lastProductCategory'));
@@ -263,205 +255,170 @@ function Cart() {
   };
 
   return (
-    <div className="mycart">
-      <br/>
-      <div className="cartRow">
+    <div className="Cart">
+      <div className="noWrapRow">
         <div className="cartSide">
-          <button onClick={() => goBack()} className="ReturnShopping">
-            Continue Shopping
-          </button>
-        </div>
-        <div className="cartMain">
-          <div className="cartRow">
-            <div className="myCartSide">
-              <img src={cart} alt="Cart" className="cartImg"/>
-            </div>
-            <div className="myCartMain">
-              <h1>My Cart</h1>
-            </div> 
-            <div className="myCartSide">
-              <img src={cart} alt="Cart" className="cartImg"/>
-            </div>
+          <div className="split50">
+            <button onClick={() => goBack()} className="default-button">
+              Continue Shopping
+            </button>
+          </div>
+          <div className="split50">
+            <h1>&nbsp;{addedItems} item(s)</h1>
           </div>
         </div>
-          <div className="cartSideItem">
-            <h1 className="ItemCount"> ${(order.total_cost * 1).toFixed(2)}
-                                      {customHighTotal ? 
-                                        <>
-                                        {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
-                                        </> : <div />}</h1>
-            <h1 className="ItemCount"> {addedItems} item(s)</h1>
+        <div className="cartMiddle">
+          <div className="noWrapRow">
+            <img src={cart} alt="Cart" className="cartImg"/>
+            <h1>My Cart</h1>
+            <img src={cart} alt="Cart" className="cartImg"/>
           </div>
-        <div className="cartSideCheckout">
-          <div className = "CheckoutButtonPlacement">
-            <br/>
-            <button onClick={() => checkout(order)} className="CheckoutButton">
+        </div>
+        <div className="cartSide">
+          <div className="split50">
+            <h1 className="inline"> 
+              ${(order.total_cost * 1).toFixed(2)}
+                {customHighTotal > 0 &&
+                  <>
+                    {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
+                  </>
+                }
+            </h1>
+          </div>
+          <div className="split50">
+            <button onClick={() => checkout(order)} className="default-button">
               Check Out
             </button>
           </div>
         </div>
       </div>
-      <br />
-      <div className="CartPage" />
-        {products.map((product) => (
-          <div key={[product.product_id, product.product_type, product.size, product.color, product.product_details]}>
-            {product.product_id ?
-              <div className="customProduct">
-                <div className="cartProductRow">
-                  <div className="productsCell">
-                    <button 
-                      className="magnify"
-                      onClick={() => confirmEnlarge(product)}>
-                        {console.log(product)}
-                      <DisplayProduct product={product} />
-                    </button>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2> <b> {product.product_name} </b></h2> 
-                    <h2> Style: {product.product_type} </h2>
-                    <h2> Size: {product.size} </h2>
-                    <h2> Color: {product.color} </h2>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2>${(setPrice(product.price, product.product_type, product.size)).toFixed(2)} </h2>
-                    <br /><br />
-                    <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>-</button>
-                      {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, setPrice(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>+</button>
-                    </h2>
-                    <br /><br />
-                    <h2>
-                      <button onClick={() => confirmDelete(product)} className="CartRemoveProductButton">
-                        Delete
-                      </button>
-                    </h2>
-                  </div>
-                  {showConfirmation && deleteProduct === product &&
-                    <div className="confirmation-modal">
-                      <div className="confirmation-dialog">
-                        <h3>Confirm Delete</h3>
-                        <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
-                        <div className="confirmation-buttons">
-                          <button onClick={() => setShowConfirmation(false)}>Cancel</button>
-                          <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
-                        </div>
-                      </div>
-                    </div>
-                  }
-                  <div className="productsCell">
-                    <br /><br /><br /><br /><br /><br />
-                    <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
-                  </div>
-                </div>
-                <br />
-                <h3 className="margin"> 
-                  <b>Custom Details: </b>
-                  {product.product_details} 
-                  {product.customerFilename && 
-                    <span>
-                      <br />
-                      This product includes an uploaded image: {product.customerFilename}
-                    </span>
-                  }
-                </h3>
-                <br />
-              </div>
-            :
-              <div className="customProduct">
-                <div className="cartProductRow">
-                  <div className="productsCell">
-                    <button 
-                          className="magnify"
-                          onClick={() => confirmEnlarge(product)}>
-                      <DisplayProduct product={product} />
-                    </button>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2> <b> {product.product_name} </b></h2> 
-                    <h2> Style: {product.product_type} </h2>
-                    <h2> Size: {product.size} </h2>
-                    <h2> Color: {product.color} </h2>
-                  </div>
-                  <div className="productsCell">
-                    <br />
-                    <h2>${(setPrice(product.price, product.product_type, product.size)).toFixed(2)} - ${(setPrice(product.price, product.product_type, product.size) + 6).toFixed(2)}</h2>
-                    <br /><br />
-                    <h2> 
-                      Qty: <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, (setPrice(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size)}>-</button>
-                      {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, (setPrice(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size, product.product_details)}>+</button>
-                    </h2>
-                    <br /><br />
-                    <h2>
-                      <button onClick={() => confirmDelete(product)} className="CartRemoveProductButton">
-                        Delete
-                      </button>
-                    </h2>
-                  </div>
-                  {showConfirmation && deleteProduct === product &&
-                    <div className="confirmation-modal">
-                      <div className="confirmation-dialog">
-                        <h3>Confirm Delete</h3>
-                        <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
-                        <div className="confirmation-buttons">
-                          <button onClick={() => setShowConfirmation(false)}>Cancel</button>
-                          <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
-                        </div>
-                      </div>
-                    </div>
-                  }
-                  <div className="productsCell">
-                    <br /><br /><br /><br /><br /><br />
-                    <h2>${(setPrice(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)} - ${((setPrice(product.price, product.product_type, product.size) + 6) * product.product_quantity).toFixed(2)}</h2>
-                  </div>
-                </div>
-                <br />
-                <h3 className="margin"> 
-                  <b>Custom Details: </b>
-                  {product.product_details} 
-                  {product.customerFilename && 
-                    <span>
-                      <br />
-                      This product includes an uploaded image: {product.customerFilename}
-                    </span>
-                  }
-                </h3>
-                <br />
-              </div>
-            }
-            {enlarge && enlargeProduct === product &&
-              <div className="confirmation-modal" onClick={handleOutsideClick}>
-                <div className="orderItem-dialog">
-                  <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
-                  <DisplayProduct product={product} />
-                </div>
-              </div>
-            }
-            <div className="CartPage" />
-          </div>
-        ))}
-      <br/>
-      <div className = "FinalCheckoutButtonPlacement">
-        <h1> Subtotal: ${(order.total_cost * 1).toFixed(2)}
-                        {customHighTotal ? 
-                        <>
-                        {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
-                        </> : <div />}</h1>
-        <div className="CartPage" />
-        <br/>
-        <button onClick={() => checkout(order)} className="FinalCheckoutButton">
-          Check Out
-        </button>
+      <div className="default-width">
+        <div className="whiteLine" />
       </div>
-      <br/>
-      <br />
-      <br />
-      <br />
-      <br />
+      {products.map((product) => (
+        <div key={[product.product_id, product.product_type, product.size, product.color, product.product_details]}>
+          <div className="mobileWrapRow">
+            <div className="split25">
+              <button 
+                className="magnify"
+                onClick={() => confirmEnlarge(product)}>
+                  {console.log(product)}
+                <DisplayProduct product={product} />
+              </button>
+            </div>
+            <div className="split25">
+              <div className="cartProductDetails">
+                <h2>
+                  <b>
+                    {product.product_name}
+                  </b>
+                </h2>
+                <h2> Style: {product.product_type} </h2>
+                <h2> Size: {product.size} </h2>
+                <h2> Color: {product.color} </h2>
+              </div>
+            </div>
+            <div className="split25">
+              <div className="cartProductPricing">
+                {product.product_id != 0 ?
+                  <div>
+                    <h2>&nbsp;</h2>
+                    <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2)} </h2>
+                    <h2> 
+                      Qty:&nbsp;
+                      <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, GetProductPriceWithSize(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>-</button>
+                      {product.product_quantity} 
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, GetProductPriceWithSize(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>+</button>
+                    </h2>
+                  </div>
+                :
+                  <div>
+                    <h2>&nbsp;</h2>
+                    <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2)} - ${(GetProductPriceWithSize(product.price, product.product_type, product.size) + 6).toFixed(2)}</h2>
+                    <h2> 
+                      Qty:&nbsp;
+                      <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, (GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size)}>-</button>
+                      {product.product_quantity} 
+                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, (GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size, product.product_details)}>+</button>
+                    </h2>
+                  </div>
+                }
+              </div>
+              <div className="cartDeleteButton">
+              <button onClick={() => confirmDelete(product)} className="delete-button">
+                Remove From Cart
+              </button>
+              </div>
+            </div>
+            <div className="split25">
+              <div className="cartProductPricing">
+                <h2>&nbsp;</h2>
+                <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div className="customDetails">
+            <h3> 
+              {product.product_details && 
+                <span>
+                  Custom Details:&nbsp;{product.product_details} 
+                </span>
+              }
+              {product.customerFilename && 
+                <span>
+                  <br />
+                  This product includes an uploaded image: {product.customerFilename}
+                </span>
+              }
+            </h3>
+          </div>
+          <div className="default-width">
+            <div className="whiteLine" />
+          </div>
+          {showConfirmation && deleteProduct === product &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Remove From Cart</h3>
+                <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
+                <div className="confirmation-buttons">
+                  <button onClick={() => setShowConfirmation(false)} className="default-button">Cancel</button>
+                  <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
+                </div>
+              </div>
+            </div>
+          }
+          {enlarge && enlargeProduct === product &&
+            <div className="confirmation-modal" onClick={handleOutsideClick}>
+              <div className="enlarge">
+                <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
+                <DisplayProduct product={product} />
+              </div>
+            </div>
+          }
+        </div>
+      ))}
+      <div className="noWrapRow">
+        <div className="split70" />
+        <div className="split30">
+          <div className="cartSubTotal">
+            <h2> Subtotal: ${(order.total_cost * 1).toFixed(2)}
+              {customHighTotal ? 
+                <>
+                {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
+                </> 
+              :
+                <div />
+              }
+            </h2>
+          </div>
+          <div className="whiteLine" />
+          <br/>
+          <button onClick={() => checkout(order)} className="default-button">
+            Check Out
+          </button>
+        </div>
+      </div>
     </div>
   );
 
