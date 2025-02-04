@@ -110,6 +110,7 @@ body {
   margin-right: 5%;
   transition: color 0.3s ease;
   font-size: 1vw;
+  text-decoration: none;
 }
 
 .delete-button:hover {
@@ -126,6 +127,7 @@ body {
   padding: 10px 0px;
   transition: color 0.3s ease;
   font-size: 1vw;
+  text-decoration: none;
 }
 
 .default-button:hover {

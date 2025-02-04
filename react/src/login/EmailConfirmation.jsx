@@ -1,21 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function EmailConfirmation() {
+  const navigate = useNavigate();
 
   return (
     <div className="EmailConfirmation">
       <br />
       <div className="container">
-        <h1> Reset Password Email Sent! </h1>
-        <br />
-        <center>
-          <h3>
+        <h1 className="center"> Reset Password Email Sent! </h1>
+          <h3 className="center">
             Follow the link in the email to reset your password.
           </h3>
-          <br />
-          <Link to="/products" className="ReturnShopping">Return to Shopping</Link>
-        </center>
+          <button onClick={() => navigate("/products")} className="default-button">Return to Shopping</button>
       </div>
     </div>
   );
