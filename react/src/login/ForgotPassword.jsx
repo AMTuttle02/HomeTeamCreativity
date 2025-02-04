@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
+import "./login.css";
 
 function LoginFailed() {
   return (
-    <div className="incorrectPassword">
-      <h2>We don't have that email on file. Try another one!</h2>
+    <div className="red">
+      <p>We don't have that email on file. Try another one!</p>
     </div>
   );
 }
@@ -65,62 +66,60 @@ function Login() {
     navigate("/loggedin");
   } else {
     return (
-      <div className="UpdatedLogin">
+      <div className="ForgotPassword">
         <br />
-        <div className="LoginPage">
-          <div className="container">
-            <h1>
-              <u>Forgot Password</u>
-            </h1>
-            <form id="loginform">
-              <label>Email Address</label>
-              <input
-                type="email"
-                className="form-control"
-                id="EmailInput"
-                name="EmailInput"
-                aria-describedby="emailHelp"
-                placeholder="Enter email"
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <br />
-              {loginAttempted && badLogin && <LoginFailed />}
-              <br />
-              {localStorage.getItem("oID") ?
-                <span>
-                <button type="submit" onClick={(event) => confirmLogin(event)}>Request New Password</button>
-                </span>
-              :
-                <span>
-                <button type="submit" onClick={(event) => loginSubmit(event)}>Request New Password</button>
-                </span>
-              }
-            </form>
-            {showConfirmation &&
-              <div className="confirmation-modal">
-                <div className="confirmation-dialog">
-                  <h3>Confirm Password Reset</h3>
-                  <p>This will remove any items you currently have in your cart.</p>
-                  <div className="confirmation-buttons">
-                    <button onClick={() => setShowConfirmation(false)}>Cancel</button>
-                    <button onClick={(e) => loginSubmit(e)} className="delete-button">Send Request</button>
-                  </div>
+        <div className="container">
+          <h1 className="center">
+            Forgot Password
+          </h1>
+          <form id="loginform">
+            <label>Email Address</label>
+            <input
+              type="email"
+              className="default-input"
+              id="EmailInput"
+              name="EmailInput"
+              placeholder="Enter email"
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <br />
+            {loginAttempted && badLogin && <LoginFailed />}
+            {localStorage.getItem("oID") ?
+              <span>
+              <button type="submit" className="default-button" onClick={(event) => confirmLogin(event)}>Request New Password</button>
+              </span>
+            :
+              <span>
+              <button type="submit" className="default-button" onClick={(event) => loginSubmit(event)}>Request New Password</button>
+              </span>
+            }
+          </form>
+          {showConfirmation &&
+            <div className="confirmation-modal">
+              <div className="confirmation-dialog">
+                <h3>Confirm Password Reset</h3>
+                <p>This will remove any items you currently have in your cart.</p>
+                <div className="confirmation-buttons">
+                  <button onClick={() => setShowConfirmation(false)} className="default-button">Cancel</button>
+                  <button onClick={(e) => loginSubmit(e)} className="delete-button">Reset Password</button>
                 </div>
               </div>
-            }
-          </div>
-          <div className="UserAccess">
-            <br />
-            <br />
+            </div>
+          }
+        </div>
+        <div className="row">
+          <div className="split45" />
+          <div className="split10">
             <p>Don't Have An Account?</p>
             <p>
-              <Link to="/signup" className="signUpButton">
+              <button onClick={() => navigate("/signup")} className="default-button">
                 Create An Account
-              </Link>
+              </button>
             </p>
           </div>
-          <Outlet />
+          <div className="split45" />
         </div>
+        <Outlet />
       </div>
     );
   }

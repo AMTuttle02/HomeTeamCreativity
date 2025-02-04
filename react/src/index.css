@@ -227,6 +227,10 @@ body {
   margin-right: 5%;
 }
 
+.red {
+  color: red;
+}
+
 @media screen and (max-width: 500px) {
   .container {
     width: 90%;
@@ -809,21 +813,7 @@ body {
 
 }
 
-.signUpButton {
-  background-color: #4c77af;
-  color: #fff;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  width: 10%;
-  cursor: pointer;
-  white-space: nowrap;
-  text-decoration: none;
-}
 
-.signUpButton:hover {
-  background-color: #45a049;
-}
 
 .addToCart {
   background-color: #4c77af;
@@ -862,12 +852,6 @@ body {
   color: #fff;
   text-align: center;
   font-size: large;
-}
-
-.incorrectPassword h2 {
-  color: red;
-  font-size: large;
-  text-align: left;
 }
 
 .AboutParagraph {
