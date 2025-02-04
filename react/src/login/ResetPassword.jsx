@@ -4,16 +4,16 @@ import bcrypt from 'bcryptjs';
 
 function NoMatchPassword() {
   return (
-    <div className="incorrectPassword">
-      <h2>Passwords do not match. Please try again.</h2>
+    <div className="red">
+      <p>Passwords do not match. Please try again.</p>
     </div>
   );
 }
 
 function EmailFailed() {
   return (
-    <div className="incorrectPassword">
-      <h2>Password reset has not been requested or token has expired. Please request a new token <Link to="/forgotpassword">here</Link>.</h2>
+    <div className="red">
+      <p>Password reset has not been requested or token has expired. Please request a new token <Link to="/forgotpassword">here</Link>.</p>
     </div>
   );
 }
@@ -79,7 +79,6 @@ function ResetPassword() {
           } else {
             // If the email and password are not valid, display an error message
             setBadLogin("email");
-            console.log(data);
           }
         });
     }
@@ -119,38 +118,38 @@ function ResetPassword() {
       <div className="ResetPassword">
         <br/>
         <div className="container">
-          <h1><u>Reset Your Password</u></h1>
+          <h1 className="center">Reset Your Password</h1>
           <form id="signupform">
             <label>Email address</label>
             <input
               type="email"
-              className="form-control"
+              className="default-input"
               id="EmailInput"
               name="EmailInput"
               aria-describedby="emailHelp"
               placeholder="Enter email"
               onChange={(event) => setEmail(event.target.value)}
             />
-            <small id="emailHelp" className="text-danger form-text">
+            <small id="emailHelp" className="red">
               {emailError}
             </small>
             <br/>
             <label>New Password</label>
             <input
               type="password"
-              className="form-control"
+              className="default-input"
               id="exampleInputPassword1"
               placeholder="Password"
               onChange={(event) => setPassword(event.target.value)}
             />
-            <small id="passworderror" className="text-danger form-text">
+            <small id="passworderror" className="red">
               {passwordError}
             </small>
             <br/>
             <label>Confirm Password</label>
             <input
               type="password"
-              className="form-control"
+              className="default-input"
               id="exampleInputPassword2"
               placeholder="Password"
               onChange={(event) => setConfirmPassword(event.target.value)}
@@ -161,11 +160,11 @@ function ResetPassword() {
             <br />
             {localStorage.getItem("oID") ?
                 <span>
-                <button type="submit" onClick={(event) => confirmLogin(event)}>Update Password</button>
+                <button type="submit" className="default-button" onClick={(event) => confirmLogin(event)}>Update Password</button>
                 </span>
               :
                 <span>
-                <button type="submit" onClick={(event) => passwordResetSubmit(event)}>Update Password</button>
+                <button type="submit" className="default-button" onClick={(event) => passwordResetSubmit(event)}>Update Password</button>
                 </span>
               }
           </form>
@@ -175,19 +174,24 @@ function ResetPassword() {
                 <h3>Confirm Password Reset</h3>
                 <p>This will remove any items you currently have in your cart.</p>
                 <div className="confirmation-buttons">
-                  <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                  <button onClick={() => setShowConfirmation(false)} className="default-button">Cancel</button>
                   <button onClick={(e) => passwordResetSubmit(e)} className="delete-button">Update Password</button>
                 </div>
               </div>
             </div>
           }
         </div>
-        <div className="UserAccess">
-          <br/><br/>
-          <p>Not what you're looking for?</p> 
-          <p>
-          <Link to="/login" className="signUpButton">Login Here</Link>
-          </p>
+        <div className="CreateAccountButton">
+          <p className="center">Not what you're looking for?</p>
+          <div className="row">
+            <div className="split30">
+              <p>
+                <button onClick={() => navigate("/login")} className="default-button">
+                Login Here
+                </button>
+              </p>
+              </div>
+          </div>
         </div>
         <Outlet/>
       </div>

@@ -7,16 +7,16 @@ function CreateAccountButton() {
 
   return (
     <div className="CreateAccountButton">
-    <p className="center">Don't Have An Account?</p>
-    <div className="row">
-      <div className="split30">
-        <p>
-          <button onClick={() => navigate("/signup")} className="default-button">
-            Create An Account
-          </button>
-        </p>
-        </div>
-    </div>
+      <p className="center">Don't Have An Account?</p>
+      <div className="row">
+        <div className="split30">
+          <p>
+            <button onClick={() => navigate("/signup")} className="default-button">
+              Create An Account
+            </button>
+          </p>
+          </div>
+      </div>
     </div>
   );
 }
