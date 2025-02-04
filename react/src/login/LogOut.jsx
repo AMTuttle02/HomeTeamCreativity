@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LogOut() {
   const [firstName, setFirstName] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     fetch("/api/admin/session.php")
       .then((response) => response.json())
@@ -12,22 +13,17 @@ function LogOut() {
   }, []);
 
   if (firstName) {
-    window.location.href='/loggedin';
+    navigate('/dashboard');
   }
   else {
     return (
         <div className='LogOut'>
           <br />
           <div className="container">
-            <h1>You Have Successfully Logged Out</h1>
-            <br />
-            <h1>Come Back Soon!</h1>
-            <br />
-            <center>
-              <Link to="/" className="ReturnHome">Return Home</Link>
-            </center>
+            <h1 className="center">You Have Successfully Logged Out</h1>
+            <h1 className="center">Come Back Soon!</h1>
+              <button onClick={() => navigate("/")} className="default-button">Return Home</button>
           </div>
-          <Outlet/>
         </div>
       );
   }
