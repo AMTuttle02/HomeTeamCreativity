@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import "./login.css";
+import CreateAccountButton from "./CreateAccountButton";
 
 function LoginFailed() {
   return (
@@ -10,7 +11,7 @@ function LoginFailed() {
   );
 }
 
-function Login() {
+function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [badLogin, setBadLogin] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -107,22 +108,11 @@ function Login() {
             </div>
           }
         </div>
-        <div className="row">
-          <div className="split45" />
-          <div className="split10">
-            <p>Don't Have An Account?</p>
-            <p>
-              <button onClick={() => navigate("/signup")} className="default-button">
-                Create An Account
-              </button>
-            </p>
-          </div>
-          <div className="split45" />
-        </div>
+        <CreateAccountButton />
         <Outlet />
       </div>
     );
   }
 }
 
-export default Login;
+export default ForgotPassword;
