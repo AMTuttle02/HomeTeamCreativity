@@ -90,6 +90,14 @@ body {
   width: 70%;
 }
 
+.split45 {
+  width: 45%;
+}
+
+.split10 {
+  width: 10%;
+}
+
 .delete-button {
   background-color: #c70000;
   color: #fff;
@@ -1035,27 +1043,6 @@ body {
   background-color: #f8f8f8;
   font-size: 16px;
   resize: none;
-}
-
-.createCatButtonWidth {
-  flex: 50%;
-}
-
-.createCatButtonWidth button{
-  margin: 1%;
-}
-
-.createCatCheckbox {
-  text-align: center;
-  flex: 20%;
-}
-
-.createSubCatCheckbox {
-  flex: 33%;
-}
-
-.createSubCatCheckbox input {
-  margin: 1%;
 }
 
 .subCatCheckbox {

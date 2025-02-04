@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./categories.css";
 
 function CreateCategories() {
   const navigate = useNavigate();
@@ -8,7 +9,9 @@ function CreateCategories() {
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [allSubcategories, setAllSubcategories] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
 
+  // API Calls
   useEffect(() => {
     fetch("/api/admin/admin.php")
         .then((response) => response.json())
@@ -16,11 +19,18 @@ function CreateCategories() {
         setAdmin(data.admin);
         }
     );
+
     fetch("/api/category/getSubCats.php")
         .then((response) => response.json())
         .then((data) => {
             setAllSubcategories(data);
-            console.log(data);
+        }
+    );
+
+    fetch("/api/category/getCategories.php")
+        .then((response) => response.json())
+        .then((data) => {
+            setAllCategories(data);
         }
     );
   }, []);
@@ -46,7 +56,7 @@ function CreateCategories() {
             body: JSON.stringify(data),
         })
         .then((response) => response.json())
-        .then((data) => {
+        .then(() => {
             navigate("/dashboard");
         })
     }
@@ -58,98 +68,61 @@ function CreateCategories() {
         <br />
         <div className="container">
             <div className="row">
-                <div className="createCatButtonWidth">
-                    <button className="catButton" onClick={() => setOption("Create")}>Create Category</button>
+                <div className="split45">
+                    <button className="default-button" onClick={() => setOption("Create")}>Create Category</button>
                 </div>
-                <div className="createCatButtonWidth">
-                    <button className="catButton" onClick={() => setOption("Remove")}>Remove Category</button>
+                <div className="split10" />
+                <div className="split45">
+                    <button className="default-button" onClick={() => setOption("Remove")}>Remove Category</button>
                 </div>
             </div>
-            <br/>
-            <center><h3>Category</h3></center>
-            {option === "Create" &&
-                <div className="row">
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Faith" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Faith*</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Family" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Family*</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Health" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Health</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Holiday" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Holiday</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Ohio" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Ohio*</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Other" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Other</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Patriotic" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Patriotic*</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="School" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;School</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Seasons" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Seasons</label>
-                    </div>
-                    <div className="createCatCheckbox">
-                        <input type="radio" value="Sports" name="cats" onChange={(event) => setCategory(event.target.value)}/>
-                        <label>&nbsp;Sports</label>
-                    </div>
-                </div>
-            }
-            <br />
+            
             {option === "Create" ?
-            <span>
-                <center><h3>Subcategory (Case-Sensitive)</h3></center>
-                <input
-                    type="text"
-                    id="cats"
-                    name="cats"
-                    placeholder="Subcategory"
-                    onChange={(event) => setSubcategory(event.target.value)}
-                />
-            </span>
-            :
-            <div className="row">
-                {allSubcategories.map((subcategory) => (
-                    <div className="createSubCatCheckbox" key={subcategory.name}>
-                        <input type="radio" value={subcategory.name} name="subcats" onChange={(event) => setSubcategory(event.target.value)}/>
-                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                <span>
+                    <h3 className="center">Category</h3>
+                    <div className="row">
+                        {allCategories.map((category) => (
+                        <div className="createCatCheckbox">
+                            <input type="radio" value={category.category} name="cats" onChange={(event) => setCategory(event.target.value)}/>
+                            <label>&nbsp;{category.category}</label>
+                        </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                    <h3 className="center">Subcategory (Case-Sensitive)</h3>
+                    <div className="split50">
+                        <input
+                            type="text"
+                            id="cats"
+                            name="cats"
+                            placeholder="Subcategory"
+                            className="default-input"
+                            onChange={(event) => setSubcategory(event.target.value)}
+                        />
+                    </div>
+                </span>
+            :
+                <span>
+                    <h3 className="center">Subcategory</h3>
+                    <div className="row">
+                        {allSubcategories.map((subcategory) => (
+                            <div className="createSubCatCheckbox" key={subcategory.name}>
+                                <input type="radio" value={subcategory.name} name="subcats" onChange={(event) => setSubcategory(event.target.value)}/>
+                                <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                            </div>
+                        ))}
+                    </div>
+                    <br />
+                </span>
             }
-            <button onClick={() => handleSubmit()}>{option} Category</button>
+            <div className="split50">
+                <button className="default-button" onClick={() => handleSubmit()}>{option} Category</button>
+            </div>
         </div> 
       </div>
     );
   }
   else {
-    return ( 
-        <div className='Upload'>
-          <br />
-          <div className="container">
-          <h1>Sorry, you must be logged in to access this page.</h1>
-          <br />
-          <h2>Click <Link to="/login">Here</Link> to Login</h2>
-          <br/>
-          </div>
-        </div>
-    );
+    navigate("/404")
   }
 }
 export default CreateCategories;

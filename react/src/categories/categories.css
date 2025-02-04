@@ -1,0 +1,15 @@
+.createCatCheckbox {
+  flex: 20%;
+}
+
+.createCatCheckbox input {
+  cursor: pointer;
+}
+
+.createSubCatCheckbox {
+  flex: 33%;
+}
+
+.createCatCheckbox input {
+  cursor: pointer;
+}
