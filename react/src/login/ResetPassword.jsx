@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { Outlet, Link, useParams } from "react-router-dom";
+import { Outlet, Link, useParams, useNavigate } from "react-router-dom";
 import bcrypt from 'bcryptjs';
 
 function NoMatchPassword() {
@@ -27,6 +27,7 @@ function ResetPassword() {
   const [badLogin, setBadLogin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const {token} = useParams();
+  const navigate = useNavigate();
 
   const confirmLogin = (e) => {
     e.preventDefault();
@@ -181,17 +182,15 @@ function ResetPassword() {
             </div>
           }
         </div>
-        <div className="CreateAccountButton">
-          <p className="center">Not what you're looking for?</p>
-          <div className="row">
-            <div className="split30">
-              <p>
-                <button onClick={() => navigate("/login")} className="default-button">
-                Login Here
-                </button>
-              </p>
-              </div>
-          </div>
+        <p className="center">Not what you're looking for?</p>
+        <div className="row">
+          <div className="split30">
+            <p>
+              <button onClick={() => navigate("/login")} className="default-button">
+              Login Here
+              </button>
+            </p>
+            </div>
         </div>
         <Outlet/>
       </div>

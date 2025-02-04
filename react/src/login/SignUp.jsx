@@ -1,11 +1,11 @@
 import React, { useState,useEffect } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import bcrypt from 'bcryptjs';
 
 function SignUpFailed() {
   return (
-    <div className="incorrectPassword">
-      <h2>Sorry, that email is already registered.</h2>
+    <div className="red">
+      <p>Sorry, that email is already registered.</p>
     </div>
   );
 }
@@ -21,6 +21,7 @@ function SignUp() {
   const [lnameError, setLnameError] = useState("");
   const [badLogin, setBadLogin] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const navigate = useNavigate();
 
   const confirmLogin = (e) => {
     e.preventDefault();
@@ -140,59 +141,59 @@ function SignUp() {
       <div className="SignUp">
         <br/>
         <div className="container">
-          <h1><u>Sign Up Below!</u></h1>
+          <h1 className="center">Sign Up Below!</h1>
           <form id="signupform">
             <label>First Name</label>
             <input
               type="name"
-              className="form-control"
+              className="default-input"
               id="NameInput"
               name="NameInput"
               aria-describedby="nameHelp"
               placeholder="Enter your first name"
               onChange={(event) => setFName(event.target.value)}
             />
-            <small id="nameHelp" className="text-danger form-text">
+            <small id="nameHelp" className="red">
               {fnameError}
             </small>
             <br/>
             <label>Last Name</label>
             <input
               type="name"
-              className="form-control"
+              className="default-input"
               id="NameInput"
               name="NameInput"
               aria-describedby="nameHelp"
               placeholder="Enter your last name"
               onChange={(event) => setLName(event.target.value)}
             />
-            <small id="nameHelp" className="text-danger form-text">
+            <small id="nameHelp" className="red">
               {lnameError}
             </small>
             <br/>
             <label>Email address</label>
             <input
               type="email"
-              className="form-control"
+              className="default-input"
               id="EmailInput"
               name="EmailInput"
               aria-describedby="emailHelp"
               placeholder="Enter email"
               onChange={(event) => setEmail(event.target.value)}
             />
-            <small id="emailHelp" className="text-danger form-text">
+            <small id="emailHelp" className="red">
               {emailError}
             </small>
             <br/>
             <label>Password</label>
             <input
               type="password"
-              className="form-control"
+              className="default-input"
               id="exampleInputPassword1"
               placeholder="Password"
               onChange={(event) => setPassword(event.target.value)}
             />
-            <small id="passworderror" className="text-danger form-text">
+            <small id="passworderror" className="red">
               {passwordError}
             </small>
             <br/>
@@ -200,11 +201,11 @@ function SignUp() {
             <br />
             {localStorage.getItem("oID") ?
                 <span>
-                <button type="submit" onClick={(event) => confirmLogin(event)}>Sign Up</button>
+                <button type="submit" onClick={(event) => confirmLogin(event)} className="default-button">Sign Up</button>
                 </span>
               :
                 <span>
-                <button type="submit" onClick={(event) => signUpSubmit(event)}>Sign Up</button>
+                <button type="submit" onClick={(event) => signUpSubmit(event)} className="default-button">Sign Up</button>
                 </span>
               }
           </form>
@@ -214,21 +215,25 @@ function SignUp() {
                 <h3>Confirm Signup</h3>
                 <p>This will remove any items you currently have in your cart.</p>
                 <div className="confirmation-buttons">
-                  <button onClick={() => setShowConfirmation(false)}>Cancel</button>
+                  <button onClick={() => setShowConfirmation(false)} className="default-button">Cancel</button>
                   <button onClick={(e) => signUpSubmit(e)} className="delete-button">Sign Up</button>
                 </div>
               </div>
             </div>
           }
         </div>
-        <div className="UserAccess">
-          <br/><br/>
-          <p>Creating an account allows you to view past orders, see payments, and quickly buy again!</p>
-          <p>Already Have An Account?</p> 
-          <p>
-          <Link to="/login" className="signUpButton">Login </Link>
-          </p>
-          
+        <div className="CreateAccountButton">
+          <p className="center">Creating an account allows you to view past orders, see payments, and quickly buy again!</p>
+          <p className="center">Already Have An Account?</p>
+          <div className="row">
+            <div className="split30">
+              <p>
+                <button onClick={() => navigate("/login")} className="default-button">
+                Login
+                </button>
+              </p>
+              </div>
+          </div>
         </div>
         <Outlet/>
       </div>
