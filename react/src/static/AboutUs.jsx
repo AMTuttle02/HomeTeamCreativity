@@ -1,15 +1,16 @@
 import React from "react";
 import maggie from "../assets/maggie.jpg";
 import info from "../assets/aboutUsInfo.png"
+import "./aboutUs.css";
 
 function AboutUs() {
 
   return (
-    <div className="about">
+    <div className="AboutUs">
       <br />
       <h1>About Us</h1>
       <div className="row">
-        <div className="side">
+        <div className="aboutUsMobileSplit70">
           <div className="AboutParagraph">
             <h3>
               I started this company in 2020 with all the free time I had, as I am sure we all did.
@@ -19,29 +20,26 @@ function AboutUs() {
               time with my family and friends, listening to music, and crafting.
             </h3>
           </div>
-          <br />
+        </div>
+        <div className="aboutUsMobileSplit30">
+          <img src={maggie} alt="Maggie Tuttle: CEO" className="aboutImg"/>
+        </div>
+      </div>
+      <div className="row">
+        <div className="aboutUsMobileSplit70">
           <div className="AboutParagraph">
-            <h1><b>Our Mission</b></h1>
+            <h1>Our Mission</h1>
             <h3>
               At HomeTeam Creativity, our mission is to provide affordable, creative, and quality custom apparel
                that makes young and middle-aged adults happy and comfortable with their outfits.
             </h3>
           </div>
         </div>
-        <div className="main">
-          <div className="mainSplit">
-            <img src={maggie} alt="Maggie Tuttle: CEO" className="MaggieImg"/>
-          </div>
-          <div className="mainSplit">
-            <img src={info} alt="About Us Contact Info" className="contactUsImg"/>
-          </div>
-          <br/>
-          <div className="mainSplit">
-            <a href="https://maggietuttle.myportfolio.com" target="_blank" style={{color: "#336699"}}>Link To My Portfolio</a>
-          </div>
-          <div className="mainSplit" />
+        <div className="aboutUsMobileSplit30">
+          <img src={info} alt="About Us Contact Info" className="aboutImg"/>
         </div>
       </div>
+      <a href="https://maggietuttle.myportfolio.com" target="_blank" className="portfolioLink">Link To My Portfolio</a>
     </div>
   );
 }
