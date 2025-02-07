@@ -140,7 +140,15 @@ function Products() {
 
   // Navigates to edit page
   const editProduct = (productId) => {
-    navigate("/editProduct/" + productId);
+    fetch("/api/product/setCurrentProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ "id": productId }),
+    })
+    .then((response) => response.json())
+    .then(() => {
+      navigate("/editProduct/" + productId);
+    });
   }
 
   // Determine whether category needs a drop down. Values are cached for faster access

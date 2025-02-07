@@ -45,10 +45,11 @@ function EditProducts() {
         setCurrentSubcategories(data.categories);
       });
     
+    console.log(productId);
     fetch("/api/product/getProductByID.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(productId),
+      body: JSON.stringify({ "product_id": productId }),
     })
     .then((response) => response.json())
     .then((data) => {
@@ -176,7 +177,7 @@ function EditProducts() {
       <div className="EditProducts">
         <br />
         <div className="topAlignRow">
-          <div className="split30">
+          <div className="mobileSplit30">
             <div className="productDetails">
               {productIsSet != [] ?
                 <DisplayProduct product={product} />
@@ -204,7 +205,7 @@ function EditProducts() {
               }
             </div>
           </div>
-          <div className="split70">
+          <div className="mobileSplit70">
             <div className="editProductsContainer">
               <h1 className="center">Edit Product Details</h1>
               <form className="alignLeft" onSubmit={handleSubmit}>
