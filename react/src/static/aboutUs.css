@@ -6,7 +6,8 @@
 }
 
 .AboutParagraph {
-  margin: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
   text-align: left;
   
 }
@@ -23,15 +24,7 @@
 }
 
 .aboutImg {
-  width: 100%;
-}
-
-.aboutUsMobileSplit70 {
-  width: 70%;
-}
-
-.aboutUsMobileSplit30 {
-  width: 30%;
+  width: 80%;
 }
 
 @media screen and (max-width: 500px) {
@@ -46,13 +39,5 @@
 
   .portfolioLink {
     font-size: large;
-  }
-
-  .aboutUsMobileSplit70 {
-    width: 100%;
-  }
-  
-  .aboutUsMobileSplit30 {
-    width: 100%;
   }
 }
