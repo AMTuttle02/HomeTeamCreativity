@@ -186,8 +186,8 @@ function Dashboard() {
                     <button className="default-button" onClick={() => completeOrder(order.order_id)}>Complete Order</button>
                   </div>
                 :
-                  <div className="dashLogOut">
-                    <h3 className="mobileCenter">
+                  <div className="mobileSplit33">
+                    <h3 className="rightMobileCenter">
                       {order.status === 'processing' && <span>Status: Processing</span>}
                       {order.status === 'active' && <span>Status: Active</span>}
                       {order.status === 'complete' && <span>Status: Complete</span>}
@@ -195,7 +195,6 @@ function Dashboard() {
                   </div>
                 }
             </div>
-            <br />
             {order.shipped > 0 ?
               <div className="row">
                 <div className="mobileSplit33">
