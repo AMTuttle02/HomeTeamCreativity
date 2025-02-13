@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DisplayProduct from "../products/DisplayProduct";
-import "./dashboard.css";
-import { GetProductPriceWithSize } from "../products/GetProductPriceWithSize";
 import DisplayProductDetails from "../products/DisplayProductDetails";
 
 function Dashboard() {
@@ -11,8 +8,6 @@ function Dashboard() {
   const [admin, setAdmin] = useState(0);
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
-  const [enlarge, setEnlarge] = useState(false);
-  const [enlargeProduct, setEnlargeProduct] = useState(false);
 
   // API Calls
   useEffect(() => {
@@ -65,19 +60,6 @@ function Dashboard() {
     .then(() => {
         window.location.reload();
     });
-  }
-
-  // Close enlarged image
-  const handleOutsideClick = (event) => {
-    if (!event.target.closest('.fullDesign')) {
-      setEnlarge(false);
-    }
-  };
-
-  // Enlarge image
-  const confirmEnlarge = (product) => {
-    setEnlargeProduct(product);
-    setEnlarge(true);
   }
 
   // Checks if custom item exists in order
@@ -170,7 +152,9 @@ function Dashboard() {
           </div>
         }
         <br />
+        <div className="default-width">
         <div className="blackLine" />
+        </div>
         {orders.map((order) => (
           <div key={order.order_id}>
             <br />
@@ -245,19 +229,18 @@ function Dashboard() {
               if (product.order_id === order.order_id) {
                 return (
                   <span>
-                    <div className="default-width">
-                      <div className="blackLine" />
-                    </div>
                     <DisplayProductDetails order={order} product={product} active={0} />
                   </span>
                 );
               }
               return null;
             })}
-            <div className="blackLine" />
+            <div className="default-width">
+              <div className="blackLine" />
+            </div>
           </div>
           ))}
-      </div>
+        </div>
     </div>
   );
 }

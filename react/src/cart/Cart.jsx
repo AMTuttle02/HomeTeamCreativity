@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import cart from "../assets/cart.png";
-import DisplayProduct from "../products/DisplayProduct";
 import { GetProductPriceWithSize } from "../products/GetProductPriceWithSize";
 import DisplayProductDetails from "../products/DisplayProductDetails";
 import "./cart.css";
@@ -11,11 +10,7 @@ function Cart() {
   const [order, setOrder] = useState([]);
   const [addedItems, setAddedItems] = useState(0);
   const navigate = useNavigate();
-  const [showConfirmation, setShowConfirmation] = useState(false);
   const [customHighTotal, setCustomHighTotal] = useState(0);
-  const [deleteProduct, setDeleteProduct] = useState("");
-  const [enlarge, setEnlarge] = useState(false);
-  const [enlargeProduct, setEnlargeProduct] = useState(false);
   const [userId, setUserId] = useState("");
 
   // API Calls
@@ -117,134 +112,6 @@ function Cart() {
     }
   }
 
-  // delete product from cart
-  const deleteFromCart = (product, order) => {
-    fetch("/api/cart/deleteFromCart.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        order_id: order.order_id, 
-        product_id: product.product_id, 
-        quantity: product.product_quantity, 
-        color: product.color,
-        product_type: product.product_type,
-        size: product.size,
-        price: GetProductPriceWithSize(product.price, product.product_type, product.size) * product.product_quantity,
-        product_details: product.product_details})
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data == 1) {
-        window.location.href='/cart';
-      }
-    })
-  }
-
-  // increase quantity of a product in cart
-  const increaseQuantity = (product, productId, quantity, price, style, color, size, product_details) => {
-    fetch("/api/cart/increaseQuantity.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        order_id: order.order_id, 
-        product_id: product.product_id, 
-        quantity: product.product_quantity, 
-        color: product.color,
-        product_type: product.product_type,
-        size: product.size,
-        price: GetProductPriceWithSize(product.price, product.product_type, product.size),
-        product_details: product.product_details}),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (productId == 0) {
-        const temp = customHighTotal;
-        setCustomHighTotal(temp + 6);
-      }
-      window.location.reload();
-    })
-
-    order['total_cost'] *= 1;
-    order['total_cost'] += (price * 1);
-    setAddedItems((addedItems * 1) + 1);
-    setProducts(prevData => {
-      const updatedData = prevData.map(product => {
-        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size && product.product_details === product_details) {
-          return {
-            ...product,
-            product_quantity: quantity + 1
-          }
-        } else {
-          return product;
-        }
-      })
-      return updatedData;
-    })
-  }
-
-  // decrease quantity of a product in cart
-  const decreaseQuantity = (product, productId, quantity, price, style, color, size, product_details) => {
-    if (quantity > 1) {
-      fetch("/api/cart/decreaseQuantity.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          order_id: order.order_id, 
-          product_id: product.product_id, 
-          quantity: product.product_quantity, 
-          color: product.color,
-          product_type: product.product_type,
-          size: product.size,
-          price: GetProductPriceWithSize(product.price, product.product_type, product.size),
-          product_details: product.product_details}),
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        if (productId == 0) {
-          const temp = customHighTotal;
-          setCustomHighTotal(temp - 6);
-        }
-        window.location.reload();
-      })
-
-      order['total_cost'] *= 1;
-      order['total_cost'] -= (price * 1);
-      setAddedItems(addedItems - 1);
-    }
-    setProducts(prevData => {
-      const updatedData = prevData.map(product => {
-        if (product.product_id === productId && product.product_type === style && product.color === color && product.size === size && quantity > 1 && product.product_details === product_details) {
-          return {
-            ...product,
-            product_quantity: quantity - 1
-          }
-        } else {
-          return product;
-        }
-      })
-      return updatedData;
-    })
-  }
-
-  // show confirmation message before removing product from cart
-  const confirmDelete = (product) => {
-    setDeleteProduct(product);
-    setShowConfirmation(true);
-  }
-
-  // close enlarged product view
-  const handleOutsideClick = (event) => {
-    if (!event.target.closest('.fullDesign')) {
-      setEnlarge(false);
-    }
-  };
-
-  // enlarge product view
-  const confirmEnlarge = (product) => {
-    setEnlargeProduct(product);
-    setEnlarge(true);
-  }
-
   // return to previous page
   const goBack = () => {
     if (localStorage.getItem('lastProductCategory')) {
@@ -257,6 +124,8 @@ function Cart() {
 
   return (
     <div className="Cart">
+      <br />
+      <div className="fullContainer">
       <div className="noWrapRow">
         <div className="cartSide">
           <div className="split50">
@@ -294,13 +163,13 @@ function Cart() {
         </div>
       </div>
       <div className="default-width">
-        <div className="whiteLine" />
+        <div className="blackLine" />
       </div>
       {products.map((product) => (
         <div key={[product.product_id, product.product_type, product.size, product.color, product.product_details]}>
           <DisplayProductDetails order={order} product={product} active={1} />
           <div className="default-width">
-            <div className="whiteLine" />
+            <div className="blackLine" />
           </div>
         </div>
       ))}
@@ -318,12 +187,13 @@ function Cart() {
               }
             </h2>
           </div>
-          <div className="whiteLine" />
+          <div className="blackLine" />
           <br/>
           <button onClick={() => checkout(order)} className="default-button">
             Check Out
           </button>
         </div>
+      </div>
       </div>
     </div>
   );
