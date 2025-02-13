@@ -1,0 +1,44 @@
+.dashUpload {
+  flex: 33%;
+}
+
+.dashUpload h1 {
+  text-align: left;
+  color: black;
+  padding: 0px;
+}
+
+.dashName {
+  flex: 33%;
+  text-align: center;
+}
+
+.dashLogOut {
+  flex: 100%;
+  text-align: center;
+}
+
+.dashLogOut {
+  flex: 33%;
+}
+
+.dashLogOut h3, .dashLogOut p{
+  text-align: right;
+}
+
+@media screen and (max-width: 500px) {
+  .dashUpload {
+    flex: 100%;
+    text-align: center;
+  }
+
+  .dashUpload button {
+    float: none;
+    width: 100%;
+  }
+
+  .dashName {
+    flex: 100%;
+    text-align: center;
+  }
+}

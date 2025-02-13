@@ -88,7 +88,8 @@ function Login() {
   }, [email, password]);
 
   if (loggedIn) {
-    navigate("/dashboard");
+    // Have to do a redirect. Cannot use navigate due to required navbar updates
+    window.location.href = "/dashboard";
   } else {
     return (
       <div className="Login">

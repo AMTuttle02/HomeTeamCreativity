@@ -220,7 +220,7 @@ function Navbar() {
                   }
                 </div>
             </Link>
-            {admin && 
+            {admin > 0 && 
             <>
               <Link to="editNavbar" className="editLink">
                   <img src={editIcon} alt="Edit Icon" className="editIcon" />

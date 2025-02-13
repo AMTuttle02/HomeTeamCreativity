@@ -85,6 +85,21 @@ body {
   align-items: center;
 }
 
+.right {
+  text-align: right;
+  align-items: right;
+}
+
+.rightMobileCenter {
+  text-align: right;
+  align-items: right;
+}
+
+.left {
+  text-align: left;
+  align-items: left;
+}
+
 .split25 {
   width: 25%;
 }
@@ -107,6 +122,14 @@ body {
 
 .split10 {
   width: 10%;
+}
+
+.split20 {
+  width: 20%;
+}
+
+.split33 {
+  width: 33%;
 }
 
 .mobileSplit25 {
@@ -133,6 +156,13 @@ body {
   width: 10%;
 }
 
+.mobileSplit20 {
+  width: 20%;
+}
+
+.mobileSplit33 {
+  width: 33%;
+}
 
 .delete-button {
   background-color: #c70000;
@@ -324,6 +354,25 @@ body {
   .mobileSplit10 {
     width: 90%;
   }
+
+  .mobileSplit20 {
+    width: 90%;
+  }
+
+  .mobileSplit33 {
+    width: 90%;
+  }
+
+  .mobileCenter {
+    text-align: center;
+    align-items: center;
+  }
+
+  .rightMobileCenter {
+    text-align: center;
+    align-items: center;
+  }
+
 }
 
 /* .homepageButton {
@@ -402,85 +451,6 @@ body {
 
 .homeSide {
   flex: 50%;
-}
-
-.dashUpload {
-  flex: 33%;
-}
-
-.dashUpload h1 {
-  text-align: left;
-  color: black;
-  padding: 0px;
-}
-
-.dashUpload button {
-  background-color: #4c77af;
-  color: #fff;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 50%;
-  float: left;
-}
-
-.dashHeader button:hover {
-  background-color: #45a049;
-}
-
-.dashHeader {
-  flex: 20%;
-}
-
-.dashHeader h1 {
-  text-align: center;
-  color: black;
-  padding: 0px;
-}
-
-.dashHeader button {
-  background-color: #4c77af;
-  color: #fff;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 99%;
-  margin: 1%;
-}
-
-.dashUpload button:hover {
-  background-color: #45a049;
-}
-
-
-.dashName {
-  flex: 33%;
-  text-align: center;
-}
-
-.dashLogOut {
-  flex: 33%;
-}
-
-.dashLogOut h3, .dashLogOut p{
-  text-align: right;
-}
-
-.dashLogOut button {
-  background-color: #4c77af;
-  color: #fff;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 50%;
-  float: right;
-}
-
-.dashLogOut button:hover {
-  background-color: #45a049;
 }
 
 .HowItWorks h1{
@@ -1038,10 +1008,6 @@ body {
   background: lightcoral;
 }
 
-.center {
-  text-align: center;
-}
-
 .delete-confirmation {
   position: relative;
 }
@@ -1193,36 +1159,6 @@ body {
   .homeMain {
     margin-top: 5%;
     flex: 100%;
-  }
-
-  .dashUpload {
-    flex: 100%;
-    text-align: center;
-  }
-
-  .dashUpload button {
-    float: none;
-    width: 100%;
-  }
-  
-  .dashName {
-    flex: 100%;
-    text-align: center;
-  }
-
-  .dashLogOut button {
-    float: none;
-    width: 100%;
-  }
-  
-  .dashLogOut {
-    flex: 100%;
-    text-align: center;
-  }
-
-  .dashLogOut h3 .dashLogOut p {
-    float: none;
-    text-align: center;
   }
 
   .policy {

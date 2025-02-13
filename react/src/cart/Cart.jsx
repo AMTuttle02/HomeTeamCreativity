@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import cart from "../assets/cart.png";
 import DisplayProduct from "../products/DisplayProduct";
 import { GetProductPriceWithSize } from "../products/GetProductPriceWithSize";
+import DisplayProductDetails from "../products/DisplayProductDetails";
 import "./cart.css";
 
 function Cart() {
@@ -297,105 +298,10 @@ function Cart() {
       </div>
       {products.map((product) => (
         <div key={[product.product_id, product.product_type, product.size, product.color, product.product_details]}>
-          <div className="mobileWrapRow">
-            <div className="split25">
-              <button 
-                className="magnify"
-                onClick={() => confirmEnlarge(product)}>
-                  {console.log(product)}
-                <DisplayProduct product={product} />
-              </button>
-            </div>
-            <div className="split25">
-              <div className="cartProductDetails">
-                <h2>
-                  <b>
-                    {product.product_name}
-                  </b>
-                </h2>
-                <h2> Style: {product.product_type} </h2>
-                <h2> Size: {product.size} </h2>
-                <h2> Color: {product.color} </h2>
-              </div>
-            </div>
-            <div className="split25">
-              <div className="cartProductPricing">
-                {product.product_id != 0 ?
-                  <div>
-                    <h2>&nbsp;</h2>
-                    <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2)} </h2>
-                    <h2> 
-                      Qty:&nbsp;
-                      <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, GetProductPriceWithSize(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>-</button>
-                      {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, GetProductPriceWithSize(product.price, product.product_type, product.size), product.product_type, product.color, product.size, product.product_details).toFixed(2)}>+</button>
-                    </h2>
-                  </div>
-                :
-                  <div>
-                    <h2>&nbsp;</h2>
-                    <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2)} - ${(GetProductPriceWithSize(product.price, product.product_type, product.size) + 6).toFixed(2)}</h2>
-                    <h2> 
-                      Qty:&nbsp;
-                      <button onClick={() => decreaseQuantity(product, product.product_id, product.product_quantity, (GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size)}>-</button>
-                      {product.product_quantity} 
-                      <button onClick={() => increaseQuantity(product, product.product_id, product.product_quantity, (GetProductPriceWithSize(product.price, product.product_type, product.size)).toFixed(2), product.product_type, product.color, product.size, product.product_details)}>+</button>
-                    </h2>
-                  </div>
-                }
-              </div>
-              <div className="cartDeleteButton">
-              <button onClick={() => confirmDelete(product)} className="delete-button">
-                Remove From Cart
-              </button>
-              </div>
-            </div>
-            <div className="split25">
-              <div className="cartProductPricing">
-                <h2>&nbsp;</h2>
-                <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
-              </div>
-            </div>
-          </div>
-          <br />
-          <div className="customDetails">
-            <h3> 
-              {product.product_details && 
-                <span>
-                  Custom Details:&nbsp;{product.product_details} 
-                </span>
-              }
-              {product.customerFilename && 
-                <span>
-                  <br />
-                  This product includes an uploaded image: {product.customerFilename}
-                </span>
-              }
-            </h3>
-          </div>
+          <DisplayProductDetails order={order} product={product} active={1} />
           <div className="default-width">
             <div className="whiteLine" />
           </div>
-          {showConfirmation && deleteProduct === product &&
-            <div className="confirmation-modal">
-              <div className="confirmation-dialog">
-                <h3>Remove From Cart</h3>
-                <p>Are you sure you want to remove "{product.product_name}" from your cart?</p>
-                <div className="confirmation-buttons">
-                  <button onClick={() => setShowConfirmation(false)} className="default-button">Cancel</button>
-                  <button onClick={() => deleteFromCart(product, order)} className="delete-button">Delete</button>
-                </div>
-              </div>
-            </div>
-          }
-          {enlarge && enlargeProduct === product &&
-            <div className="confirmation-modal" onClick={handleOutsideClick}>
-              <div className="enlarge">
-                <span className="close-button" onClick={() => setEnlarge(false)}>&times;</span>
-                <DisplayProduct product={product} />
-              </div>
-            </div>
-          }
         </div>
       ))}
       <div className="noWrapRow">

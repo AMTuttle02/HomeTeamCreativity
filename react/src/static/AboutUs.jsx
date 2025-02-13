@@ -1,6 +1,6 @@
 import React from "react";
-import maggie from "../assets/maggie.jpg";
-import info from "../assets/aboutUsInfo.png"
+import maggie from "../assets/maggie.jpeg";
+import info from "../assets/aboutUsInfo.jpeg"
 import "./aboutUs.css";
 
 function AboutUs() {
