@@ -165,10 +165,17 @@ function DisplayProductDetails({ order, product, active }) {
           }
         </div>
         <div className="split25">
-          <div className="cartProductPricing">
-            <h2>&nbsp;</h2>
-            <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
-          </div>
+          {product.product_id != 0 ?
+            <div className="cartProductPricing">
+              <h2>&nbsp;</h2>
+              <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)}</h2>
+            </div>
+            :
+            <div className="cartProductPricing">
+              <h2>&nbsp;</h2>
+              <h2>${(GetProductPriceWithSize(product.price, product.product_type, product.size) * product.product_quantity).toFixed(2)} - ${((GetProductPriceWithSize(product.price, product.product_type, product.size) + 6) * product.product_quantity).toFixed(2)}</h2>
+            </div>
+          }
         </div>
       </div>
       <br />

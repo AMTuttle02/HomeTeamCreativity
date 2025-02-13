@@ -5,9 +5,7 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
 
-require_once 'secrets.php';
-
-include 'conn.php';
+include '../admin/conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
