@@ -80,6 +80,14 @@ body {
   justify-content: center;
 }
 
+.topAlignContainerRow {  
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+
 .center {
   text-align: center;
   align-items: center;
@@ -132,6 +140,10 @@ body {
   width: 33%;
 }
 
+.split40 {
+  width: 40%;
+}
+
 .mobileSplit25 {
   width: 25%;
 }
@@ -162,6 +174,14 @@ body {
 
 .mobileSplit33 {
   width: 33%;
+}
+
+.mobileSplit40 {
+  width: 40%;
+}
+
+.mobileSplit100 {
+  width: 100%;
 }
 
 .delete-button {
@@ -360,6 +380,14 @@ body {
   }
 
   .mobileSplit33 {
+    width: 90%;
+  }
+
+  .mobileSplit40 {
+    width: 90%;
+  }
+
+  .mobileSplit100 {
     width: 90%;
   }
 
@@ -895,15 +923,6 @@ body {
   color: darkblue;
 }
 
-.split50 {
-  width: 50%;
-}
-
-.split50Center {
-  width: 50%;
-  text-align: center;
-}
-
 .customOrderBox textarea {
   width: 70%;
   height: 100px;
@@ -1106,32 +1125,6 @@ body {
   background-color: #ddd;
 }
 
-.CouponCode input{
-  box-sizing: border-box;
-  color: black;
-  background-color: white;
-  margin: 8px 0;
-  border-radius: 4px;
-  width: 50%;
-  padding: 2px;
-  border: 2px solid #ccc;
-  border-radius: 0px;
-  font-size: 16px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  text-align: right;
-}
-
-.CouponCode button {
-  background-color: #4c77af;
-  color: #fff;
-  padding: 5px;
-  margin-left: 5px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 15%;
-}
-
 .grayOut {
   color: gray;
 }
@@ -1203,15 +1196,6 @@ body {
     width: 100%;
   }
 
-  .split50 {
-    width: 100%;
-    padding-right: 0px;
-  }
-
-  .split50Center {
-    text-align: left;
-    width: 100%;
-  }
 
   .cartDesign {
     position: absolute;

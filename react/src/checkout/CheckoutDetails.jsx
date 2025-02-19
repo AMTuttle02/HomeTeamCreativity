@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "./checkout.css";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
@@ -24,7 +25,67 @@ function CheckoutDetails() {
     const [discount, setDiscount] = useState((0.00).toFixed(2));
     const [code, setCode] = useState("");
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const [customHighTotal, setCustomHighTotal] = useState(0);
     const navigate = useNavigate();
+
+    // API Calls
+    useEffect(() => {
+        let oID = 0;
+
+        fetch("/api/admin/session.php")
+        .then((response) => response.json())
+        .then((data) => {
+            setUserId(data.userId);
+            setFirst(data.first_name);
+            setLast(data.last_name);
+            setEmail(data.email);
+
+            if (data.userId) {
+                oID = 0;
+            }
+        });
+        
+        if (localStorage.getItem("oID")) {
+        oID = localStorage.getItem("oID");
+        }
+        else if (userId) {
+        oID = 0;
+        }
+        else {
+        setOrder({total_cost: 0});
+        }
+        
+        fetch("/api/order/getOrder.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            order_id: oID
+        }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+        setOrder(data);
+        });
+
+        fetch("/api/cart/getCart.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+            order_id: oID
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            let total = 0;
+            for (const element of data) {
+                if (element.product_id == 0) {
+                    setNotCustomOrder(0);
+                    total += (6 * element.product_quantity);
+                }
+                setCustomHighTotal(total);
+            }
+        });
+    }, []);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -49,7 +110,6 @@ function CheckoutDetails() {
                     body: JSON.stringify({ order_id: oID }),
                 });
                 const data = await response.json();
-                console.log(data);
     
                 for (const element of data) {
                     let categories = element.categories
@@ -69,16 +129,12 @@ function CheckoutDetails() {
             }
         }
     
-        console.log("Initial");
-        console.log(finalAmount);
         if (discount.type === 'percent') {
             let percent = (discount.amount * 1) / 100;
             finalAmount = (orderTotal * 1 * percent).toFixed(2);
         } else if (discount.type === 'amount') {
             finalAmount = (discount.amount * 1).toFixed(2);
         }
-
-        console.log("After calculation")
 
         if (finalAmount * 1 > discount.maximum_allowed * 1) {
             finalAmount = (discount.maximum_allowed * 1).toFixed(2);
@@ -232,71 +288,6 @@ function CheckoutDetails() {
     };
 
     useEffect(() => {
-        let oID = 0;
-        if (localStorage.getItem("oID")) {
-          oID = localStorage.getItem("oID");
-        }
-        else if (userId) {
-          oID = 0;
-        }
-        else {
-          setOrder({total_cost: 0});
-        }
-        fetch("/api/order/getOrder.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            order_id: oID
-          }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          setOrder(data);
-        });
-    }, []);
-    
-    const [customHighTotal, setCustomHighTotal] = useState(0);
-    useEffect(() => {
-    let oID = 0;
-    if (localStorage.getItem("oID")) {
-        oID = localStorage.getItem("oID");
-    }
-    else if (userId) {
-        oID = 0;
-    }
-    fetch("/api/cart/getCart.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-        order_id: oID
-        }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        console.log(data);
-        let total = 0;
-        for (const element of data) {
-            if (element.product_id == 0) {
-                setNotCustomOrder(0);
-                total += (6 * element.product_quantity);
-            }
-            setCustomHighTotal(total);
-        }
-    });
-    }, []);
-
-    useEffect(() => {
-        fetch("/api/admin/session.php")
-        .then((response) => response.json())
-        .then((data) => {
-            setUserId(data.userId);
-            setFirst(data.first_name);
-            setLast(data.last_name);
-            setEmail(data.email);
-        });
-    }, []);
-
-    useEffect(() => {
         setLocationError("");
         setNameError("");
         setEmailError("");
@@ -330,14 +321,15 @@ function CheckoutDetails() {
             <br />
             <div className="container">
                 <h3>Checkout Details</h3>
-                <div className="row">
-                    <div className="split50">
+                <div className="containerRow">
+                    <div className="mobileSplit45">
                         <label>First Name</label>
-                        <input type="text" id="first" name="first" defaultValue={first} onChange={(event) => setFirst(event.target.value)} />
+                        <input type="text" id="first" name="first" className="default-input" defaultValue={first} onChange={(event) => setFirst(event.target.value)} />
                     </div>
-                    <div className="split50">
+                    <div className="mobileSplit10" />
+                    <div className="mobileSplit45">
                         <label>Last Name</label>
-                        <input type="text" id="last" name="last" defaultValue={last} onChange={(event) => setLast(event.target.value)} />
+                        <input type="text" id="last" name="last" className="default-input" defaultValue={last} onChange={(event) => setLast(event.target.value)} />
                     </div>
                 </div>
                 <div className="red">
@@ -347,50 +339,64 @@ function CheckoutDetails() {
                 <div className="red">
                     {emailError}
                 </div>
-                <input type="text" id="email" name="email" defaultValue={email} onChange={(event) => setEmail(event.target.value)} />
-                <br />
-                <br />
-                <div className="row">
-                    <div className="split50Center">
-                        <label>
-                            <input type="radio" checked={shipping === 0} onChange={() => setShipping(0)}/> Pickup
-                        </label>
+                <div className="containerRow">
+                    <div className="mobileSplit100">
+                        <input type="text" id="email" name="email" className="default-input" defaultValue={email} onChange={(event) => setEmail(event.target.value)} />
                     </div>
-                    <div className="split50Center">
-                        <label>
-                            <input type="radio" checked={shipping === 1} onChange={() => setShipping(1)}/> Shipping
-                        </label>
+                </div>
+                <br /><br />
+                <div className="containerRow">
+                    <div className="split50">
+                        <div className="center">
+                            <div className="default-checkbox">
+                                <input type="radio" checked={shipping === 0} onChange={() => setShipping(0)}/> Pickup
+                            </div>
+                        </div>
+                    </div>
+                    <div className="split50">
+                        <div className="center">
+                            <div className="default-checkbox">
+                                <input type="radio" checked={shipping === 1} onChange={() => setShipping(1)}/> Shipping
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {shipping ? 
                     <div>
                         <br />
-                        <label> Address</label>
+                        <label>Street</label>
                         <div className="red">
                             {locationError}
                         </div>
-                        <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" onChange={(event) => setAddress(event.target.value)}/>
-                        <label> City</label>
-                        <input type="text" id="city" name="city" placeholder="New York" onChange={(event) => setCity(event.target.value)}/>
-
-                        <div className="row">
-                            <div className="split50">
-                                <label>State</label>
-                                <input type="text" id="state" name="state" placeholder="NY" onChange={(event) => setState(event.target.value)}/>
-                            </div>
-                            <div className="split50">
-                                <label>Zip</label>
-                                <input type="text" id="zip" name="zip" placeholder="10001" onChange={(event) => setZip(event.target.value)}/>
+                        <div className="containerRow">
+                            <div className="mobileSplit100">
+                                <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" className="default-input" onChange={(event) => setAddress(event.target.value)}/>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="split50">
-                                <p style={{color: 'red'}}>Total varies depending on shipping cost.</p>
-                                <p style={{color: 'red'}}>Total will be sent via email.</p>
+                        <div className="containerRow">
+                            <div className="mobileSplit40">
+                                <label> City</label>
+                                <input type="text" id="city" name="city" placeholder="New York" className="default-input" onChange={(event) => setCity(event.target.value)}/>
+                            </div>
+                            <div className="mobileSplit10"/>
+                            <div className="mobileSplit30">
+                                <label>State</label>
+                                <input type="text" id="state" name="state" placeholder="NY" className="default-input" onChange={(event) => setState(event.target.value)}/>
+                            </div>
+                            <div className="mobileSplit10"/>
+                            <div className="mobileSplit10">
+                                <label>Zip</label>
+                                <input type="text" id="zip" name="zip" placeholder="10001" className="default-input" onChange={(event) => setZip(event.target.value)}/>
+                            </div>
+                        </div>
+                        <div className="topAlignContainerRow">
+                            <div className="mobileSplit50">
+                                <p className="red">Total Cost May Vary Based On Shipping Cost.</p>
+                                <p className="red">Total will be sent via email.</p>
                                 <p><a href="/payLater">Learn More</a></p>
                             </div>
-                            <div className="split50">
-                                <div className="RightAlign">
+                            <div className="mobileSplit50">
+                                <div className="rightMobileCenter">
                                     <p> Subtotal: ${order.total_cost}{!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>}</p>
                                     <p> Shipping: TBD</p>
                                     <p> Online Processing Fee: $0.00</p>
@@ -401,82 +407,78 @@ function CheckoutDetails() {
                             </div>
                         </div>
                         <br/>
-                        <div className = "PaymentButtonPlacement">
-                            <button className="PaymentButton" onClick={payLater}>
-                            Complete Order
-                            </button>
-                        </div>
+                        <button className="default-button" onClick={payLater}>Complete Order</button>
                     </div>
                 : 
                     <div>
                         <br />
-                        <label> Location</label>
+                        <label>Location</label>
                         <div className="red">
                             {locationError}
                         </div>
-                        <input type="text" id="adr" name="address" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
+                        <div className="containerRow">
+                            <div className="mobileSplit100">
+                                <input type="text" id="adr" name="address" className="default-input" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
+                            </div>
+                        </div>
+                        <br /><br />
                         {notCustomOrder ?
-                            <div className="row">
-                                <div className="split50Center">
-                                    <label>
-                                    <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
-                                    </label>
+                            <div className="containerRow">
+                                <div className="split50">
+                                    <div className="center">
+                                        <div className="default-checkbox">
+                                            <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="split50Center">
-                                    <label>
-                                        <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
-                                    </label>
+                                <div className="split50">
+                                    <div className="center">
+                                        <div className="default-checkbox">
+                                            <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         : 
                             <div />
                         }
-                        
                         {paying && notCustomOrder ?
                             <div>
-                                <div className="row">
-                                    <div className="split50">
-                                    </div>
-                                    <div className="split50">
-                                        <div className="RightAlign">
-                                            <label> &nbsp;</label>
-                                            <span className="CouponCode">
-                                                <input type="text" placeholder="Discount Code" onChange={(event) => setCode(event.target.value)}></input>
-                                                <button onClick={validateCoupon}>Apply</button>
-                                            </span>
-                                            <div className="red">
-                                                {couponError}
-                                            </div>
-                                            <p> Subtotal: ${order.total_cost}</p>
-                                            <p> Discount: ${discount}</p>
-                                            <p> Shipping: $0.00</p>
-                                            <p> Online Processing Fee: ${processingFee}</p>
-                                            <p> Estimated Tax: ${tax}</p>
-                                            <h3> Total: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
-                                            <h3> Due Now: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
+                                <div className="rightMobileCenter">
+                                    <div className="containerRow">
+                                        <div className="mobileSplit50"/>
+                                        <div className="mobileSplit50">
+                                            <input type="text" className="couponCodeInput" placeholder="Discount Code" onChange={(event) => setCode(event.target.value)}></input>
+                                            <button className="couponCodeButton" onClick={validateCoupon}>Apply</button>
                                         </div>
                                     </div>
+                                    <div className="red">
+                                        {couponError}
+                                    </div>
+                                    <p> Subtotal: ${order.total_cost}</p>
+                                    <p> Discount: ${discount}</p>
+                                    <p> Shipping: $0.00</p>
+                                    <p> Online Processing Fee: ${processingFee}</p>
+                                    <p> Estimated Tax: ${tax}</p>
+                                    <h3> Total: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
+                                    <h3> Due Now: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
                                 </div>
                                 <br/>
-                                <div className = "PaymentButtonPlacement">
-                                    <button className="PaymentButton" onClick={payNow}>
-                                    Go To Payment
-                                    </button>
-                                </div>
+                                <button className="default-button" onClick={payNow}>Go To Payment</button>
                             </div>
                         :
-                            <div className="row">
+                            <div className="containerRow">
                                 {notCustomOrder ?
-                                    <div className="split50">
-                                    </div>
+                                    <div className="mobileSplit50" />
                                 :
-                                    <div className="split50">
+                                    <div className="mobileSplit50">
                                         <p style={{color: 'red'}}>Total Cost May Vary Based On Custom Mockup.</p>
+                                        <p className="red">Total will be sent via email.</p>
                                         <p><a href="/payLater">Learn More</a></p>
                                     </div>
                                 }
-                                <div className="split50">
-                                    <div className="RightAlign">
+                                <div className="mobileSplit50">
+                                    <div className="rightMobileCenter">
                                         <p> Subtotal: ${order.total_cost} {!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>} </p>
                                         <p> Shipping: $0.00</p>
                                         <p> Online Processing Fee: $0.00</p>
@@ -496,11 +498,7 @@ function CheckoutDetails() {
                                     </div>
                                 </div>
                                 <br/>
-                                <div className = "PaymentButtonPlacement">
-                                    <button className="PaymentButton" onClick={payLater}>
-                                    Complete Order
-                                    </button>
-                                </div>
+                                <button className="default-button" onClick={payLater}>Complete Order</button>
                             </div>
                         }
                     </div>
