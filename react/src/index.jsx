@@ -6,7 +6,6 @@ import AllCoupons from "./coupons/AllCoupons.jsx";
 import Cart from "./cart/Cart";
 import Checkout from "./checkout/CheckoutComplete.jsx";
 import CheckoutDetails from "./checkout/CheckoutDetails.jsx";
-import CheckoutFailed from "./checkout/CheckoutFailed.jsx";
 import CostCalculator from "./calculator/CostCalculator.jsx";
 import CreateCategories from "./categories/CreateCategories.jsx";
 import CreateCoupon from "./coupons/CreateCoupon.jsx";
@@ -59,7 +58,6 @@ export default function App() {
           <Route path="order/:productKey" element={<Order />} />
           <Route path="customOrder" element={<CustomOrder />} />
           <Route path="ordercomplete/:orderId/:paid/:stripe" element={<Checkout />} />
-          <Route path="orderfailed" element={<CheckoutFailed />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="paylater" element={<PayLater />} />
@@ -76,7 +74,7 @@ export default function App() {
           <Route path="/coupons/create" element={<CreateCoupon />} />
           <Route path="/coupons/edit/:code" element={<EditCoupons />} />
           <Route path="/editNavbar" element={<EditNavbar />} />
-          <Route path="*" element={<Navbar />} />
+          <Route path="*" element={<FourOFour />} />
         </Route>
       </Routes>
     </BrowserRouter>
