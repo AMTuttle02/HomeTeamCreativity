@@ -317,6 +317,10 @@ body {
   color: red;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 @media screen and (max-width: 500px) {
   .container {
     width: 90%;
@@ -1101,30 +1105,6 @@ body {
   text-align: center;
 }
 
-.coupon-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.coupon-table th,
-.coupon-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.coupon-table th {
-  background-color: #f2f2f2;
-}
-
-.coupon-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.coupon-table tr:hover {
-  background-color: #ddd;
-}
-
 .grayOut {
   color: gray;
 }
@@ -1133,12 +1113,6 @@ body {
 @media screen and (max-width: 1199px) {
   .container {
     width: 90%;
-  }
-
-  .coupon-table th,
-  .coupon-table td {
-    padding: 6px;
-    font-size: 14px;
   }
 
   /* .edit-button {

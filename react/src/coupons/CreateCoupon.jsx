@@ -84,110 +84,169 @@ function CreateCoupon() {
   return (
     <div className='CreateCoupon'>
       <br />
-      <div className="dashboardContainer">
+      <div className="fullContainer">
         <Coupons />
         <br/>
-        <form className="couponForm" onSubmit={handleSubmit}>
-          <label>Coupon Code</label>
-            <input
-              type="text"
-              id="code"
-              name="code"
-              placeholder="Coupon Code"
-              onChange={(event) => setCode(event.target.value)}
-            />
-          <label>Description</label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            placeholder="Description"
-            onChange={(event) => setDescription(event.target.value)}
-          />
-          <label>Type</label>
+        <form className="default-width" onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Coupon Code</label>
+              <input
+                type="text"
+                id="code"
+                name="code"
+                onChange={(event) => setCode(event.target.value)}
+                className="default-input"
+              />
+            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40">
+              <label className="bold">Description</label>
+              <input
+                type="text"
+                id="description"
+                name="description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                className="default-input"
+              />
+            </div>
+          </div>
           <br />
-          <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
-            <label>&nbsp;% Off</label>
-          <br />
-          <input type="radio" id="type" name="type" value="percent" onChange={(event) => setType(event.target.value)}/>
-            <label>&nbsp;$ Amount Off</label>
-          <br /><br />
-          <label>Amount ($ or %)</label>
-          <br />
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            placeholder="Amount"
-            onChange={(event) => setAmount(event.target.value)}
-          />
-          <br />
-          <label>Minimum Amount Required ($)</label>
-          <br />
-          <input
-            type="number"
-            id="min_amt"
-            name="min_amt"
-            placeholder="Minimum Amount"
-            onChange={(event) => setMinRequired(event.target.value)}
-          />
-          <br />
-          <label>Maximum Discount Total ($)</label>
-          <br />
-          <input
-            type="number"
-            id="max_amt"
-            name="max_amt"
-            placeholder="Maximum Amount"
-            onChange={(event) => setMaxAllowed(event.target.value)}
-          />
-          <br />
-          <label>Start Date & Time</label>
-          <br />
-          <input
-            type="datetime-local"
-            id="start_time"
-            name="start_time"
-            placeholder="Start Time"
-            onChange={(event) => setStartTime(event.target.value)}
-          />
-          <br />
-          <label>End Date & Time</label>
-          <br />
-          <input
-            type="datetime-local"
-            id="end_time"
-            name="end_time"
-            placeholder="End Time"
-            onChange={(event) => setEndTime(event.target.value)}
-          />
-          <label>Categories Of Products To Include</label>
-            <div className="row">
-              <div className="createSubCatCheckbox">
-                <input type="checkbox" value={"All"} name="subcats" onChange={() => handleCategory('All')}/>
-                <label>&nbsp;{"All Products"}</label>
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Type</label>
+              <br />
+              <div className="default-checkbox">
+                <input type="radio" id="type" name="type" value="percent" checked={type === "percent"} onChange={(event) => setType(event.target.value)}/>
+                <label className="bold">&nbsp;% Off</label>
+              </div>
+              <div className="default-checkbox">
+                <input type="radio" id="type" name="type" value="amount" checked={type === "amount"} onChange={(event) => setType(event.target.value)}/>
+                <label className="bold">&nbsp;$ Amount Off</label>
               </div>
             </div>
-            <div className="row">
-              {cats.map((category) => (
-                <div className="createSubCatCheckbox" key={category}>
-                  <input type="checkbox" value={category} name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;{category}</label>
-                </div>
-              ))}
-            </div>
-          <label>Subcategories Of Products To Include</label>
-            <div className="row">
-              {allSubcategories.map((subcategory) => (
-                <div className="createSubCatCheckbox" key={subcategory}>
-                  <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
-                </div>
-              ))}
-            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40"/>
+            
+          </div>
           <br />
-          <br/><br/>
-          <button type="submit">Create Coupon</button>
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Amount ($ or %)</label>
+              <br />
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                value={amount}
+                onChange={(event) => setAmount(event.target.value)}
+                className="default-input"
+              />
+            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40">
+              <label className="bold">Start Date & Time</label>
+              <br />
+              <input
+                type="datetime-local"
+                id="start_time"
+                name="start_time"
+                value={startTime}
+                onChange={(event) => setStartTime(event.target.value)}
+                className="default-input"
+              />
+            </div>
+            
+          </div>
+          <br />
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Minimum Amount Required ($)</label>
+              <br />
+              <input
+                type="number"
+                id="min_amt"
+                name="min_amt"
+                value={minRequired}
+                onChange={(event) => setMinRequired(event.target.value)}
+                className="default-input"
+              />
+            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40">
+              <label className="bold">End Date & Time</label>
+              <br />
+              <input
+                type="datetime-local"
+                id="end_time"
+                name="end_time"
+                value={endTime}
+                onChange={(event) => setEndTime(event.target.value)}
+                className="default-input"
+              />
+            </div>
+          </div>
+          <br />
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Maximum Discount Total ($)</label>
+              <br />
+              <input
+                type="number"
+                id="max_amt"
+                name="max_amt"
+                value={maxAllowed}
+                onChange={(event) => setMaxAllowed(event.target.value)}
+                className="default-input"
+              />
+            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40"/>
+          </div>
+          <br />
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Categories Of Products To Include</label>
+            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40"/>
+          </div>
+          <div className="row">
+            <div className="default-checkbox">
+              <input type="checkbox" value={"All"} name="subcats" onChange={() => handleCategory('All')}/>
+              <label>&nbsp;{"All Products"}</label>
+            </div>
+          </div>
+          <div className="row">
+            {cats.map((category) => (
+              <div className="default-checkbox" key={category}>
+                <input type="checkbox" value={category} name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                <label>&nbsp;{category}</label>
+              </div>
+            ))}
+          </div>
+          <br />
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Subcategories Of Products To Include</label>
+            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40"/>
+          </div>
+          <br />
+          <div className="row">
+            {allSubcategories.map((subcategory) => (
+              <div className="default-checkbox" key={subcategory}>
+                <input type="checkbox" value={subcategory.name} name="subcats" checked={category.includes(subcategory.name)} onChange={(event) => handleCategory(event.target.value)}/>
+                <label >&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+              </div>
+            ))}
+          </div>
+          <br />
+          <div className="row">
+            <button className="default-button" type="submit">Create Coupon</button>
+          </div>
         </form>
         {showConfirmation === 'required' &&
           <div className="confirmation-modal">
@@ -195,7 +254,7 @@ function CreateCoupon() {
               <h3>Sorry, you've missed a required field.</h3>
               <p>Please review the form and try agin.</p>
               <div className="confirmation-buttons">
-                <button onClick={() => setShowConfirmation('false')}>Review</button>
+                <button className="delete-button" onClick={() => setShowConfirmation('false')}>Review</button>
               </div>
             </div>
           </div>
@@ -206,7 +265,7 @@ function CreateCoupon() {
               <h3>Sorry, something went wrong.</h3>
               <p>Please review the form and try agin.</p>
               <div className="confirmation-buttons">
-                <button onClick={() => setShowConfirmation('false')}>Review</button>
+                <button className="delete-button" onClick={() => setShowConfirmation('false')}>Review</button>
               </div>
             </div>
           </div>

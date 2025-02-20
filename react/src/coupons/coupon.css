@@ -1,0 +1,38 @@
+/* coupon.css */
+.coupon-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* No need for overflow-x here, it's handled by the parent div */
+  /*table-layout: fixed; /* Important for consistent column widths */
+}
+
+.coupon-table th,
+.coupon-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.coupon-table th {
+  background-color: #f2f2f2;
+}
+
+.coupon-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.coupon-table tr:hover {
+  background-color: #ddd;
+}
+
+@media screen and (max-width: 500px) {
+  .coupon-table .hide-on-mobile {
+    display: none;
+  }
+
+  .coupon-table th,
+  .coupon-table td {
+    padding: 6px;
+    font-size: 14px;
+  }
+}

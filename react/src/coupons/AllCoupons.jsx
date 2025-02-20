@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Coupons from "./Coupons";
 import { useNavigate } from "react-router-dom";
+import "./coupon.css";
 
 function AllCoupons() {
   const [coupons, setCoupons] = useState([]);
@@ -11,14 +12,12 @@ function AllCoupons() {
       .then((response) => response.json())
       .then((data) => {
         setCoupons(data);
-        console.log(data);
-      })
+      });
   }, []);
 
   const formatTime = (timeString) => {
     const date = new Date(timeString);
     if (isNaN(date.getTime())) {
-      // Check if date is invalid
       return "No End Date";
     } else {
       return date.toLocaleString();
@@ -26,47 +25,52 @@ function AllCoupons() {
   };
 
   return (
-    <div className='Dashboard'>
+    <div className='Coupons'>
       <br />
-      <div className="dashboardContainer">
+      <div className="fullContainer">
         <Coupons />
         <br />
-        <table className="coupon-table">
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Description</th>
-              <th>Amount</th>
-              <th>Type</th>
-              <th>Minimum Required</th>
-              <th>Maximum Allowed</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Categories</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {coupons.map((coupon) => (
-              <tr key={coupon.code}>
-                <td>{coupon.code}</td>
-                <td>{coupon.description}</td>
-                <td>{coupon.amount}</td>
-                <td>{coupon.type}</td>
-                <td>{coupon.minimum_required}</td>
-                <td>{coupon.maximum_allowed}</td>
-                <td>{formatTime(coupon.start_time)}</td>
-                <td>{formatTime(coupon.end_time)}</td>
-                <td>{coupon.categories}</td>
-                <td>
-                  <button className="edit-button" onClick={() => navigate('/coupons/edit/' + coupon.code)}>Edit</button>
-                </td>
+        <div style={{ overflowX: 'auto',  WebkitOverflowScrolling: 'touch' }}> {/* Scrollable container */}
+          <table className="coupon-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th className="hide-on-mobile">Description</th>
+                <th className="hide-on-mobile">Amount</th>
+                <th className="hide-on-mobile">Type</th>
+                <th className="hide-on-mobile">Minimum Required</th>
+                <th className="hide-on-mobile">Maximum Allowed</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th className="hide-on-mobile">Categories</th>
+                <th>Edit</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {coupons.map((coupon) => (
+                <tr key={coupon.code}>
+                  <td>{coupon.code}</td>
+                  <td className="hide-on-mobile">{coupon.description}</td>
+                  <td className="hide-on-mobile">{coupon.amount}</td>
+                  <td className="hide-on-mobile">{coupon.type}</td>
+                  <td className="hide-on-mobile">{coupon.minimum_required}</td>
+                  <td className="hide-on-mobile">{coupon.maximum_allowed}</td>
+                  <td>{formatTime(coupon.start_time)}</td>
+                  <td>{formatTime(coupon.end_time)}</td>
+                  <td className="hide-on-mobile">{coupon.categories}</td>
+                  <td>
+                    <button className="default-button" onClick={() => navigate('/coupons/edit/' + coupon.code)}>
+                      &nbsp;Edit&nbsp;
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
 }
+
 export default AllCoupons;
