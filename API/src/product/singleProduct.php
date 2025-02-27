@@ -23,7 +23,7 @@ if (!$conn) {
 
 // Get single products
 
-if ($inputs["id"]) {
+if (isset($inputs["id"])) {
   $_SESSION['product_id'] = $inputs['id'];
 }
 

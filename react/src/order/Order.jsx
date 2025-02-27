@@ -50,6 +50,7 @@ function Order() {
   const [sizesAvailable, setSizesAvailable] = useState(1);
   const [nameOnBackDetails, setNameOnBackDetails] = useState("");
   const [numberOnBackDetails, setNumberOnBackDetails] = useState(0);
+  const [custom, setCustom] = useState(0);
 
   const colorMap = {
     "Black": black,
@@ -79,9 +80,7 @@ function Order() {
   function retrieveProduct() {
     let data = { id: 0 };
     
-    if (productKey) {
-      data = { id: productKey };
-    }
+    data = { id: productKey };
 
     fetch("/api/product/singleProduct.php", {
       method: "POST",
@@ -116,6 +115,7 @@ function Order() {
           setDesign(data);
           setNameOnBack(data[0].nameOnBack);
           setNumberOnBack(data[0].numberOnBack);
+          setCustom(data[0].custom);
           let retrieveDefault = data[0];
           for (const element of data) {
             if (element.product_id < retrieveDefault.product_id) {
@@ -543,8 +543,11 @@ function Order() {
         <div className="mobileSplit50">
           <div className="orderDetails">
             <h1>Style Your Product With The Options Below</h1>
-            <h3>Click <Link to="/customOrder">Here</Link> To Order a Custom Design</h3>
-            <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
+            {custom === 0 && <h3>Click <Link to="/customOrder">Here</Link> To Order a Custom Design</h3>}
+            <h1>
+              Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}
+              {custom === 1 && <span> - ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost + 6) * quantity).toFixed(2)}</span>}
+            </h1>
             {currentStyle !== "Other" && 
               <h1>
                 Style: {currentStyle}
@@ -793,7 +796,10 @@ function Order() {
               </div>
               <div className="split25" />
             </div>
-            <h1>Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}</h1>
+            <h1>
+              Price: ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost) * quantity).toFixed(2)}
+              {custom === 1 && <span> - ${(((currentDesign.price * 1) + productType.addedCost + size.addedCost + 6) * quantity).toFixed(2)}</span>}
+            </h1>
           </div>
         </div>
       </div>

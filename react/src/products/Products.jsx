@@ -130,12 +130,7 @@ function Products() {
 
   // Navigates to order page
   const orderProduct = (productId) => {
-    if (productId != 0) {
-      navigate("/order/" + productId);
-    }
-    else {
-      navigate("/customOrder");
-    }
+    navigate("/order/" + productId);
   };
 
   // Navigates to edit page
