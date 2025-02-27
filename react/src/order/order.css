@@ -58,19 +58,15 @@
   resize: none;
 }
 
-.addToCart {
-  background-color: #4c77af;
-  color: #fff;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  width: 400px;
-  cursor: pointer;
-  margin-left: 15px;
-  font-size: xx-large;
-  text-decoration: none;
-}
-
-.addToCart:hover {
-  background-color: #45a049;
+@media screen and (max-width: 500px) {
+  .colorOptions {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+  }
+  
+  .shirtOptions {
+    width: 100px;
+    height: 100px;
+  }
 }

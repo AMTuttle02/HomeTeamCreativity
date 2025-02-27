@@ -550,7 +550,7 @@ function Order() {
                 Style: {currentStyle}
               </h1>
             }
-            <div className="row">
+            <div className="wrapRow">
               {(validStyle(tColors) && currentStyle !== "Other") && 
                 <button
                   onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
@@ -598,7 +598,7 @@ function Order() {
             </div>
             <h1>Color: {currentColor}</h1>
             {(currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") &&
-              <div className="row">
+              <div className="wrapRow">
                 {tColors.map((color) => (
                   <div key={currentStyle + color}>
                     <button 
@@ -615,7 +615,7 @@ function Order() {
               </div>
             }
             {currentStyle === "Long Sleeve T-Shirt" &&
-              <div className="row">
+              <div className="wrapRow">
                 {lColors.map((color) => (
                   <button 
                     onClick={() => changeColor(color)}
@@ -630,7 +630,7 @@ function Order() {
               </div>
             }
             {currentStyle === "Crewneck Sweatshirt" &&
-              <div className="row">
+              <div className="wrapRow">
                 {cColors.map((color) => (
                   <button 
                     onClick={() => changeColor(color)}
@@ -645,7 +645,7 @@ function Order() {
               </div>
             }
             {currentStyle === "Hooded Sweatshirt" &&
-              <div className="row">
+              <div className="wrapRow">
                 {hColors.map((color) => (
                   <button 
                     onClick={() => changeColor(color)}
@@ -662,7 +662,7 @@ function Order() {
             {sizesAvailable === 1 &&
               <div>
                 <h1>Size: {size.description}</h1>
-                <div className="row">
+                <div className="wrapRow">
                   <h1 className="noBold">Youth:&nbsp;</h1>
                   <button 
                     onClick={() => setSize({description: "Youth Small", addedCost: -2})}
@@ -685,7 +685,7 @@ function Order() {
                     <h1 className="noBold">X-Large</h1>
                   </button>
                 </div>
-                <div className="row">
+                <div className="wrapRow">
                   <h1 className="noBold">Adult:&nbsp;</h1>
                   <button 
                     onClick={() => setSize({description: "Adult Small", addedCost: 0})}
