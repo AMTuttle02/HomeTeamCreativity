@@ -1,0 +1,171 @@
+.welcome {
+  text-align: center;
+  align-items: center;
+  font-size: 3vw;
+  margin: 0px;
+  margin-top: 5px;
+  margin-bottom: 30px;
+  font-weight: 100;
+}
+
+.homepageLink {
+  width: 15%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: inline-block;
+  text-align: center;
+  background-color: #005E96;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+  font-size: 2vw;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.homepageLink:hover {
+  background-color: #003f64;
+}
+
+.categoryLink {
+  width: 15%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: inline-block;
+  text-align: center;
+  background-color: #005E96;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+  font-size: 2vw;
+  margin: 2%;
+}
+
+.categoryLink:hover {
+  background-color: #003f64;
+}
+
+.footerLink {
+  width: 15%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: inline-block;
+  text-align: center;
+  background-color: #005E96;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+  font-size: 2vw;
+  margin: 2%;
+}
+
+.footerLink:hover {
+  background-color: #003f64;
+}
+
+.welcomeLinksRow {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured {
+  text-decoration: none;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 2vw;
+  font-weight: 100;
+}
+
+.featuredBelow {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 2vw;
+  font-weight: 100;
+  text-decoration: underline;
+}
+
+.homeProductsCell {
+  width: 30%;
+  max-width: 90%;
+  height: auto;
+  color: white;
+  font-size: large;
+}
+
+footer {
+  text-align: center;
+  color: black;
+  font-style: italic;
+  font-size: 2vw;
+  display: block;
+}
+
+.footerHeaderLink {
+  text-decoration: underline;
+  color: black;
+  margin: 1%;
+  font-size: 1.5vw;
+}
+
+.socialMediaLink {
+  width: 4%;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.socialMediaImg {
+  width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .welcome {
+    font-size: large;
+  }
+
+  .homepageLink {
+    width: 75%;
+    font-size: large;
+  }
+
+  .categoryLink {
+    width: 40%;
+    font-size: large;
+  }
+
+  .footerLink {
+    width: 40%;
+    margin-left: 30%;
+    margin-right: 30%;
+    font-size: large;
+  }
+
+  .featured {
+    font-size: large;
+  }
+
+  .featuredBelow {
+    font-size: large;
+  }
+
+  .homeProductsCell {
+    width: 75%;
+  }
+
+  .socialMediaLink {
+    width: 10%;
+  }
+
+  .footerHeaderLink {
+    width: 100%;
+  }
+
+}

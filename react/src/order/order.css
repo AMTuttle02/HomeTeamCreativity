@@ -1,0 +1,72 @@
+.designSideNavButton {
+  flex: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.designSideNavButton button {
+  color: black;
+  font-size: 3vw;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  cursor: pointer;
+}
+
+.designSideNavButton button:hover {
+  color: blue;
+}
+
+.orderDesign {
+  flex: 80%;
+  text-align: center;
+}
+
+.colorOptions {
+  width: 75px;
+  height: 75px;
+  padding: 5px;
+}
+
+.shirtOptions {
+  width: 150px;
+  height: 150px;
+}
+
+.customOrderBox textarea {
+  width: 70%;
+  height: 100px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+
+.lastNameOrderPage[type="text"] {
+  width: 50%;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+
+@media screen and (max-width: 500px) {
+  .colorOptions {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+  }
+  
+  .shirtOptions {
+    width: 100px;
+    height: 100px;
+  }
+}

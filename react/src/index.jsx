@@ -1,48 +1,46 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Homepage from "./Homepage"
-import HomeContents from "./HomeContents.jsx"
-import Login from "./Login";
-import SignUp from "./SignUp";
-import Products from "./Products";
-import HowItWorks from "./howItWorks";
-import About from "./AboutUs";
+
+import About from "./static/AboutUs.jsx";
+import AllCoupons from "./coupons/AllCoupons.jsx";
+import Cart from "./cart/Cart";
+import Checkout from "./checkout/CheckoutComplete.jsx";
+import CheckoutDetails from "./checkout/CheckoutDetails.jsx";
+import CostCalculator from "./calculator/CostCalculator.jsx";
+import CreateCategories from "./categories/CreateCategories.jsx";
+import CreateCoupon from "./coupons/CreateCoupon.jsx";
+import Dashboard from "./dashboard/Dashboard";
+import EditCoupons from "./coupons/EditCoupons.jsx";
+import EditProducts from "./products/EditProducts";
+import EmailConfirmation from "./login/EmailConfirmation.jsx";
+import ForgotPassword from "./login/ForgotPassword.jsx";
+import FourOFour from "./errorPages/404.jsx";
+import HomeContents from "./homepage/HomeContents.jsx";
+import Navbar from "./homepage/Navbar.jsx";
+import HowItWorks from "./static/howItWorks.jsx";
+import Login from "./login/Login.jsx";
+import LogOut from "./login/LogOut.jsx";
+import NoResults from "./products/NoResults.jsx";
+import Order from "./order/Order";
+import Products from "./products/Products";
+import PayLater from "./static/PayLater.jsx";
+import SearchResults from "./products/SearchResults";
+import SignUp from "./login/SignUp.jsx";
+import ResetPassword from "./login/ResetPassword.jsx";
+import ReturnPolicy from "./static/ReturnPolicy.jsx";
+import Upload from "./upload/Upload.jsx";
+import UploadSuccess from "./upload/UploadSuccess.jsx";
 import "./index.css";
-import LoginSuccess from "./LoginSuccess";
-import LogOut from "./LogOut";
-import Upload from "./Upload";
-import UploadSuccess from "./UploadSuccess";
-import SearchResults from "./SearchResults";
-import NoResults from "./NoResults";
-import Cart from "./Cart";
-import Order from "./Order";
-import CustomOrder from "./CustomOrder";
-import Checkout from "./CheckoutComplete";
-import CheckoutFailed from "./CheckoutFailed";
-import ReturnPolicy from "./ReturnPolicy";
-import CheckoutDetails from "./CheckoutDetails";
-import PayLater from "./PayLater";
-import Dashboard from "./Dashboard";
-import CreateCategories from "./CreateCategories";
-import EditProducts from "./EditProducts";
-import ForgotPassword from "./ForgotPassword";
-import ResetPassword from "./ResetPassword";
-import EmailConfirmation from "./EmailConfirmation";
-import CostCalculator from "./CostCalculator.jsx";
-import FourOFour from "./404.jsx";
-import AllCoupons from "./AllCoupons.jsx";
-import CreateCoupon from "./CreateCoupon.jsx";
-import EditCoupons from "./EditCoupons.jsx";
-import FiveHundred from "./500.jsx";
+import FiveHundred from "./errorPages/500.jsx";
+import EditNavbar from "./homepage/EditNavbar.jsx";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage />}>
+        <Route path="/" element={<Navbar />}>
           <Route index element={<HomeContents />} />
           <Route path="login" element={<Login />} />
-          <Route path="loggedin" element={<LoginSuccess />} />
           <Route path="loggedout" element={<LogOut />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="products" element={<Products />} />
@@ -57,15 +55,13 @@ export default function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="order" element={<Order />} />
           <Route path="order/:productKey" element={<Order />} />
-          <Route path="customOrder" element={<CustomOrder />} />
           <Route path="ordercomplete/:orderId/:paid/:stripe" element={<Checkout />} />
-          <Route path="orderfailed" element={<CheckoutFailed />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="paylater" element={<PayLater />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="categories" element={<CreateCategories />} />
-          <Route path="editproducts" element={<EditProducts />} />
+          <Route path="editproduct/:productId" element={<EditProducts />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/emailconfirmation" element={<EmailConfirmation />} />
@@ -75,7 +71,8 @@ export default function App() {
           <Route path="/coupons" element={<AllCoupons />} />
           <Route path="/coupons/create" element={<CreateCoupon />} />
           <Route path="/coupons/edit/:code" element={<EditCoupons />} />
-          <Route path="*" element={<Homepage />} />
+          <Route path="/editNavbar" element={<EditNavbar />} />
+          <Route path="*" element={<FourOFour />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -7,11 +7,11 @@ services:
         - ./react/public:/app/public
     api:
         build:
-            context: ./PHP
+            context: ./API
         depends_on:
             - db
         volumes:
-            - ./PHP/src:/var/www/html/
+            - ./API/src:/var/www/html/
         env_file:
           - .env
     db:

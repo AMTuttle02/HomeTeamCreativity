@@ -1,0 +1,8 @@
+.forgotPasswordButton {
+  text-decoration: underline;
+  color: blue;
+  background-color: transparent;
+  font-size: medium;
+  border: none;
+  cursor: pointer;
+}
