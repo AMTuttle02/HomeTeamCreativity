@@ -10,6 +10,6 @@
   flex: 33%;
 }
 
-.createCatCheckbox input {
+.createSubCatCheckbox input {
   cursor: pointer;
 }

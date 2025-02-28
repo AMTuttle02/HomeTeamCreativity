@@ -9,7 +9,6 @@ import CheckoutDetails from "./checkout/CheckoutDetails.jsx";
 import CostCalculator from "./calculator/CostCalculator.jsx";
 import CreateCategories from "./categories/CreateCategories.jsx";
 import CreateCoupon from "./coupons/CreateCoupon.jsx";
-import CustomOrder from "./order/CustomOrder.jsx";
 import Dashboard from "./dashboard/Dashboard";
 import EditCoupons from "./coupons/EditCoupons.jsx";
 import EditProducts from "./products/EditProducts";
@@ -56,7 +55,6 @@ export default function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="order" element={<Order />} />
           <Route path="order/:productKey" element={<Order />} />
-          <Route path="customOrder" element={<CustomOrder />} />
           <Route path="ordercomplete/:orderId/:paid/:stripe" element={<Checkout />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />

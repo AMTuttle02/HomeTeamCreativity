@@ -24,6 +24,32 @@ function Upload() {
   const [customFieldRequired, setCustomFieldRequired] = useState(null);
   const [sizesAvailable, setSizesAvailable] = useState(1);
   const navigate = useNavigate();
+  const [admin, setAdmin] = useState("");
+  const [allCategories, setAllCategories] = useState([]);
+
+  // Api Calls
+  useEffect(() => {
+    fetch("/api/admin/admin.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAdmin(data.admin);
+      });
+    
+    fetch("/api/category/getSubCats.php")
+      .then((response) => response.json())
+      .then((data) => {
+          setAllSubcategories(data);
+      }
+    );
+
+    fetch("/api/category/getCategories.php")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setAllCategories(data);
+      }
+    );
+  }, []);
 
   const handleFrontFileInputChange = (event) => {
     setFrontFile(event.target.files[0]);
@@ -122,7 +148,7 @@ function Upload() {
     }
   
     try {
-      const response = await axios.post('/api/upload.php', formData, {
+      const response = await axios.post('/api/product/upload.php', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -134,23 +160,6 @@ function Upload() {
       console.error('Error uploading files', error);
     }
   }
-
-  const [admin, setAdmin] = useState("");
-  useEffect(() => {
-    fetch("/api/admin/admin.php")
-      .then((response) => response.json())
-      .then((data) => {
-        setAdmin(data.admin);
-      });
-    
-    fetch("/api/category/getSubCats.php")
-      .then((response) => response.json())
-      .then((data) => {
-          setAllSubcategories(data);
-          console.log(data);
-      }
-    );
-  }, []);
 
   useEffect(() => {
     const tColors = tshirtColors.trim();
@@ -192,8 +201,7 @@ function Upload() {
       <div className='Upload'>
         <br />
         <div className="container">
-          <h1>Upload Designs Below</h1>
-          <h2>Design must be 500px by 500px</h2>
+          <h1 className="center">Upload Designs Below</h1>
           <h3 className="center">Required Fields are marked with a <span className="red">*</span></h3>
           <br/>
           <form onSubmit={handleSubmit}>
@@ -203,6 +211,7 @@ function Upload() {
                 id="product_name"
                 name="product_name"
                 placeholder="Product Name"
+                className="default-input"
                 onChange={(event) => setProductName(event.target.value)}
               />
             <label>Price<span className="red">*</span> (Do Not Include $) (Pricing Default is for an Adult Medium)</label>
@@ -211,6 +220,7 @@ function Upload() {
               id="price"
               name="price"
               placeholder="Price"
+              className="default-input"
               onChange={(event) => setPrice(event.target.value)}
             />
             <label>Tags (Separate By A Space)</label>
@@ -219,269 +229,241 @@ function Upload() {
               id="tags"
               name="tags"
               placeholder="Tags"
+              className="default-input"
               onChange={(event) => setTags(event.target.value)}
             />
             <br />
-            <center><h3>Categories</h3></center>
+            <h3 className="center">Categories</h3>
             <div className="row">
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Faith" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Faith*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Family" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Family*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Health" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Health</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Holiday" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Holiday</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Ohio" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Ohio*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Other" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Other</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Patriotic" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Patriotic*</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="School" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;School</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Seasons" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Seasons</label>
-              </div>
-              <div className="createCatCheckbox">
-                  <input type="checkbox" value="Sports" name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                  <label>&nbsp;Sports</label>
-              </div>
+              {allCategories.map((category) => (
+                <div className="createCatCheckbox" key={category.category}>
+                  <input type="checkbox" value={category.category} name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;{category.category}</label>
+                </div>
+              ))}
             </div>
-            <center><h3>Subcategories</h3></center>
+            <h3 className="center">Subcategories</h3>
             <div className="row">
-                {allSubcategories.map((subcategory) => (
-                    <div className="createSubCatCheckbox" key={subcategory.name}>
-                        <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
-                        <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
-                    </div>
-                ))}
+              {allSubcategories.map((subcategory) => (
+                <div className="createSubCatCheckbox" key={subcategory.name}>
+                  <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
+                  <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
+                </div>
+              ))}
             </div>
-            <center><h3>Default Style<span className="red">*</span></h3></center>
-            <div className="row">
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="style" name="style" value="tshirt" onChange={(event) => setStyle(event.target.value)}/>
-                    <label>&nbsp;T-Shirt</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="style" name="style" value="longsleeve" onChange={(event) => setStyle(event.target.value)}/>
-                    <label>&nbsp;Long Sleeve</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="style" name="style" value="crewneck" onChange={(event) => setStyle(event.target.value)}/>
-                    <label>&nbsp;Crewneck</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="style" name="style" value="hoodie" onChange={(event) => setStyle(event.target.value)}/>
-                    <label>&nbsp;Hoodie</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="style" name="style" value="other" onChange={(event) => setStyle(event.target.value)}/>
-                    <label>&nbsp;Other</label>
-                    <br />
-                </span>
-              </div>
-            </div>
-            <center><h3>Default Style Location<span className="red">*</span></h3></center>
+            <div className="mobileCenter">
+              <h3 className="center">Default Style<span className="red">*</span></h3>
               <div className="row">
-                <div className="uploadSplit" />
-                <div className="uploadSplit">
+                <div className="mobileSplit20">
                   <span>
-                    <input type="radio" id="location" name="location" value="front" onChange={(event) => setLocation(event.target.value)}/>
-                      <label>&nbsp;Front</label>
+                    <input type="radio" id="style" name="style" value="tshirt" className="pointer" onChange={(event) => setStyle(event.target.value)}/>
+                      <label>&nbsp;T-Shirt</label>
                       <br />
                   </span>
                 </div>
-                <div className="uploadSplit">
+                <div className="mobileSplit20">
                   <span>
-                    <input type="radio" id="location" name="location" value="back" onChange={(event) => setLocation(event.target.value)}/>
-                      <label>&nbsp;Back</label>
+                    <input type="radio" id="style" name="style" value="longsleeve" className="pointer" onChange={(event) => setStyle(event.target.value)}/>
+                      <label>&nbsp;Long Sleeve</label>
                       <br />
                   </span>
                 </div>
-                <div className="uploadSplit" />
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="style" name="style" value="crewneck" className="pointer" onChange={(event) => setStyle(event.target.value)}/>
+                      <label>&nbsp;Crewneck</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="style" name="style" value="hoodie" className="pointer" onChange={(event) => setStyle(event.target.value)}/>
+                      <label>&nbsp;Hoodie</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="style" name="style" value="other" className="pointer" onChange={(event) => setStyle(event.target.value)}/>
+                      <label>&nbsp;Other</label>
+                      <br />
+                  </span>
+                </div>
               </div>
-            <center><h3>Color Options</h3></center>
-            <div className="row">
-              <div className="uploadSplit">
-                <label>T-Shirt (Other): {tColorsPrimary}</label>
-                <br />
-                <input type="checkbox" id="tBlack" name="tBlack" value="Black" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Black</label>
+              <center><h3>Default Style Location<span className="red">*</span></h3></center>
+                <div className="row">
+                  <div className="mobileSplit20" />
+                  <div className="mobileSplit20">
+                    <span>
+                      <input type="radio" id="location" name="location" value="front" className="pointer" onChange={(event) => setLocation(event.target.value)}/>
+                        <label>&nbsp;Front</label>
+                        <br />
+                    </span>
+                  </div>
+                  <div className="mobileSplit20"/>
+                  <div className="mobileSplit20">
+                    <span>
+                      <input type="radio" id="location" name="location" value="back" className="pointer" onChange={(event) => setLocation(event.target.value)}/>
+                        <label>&nbsp;Back</label>
+                        <br />
+                    </span>
+                  </div>
+                  <div className="mobileSplit20" />
+                </div>
+              <h3 className="center">Color Options</h3>
+              <div className="topAlignRow">
+                <div className="mobileSplit25">
+                  <label>T-Shirt (Other): {tColorsPrimary}</label>
                   <br />
-                <input type="checkbox" id="tYellow" name="tYellow" value="Yellow" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Yellow</label>
+                  <input type="checkbox" id="tBlack" name="tBlack" value="Black" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Black</label>
+                    <br />
+                  <input type="checkbox" id="tYellow" name="tYellow" value="Yellow" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Yellow</label>
+                    <br />
+                  <input type="checkbox" id="tPink" name="tPink" value="Pink" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Pink</label>
+                    <br />
+                  <input type="checkbox" id="tGray" name="tGray" value="Gray" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Gray</label>
+                    <br />
+                  <input type="checkbox" id="tMaroon" name="tMaroon" value="Maroon" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Maroon</label>
+                    <br />
+                  <input type="checkbox" id="tOrange" name="tOrange" value="Orange" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Orange</label>
+                    <br />
+                  <input type="checkbox" id="tPurple" name="tPurple" value="Purple" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Purple</label>
+                    <br />
+                  <input type="checkbox" id="tRed" name="tRed" value="Red" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Red</label>
+                    <br />
+                  <input type="checkbox" id="tRoyal" name="tRoyal" value="Royal" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Royal</label>
+                    <br />
+                  <input type="checkbox" id="tGreen" name="tGreen" value="Green" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Green</label>
+                    <br />
+                  <input type="checkbox" id="tWhite" name="tWhite" value="White" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;White</label>
+                    <br />
+                  <input type="checkbox" id="tNavy" name="tNavy" value="Navy" className="pointer" onChange={(event) => handleTshirtColor(event.target.value)}/>
+                    <label>&nbsp;Navy</label>
+                    <br />
+                </div>
+                <div className="mobileSplit25">
+                  <label>Long Sleeve: {lColorsPrimary}</label>
                   <br />
-                <input type="checkbox" id="tPink" name="tPink" value="Pink" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Pink</label>
+                  <input type="checkbox" id="lBlack" name="lBlack" value="Black" className="pointer" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                    <label>&nbsp;Black</label>
+                    <br />
+                  <input type="checkbox" id="lNavy" name="lNavy" value="Navy" className="pointer" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                    <label>&nbsp;Navy</label>
+                    <br />
+                  <input type="checkbox" id="lRed" name="lRed" value="Red" className="pointer" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                    <label>&nbsp;Red</label>
+                    <br />
+                  <input type="checkbox" id="lRoyal" name="lRoyal" value="Royal" className="pointer" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                    <label>&nbsp;Royal</label>
+                    <br />
+                  <input type="checkbox" id="lGray" name="lGray" value="Gray" className="pointer" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                    <label>&nbsp;Gray</label>
+                    <br />
+                  <input type="checkbox" id="lWhite" name="lWhite" value="White" className="pointer" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
+                    <label>&nbsp;White</label>
+                    <br />
+                </div>
+                <div className="mobileSplit25">
+                  <label>Crewneck: {cColorsPrimary}</label>
                   <br />
-                <input type="checkbox" id="tGray" name="tGray" value="Gray" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Gray</label>
+                  <input type="checkbox" id="cBlack" name="cBlack" value="Black" className="pointer" onChange={(event) => handleCrewneckColor(event.target.value)}/>
+                    <label>&nbsp;Black</label>
+                    <br />
+                  <input type="checkbox" id="cGray" name="cGray" value="Gray" className="pointer" onChange={(event) => handleCrewneckColor(event.target.value)}/>
+                    <label>&nbsp;Gray</label>
+                    <br />
+                  <input type="checkbox" id="cWhite" name="cWhite" value="White" className="pointer" onChange={(event) => handleCrewneckColor(event.target.value)}/>
+                    <label>&nbsp;White</label>
+                    <br />
+                </div>
+                <div className="mobileSplit25">
+                  <label>Hoodie: {hColorsPrimary}</label>
                   <br />
-                <input type="checkbox" id="tMaroon" name="tMaroon" value="Maroon" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Maroon</label>
-                  <br />
-                <input type="checkbox" id="tOrange" name="tOrange" value="Orange" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Orange</label>
-                  <br />
-                <input type="checkbox" id="tPurple" name="tPurple" value="Purple" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Purple</label>
-                  <br />
-                <input type="checkbox" id="tRed" name="tRed" value="Red" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Red</label>
-                  <br />
-                <input type="checkbox" id="tRoyal" name="tRoyal" value="Royal" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Royal</label>
-                  <br />
-                <input type="checkbox" id="tGreen" name="tGreen" value="Green" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Green</label>
-                  <br />
-                <input type="checkbox" id="tWhite" name="tWhite" value="White" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;White</label>
-                  <br />
-                <input type="checkbox" id="tNavy" name="tNavy" value="Navy" onChange={(event) => handleTshirtColor(event.target.value)}/>
-                  <label>&nbsp;Navy</label>
-                  <br />
+                  <input type="checkbox" id="hBlack" name="hBlack" value="Black" className="pointer" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                    <label>&nbsp;Black</label>
+                    <br />
+                  <input type="checkbox" id="hGray" name="hGray" value="Gray" className="pointer" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                    <label>&nbsp;Gray</label>
+                    <br />
+                  <input type="checkbox" id="hRed" name="hRed" value="Red" className="pointer" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                    <label>&nbsp;Red</label>
+                    <br />
+                  <input type="checkbox" id="hNavy" name="hNavy" value="Navy" className="pointer" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                    <label>&nbsp;Navy</label>
+                    <br />
+                  <input type="checkbox" id="hWhite" name="hWhite" value="White" className="pointer" onChange={(event) => handleHoodieColor(event.target.value)}/>
+                    <label>&nbsp;White</label>
+                    <br />
+                </div>
               </div>
-              <div className="uploadSplit">
-                <label>Long Sleeve: {lColorsPrimary}</label>
-                <br />
-                <input type="checkbox" id="lBlack" name="lBlack" value="Black" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
-                  <label>&nbsp;Black</label>
-                  <br />
-                <input type="checkbox" id="lNavy" name="lNavy" value="Navy" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
-                  <label>&nbsp;Navy</label>
-                  <br />
-                <input type="checkbox" id="lRed" name="lRed" value="Red" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
-                  <label>&nbsp;Red</label>
-                  <br />
-                <input type="checkbox" id="lRoyal" name="lRoyal" value="Royal" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
-                  <label>&nbsp;Royal</label>
-                  <br />
-                <input type="checkbox" id="lGray" name="lGray" value="Gray" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
-                  <label>&nbsp;Gray</label>
-                  <br />
-                <input type="checkbox" id="lWhite" name="lWhite" value="White" onChange={(event) => handleLongSleeveColor(event.target.value)}/>
-                  <label>&nbsp;White</label>
-                  <br />
+              <center><h3>Custom Details Required<span className="red">*</span></h3></center>
+              <div className="row">
+                <div className="mobileSplit20"/>
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="customBoxRequired" name="customBoxRequired" value={1} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                      <label>&nbsp;Yes</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20"/>
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="customBoxRequired" name="customBoxRequired" value={0} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
+                      <label>&nbsp;No</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20"/>
               </div>
-              <div className="uploadSplit">
-                <label>Crewneck: {cColorsPrimary}</label>
-                <br />
-                <input type="checkbox" id="cBlack" name="cBlack" value="Black" onChange={(event) => handleCrewneckColor(event.target.value)}/>
-                  <label>&nbsp;Black</label>
-                  <br />
-                <input type="checkbox" id="cGray" name="cGray" value="Gray" onChange={(event) => handleCrewneckColor(event.target.value)}/>
-                  <label>&nbsp;Gray</label>
-                  <br />
-                <input type="checkbox" id="cWhite" name="cWhite" value="White" onChange={(event) => handleCrewneckColor(event.target.value)}/>
-                  <label>&nbsp;White</label>
-                  <br />
-              </div>
-              <div className="uploadSplit">
-                <label>Hoodie: {hColorsPrimary}</label>
-                <br />
-                <input type="checkbox" id="hBlack" name="hBlack" value="Black" onChange={(event) => handleHoodieColor(event.target.value)}/>
-                  <label>&nbsp;Black</label>
-                  <br />
-                <input type="checkbox" id="hGray" name="hGray" value="Gray" onChange={(event) => handleHoodieColor(event.target.value)}/>
-                  <label>&nbsp;Gray</label>
-                  <br />
-                <input type="checkbox" id="hRed" name="hRed" value="Red" onChange={(event) => handleHoodieColor(event.target.value)}/>
-                  <label>&nbsp;Red</label>
-                  <br />
-                <input type="checkbox" id="hNavy" name="hNavy" value="Navy" onChange={(event) => handleHoodieColor(event.target.value)}/>
-                  <label>&nbsp;Navy</label>
-                  <br />
-                <input type="checkbox" id="hWhite" name="hWhite" value="White" onChange={(event) => handleHoodieColor(event.target.value)}/>
-                  <label>&nbsp;White</label>
-                  <br />
+              <center><h3>Sizes Available</h3></center>
+              <div className="row">
+                <div className="mobileSplit20"/>
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="sizesAvailable" name="sizesAvailable" value={1} onChange={(event) => setSizesAvailable(event.target.value)}/>
+                      <label>&nbsp;Yes</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20"/>
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="sizesAvailable" name="sizesAvailable" value={0} onChange={(event) => setSizesAvailable(event.target.value)}/>
+                      <label>&nbsp;No</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20"/>
               </div>
             </div>
-            <center><h3>Custom Details Required<span className="red">*</span></h3></center>
-            <div className="row">
-              <div className="uploadSplit"/>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value={1} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
-                    <label>&nbsp;Yes</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="customBoxRequired" name="customBoxRequired" value={0} onChange={(event) => setCustomFieldRequired(event.target.value)}/>
-                    <label>&nbsp;No</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit"/>
+            <div className="center">
+              <h3>Front Design{location === 'front' && <span className="red">*</span>}</h3>
+              <input type="file" onChange={handleFrontFileInputChange} />
+              <br/><br/>
+              <h3>Back Design{location === 'back' && <span className="red">*</span>}</h3>
+              <input type="file" onChange={handleBackFileInputChange} />
+              <br/><br/>
             </div>
-            <center><h3>Sizes Available</h3></center>
-            <div className="row">
-              <div className="uploadSplit"/>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="sizesAvailable" name="sizesAvailable" value={1} onChange={(event) => setSizesAvailable(event.target.value)}/>
-                    <label>&nbsp;Yes</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit">
-                <span>
-                  <input type="radio" id="sizesAvailable" name="sizesAvailable" value={0} onChange={(event) => setSizesAvailable(event.target.value)}/>
-                    <label>&nbsp;No</label>
-                    <br />
-                </span>
-              </div>
-              <div className="uploadSplit"/>
-            </div>
-            <h3>Front Design{location === 'front' && <span className="red">*</span>}</h3>
-            <input type="file" onChange={handleFrontFileInputChange} />
-            <br/><br/>
-            <h3>Back Design{location === 'back' && <span className="red">*</span>}</h3>
-            <input type="file" onChange={handleBackFileInputChange} />
-            <br/><br/>
-            <button type="submit">Upload</button>
+            <button className="default-button" type="submit">Upload</button>
           </form>
           {showConfirmation &&
             <div className="confirmation-modal">
               <div className="confirmation-dialog">
                 <h3>Sorry, you've missed a required field.</h3>
                 <p>Please review the form and try agin.</p>
-                <div className="confirmation-buttons">
-                  <button onClick={() => setShowConfirmation(false)}>Review</button>
-                </div>
+                <button className="default-button" onClick={() => setShowConfirmation(false)}>Review</button>
               </div>
             </div>
           }
