@@ -1,0 +1,63 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build with Vite
+        run: npm run build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-files
+          path: |
+            ./dist
+            ./api # Assuming your API folder is in the root of your repo
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-files
+
+      - name: Deploy to Hostinger via SFTP
+        uses: burnett01/rsync-deployments@5.2
+        with:
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          args: -avz --delete
+          ssh_key: ${{ secrets.HOSTINGER_PRIVATE_KEY }}
+          remote_host: ${{ secrets.HOSTINGER_HOST }}
+          remote_user: ${{ secrets.HOSTINGER_USER }}
+          remote_path: ${{ secrets.HOSTINGER_REMOTE_PATH }}
+
+      - name: Move API Folder
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_PRIVATE_KEY }}
+          script: |
+            mv ${{ secrets.HOSTINGER_REMOTE_PATH }}/API ${{ secrets.HOSTINGER_REMOTE_PATH }}/API # replace api_folder_name
