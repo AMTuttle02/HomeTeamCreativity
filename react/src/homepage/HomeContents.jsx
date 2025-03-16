@@ -17,12 +17,7 @@ function HomeContents() {
   const navigate = useNavigate();
 
   const orderProduct = (productId) => {
-    if (productId != 0) {
       navigate("/order/" + productId);
-    }
-    else {
-      navigate("/customOrder");
-    }
   };
 
   useEffect(() => {
