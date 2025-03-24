@@ -278,7 +278,7 @@ function CheckoutDetails() {
                 .then((response) => response.json())
                 .then((data) => {
                 if (data > 0) {
-                    window.location.href = "/ordercomplete/" + oID + "/0/" + stripe;
+                    window.location.href = "/ordercomplete/" + oID + "/0/" + stripe + "/1";
                 } else {
                     navigate("/500");
                 }

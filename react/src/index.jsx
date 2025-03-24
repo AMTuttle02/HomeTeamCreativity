@@ -55,7 +55,7 @@ export default function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="order" element={<Order />} />
           <Route path="order/:productKey" element={<Order />} />
-          <Route path="ordercomplete/:orderId/:paid/:stripe" element={<Checkout />} />
+          <Route path="ordercomplete/:orderId/:paid/:stripe/:complete" element={<Checkout />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />
           <Route path="paylater" element={<PayLater />} />

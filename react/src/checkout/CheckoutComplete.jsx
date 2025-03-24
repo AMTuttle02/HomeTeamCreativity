@@ -5,7 +5,7 @@ import DisplayProductDetails from "../products/DisplayProductDetails";
 function Checkout() {
   const [products, setProducts] = useState([]);
   const [customHighTotal, setCustomHighTotal] = useState(0);
-  const { orderId, paid, stripe } = useParams();
+  const { orderId, paid, stripe, complete } = useParams();
 
   // API Calls
   useEffect(() => {
@@ -18,7 +18,7 @@ function Checkout() {
       .then((response) => response.json())
       .then((data) => {
         if (data === 1) {
-          getDetails();
+          window.location.href = "/ordercomplete/" + orderId + "/" + paid + "/" + stripe + "/0";
         }
       });
     }
@@ -46,10 +46,12 @@ function Checkout() {
       });
     }
 
-    if (orderId && paid && stripe) {
+    if (orderId && paid && stripe && complete > 0) {
       checkout();
+    } else if (orderId && paid && stripe) {
+      getDetails();
     }
-  }, [orderId, paid, stripe]);
+  }, [orderId, paid, stripe, complete]);
 
   return (
     <div className="CheckoutComplete">
