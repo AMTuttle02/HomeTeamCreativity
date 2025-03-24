@@ -158,7 +158,7 @@ function HomeContents() {
 
       {/* Featured Categories */}
       <div className="row">
-        <h1 className="featuredBelow">{featuredBelow}</h1>
+        <Link to={"/products"} className="featuredBelow">{featuredBelow}</Link>
       </div>
       <div className="doubleRow">
           {categoryLinks.map((item) => (
