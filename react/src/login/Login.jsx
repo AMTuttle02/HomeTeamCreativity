@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import bcrypt from 'bcryptjs';
 import CreateAccountButton from "./CreateAccountButton";
 
@@ -115,7 +115,7 @@ function Login() {
               placeholder="Password"
               onChange={(event) => setPassword(event.target.value)}
             />
-            <button onClick={() => navigate("/forgotpassword")} className="forgotPasswordButton">Forgot Password?</button>
+            <button type="button" onClick={() => navigate("/forgotpassword")} className="forgotPasswordButton">Forgot Password?</button>
             {loginAttempted && badLogin && <LoginFailed />}
             {localStorage.getItem("oID") ?
               <span>
