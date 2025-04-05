@@ -95,7 +95,7 @@ function SignUp() {
           // If the email and password are valid, redirect to the homepage
           if (data.loggedin) {
             localStorage.clear();
-            window.location.href = '/loggedin';
+            window.location.href = '/dashboard';
           } else {
             // If the email and password are not valid, display an error message
             setBadLogin(true);
@@ -134,7 +134,7 @@ function SignUp() {
   }, [password]);
 
   if (firstName) {
-    window.location.href='/loggedin';
+    window.location.href='/dashboard';
   }
   else {
     return (
