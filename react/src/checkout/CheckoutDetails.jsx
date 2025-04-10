@@ -407,7 +407,9 @@ function CheckoutDetails() {
                             </div>
                         </div>
                         <br/>
-                        <button className="default-button" onClick={payLater}>Complete Order</button>
+                        <div className="containerRow">
+                            <button className="default-button" onClick={payLater}>Complete Order</button>
+                        </div>
                     </div>
                 : 
                     <div>
@@ -464,7 +466,9 @@ function CheckoutDetails() {
                                     <h3> Due Now: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
                                 </div>
                                 <br/>
-                                <button className="default-button" onClick={payNow}>Go To Payment</button>
+                                <div className="containerRow">
+                                    <button className="default-button" onClick={payNow}>Go To Payment</button>
+                                </div>
                             </div>
                         :
                             <div className="containerRow">
@@ -498,7 +502,9 @@ function CheckoutDetails() {
                                     </div>
                                 </div>
                                 <br/>
-                                <button className="default-button" onClick={payLater}>Complete Order</button>
+                                <div className="containerRow">
+                                    <button className="default-button" onClick={payLater}>Complete Order</button>
+                                </div>
                             </div>
                         }
                     </div>

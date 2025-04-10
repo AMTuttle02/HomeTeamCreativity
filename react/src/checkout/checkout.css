@@ -25,6 +25,10 @@
   width: 20%;
 }
 
+.couponCodeButton:hover {
+  background-color: #3a5f8d;
+}
+
 .CheckoutComplete h1, h3{
   font-weight: 100;
 }
