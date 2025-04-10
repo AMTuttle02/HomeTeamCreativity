@@ -3,8 +3,7 @@
   text-decoration: none;
   font-weight: 100;
   text-align: center;
-  padding: 5%;
-  font-size: 1.5vw;
+  font-size: 1.5rem;
 }
 
 .cartSide {
@@ -65,20 +64,10 @@
   margin-top: 15%;
 }
 
-.cartSubTotal h2 {
-  font-weight: 100;
-  font-size: 1.5vw;
-}
-
 @media screen and (max-width: 500px) {
   .FinalCheckoutButtonPlacement {
     padding: 0px;
     margin: auto;
-  }
-
-  .cartImg {
-    width: 30px;
-    height: 30px;
   }
 
   .CheckoutButtonPlacement {

@@ -126,58 +126,72 @@ function Cart() {
     <div className="Cart">
       <br />
       <div className="fullContainer">
-      <div className="noWrapRow">
-        <div className="cartSide">
-          <div className="split50">
-            <button onClick={() => goBack()} className="default-button">
-              Continue Shopping
-            </button>
-          </div>
-          <div className="split50">
-            <h1>&nbsp;{addedItems} item(s)</h1>
+        <div className = "desktopOnly">
+          <div className="row">
+            <div className="split20">
+              <button onClick={() => goBack()} className="default-button">
+                Continue Shopping
+              </button>
+            </div>
+            <div className="split20">
+              <h1>&nbsp;{addedItems} item(s)</h1>
+            </div>
+            <div className="split20">
+              <div className="noWrapRow">
+                <img src={cart} alt="Cart" className="cartImg"/>
+                <h1>My Cart</h1>
+                <img src={cart} alt="Cart" className="cartImg"/>
+              </div>
+            </div>
+            <div className="split20">
+              <h1 className="inline"> 
+                ${(order.total_cost * 1).toFixed(2)}
+                  {customHighTotal > 0 &&
+                    <>
+                      {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
+                    </>
+                  }
+              </h1>
+            </div>
+            <div className="split20">
+              <button onClick={() => checkout(order)} className="default-button">
+                Check Out
+              </button>
+            </div>
           </div>
         </div>
-        <div className="cartMiddle">
+        <div className = "mobileOnly">
+          <h1>My Cart</h1>
+          <h1>&nbsp;{addedItems} item{addedItems > 1 && "s"}</h1>
+          <h1 className="inline"> 
+            ${(order.total_cost * 1).toFixed(2)}
+              {customHighTotal > 0 &&
+                <>
+                  {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
+                </>
+              }
+          </h1>
           <div className="noWrapRow">
-            <img src={cart} alt="Cart" className="cartImg"/>
-            <h1>My Cart</h1>
-            <img src={cart} alt="Cart" className="cartImg"/>
-          </div>
-        </div>
-        <div className="cartSide">
-          <div className="split50">
-            <h1 className="inline"> 
-              ${(order.total_cost * 1).toFixed(2)}
-                {customHighTotal > 0 &&
-                  <>
-                    {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
-                  </>
-                }
-            </h1>
-          </div>
-          <div className="split50">
             <button onClick={() => checkout(order)} className="default-button">
               Check Out
             </button>
           </div>
         </div>
-      </div>
-      <div className="default-width">
-        <div className="blackLine" />
-      </div>
-      {products.map((product) => (
-        <div key={[product.product_id, product.product_type, product.size, product.color, product.product_details]}>
-          <DisplayProductDetails order={order} product={product} active={1} />
-          <div className="default-width">
-            <div className="blackLine" />
-          </div>
+        <div className="default-width">
+          <div className="blackLine" />
         </div>
-      ))}
-      <div className="noWrapRow">
-        <div className="split70" />
-        <div className="split30">
-          <div className="cartSubTotal">
-            <h2> Subtotal: ${(order.total_cost * 1).toFixed(2)}
+        {products.map((product) => (
+          <div key={[product.product_id, product.product_type, product.size, product.color, product.product_details]}>
+            <DisplayProductDetails order={order} product={product} active={1} />
+            <div className="default-width">
+              <div className="blackLine" />
+            </div>
+          </div>
+        ))}
+        <div className="row">
+          <div className="mobileSplit70"/>
+          <div className="mobileSplit30">
+            <h1>Subtotal: ${(order.total_cost * 1).toFixed(2)}
               {customHighTotal ? 
                 <>
                 {' '}- ${(order.total_cost * 1 + customHighTotal).toFixed(2)}
@@ -185,15 +199,15 @@ function Cart() {
               :
                 <div />
               }
-            </h2>
+            </h1>
+            <div className="blackLine" />
+            <div className="containerRow">
+              <button onClick={() => checkout(order)} className="default-button">
+                Check Out
+              </button>
+            </div>
           </div>
-          <div className="blackLine" />
-          <br/>
-          <button onClick={() => checkout(order)} className="default-button">
-            Check Out
-          </button>
         </div>
-      </div>
       </div>
     </div>
   );
