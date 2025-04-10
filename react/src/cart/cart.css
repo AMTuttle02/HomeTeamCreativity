@@ -6,31 +6,9 @@
   font-size: 1.5rem;
 }
 
-.cartSide {
-  text-align: center;
-  width: 38%;
-  display: flex;
-  align-items: center;
-}
-
-.cartMiddle {
-  text-align: center;
-  width: 24%;
-  display: flex;
-}
-
-.inline {
-  white-space: nowrap;
-}
-
 .cartImg {
   width: 80px;
   height: 80px;
-}
-
-.FinalCheckoutButtonPlacement{
-  float: right;
-  padding-right: 40px;
 }
 
 .customDetails {
@@ -64,16 +42,4 @@
   margin-top: 15%;
 }
 
-@media screen and (max-width: 500px) {
-  .FinalCheckoutButtonPlacement {
-    padding: 0px;
-    margin: auto;
-  }
-
-  .CheckoutButtonPlacement {
-    float: left;
-    padding: 0px;
-    width: 100%;
-    display: flex;
-  }
-}
+@media screen and (max-width: 500px) {}
