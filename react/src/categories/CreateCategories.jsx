@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./categories.css";
 
 function CreateCategories() {
@@ -67,7 +67,7 @@ function CreateCategories() {
       <div className='Categories'>
         <br />
         <div className="container">
-            <div className="row">
+            <div className="noWrapRow">
                 <div className="split45">
                     <button className="default-button" onClick={() => setOption("Create")}>Create Category</button>
                 </div>
@@ -76,7 +76,6 @@ function CreateCategories() {
                     <button className="default-button" onClick={() => setOption("Remove")}>Remove Category</button>
                 </div>
             </div>
-            
             {option === "Create" ?
                 <span>
                     <h3 className="center">Category</h3>
@@ -89,15 +88,17 @@ function CreateCategories() {
                         ))}
                     </div>
                     <h3 className="center">Subcategory (Case-Sensitive)</h3>
-                    <div className="split50">
-                        <input
-                            type="text"
-                            id="cats"
-                            name="cats"
-                            placeholder="Subcategory"
-                            className="default-input"
-                            onChange={(event) => setSubcategory(event.target.value)}
-                        />
+                    <div className="row">
+                        <div className="split50">
+                            <input
+                                type="text"
+                                id="cats"
+                                name="cats"
+                                placeholder="Subcategory"
+                                className="default-input"
+                                onChange={(event) => setSubcategory(event.target.value)}
+                            />
+                        </div>
                     </div>
                 </span>
             :
@@ -114,8 +115,10 @@ function CreateCategories() {
                     <br />
                 </span>
             }
-            <div className="split50">
-                <button className="default-button" onClick={() => handleSubmit()}>{option} Category</button>
+            <div className="row">
+                <div className="split50">
+                    <button className="default-button" onClick={() => handleSubmit()}>{option} Category</button>
+                </div>
             </div>
         </div> 
       </div>
