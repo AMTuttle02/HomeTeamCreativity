@@ -292,4 +292,28 @@
     border: none; /* Black border on focus */
     border-radius: 20px;
   }
+
+  .editNavbarTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .editNavbarTable th,
+  .editNavbarTable td {
+    border: 1px solid #ddd;
+    padding: 1px;
+    text-align: left;
+  }
+
+  .editNavbarTable th {
+    background-color: #f2f2f2;
+  }
+
+  .editNavbarTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .editNavbarTable tr:hover {
+    background-color: #ddd;
+  }
 }

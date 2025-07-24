@@ -206,7 +206,6 @@ body {
   border-radius: 15px;
   transition: background-color 0.3s ease;
   font-size: 1.5rem;
-  margin: 2%;
   border-color: transparent;
 }
 
@@ -227,7 +226,6 @@ body {
   border-radius: 15px;
   transition: background-color 0.3s ease;
   font-size: 1.5rem;
-  margin: 2%;
   border-color: transparent;
 }
 
@@ -274,6 +272,7 @@ body {
 .confirmation-buttons {
   display: flex;
   justify-content: center;
+  gap: 2%;
 }
 
 .alignLeft {
