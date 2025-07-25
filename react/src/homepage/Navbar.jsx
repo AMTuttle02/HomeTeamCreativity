@@ -232,7 +232,7 @@ function Navbar() {
         <footer>
           {/* Footer Message */}
           <br/>
-          <p>{footer}</p>
+          <h1 className="noBold">{footer}</h1>
           {/* Footer Contents */}
           <div className="doubleRow">
             {footerLinks.map((item) => (
@@ -254,11 +254,11 @@ function Navbar() {
 
             {navbarContent.map((item) => (
               <Link to={item.link} onClick={() => window.scrollTo(0,0)} className="footerHeaderLink" key={item.id}>
-                {item.name}
+                <h1 className="noBold">{item.name}</h1>
               </Link>
             ))}
             <Link to={"/login"} onClick={() => window.scrollTo(0,0)} className="footerHeaderLink" key={"Login"}>
-              Login
+              <h1 className="noBold">Login</h1>
             </Link>
           </div>
         </footer>
