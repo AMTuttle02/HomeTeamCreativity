@@ -126,6 +126,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+        <div className="gap" />
         {admin > 0 &&
           <div className="row">
             <div className="mobileSplit20">
@@ -133,17 +134,20 @@ function Dashboard() {
                 <button className="default-button" onClick={() => navigate("/upload")}>Upload Designs</button>
               </div>
             </div>
+            <div className="gap" />
             <div className="mobileSplit20">
               <div className="default-width">
                 <button className="default-button" onClick={() => navigate("/categories")}>Edit Categories</button>
               </div>
             </div>
             <div className="mobileSplit20" />
+            <div className="gap" />
             <div className="mobileSplit20">
               <div className="default-width">
                 <button className="default-button" onClick={() => navigate("/costcalculator")}>Cost Calculator</button>
               </div>
             </div>
+            <div className="gap" />
             <div className="mobileSplit20">
               <div className="default-width">
                 <button className="default-button" onClick={() => navigate("/coupons")}>Manage Coupons</button>

@@ -97,7 +97,6 @@ body {
   justify-content: center;
 }
 
-
 .center {
   text-align: center;
   align-items: center;
@@ -364,6 +363,12 @@ body {
 }
 
 @media screen and (max-width: 500px) {
+  .gap {
+    width: 100%;
+    height: 5px; /* Use em for scalable spacing */
+    display: block;
+  }
+
   .desktopOnly {
     display: none;
   }

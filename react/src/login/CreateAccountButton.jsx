@@ -9,13 +9,13 @@ function CreateAccountButton() {
     <div className="CreateAccountButton">
       <p className="center">Don't Have An Account?</p>
       <div className="row">
-        <div className="split30">
+        <div className="mobileSplit30">
           <p>
             <button onClick={() => navigate("/signup")} className="default-button">
               Create An Account
             </button>
           </p>
-          </div>
+        </div>
       </div>
     </div>
   );

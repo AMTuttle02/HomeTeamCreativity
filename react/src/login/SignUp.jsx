@@ -222,8 +222,9 @@ function SignUp() {
             </div>
           }
         </div>
-        <div className="CreateAccountButton">
+        <div className="row">
           <p className="center">Creating an account allows you to view past orders, see payments, and quickly buy again!</p>
+        </div>
           <p className="center">Already Have An Account?</p>
           <div className="row">
             <div className="split30">
@@ -234,7 +235,6 @@ function SignUp() {
               </p>
               </div>
           </div>
-        </div>
         <Outlet/>
       </div>
     );

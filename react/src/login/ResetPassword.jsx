@@ -184,7 +184,7 @@ function ResetPassword() {
         </div>
         <p className="center">Not what you're looking for?</p>
         <div className="row">
-          <div className="split30">
+          <div className="mobileSplit30">
             <p>
               <button onClick={() => navigate("/login")} className="default-button">
               Login Here
