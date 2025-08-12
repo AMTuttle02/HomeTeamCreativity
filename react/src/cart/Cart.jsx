@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import cart from "../assets/cart.png";
-import { GetProductPriceWithSize } from "../products/GetProductPriceWithSize";
 import DisplayProductDetails from "../products/DisplayProductDetails";
 import "./cart.css";
 
@@ -153,6 +152,7 @@ function Cart() {
                   }
               </h1>
             </div>
+            <div className="gap" />
             <div className="split20">
               <button onClick={() => checkout(order)} className="default-button">
                 Check Out
@@ -177,6 +177,7 @@ function Cart() {
             </button>
           </div>
         </div>
+        <div className="gap" />
         <div className="default-width">
           <div className="blackLine" />
         </div>
@@ -201,6 +202,7 @@ function Cart() {
               }
             </h1>
             <div className="blackLine" />
+            <div className="gap" />
             <div className="containerRow">
               <button onClick={() => checkout(order)} className="default-button">
                 Check Out

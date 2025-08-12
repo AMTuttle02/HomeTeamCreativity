@@ -24,7 +24,7 @@
   margin: 5%;
   margin-top: 15%;
   font-weight: 100;
-  font-size: 1.5vw;
+  font-size: large;
 }
 
 .cartProductPricing {
@@ -35,11 +35,19 @@
   font-weight: 100;
   margin: 5%;
   margin-top: 15%;
-  font-size: 1.5vw;
+  font-size: large;
 }
 
 .cartDeleteButton {
   margin-top: 15%;
 }
 
-@media screen and (max-width: 500px) {}
+@media screen and (max-width: 500px) {
+  .cartProductDetails h2 {
+    text-align: center;
+  }
+
+  .cartProductPricing h2 {
+    text-align: center;
+  }
+}
