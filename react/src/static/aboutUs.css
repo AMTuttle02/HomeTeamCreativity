@@ -1,0 +1,43 @@
+.AboutUs {
+  text-align: center;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.AboutParagraph {
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: left;
+  
+}
+
+.AboutParagraph h3 {
+  font-size: xx-large;
+  line-height: 1.5;
+  font-weight: 100;
+}
+
+.portfolioLink {
+  color: #336699;
+  font-size: xx-large;
+}
+
+.aboutImg {
+  width: 80%;
+}
+
+@media screen and (max-width: 500px) {
+  .AboutParagraph {
+    padding: 0px;
+    text-align: center;
+  }
+
+  .AboutParagraph h3 {
+    font-size: large;
+  }
+
+  .portfolioLink {
+    font-size: large;
+  }
+}

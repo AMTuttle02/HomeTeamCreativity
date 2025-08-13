@@ -1,0 +1,53 @@
+.Cart h1 {
+  color: black;
+  text-decoration: none;
+  font-weight: 100;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.cartImg {
+  width: 80px;
+  height: 80px;
+}
+
+.customDetails {
+  margin-left: 5%;
+}
+
+.customDetails h3 {
+  font-weight: 100;
+  font-size: 1.5vw;
+}
+
+.cartProductDetails h2{
+  margin: 5%;
+  margin-top: 15%;
+  font-weight: 100;
+  font-size: large;
+}
+
+.cartProductPricing {
+  text-align: center;
+}
+
+.cartProductPricing h2{
+  font-weight: 100;
+  margin: 5%;
+  margin-top: 15%;
+  font-size: large;
+}
+
+.cartDeleteButton {
+  margin-top: 15%;
+}
+
+@media screen and (max-width: 500px) {
+  .cartProductDetails h2 {
+    text-align: center;
+  }
+
+  .cartProductPricing h2 {
+    text-align: center;
+  }
+}

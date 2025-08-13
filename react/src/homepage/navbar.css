@@ -1,0 +1,319 @@
+/* Style the top navigation bar */
+.navBar {
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-radius: 20px;
+  z-index: 999;
+}
+
+.homeLink {
+  margin-left: 5px;
+  width: 7%;
+}
+
+.navbar a:hover {
+  color: black;
+  background-color: #ddd;
+}
+
+.logo{
+  width: 100%;
+  height: auto;
+}
+
+/* Style the navigation bar links */
+.navLink {
+  width: 20%;
+  border: none;
+  float: left;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-size: 2vw;
+  padding: 20px 10px;
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: #1A53AE;
+}
+
+.cartLink {
+  width: 5%;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.profileLink {
+  width: 2%;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.profile {
+  width: 100%; /* Adjust width to fit the container */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.imageSize {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: inline-block;
+}
+
+.cart {
+  width: 100%;
+  height: 100%;
+}
+
+.circle {
+  width: 30%; /* Set the width and height to create a circle */
+  height: 30%;
+  border-radius: 50%; /* Makes the div a circle */
+  background-color: #1a53ae; /* Color of the circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Color of the number */
+  font-size: 1vw; /* Size of the number */
+  text-decoration: none;
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  z-index: 1; /* Ensure the circle stays above the image */
+}
+
+.number {
+  /* Styling for the number inside the circle */
+  color: white;
+  text-decoration: none;
+}
+
+.editLink {
+  width: 2%;
+  margin-right: 1%;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+}
+
+.searchBox {
+  display: flex; /* Allow for potential icon placement next to input */
+  border: 1px solid black;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 22%;
+  color: black;
+  align-items: center;
+}
+
+.searchBox input {
+  flex-grow: 1; /* Allow input to fill remaining space */
+  border: none; /* Remove default input border */
+  padding: 5px 10px; /* Adjust padding as needed */
+  background-color: transparent; /* Transparent background */
+  font-size: 16px; /* Adjust font size as needed */
+}
+
+.searchBox input:focus {
+  outline: none; /* Remove default focus outline */
+  border: none; /* Black border on focus */
+  border-radius: 20px;
+}
+
+.magnifyingGlass {
+  width: 8%;
+  margin-left: 2%;
+  margin-right: 2%;
+  height: max-content;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #1A53AE;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  border: none;
+  cursor: pointer;
+  background-color: white;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:focus-within .dropdown-content {
+  display: block;
+}
+
+.searchBox {
+  /* Adjust styles for mobile search bar */
+  display: flex; /* Allow stacking image and input */
+}
+
+.search {
+  width: 100%;
+}
+
+.formInput {
+  box-sizing: border-box;
+  font-size: 16px;
+  color: black;
+  background-color: #B7C9E2;
+  transition: width 0.4s ease-in-out;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.noDecoration {
+  border: none;
+  background-color: white;
+  color: red;
+}
+
+.editNavbarTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.editNavbarTable th,
+.editNavbarTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.editNavbarTable th {
+  background-color: #f2f2f2;
+}
+
+.editNavbarTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.editNavbarTable tr:hover {
+  background-color: #ddd;
+}
+
+@media screen and (max-width: 500px) {
+  .magnifyingGlass {
+    width: 6%;
+  }
+
+  .homeLink {
+    margin: 0;
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 15%;
+  }
+
+  .profileLink {
+    width: 5%;
+  }
+
+  .cartLink {
+    width: 10%;
+  }
+
+  .searchBox {
+    display: flex; /* Allow for potential icon placement next to input */
+    border: 1px solid black;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 60%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    color: black;
+    align-items: center;
+  }
+  
+  .searchBox input {
+    flex-grow: 1; /* Allow input to fill remaining space */
+    border: none; /* Remove default input border */
+    padding: 5px 10px; /* Adjust padding as needed */
+    background-color: transparent; /* Transparent background */
+    font-size: 16px; /* Adjust font size as needed */
+  }
+  
+  .searchBox input:focus {
+    outline: none; /* Remove default focus outline */
+    border: none; /* Black border on focus */
+    border-radius: 20px;
+  }
+
+  .editNavbarTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .editNavbarTable th,
+  .editNavbarTable td {
+    border: 1px solid #ddd;
+    padding: 1px;
+    text-align: left;
+  }
+
+  .editNavbarTable th {
+    background-color: #f2f2f2;
+  }
+
+  .editNavbarTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .editNavbarTable tr:hover {
+    background-color: #ddd;
+  }
+}
