@@ -1,5 +1,5 @@
 export function GetProductPrice(price, style) {
-  if (style === "tshirt") {
+  if (style === "tshirt" || style === "other") {
     return ((price * 1 + 0));
   }
   else if (style === "longsleeve") {
