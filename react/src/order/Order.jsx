@@ -128,7 +128,6 @@ function Order() {
           if (data[0].sizesAvailable === 0) {
             setSize({description: "Other", addedCost: 0});
           }
-          console.log(data[0]);
 
           // Set tshirt color and design location
           const regex = /\S+/;
@@ -384,9 +383,6 @@ function Order() {
           setCurrentColor(color);
           setProductType({description: "Crewneck Sweatshirt", addedCost: 8});
         }
-        if (size.description == "Adult XXX-Large") {
-          setSize({description: "", addedCost: 0});
-        }
       }
       else if (currentStyle == "Long Sleeve T-Shirt") {
         if (currentDesign.lColors.includes(longSleeveColor)) {
@@ -406,9 +402,6 @@ function Order() {
           setCurrentColor(color);
           setProductType({description: "Long Sleeve T-Shirt", addedCost: 4});
         }
-        if (size.description == "Adult XXX-Large") {
-          setSize({description: "", addedCost: 0});
-        }
       }
       else if (currentStyle == "Hooded Sweatshirt") {
         if (currentDesign.hColors.includes(hoodieColor)) {
@@ -427,9 +420,6 @@ function Order() {
           setHoodieColor(color);
           setCurrentColor(color);
           setProductType({description: "Hooded Sweatshirt", addedCost: 12});
-        }
-        if (size.description == "Adult XXX-Large") {
-          setSize({description: "", addedCost: 0});
         }
       }
       else if (currentStyle == "Other") {
@@ -715,15 +705,11 @@ function Order() {
                     className="transparent-button">
                     <h1 className="noBold">2XL</h1>
                   </button>
-                  {currentStyle == "Short Sleeve T-Shirt" ?
-                    <button 
-                      onClick={() => setSize({description: "Adult XXX-Large", addedCost: 2})}
-                      className="transparent-button">
-                      <h1 className="noBold">3XL</h1>
-                    </button>
-                  :
-                  <div />
-                  }
+                  <button 
+                    onClick={() => setSize({description: "Adult XXX-Large", addedCost: 2})}
+                    className="transparent-button">
+                    <h1 className="noBold">3XL</h1>
+                  </button>
                 </div>
               </div>
             }

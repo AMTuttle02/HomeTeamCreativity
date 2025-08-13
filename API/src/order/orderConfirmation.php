@@ -5,8 +5,8 @@ header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
 
-require 'vendor/autoload.php';
-require_once 'secrets.php';
+require '../vendor/autoload.php';
+require_once '../secrets.php';
 use PHPMailer\PHPMailer\PHPMailer;
 $mail = new PHPMailer;
 
@@ -736,6 +736,13 @@ $mail->Subject = 'HomeTeam Creativity Order Confirmation';
 //$mail->msgHTML(file_get_contents('message.html'), __DIR__);
 $mail->isHTML(true);
 $mail->Body = $productHTML;
+$mail->SMTPOptions = array( 
+    'ssl' => array( 
+    'verify_peer' => false, 
+    'verify_peer_name' => false, 
+    'allow_self_signed' => true 
+    ) 
+);
 if (!$mail->send()) {
     echo json_encode('Mailer Error: ' . $mail->ErrorInfo);
 }

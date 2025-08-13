@@ -3,35 +3,12 @@
   text-decoration: none;
   font-weight: 100;
   text-align: center;
-  padding: 5%;
-  font-size: 1.5vw;
-}
-
-.cartSide {
-  text-align: center;
-  width: 38%;
-  display: flex;
-  align-items: center;
-}
-
-.cartMiddle {
-  text-align: center;
-  width: 24%;
-  display: flex;
-}
-
-.inline {
-  white-space: nowrap;
+  font-size: 1.5rem;
 }
 
 .cartImg {
   width: 80px;
   height: 80px;
-}
-
-.FinalCheckoutButtonPlacement{
-  float: right;
-  padding-right: 40px;
 }
 
 .customDetails {
@@ -47,7 +24,7 @@
   margin: 5%;
   margin-top: 15%;
   font-weight: 100;
-  font-size: 1.5vw;
+  font-size: large;
 }
 
 .cartProductPricing {
@@ -58,33 +35,19 @@
   font-weight: 100;
   margin: 5%;
   margin-top: 15%;
-  font-size: 1.5vw;
+  font-size: large;
 }
 
 .cartDeleteButton {
   margin-top: 15%;
 }
 
-.cartSubTotal h2 {
-  font-weight: 100;
-  font-size: 1.5vw;
-}
-
 @media screen and (max-width: 500px) {
-  .FinalCheckoutButtonPlacement {
-    padding: 0px;
-    margin: auto;
+  .cartProductDetails h2 {
+    text-align: center;
   }
 
-  .cartImg {
-    width: 30px;
-    height: 30px;
-  }
-
-  .CheckoutButtonPlacement {
-    float: left;
-    padding: 0px;
-    width: 100%;
-    display: flex;
+  .cartProductPricing h2 {
+    text-align: center;
   }
 }

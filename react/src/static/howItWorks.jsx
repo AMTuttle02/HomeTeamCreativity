@@ -12,33 +12,46 @@ function HowItWorks() {
           <div className="fullContainer">
             <h2>For Custom Designs: </h2>
             <ol>
-              <li>Send a message explaining what you would like on your design with as much detail as possible.</li>
-              <li>Follow product ordering steps.</li>
-              <li>The designer will send you mockup images for you to choose and adjust to your liking.</li>
-              <li>Once the design is approved by you, you can choose your delivery option.</li>
-              <li>Process your payment.</li>
-              <li>Receive confirmation email and receipt including tracking number, if applicable.</li>
+              <li>Please select the 'Custom Order' product found on our homepage and products page.</li>
+              <li>Enter into the text box a very detailed description of your desired design.</li>
+              <li>If you have any helpful reference imagery, please upload them on the product ordering page.</li>
+              <li>Enter all information on styling and color options, and proceed through the checkout process.</li>
+              <li>In the checkout, enter a good email, that will be used for official communication.</li>
+              <li>Once your order is placed, our designer will email you digital mockup images of design options. You may ask for revisions and improvements, or approve the design.</li>
+              <li>Once the design is approved, delivery or shipping will be discussed and you will be sent an official invoice.</li>
+              <li>Complete payment process. Order has now officially been placed.</li>
             </ol>
           </div>
         </div>
-        <div className="mobileSplit25">
+        <div className="mobileSplit50">
           <div className="fullContainer">
-            <h2>Product Ordering Steps: </h2>
+            <h2>All Other Products</h2>
             <ol>
-              <li>Select shirt style</li>
-              <li>Select quantity, color, and size</li>
-              <li>See price info below</li>
+              <li>There is a collection of over 1,000 pre-designed items for you to browse.</li>
+              <li>Choose your items.</li>
+              <li>In the details box of the product page, you may ask for customizations or alterations to the item displayed.</li>
+              <li>Select all items asked, style, quantity, color, and size. Continue with ordering process.</li>
+              <li>Order has officially been placed.</li>
             </ol>
           </div>
         </div>
-        <div className="mobileSplit25">
+      </div>
+      <div className="topAlignRow">
+        <div>
           <div className="fullContainer">
-            <h2>Already Have A Design? </h2>
-            <ol> 
-              <li>Order custom apparel <Link to="">here</Link></li>
-              <li>Select quantity, color, and size</li>
-              <li>See price info below</li>
-            </ol>
+            <h2>Local Pickup vs. Shipping</h2>
+            <ul>
+              <li>This business is operated out of Morrow County, Ohio. All residents in AND near Morrow County are eligible for local pickup. Please choose local pickup if you do not want to pay shipping costs.</li>
+              <li>Local pickup is free of charge.</li>
+              <li>If you are not sure if you qualify for free local pickup, please contact us <Link to="mailto:admin@hometeamcreativity.com" target="_blank">here</Link>.</li>
+              <li>Some popular local pickup locations include: Iberia Dollar General, St. Joseph Catholic School Galion, and Northmor School.</li>
+              <li>If you are outside of the local pickup eligibility range, please select shipping.</li>
+              <li>Please note, shipping costs are not free of charge, and usually range between $5 and $20 in cost, depending on quantity of items.</li>
+              <li>Items will be shipped through USPS, flat rate shipping, which takes around 2-5 business days for delivery.</li>
+              <li>If you choose shipping, an updated invoice with your shipping cost applied will be sent to your email listed under the order.</li>
+              <li>Once the invoice is paid in full, the package will be shipped. And you will be sent a tracking number for reference. Please track your package through USPS tracking.</li>
+              <li>If after 14 days, you have yet to receive your items, contact us and we will ensure you receive your items.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -61,6 +74,19 @@ function HowItWorks() {
               <li>Adult Long Sleeve $20 (S-XL) $22 (XXL)</li>
               <li>Adult Crewneck Sweatshirt: $24 (S-XL) $26 (XXL)</li>
               <li>Adult Hoodie: $28 (S-XL) $30 (XXL)</li>
+              <li>Can Koozies: $8</li>
+              <li>License Plates: $8</li>
+              <li>Ladies V-Neck T-Shirt: $24</li>
+              <li>Frosted Cup, 16 ounce, with Bamboo Lid and Straw: $18</li>
+              <li>Stainless Steel Tumbler, 40 ounce, with lid and straw: $20</li>
+              <li>Stainless Steel Tumbler, 20 ounce, with lid and straw: $18</li>
+              <li>Glass Mug, 15 ounce: $14</li>
+              <li>Wine Tumblers, 12 ounce: $16</li>
+              <li>Baseball and Trucker Hats: $14</li>
+              <li>Beanie Hats: $14</li>
+              <li>Tote Bag: $16</li>
+              <li>Waterproof car decal: $4</li>
+              <li>Stickers: $2</li>
             </ul>
           </div>
         </div>

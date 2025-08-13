@@ -184,6 +184,11 @@
   width: 50%;
 }
 
+.NoResults {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
 .NoResults h1 {
   color: black;
   text-decoration: none;

@@ -26,16 +26,16 @@ function Coupons() {
   if (admin) {
     return (
       <div className='Dashboard'>
-        <div className="noWrapRow">
-          <div className="split20">
+        <div className="row">
+          <div className="mobileSplit20">
             <button type="button" className="default-button" onClick={() => navigate('/coupons/create')}>Create Coupon</button>
           </div>
-          <div className="split10" />
-          <div className="split40">
+          <div className="mobileSplit10" />
+          <div className="mobileSplit40">
             <h1 className="center">Coupons</h1>
           </div>
-          <div className="split10" />
-          <div className="split20">
+          <div className="mobileSplit10" />
+          <div className="mobileSplit20">
             <button type="button" className="default-button" onClick={() => navigate('/coupons')}>Manage Coupons</button>
           </div>
         </div>

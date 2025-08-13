@@ -232,7 +232,7 @@ function Navbar() {
         <footer>
           {/* Footer Message */}
           <br/>
-          <p>{footer}</p>
+          {footer}
           {/* Footer Contents */}
           <div className="doubleRow">
             {footerLinks.map((item) => (

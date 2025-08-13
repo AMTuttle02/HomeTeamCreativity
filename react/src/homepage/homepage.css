@@ -88,6 +88,7 @@
   font-size: 2vw;
   font-weight: 100;
   text-decoration: underline;
+  color: black;
 }
 
 .homeProductsCell {
@@ -110,7 +111,7 @@ footer {
   text-decoration: underline;
   color: black;
   margin: 1%;
-  font-size: 1.5vw;
+  font-size: 2vw;
 }
 
 .socialMediaLink {
@@ -166,6 +167,11 @@ footer {
 
   .footerHeaderLink {
     width: 100%;
+    font-size: large;
+  }
+
+  footer {
+    font-size: large;
   }
 
 }

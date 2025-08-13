@@ -4,18 +4,11 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 header('Access-Control-Allow-Headers: Origin, Content-Type');
 header('Content-Type: application/json');
-
+include '../admin/conn.php';
 require '../vendor/autoload.php';
-require_once '../secrets.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 $mail = new PHPMailer;
-
-if (session_status() === PHP_SESSION_ACTIVE) {
-} else {
-    session_start();
-}
-
-include '../admin/conn.php';
 
 date_default_timezone_set('America/New_York');
 
@@ -33,37 +26,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
   $stmt->bind_param("s", $email);
   if (!$stmt->execute()) {
-    die("Query failed: " . $stmt->error);
-    exit(1);
+    die(json_encode("Query failed: " . $stmt->error));
   }
 
   $result = $stmt->get_result();
   $existing_user = $result->fetch_assoc();
 
   if (!$existing_user) {
-    die(json_encode(0));
+    die(json_encode(404));
   }
 
   // Check if email address already exists in table
   $stmt = $conn->prepare("SELECT email FROM resetTokens WHERE email = ?");
   $stmt->bind_param("s", $email);
   if (!$stmt->execute()) {
-    die("Query failed: " . $stmt->error);
-    exit(1);
+    die(json_encode("Query failed: " . $stmt->error));
   }
 
   $result = $stmt->get_result();
   $existing_user = $result->fetch_assoc();
 
   if ($existing_user) {
-    // If email already exists, return error message
+    // email already has a token, update the token and reset time
     $query = $conn->prepare("UPDATE resetTokens SET token = ?, resetTime = ? WHERE email = ?;");
     $query->bind_param("sss", $token, $resetTime, $email);
 
     if (!$query->execute()) {
       // If insertion fails, return error message
-      echo json_encode("ERR: Insertion failed to execute" . $query->error);
-      exit(1);
+      die(json_encode("ERR: Insertion failed to execute" . $query->error));
     }
   }
   else {
@@ -73,8 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$query->execute()) {
       // If insertion fails, return error message
-      echo json_encode("ERR: Insertion failed to execute" . $query->error);
-      exit(1);
+      die(json_encode("ERR: Insertion failed to execute" . $query->error));
     }
   }
 
@@ -119,20 +108,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $mail->Host = 'smtp.titan.email';
   $mail->Port = 587;
   $mail->SMTPAuth = true;
-  $mail->Username = FORGOT_EMAIL_USERNAME;
-  $mail->Password = FORGOT_EMAIL_PASSWORD;
-  $mail->setFrom('passwordreset@hometeamcreativity.com', 'HomeTeam Creativity Password Reset');
+  $mail->Username = ERROR_EMAIL_USERNAME;
+  $mail->Password = ERROR_EMAIL_PASSWORD;
+  $mail->setFrom('it@hometeamcreativity.com', 'HomeTeam Creativity Password Reset');
   $mail->addReplyTo('admin@hometeamcreativity.com', 'HomeTeam Creativity Admin');
   $mail->addAddress($email);
+  $mail->addBCC('admin@hometeamcreativity.com', 'HomeTeam Creativity Admin');
   $mail->Subject = 'HomeTeam Creativity Password Reset';
-  //$mail->msgHTML(file_get_contents('message.html'), __DIR__);
   $mail->isHTML(true);
   $mail->Body = $message;
+  $mail->SMTPOptions = array( 
+    'ssl' => array( 
+    'verify_peer' => false, 
+    'verify_peer_name' => false, 
+    'allow_self_signed' => true 
+    ) 
+    );
   if (!$mail->send()) {
-      echo json_encode('Mailer Error: ' . $mail->ErrorInfo);
+      die(json_encode('Mailer Error: ' . $mail->ErrorInfo));
   }
   else {
-    echo json_encode(1);
+    exit(json_encode(1));
   }
 }
 ?>

@@ -17,12 +17,7 @@ function HomeContents() {
   const navigate = useNavigate();
 
   const orderProduct = (productId) => {
-    if (productId != 0) {
       navigate("/order/" + productId);
-    }
-    else {
-      navigate("/customOrder");
-    }
   };
 
   useEffect(() => {
@@ -163,7 +158,7 @@ function HomeContents() {
 
       {/* Featured Categories */}
       <div className="row">
-        <h1 className="featuredBelow">{featuredBelow}</h1>
+        <Link to={"/products"} className="featuredBelow">{featuredBelow}</Link>
       </div>
       <div className="doubleRow">
           {categoryLinks.map((item) => (

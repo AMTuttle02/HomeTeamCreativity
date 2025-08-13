@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import "./login.css";
 import CreateAccountButton from "./CreateAccountButton";
+import {reportError} from "../errorPages/errorHandling";
 
-function LoginFailed() {
+function BadEmail() {
   return (
     <div className="red">
       <p>We don't have that email on file. Try another one!</p>
@@ -13,9 +14,8 @@ function LoginFailed() {
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [badLogin, setBadLogin] = useState(false);
+  const [noEmailExists, setNoEmailExists] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loginAttempted, setLoginAttempted] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
@@ -34,12 +34,15 @@ function ForgotPassword() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if(data === 1) {
           navigate('/emailconfirmation');
         }
-        else {
-          setBadLogin(true);
-          setLoginAttempted(true); // Set login attempt status
+        else if (data === 404) {
+          setNoEmailExists(true);
+        } else {
+          reportError(data, "login/newPasswordRequest.php");
+          navigate("/500");
         }
       });
   };
@@ -60,7 +63,7 @@ function ForgotPassword() {
   }, [firstName]);
 
   useEffect(() => {
-    setBadLogin(false);
+    setNoEmailExists(false);
   }, [email]);
 
   if (loggedIn) {
@@ -84,7 +87,7 @@ function ForgotPassword() {
               onChange={(event) => setEmail(event.target.value)}
             />
             <br />
-            {loginAttempted && badLogin && <LoginFailed />}
+            {noEmailExists && <BadEmail />}
             {localStorage.getItem("oID") ?
               <span>
               <button type="submit" className="default-button" onClick={(event) => confirmLogin(event)}>Request New Password</button>

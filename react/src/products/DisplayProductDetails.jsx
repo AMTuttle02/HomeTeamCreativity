@@ -99,14 +99,14 @@ function DisplayProductDetails({ order, product, active }) {
   return (
     <div className="DisplayProductDetails">
       <div className="mobileWrapRow">
-        <div className="split25">
+        <div className="mobileSplit25">
           <button 
             className="magnify"
             onClick={() => confirmEnlarge(product)}>
             <DisplayProduct product={product} />
           </button>
         </div>
-        <div className="split25">
+        <div className="mobileSplit25">
           <div className="cartProductDetails">
             <h2>
               <b>
@@ -118,7 +118,7 @@ function DisplayProductDetails({ order, product, active }) {
             <h2> Color: {product.color} </h2>
           </div>
         </div>
-        <div className="split25">
+        <div className="mobileSplit25">
           <div className="cartProductPricing">
             {product.product_id != 0 ?
               <div>
@@ -164,7 +164,7 @@ function DisplayProductDetails({ order, product, active }) {
             </div>
           }
         </div>
-        <div className="split25">
+        <div className="mobileSplit25">
           {product.product_id != 0 ?
             <div className="cartProductPricing">
               <h2>&nbsp;</h2>
