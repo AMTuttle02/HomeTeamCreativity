@@ -1,8 +1,8 @@
 {
-  "name": "hostinger-react",
+  "name": "hometeamcreativity",
   "homepage": "https://hometeamcreativity.com",
-  "version": "2.2.2",
-  "description": "my react application",
+  "version": "2.2.3",
+  "description": "HomeTeamCreativity React Frontend",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
