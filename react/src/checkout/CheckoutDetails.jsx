@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./checkout.css";
+import { GetProductPriceWithSize } from "../products/GetProductPriceWithSize";
 
 function CheckoutDetails() {
     const [userId, setUserId] = useState("");
@@ -116,10 +117,12 @@ function CheckoutDetails() {
                         .split(' ')
                         .filter(item => item.trim().length > 0)
                         .map(item => item.trim());
-    
+                    
+                    console.log(categories);
                     for (let j = 0; j < categories.length; ++j) {
                         if (discount.categories.includes(categories[j])) {
-                            orderTotal += (data[i].price * 1 * data[i].product_quantity);
+                            orderTotal += (GetProductPriceWithSize(element.price, element.product_type, element.size) * 1 * element.product_quantity);
+                            console.log("Order Total Updated: " + orderTotal);
                             j = categories.length;
                         }
                     }
