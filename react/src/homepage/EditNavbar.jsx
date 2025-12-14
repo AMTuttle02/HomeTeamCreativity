@@ -3,9 +3,11 @@ import './navbar.css';
 import axios from 'axios';
 import { reportError } from "../errorPages/errorHandling";
 import { getAdmin } from "../admin/getAdmin";
+import { useNavigate } from "react-router-dom";
 
 function EditNavbar() {
   const file = "homepage/EditNavbar.jsx";
+  const [isAdmin, setIsAdmin] = useState(null);
   const [id, setId] = useState(0);
   const [tagName, setTagName] = useState("Tag Name");
   const [position, setPosition] = useState(1);
@@ -13,6 +15,7 @@ function EditNavbar() {
   const [navbar, setNavbar] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [deleteLink, setDeleteLink] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/api/admin/getNavbar.php")
@@ -108,8 +111,25 @@ function EditNavbar() {
     setPosition(1);
   }
 
-  if (getAdmin()) {
-    return (
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const adminVal = await getAdmin();
+        if (!mounted) return;
+        setIsAdmin(Number(adminVal) === 1 ? 1 : 0);
+      } catch (err) {
+        console.error('getAdmin failed', err);
+        if (mounted) setIsAdmin(0);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  if (isAdmin === null) return null;
+  if (isAdmin !== 1) navigate("/404");
+
+  return (
       <div className='editNavbar'>
         <br />
         <div className="container">
@@ -199,7 +219,6 @@ function EditNavbar() {
               }
         </div>
       </div>
-    );
-  }
+  );
 }
 export default EditNavbar;
