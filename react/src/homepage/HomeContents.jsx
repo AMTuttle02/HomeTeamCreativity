@@ -5,6 +5,7 @@ import { getFirstName } from "../admin/getName";
 import axios  from "axios";
 import "./homepage.css";
 import { GetProductPrice } from "../products/GetProductPrice";
+import editIcon from "../assets/editIcon.svg";
 
 function HomeContents() {
   const [firstName, setFirstName] = useState("");
@@ -14,6 +15,7 @@ function HomeContents() {
   const [featured, setFeatured] = useState("");
   const [featuredBelow, setFeaturedBelow] = useState("");
   const [categoryLinks, setCategoryLinks] = useState([]);
+  const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
 
   const orderProduct = (productId) => {
@@ -21,6 +23,12 @@ function HomeContents() {
   };
 
   useEffect(() => {
+    fetch("/api/admin/admin.php")
+    .then((response) => response.json())
+    .then((data) => {
+      setAdmin(data.admin);
+    });
+
     const fetchData = async () => {
       const fetchedFirstName = await getFirstName(); 
       setFirstName(fetchedFirstName);
@@ -167,6 +175,15 @@ function HomeContents() {
             </Link>
           ))}
       </div>
+      {admin > 0 && 
+        <div className="default-width">
+          <div className="right">
+            <Link to="editHomepage" className="editLink">
+              <img src={editIcon} alt="Edit Icon" className="editIcon" />
+            </Link>
+          </div>
+        </div>
+      }
       <Outlet />
     </div>
 

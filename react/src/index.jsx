@@ -33,6 +33,7 @@ import UploadSuccess from "./upload/UploadSuccess.jsx";
 import "./index.css";
 import FiveHundred from "./errorPages/500.jsx";
 import EditNavbar from "./homepage/EditNavbar.jsx";
+import EditHomepage from "./homepage/EditHomepage.jsx";
 
 export default function App() {
   return (
@@ -72,6 +73,7 @@ export default function App() {
           <Route path="/coupons/create" element={<CreateCoupon />} />
           <Route path="/coupons/edit/:code" element={<EditCoupons />} />
           <Route path="/editNavbar" element={<EditNavbar />} />
+          <Route path="/editHomepage" element={<EditHomepage />} />
           <Route path="*" element={<FourOFour />} />
         </Route>
       </Routes>
