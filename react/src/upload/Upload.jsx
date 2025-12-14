@@ -154,10 +154,15 @@ function Upload() {
         },
       });
 
+      if (response.data.includes("ERR")) {
+        navigate("/500");
+        return;
+      }
       console.log('Upload successful', response.data);
       navigate("/uploadcomplete");
     } catch (error) {
       console.error('Error uploading files', error);
+      navigate("/500");
     }
   }
 
