@@ -8,13 +8,15 @@ function EditHomepage() {
   const file = "homepage/EditNavbar.jsx";
   const [welcome, setWelcome] = useState("");
   const [noWelcome, setNoWelcome] = useState("");
-  const [products, setProducts] = useState([]);
   const [headerLinks, setHeaderLinks] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
   const [featured, setFeatured] = useState("");
   const [featuredBelow, setFeaturedBelow] = useState("");
   const [categoryLinks, setCategoryLinks] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editingRow, setEditingRow] = useState({ name: '', link: '', position: null });
+  const [productsEditingIndex, setProductsEditingIndex] = useState(-1);
+  const [productsEditingRow, setProductsEditingRow] = useState({ product_id: '', position: null });
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
   const [showSaveError, setShowSaveError] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState('');
@@ -42,12 +44,20 @@ function EditHomepage() {
     }, 150);
   }
 
+  const scheduleCommitProducts = (idx) => {
+    clearCommit();
+    commitTimeoutRef.current = setTimeout(() => {
+      const updated = [...featuredProducts];
+      updated[idx] = { ...updated[idx], ...productsEditingRow };
+      setFeaturedProducts(updated);
+      setProductsEditingIndex(-1);
+      setProductsEditingRow({ product_id: '', position: null });
+      commitTimeoutRef.current = null;
+    }, 150);
+  }
+
   // Fetch initial data
   useEffect(() => {
-    fetch("/api/product/featuredProducts.php")
-      .then((response) => response.json())
-      .then((data) => setProducts(data));
-
     const fetchHeaderLinks = async () => {
       const formData = new FormData();
       formData.append('page', 'homepage');
@@ -69,6 +79,16 @@ function EditHomepage() {
       setHeaderLinks(links);
     };
     fetchHeaderLinks();
+
+    const fetchFeaturedProducts = async () => {
+      const response = await axios.get('/api/product/featuredProducts.php');
+      const formatted = response.data.map(product => ({
+        product_id: product.product_id,
+        position: product.featured
+      }));
+      setFeaturedProducts(formatted);
+    };
+    fetchFeaturedProducts();
 
     const fetchFeatured = async () => {
       const formData = new FormData();
@@ -173,11 +193,31 @@ function EditHomepage() {
       }
     }
 
+    // If a products row is currently being edited, commit it locally before saving
+    if (productsEditingIndex !== -1) {
+      const idx = productsEditingIndex;
+      const updated = [...featuredProducts];
+      updated[idx] = { ...updated[idx], ...productsEditingRow };
+      setFeaturedProducts(updated);
+      setProductsEditingIndex(-1);
+      setProductsEditingRow({ product_id: '', position: null });
+      if (commitTimeoutRef.current) {
+        clearTimeout(commitTimeoutRef.current);
+        commitTimeoutRef.current = null;
+      }
+    }
+
     // ensure headerLinks are ordered by position before saving
     const orderedHeaderLinks = Array.isArray(headerLinks)
       ? [...headerLinks].sort((a, b) => (Number(a.position ?? 0) || 0) - (Number(b.position ?? 0) || 0))
       : [];
     setHeaderLinks(orderedHeaderLinks);
+
+    // ensure featuredProducts are ordered by position before saving
+    const orderedFeaturedProducts = Array.isArray(featuredProducts)
+      ? [...featuredProducts].sort((a, b) => (Number(a.position ?? 0) || 0) - (Number(b.position ?? 0) || 0))
+      : [];
+    setFeaturedProducts(orderedFeaturedProducts);
 
     const updates = [
       { location: 'welcomeLogin', text: welcome },
@@ -199,6 +239,14 @@ function EditHomepage() {
         if (response.data !== 1) {
           throw(new Error('Failed to save ' + u.location + ': ' + JSON.stringify(response.data)));
         }
+      }
+      // update featured products
+      const featuredData = orderedFeaturedProducts.map(p => ({ id: p.product_id, position: p.position }));
+      const featuredResponse = await axios.post('/api/product/updateFeaturedProducts.php', featuredData, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (featuredResponse.data !== 1) {
+        throw(new Error('Failed to save featured products: ' + JSON.stringify(featuredResponse.data)));
       }
       // all succeeded
       setShowSaveSuccess(true);
@@ -374,6 +422,129 @@ function EditHomepage() {
               }}
             >
               Add Header Link
+          </button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2>Featured Products</h2>
+          </div>
+          <table className="editNavbarTable">
+            <thead>
+              <tr>
+                <th>Product Id</th>
+                <th>Position</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(featuredProducts) && featuredProducts.length > 0 ? (
+                featuredProducts.map((hl, idx) => (
+                  <tr key={(hl.product_id || '') + idx}>
+                    <td ref={el => rowRefs.current[idx] = el}>
+                      {productsEditingIndex === idx ? (
+                          <input
+                            type="number"
+                            value={productsEditingRow.product_id}
+                            onChange={(e) => setProductsEditingRow({ ...productsEditingRow, product_id: e.target.value })}
+                            onFocus={clearCommit}
+                            onBlur={() => scheduleCommitProducts(idx)}
+                            className="formInput"
+                          />
+                      ) : (
+                        hl.product_id
+                      )}
+                    </td>
+                    <td>
+                      {productsEditingIndex === idx ? (
+                          <input
+                            type="number"
+                            value={productsEditingRow.position ?? ''}
+                            onChange={(e) => setProductsEditingRow({ ...productsEditingRow, position: Number(e.target.value) })}
+                            onFocus={clearCommit}
+                            onBlur={() => scheduleCommitProducts(idx)}
+                            className="formInput"
+                            min={1}
+                          />
+                      ) : (
+                        hl.position ?? idx + 1
+                      )}
+                    </td>
+                    <td>
+                      {editingIndex === idx ? (
+                        <>
+                          <button
+                            onClick={() => {
+                              // cancel editing
+                              setProductsEditingIndex(-1);
+                              setProductsEditingRow({ product_id: '', position: null });
+                              if (commitTimeoutRef.current) {
+                                clearTimeout(commitTimeoutRef.current);
+                                commitTimeoutRef.current = null;
+                              }
+                            }}
+                            className="default-button"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setProductsEditingIndex(idx);
+                            setProductsEditingRow({ product_id: hl.product_id || '', position: hl.position ?? idx + 1 });
+                            // focus the first input after rendering
+                            setTimeout(() => {
+                              const ref = rowRefs.current[idx];
+                              if (ref && ref.querySelector) {
+                                const input = ref.querySelector('input');
+                                if (input) input.focus();
+                              }
+                            }, 0);
+                          }}
+                          className="default-button"
+                        >
+                          Edit
+                        </button>
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          // client-side delete only; persist on main form save
+                          const updated = featuredProducts.filter((_, i) => i !== idx);
+                          setFeaturedProducts(updated);
+                          // if we were editing this row, cancel editing
+                          if (productsEditingIndex === idx) {
+                            setProductsEditingIndex(-1);
+                            setProductsEditingRow({ product_id: '', position: null });
+                          }
+                        }}
+                        className="delete-button"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="muted">No featured products configured</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <button
+              className="default-button"
+              onClick={() => {
+                // append a new blank header link and open it for editing
+                const updated = Array.isArray(featuredProducts) ? [...featuredProducts] : [];
+                const newIndex = updated.length;
+                updated.push({ product_id: '', position: newIndex + 1 });
+                setFeaturedProducts(updated);
+                setProductsEditingIndex(newIndex);
+                setProductsEditingRow({ product_id: '', position: newIndex + 1 });
+              }}
+            >
+              Add Featured Product
           </button>
           <form onSubmit={handleFormSave}>
             <br />
