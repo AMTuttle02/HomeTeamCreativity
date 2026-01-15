@@ -35,6 +35,7 @@ import FiveHundred from "./errorPages/500.jsx";
 import EditNavbar from "./homepage/EditNavbar.jsx";
 import EditHomepage from "./homepage/EditHomepage.jsx";
 import EditAbout from "./static/EditAbout.jsx";
+import EditHowItWorks from "./static/EditHowItWorks.jsx";
 
 export default function App() {
   return (
@@ -76,6 +77,7 @@ export default function App() {
           <Route path="/editNavbar" element={<EditNavbar />} />
           <Route path="/editHomepage" element={<EditHomepage />} />
           <Route path="/editAbout" element={<EditAbout />} />
+          <Route path="/editHowItWorks" element={<EditHowItWorks />} />
           <Route path="*" element={<FourOFour />} />
         </Route>
       </Routes>
