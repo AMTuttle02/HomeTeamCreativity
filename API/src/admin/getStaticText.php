@@ -20,7 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $query->get_result();
     $row = $result->fetch_assoc();
 
-    echo json_encode($row["text"]);
+    if ($row && array_key_exists("text", $row)) {
+      echo json_encode($row["text"]);
+    } else {
+      // No row found for given page/location — return null JSON without raising a PHP warning
+      echo json_encode(null);
+    }
   } catch (Exception $e) {
     throw(json_encode("ERR: Get static text failed with page " . $page 
                       . ", location: " . $location
