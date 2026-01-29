@@ -113,14 +113,21 @@ function CheckoutDetails() {
             let couponCatIds = [];
             let couponCatNames = [];
 
-            if (typeof couponSubRaw === 'string' && couponSubRaw.length) {
-                couponSubIds = couponSubRaw.split(';').map(s => s.trim()).filter(Boolean);
+            // Normalize coupon subcategories and categories to support single id, semicolon lists, or legacy names
+            if (couponSubRaw != null && String(couponSubRaw).trim() !== '') {
+                couponSubIds = String(couponSubRaw).split(';').map(s => s.trim()).filter(Boolean);
             }
-            if (typeof couponCatRaw === 'string' && couponCatRaw.length) {
-                if (couponCatRaw.indexOf(';') !== -1) {
-                    couponCatIds = couponCatRaw.split(';').map(s => s.trim()).filter(Boolean);
+            if (couponCatRaw != null && String(couponCatRaw).trim() !== '') {
+                const parts = String(couponCatRaw).split(';').map(s => s.trim()).filter(Boolean);
+                const allNumeric = parts.length > 0 && parts.every(p => /^\d+$/.test(p));
+                if (allNumeric) {
+                    couponCatIds = parts;
                 } else {
-                    couponCatNames = couponCatRaw.split(' ').map(s => s.trim()).filter(Boolean);
+                    if (parts.length === 1 && parts[0].indexOf(' ') !== -1) {
+                        couponCatNames = parts[0].split(' ').map(s => s.trim()).filter(Boolean);
+                    } else {
+                        couponCatNames = parts;
+                    }
                 }
             }
 
@@ -140,14 +147,24 @@ function CheckoutDetails() {
                     let elemCatIds = [];
                     let elemCatNames = [];
 
-                    if (typeof elemSubRaw === 'string' && elemSubRaw.indexOf(';') !== -1) {
-                        elemSubIds = elemSubRaw.split(';').map(s => s.trim()).filter(Boolean);
+                    // Normalize element subcategories: accept single id or semicolon-separated ids
+                    if (elemSubRaw != null && String(elemSubRaw).trim() !== '') {
+                        elemSubIds = String(elemSubRaw).split(';').map(s => s.trim()).filter(Boolean);
                     }
-                    if (typeof elemCatRaw === 'string' && elemCatRaw.length) {
-                        if (elemCatRaw.indexOf(';') !== -1) {
-                            elemCatIds = elemCatRaw.split(';').map(s => s.trim()).filter(Boolean);
+
+                    // Normalize element categories: accept semicolon-separated ids, single numeric id, or legacy names
+                    if (elemCatRaw != null && String(elemCatRaw).trim() !== '') {
+                        const parts = String(elemCatRaw).split(';').map(s => s.trim()).filter(Boolean);
+                        const allNumeric = parts.length > 0 && parts.every(p => /^\d+$/.test(p));
+                        if (allNumeric) {
+                            elemCatIds = parts;
                         } else {
-                            elemCatNames = elemCatRaw.split(' ').map(s => s.trim()).filter(Boolean);
+                            // If a single part contains spaces, split into names; otherwise treat parts as names
+                            if (parts.length === 1 && parts[0].indexOf(' ') !== -1) {
+                                elemCatNames = parts[0].split(' ').map(s => s.trim()).filter(Boolean);
+                            } else {
+                                elemCatNames = parts;
+                            }
                         }
                     }
 
@@ -214,9 +231,13 @@ function CheckoutDetails() {
             .then((response) => response.json())
             .then((data) => {
               if (data) {
-                // verify code is active
-                if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
-                    throw(new Error(data.start_time + " - " + data.end_time));
+                // verify code is active by comparing Date objects (avoid locale-string comparison)
+                const startDate = new Date(data.start_time);
+                const endDate = data.end_time ? new Date(data.end_time) : null;
+                if (!isNaN(startDate.getTime())) {
+                    if (currentDateTime < startDate || (endDate && !isNaN(endDate.getTime()) && currentDateTime > endDate)) {
+                        throw(new Error(data.start_time + " - " + data.end_time));
+                    }
                 }
                 determineDiscount(data);
               }
