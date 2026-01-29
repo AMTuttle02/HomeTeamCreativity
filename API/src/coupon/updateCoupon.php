@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $query = $conn->prepare(
                           "UPDATE coupons
-                          SET description = ?, amount = ?, type = ?, minimum_required = ?, maximum_allowed = ?, start_time = ?, end_time = ?, categories = ?
+                          SET description = ?, amount = ?, type = ?, minimum_required = ?, maximum_allowed = ?, start_time = ?, end_time = ?, categories = ?, subcategories = ?
                           WHERE code = ?"
                         );
   $query->bind_param(
-                    "sssssssss",
+                    "ssssssssss",
                     $inputs['description'],
                     $inputs['amount'],
                     $inputs['type'],
@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $inputs['start_time'],
                     $inputs['end_time'],
                     $inputs['categories'],
+                    $inputs['subcategories'],
                     $inputs['code']
                   );
 

@@ -14,8 +14,11 @@ function CreateCoupon() {
   const [showConfirmation, setShowConfirmation] = useState('false');
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [category, setCategory] = useState("");
+  const [selectedSubcatIds, setSelectedSubcatIds] = useState([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const navigate = useNavigate();
   const {code} = useParams();
+  const [allCategories, setAllCategories] = useState([]);
 
   function formatDate(isoString) {
     const date = new Date(isoString);
@@ -39,6 +42,13 @@ function CreateCoupon() {
       }
     );
 
+    fetch("/api/category/getCategories.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAllCategories(data || []);
+      })
+      .catch(() => setAllCategories([]));
+
     fetch("/api/coupon/getCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -54,7 +64,32 @@ function CreateCoupon() {
           setMaxAllowed(data.maximum_allowed);
           setStartTime(formatDate(data.start_time));
           setEndTime(formatDate(data.end_time));
-          setCategory(data.categories);
+          // Normalize raw values (may be string or numeric) and prefer `subcategories` ids.
+          const subcatsRaw = data.subcategories;
+          const catsRaw = data.categories;
+
+          // If both are present, populate both selectedSubcatIds and selectedCategoryIds when appropriate.
+          if (subcatsRaw != null && String(subcatsRaw).trim() !== '') {
+            const ids = String(subcatsRaw).split(';').map(s => s.trim()).filter(Boolean);
+            setSelectedSubcatIds(ids);
+          } else {
+            setSelectedSubcatIds([]);
+          }
+
+          if (catsRaw != null && String(catsRaw).trim() !== '') {
+            const parts = String(catsRaw).split(';').map(s => s.trim()).filter(Boolean);
+            const allNumeric = parts.length > 0 && parts.every(p => /^\d+$/.test(p));
+            if (allNumeric) {
+              setSelectedCategoryIds(parts);
+              setCategory('');
+            } else {
+              setCategory(String(catsRaw));
+              setSelectedCategoryIds([]);
+            }
+          } else {
+            setSelectedCategoryIds([]);
+            if (!subcatsRaw) setCategory('');
+          }
         }
       })
       .catch((error) => {
@@ -65,12 +100,33 @@ function CreateCoupon() {
   }, []);
   
   const handleCategory = (event) => {
-    if (category.includes(event)) {
-      const removeCat = category.replace(event, "");
-      setCategory(removeCat);
+    // event may be 'All' or a category id
+    if (event === 'All') {
+      setSelectedSubcatIds([]);
+      setSelectedCategoryIds([]);
+      setCategory('All');
+      return;
     }
-    else {
-      setCategory(category + ' ' + event);
+
+    const id = String(event);
+    if (selectedCategoryIds.includes(id)) {
+      setSelectedCategoryIds(selectedCategoryIds.filter((c) => c !== id));
+    } else {
+      if (category.includes('All')) setCategory('');
+      setSelectedCategoryIds([...selectedCategoryIds, id]);
+    }
+  };
+
+  const toggleSubcat = (id) => {
+    const sid = id + "";
+    if (selectedSubcatIds.includes(sid)) {
+      setSelectedSubcatIds(selectedSubcatIds.filter((c) => c !== sid));
+    } else {
+      // selecting a specific subcategory should clear any 'All' top-level selection
+      if (category.includes('All')) {
+        setCategory(category.replace('All', '').trim());
+      }
+      setSelectedSubcatIds([...selectedSubcatIds, sid]);
     }
   };
 
@@ -82,7 +138,7 @@ function CreateCoupon() {
         amount < 0.01 ||
         type === '' ||
         startTime === '' ||
-        category === ''||
+        (category === '' && selectedSubcatIds.length === 0) ||
         minRequired < 1) {
       setShowConfirmation('required');
       return;
@@ -90,7 +146,10 @@ function CreateCoupon() {
 
     const startUTC = moment.tz(startTime, moment.tz.guess()).utc().format();
     const endUTC = moment.tz(endTime, moment.tz.guess()).utc().format();
-  
+    // send both top-level categories (ids) and subcategory id list
+    const subcatsToSend = selectedSubcatIds.length > 0 ? selectedSubcatIds.join(';') : '';
+    const catsToSend = selectedCategoryIds.length > 0 ? selectedCategoryIds.join(';') : (category || '');
+
     fetch("/api/coupon/updateCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -103,7 +162,8 @@ function CreateCoupon() {
         'maximum_allowed': maxAllowed,
         'start_time': startUTC,
         'end_time': endUTC,
-        'categories': category
+        'categories': catsToSend,
+        'subcategories': subcatsToSend
       }),
     })
       .then((response) => response.json())
@@ -244,7 +304,7 @@ function CreateCoupon() {
           <br />
           <div className="row">
             <div className="mobileSplit40">
-              <label className="bold">Subcategories Of Products To Include</label>
+              <label className="bold">Categories Of Products To Include</label>
             </div>
             <div className="mobileSplit20"/>
             <div className="mobileSplit40"/>
@@ -257,9 +317,26 @@ function CreateCoupon() {
             </div>
           </div>
           <div className="row">
+            {allCategories.map((cat) => (
+              <div className="default-checkbox" key={cat.id}>
+                <input type="checkbox" value={cat.id} name="cats" checked={selectedCategoryIds.includes(String(cat.id))} onChange={(event) => handleCategory(event.target.value)}/>
+                <label>&nbsp;{cat.category}</label>
+              </div>
+            ))}
+          </div>
+          <br/>
+          <div className="row">
+            <div className="mobileSplit40">
+              <label className="bold">Subcategories Of Products To Include</label>
+            </div>
+            <div className="mobileSplit20"/>
+            <div className="mobileSplit40"/>
+          </div>
+          <br/>
+          <div className="row">
             {allSubcategories.map((subcategory) => (
-              <div className="default-checkbox" key={subcategory}>
-                <input type="checkbox" value={subcategory.name} name="subcats" checked={category.includes(subcategory.name)} onChange={(event) => handleCategory(event.target.value)}/>
+              <div className="default-checkbox" key={subcategory.id}>
+                <input type="checkbox" value={subcategory.id} name="subcats" checked={selectedSubcatIds.includes(String(subcategory.id))} onChange={() => toggleSubcat(subcategory.id)}/>
                 <label className="couponCategoryLabel">&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
               </div>
             ))}

@@ -107,10 +107,59 @@ function Products() {
 
   // Displays appropriate products based on category
   useEffect(() => {
-    const filters = products.filter((product) =>
-      product.categories.includes(display)
-    );
-    setFilteredProducts(filters);
+    // If showing all, include every product
+    if (display === "All") {
+      setFilteredProducts(products);
+      setPage(1);
+      return;
+    }
+
+    // Helper to safely split ID lists stored as semicolon-separated strings
+    const parseIdList = (val) => {
+      if (!val || typeof val !== 'string') return [];
+      if (val.indexOf(';') !== -1) return val.split(';').map(s => s.trim()).filter(Boolean);
+      return [val.trim()];
+    };
+
+    // Try to match a category by name first
+    const matchedCategory = categories.find(cat => (cat.category || '').toLowerCase() === (display || '').toLowerCase());
+    if (matchedCategory) {
+      const catIdStr = String(matchedCategory.id);
+      const filters = products.filter((product) => {
+        // New format: product.categories contains semicolon-separated category ids
+        const catField = product.categories || '';
+        const ids = parseIdList(catField);
+        if (ids.length > 0 && ids.includes(catIdStr)) return true;
+        // Fallback to legacy name-based categories field
+        if (typeof catField === 'string' && catField.toLowerCase().includes((display || '').toLowerCase())) return true;
+        return false;
+      });
+      setFilteredProducts(filters);
+      setPage(1);
+      return;
+    }
+
+    // Try to match a subcategory by name
+    const matchedSub = subcategories.find(sub => (sub.name || '').toLowerCase() === (display || '').toLowerCase());
+    if (matchedSub) {
+      const subIdStr = String(matchedSub.id);
+      const filters = products.filter((product) => {
+        // New format: product.subcategories contains semicolon-separated subcategory ids
+        const subField = product.subcategories || '';
+        const ids = parseIdList(subField);
+        if (ids.length > 0 && ids.includes(subIdStr)) return true;
+        // Fallback: maybe category names were stored in product.categories
+        const catField = product.categories || '';
+        if (typeof catField === 'string' && catField.toLowerCase().includes((display || '').toLowerCase())) return true;
+        return false;
+      });
+      setFilteredProducts(filters);
+      setPage(1);
+      return;
+    }
+
+    // No match found: empty result
+    setFilteredProducts([]);
     setPage(1);
   }, [products, display]);
 
@@ -148,10 +197,18 @@ function Products() {
 
   // Determine whether category needs a drop down. Values are cached for faster access
   const useMemoizedValidSubCategories = useMemo(() => {
-    const memoizedValidSubCategories = (categoryName) => {
-        return subcategories.find(subcategory => subcategory.category === categoryName) !== undefined;
+    return (categoryName) => {
+      // Find category object for the given name (if present)
+      const cat = categories.find(c => (c.category || '').toLowerCase() === (categoryName || '').toLowerCase());
+      const catId = cat ? String(cat.id) : null;
+      return subcategories.some(sub => {
+        if (!sub) return false;
+        // sub.category may be a category name (legacy) or category id (new)
+        if (catId && String(sub.category) === catId) return true;
+        if (typeof sub.category === 'string' && sub.category.toLowerCase() === (categoryName || '').toLowerCase()) return true;
+        return false;
+      });
     };
-    return memoizedValidSubCategories;
   }, [categories, subcategories]); 
 
   return (
