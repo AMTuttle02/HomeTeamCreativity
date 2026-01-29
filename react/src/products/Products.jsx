@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
 import "./products.css";
 import { GetProductPrice } from "./GetProductPrice";
@@ -14,7 +14,10 @@ function Products() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
   const amountPerPage = 20;
   const [page, setPage] = useState(1);
-  const { category, subcategory } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const subcategoryParam = searchParams.get('subcategory');
+  const pageParam = searchParams.get('page');
   const [displayProducts, setDisplayProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -61,49 +64,66 @@ function Products() {
     })
   }, []);
 
-  // Page setup based on category and subcategory in link
+  // Page setup based on category and subcategory in query params
   useEffect(() => {
+    const category = categoryParam;
+    const subcategory = subcategoryParam;
+
     if (subcategory) {
       if (subcategories.length > 0) {
         let valid = 0;
         for (let i = 0; i < subcategories.length; i++) {
           if ((subcategories[i].name).toLowerCase() === subcategory.toLowerCase()) {
             setDisplay(subcategories[i].name);
-            localStorage.setItem('lastProductCategory', '/products/' + category + '/' + subcategories[i].name);
+            localStorage.setItem('lastProductCategory', '/products?category=' + (category || '') + '&subcategory=' + subcategories[i].name);
             i = subcategories.length + 1;
             valid = 1;
           }
         }
         if (!valid) {
-          navigate("/products");
-          setDisplay("All");
+          navigate('/products');
+          setDisplay('All');
         }
       }
     }
     else if (category) {
       if (categories.length > 0) {
-        console.log(categories);
         let valid = 0;
         for (let i = 0; i < categories.length; i++) {
           if ((categories[i].category).toLowerCase() === category.toLowerCase()) {
             setDisplay(categories[i].category);
-            localStorage.setItem('lastProductCategory', '/products/' + categories[i].category);
+            localStorage.setItem('lastProductCategory', '/products?category=' + categories[i].category);
             i = categories.length + 1;
             valid = 1;
           }
         }
         if (!valid) {
-          navigate("/products");
-          setDisplay("All");
+          navigate('/products');
+          setDisplay('All');
         }
       }
     }
     else {
       localStorage.setItem('lastProductCategory', '/products');
-      navigate("/products");
-      setDisplay("All");
+      navigate('/products');
+      setDisplay('All');
     }
-  }, [category, subcategory, subcategories, categories]);
+  }, [categoryParam, subcategoryParam, subcategories, categories]);
+
+  // If the URL contains a page param, use it (validate positive integer)
+  useEffect(() => {
+    if (pageParam) {
+      const p = parseInt(pageParam, 10);
+      if (!isNaN(p) && p > 0) {
+        setPage(p);
+      } else {
+        setSearchParams({});
+        navigate('/products');
+      }
+    } else {
+      setPage(1);
+    }
+  }, [pageParam]);
 
   // Displays appropriate products based on category
   useEffect(() => {
@@ -177,6 +197,16 @@ function Products() {
     window.scrollTo(0, 0);
   }, [filteredProducts, page]);
 
+  // Helper to construct product paths preserving category/subcategory and page
+  const buildProductsPath = (cat, sub, pg) => {
+    const params = {};
+    if (cat) params.category = cat;
+    if (sub) params.subcategory = sub;
+    if (pg && pg > 1) params.page = String(pg);
+    const qs = new URLSearchParams(params).toString();
+    return '/products' + (qs ? ('?' + qs) : '');
+  }
+
   // Navigates to order page
   const orderProduct = (productId) => {
     navigate("/order/" + productId);
@@ -214,16 +244,16 @@ function Products() {
   return (
     <div className="Products">
       <div className="productFilterRow">
-        {categories.map((category) => (
-          <div className="button-wrapper" key={category.id}>
-            <button onClick={() => navigate("/products/" + category.category)}>
-              {category.category}{(!isMobile && useMemoizedValidSubCategories(category.category)) ? <>&#9660;</> : <></>}
+        {categories.map((cat) => (
+          <div className="button-wrapper" key={cat.id}>
+            <button onClick={() => setSearchParams({ category: cat.category })}>
+              {cat.category}{(!isMobile && useMemoizedValidSubCategories(cat.category)) ? <>&#9660;</> : <></>}
             </button>
             <div className="subcategories">
             {subcategories.map((subcategory) => (
               <span key={subcategory.id}>
-                {subcategory.category === category.category &&
-                  <span><button onClick={() => navigate("/products/" + category.category + "/" + subcategory.name)}>{subcategory.name}</button></span>
+                {subcategory.category === cat.category &&
+                  <span><button onClick={() => setSearchParams({ category: cat.category, subcategory: subcategory.name })}>{subcategory.name}</button></span>
                 }
               </span>
             ))}
@@ -235,10 +265,18 @@ function Products() {
         {/* Page Navigation */}
         <div className="productsLeft">
           {page > 1 &&
-            <span>
-              <button onClick={() => setPage(page-1)}>{'<'}{/*&#129044;*/} Previous Page</button>
-            </span>
-          }
+              <span>
+                <button onClick={() => {
+                  const newPage = page - 1;
+                  setPage(newPage);
+                  const params = {};
+                  if (categoryParam) params.category = categoryParam;
+                  if (subcategoryParam) params.subcategory = subcategoryParam;
+                  if (newPage && newPage > 1) params.page = String(newPage);
+                  setSearchParams(params);
+                }}>{'<'} Previous Page</button>
+              </span>
+            }
         </div>
         {/* Header text to say what cateogry is being displayed */}
         <div className="productsMain">
@@ -257,7 +295,15 @@ function Products() {
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 
             <span>
-              <button onClick={() => setPage(page+1)}>Next Page {'>'}{/*&#129046;*/}</button>
+              <button onClick={() => {
+                const newPage = page + 1;
+                setPage(newPage);
+                const params = {};
+                if (categoryParam) params.category = categoryParam;
+                if (subcategoryParam) params.subcategory = subcategoryParam;
+                if (newPage && newPage > 1) params.page = String(newPage);
+                setSearchParams(params);
+              }}>Next Page {'>'}</button>
             </span>
           }
         </div>
@@ -287,10 +333,18 @@ function Products() {
       <div className="ProductHeaderRow">
         <div className="productsLeft">
           {page > 1 &&
-            <span>
-              <button onClick={() => setPage(page-1)}>{'<'} Previous Page</button>
-            </span>
-          }
+              <span>
+                <button onClick={() => {
+                  const newPage = page - 1;
+                  setPage(newPage);
+                  const params = {};
+                  if (categoryParam) params.category = categoryParam;
+                  if (subcategoryParam) params.subcategory = subcategoryParam;
+                  if (newPage && newPage > 1) params.page = String(newPage);
+                  setSearchParams(params);
+                }}>{'<'} Previous Page</button>
+              </span>
+            }
         </div>
         {/* Return to all products link if in a category */}
         <div className="productsMain">
@@ -304,7 +358,15 @@ function Products() {
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 
             <span>
-              <button onClick={() => setPage(page+1)}>Next Page {'>'}</button>
+              <button onClick={() => {
+                const newPage = page + 1;
+                setPage(newPage);
+                const params = {};
+                if (categoryParam) params.category = categoryParam;
+                if (subcategoryParam) params.subcategory = subcategoryParam;
+                if (newPage && newPage > 1) params.page = String(newPage);
+                setSearchParams(params);
+              }}>Next Page {'>'}</button>
             </span>
           }
         </div>

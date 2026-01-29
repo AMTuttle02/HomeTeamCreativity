@@ -170,7 +170,7 @@ function HomeContents() {
       </div>
       <div className="doubleRow">
           {categoryLinks.map((item) => (
-            <Link to={"/products/" + item.category} className="categoryLink" key={item.category}>
+            <Link to={`/products?category=${encodeURIComponent(item.category)}`} className="categoryLink" key={item.category}>
               {item.category}
             </Link>
           ))}
