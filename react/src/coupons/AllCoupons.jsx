@@ -5,6 +5,10 @@ import "./coupon.css";
 
 function AllCoupons() {
   const [coupons, setCoupons] = useState([]);
+  const [allSubcategories, setAllSubcategories] = useState([]);
+  const [subcatMap, setSubcatMap] = useState({});
+  const [allCategories, setAllCategories] = useState([]);
+  const [catMap, setCatMap] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,6 +16,36 @@ function AllCoupons() {
       .then((response) => response.json())
       .then((data) => {
         setCoupons(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/category/getSubCats.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAllSubcategories(data || []);
+        const map = {};
+        (data || []).forEach((s) => { map[String(s.id)] = s.name; });
+        setSubcatMap(map);
+      })
+      .catch(() => {
+        setAllSubcategories([]);
+        setSubcatMap({});
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/category/getCategories.php")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllCategories(data || []);
+        const map = {};
+        (data || []).forEach((c) => { map[String(c.id)] = c.category; });
+        setCatMap(map);
+      })
+      .catch(() => {
+        setAllCategories([]);
+        setCatMap({});
       });
   }, []);
 
@@ -57,7 +91,27 @@ function AllCoupons() {
                   <td className="hide-on-mobile">{coupon.maximum_allowed}</td>
                   <td>{formatTime(coupon.start_time)}</td>
                   <td>{formatTime(coupon.end_time)}</td>
-                  <td className="hide-on-mobile">{coupon.categories}</td>
+                  <td className="hide-on-mobile">
+                    {(() => {
+                      const cats = String(coupon.categories || '').trim();
+                      if (cats === '') return '';
+                      const parts = cats.split(';').map(s => s.trim()).filter(Boolean);
+                      const allNumeric = parts.length > 0 && parts.every(p => /^\d+$/.test(p));
+                      if (allNumeric) {
+                        const names = parts.map(id => catMap[id] || id);
+                        return names.join(', ');
+                      }
+                      return cats;
+                    })()}
+                    {coupon.subcategories ? ' | ' : ''}
+                    {coupon.subcategories && (
+                      (() => {
+                        const ids = String(coupon.subcategories).split(';').map(s => s.trim()).filter(Boolean);
+                        const names = ids.map(id => subcatMap[id] || id);
+                        return names.join(', ');
+                      })()
+                    )}
+                  </td>
                   <td>
                     <button className="default-button" onClick={() => navigate('/coupons/edit/' + coupon.code)}>
                       &nbsp;Edit&nbsp;

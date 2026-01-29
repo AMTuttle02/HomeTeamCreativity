@@ -99,11 +99,31 @@ function CheckoutDetails() {
     const determineDiscount = async (discount) => {
         let orderTotal = order.total_cost;
         let finalAmount = 0.00;
-    
-        if (!discount.categories.includes("All")) {
+        // New logic: coupon may have separate `categories` (top-level names or ids) and `subcategories` (ids)
+        const couponCatRaw = (discount && discount.categories) ? discount.categories : '';
+        const couponSubRaw = (discount && discount.subcategories) ? discount.subcategories : '';
+        const isAll = (typeof couponCatRaw === 'string' && couponCatRaw.indexOf('All') !== -1) || couponCatRaw === 'All' || (typeof couponSubRaw === 'string' && couponSubRaw.indexOf('All') !== -1) || couponSubRaw === 'All';
+
+        if (!isAll) {
             orderTotal = 0;
             let oID = localStorage.getItem("oID") || 0;
-    
+
+            // prepare coupon match lists
+            let couponSubIds = [];
+            let couponCatIds = [];
+            let couponCatNames = [];
+
+            if (typeof couponSubRaw === 'string' && couponSubRaw.length) {
+                couponSubIds = couponSubRaw.split(';').map(s => s.trim()).filter(Boolean);
+            }
+            if (typeof couponCatRaw === 'string' && couponCatRaw.length) {
+                if (couponCatRaw.indexOf(';') !== -1) {
+                    couponCatIds = couponCatRaw.split(';').map(s => s.trim()).filter(Boolean);
+                } else {
+                    couponCatNames = couponCatRaw.split(' ').map(s => s.trim()).filter(Boolean);
+                }
+            }
+
             try {
                 const response = await fetch("/api/cart/getCart.php", {
                     method: "POST",
@@ -111,20 +131,51 @@ function CheckoutDetails() {
                     body: JSON.stringify({ order_id: oID }),
                 });
                 const data = await response.json();
-    
+
                 for (const element of data) {
-                    let categories = element.categories
-                        .split(' ')
-                        .filter(item => item.trim().length > 0)
-                        .map(item => item.trim());
-                    
-                    console.log(categories);
-                    for (let j = 0; j < categories.length; ++j) {
-                        if (discount.categories.includes(categories[j])) {
-                            orderTotal += (GetProductPriceWithSize(element.price, element.product_type, element.size) * 1 * element.product_quantity);
-                            console.log("Order Total Updated: " + orderTotal);
-                            j = categories.length;
+                    const elemCatRaw = element.categories || '';
+                    const elemSubRaw = element.subcategories || '';
+
+                    let elemSubIds = [];
+                    let elemCatIds = [];
+                    let elemCatNames = [];
+
+                    if (typeof elemSubRaw === 'string' && elemSubRaw.indexOf(';') !== -1) {
+                        elemSubIds = elemSubRaw.split(';').map(s => s.trim()).filter(Boolean);
+                    }
+                    if (typeof elemCatRaw === 'string' && elemCatRaw.length) {
+                        if (elemCatRaw.indexOf(';') !== -1) {
+                            elemCatIds = elemCatRaw.split(';').map(s => s.trim()).filter(Boolean);
+                        } else {
+                            elemCatNames = elemCatRaw.split(' ').map(s => s.trim()).filter(Boolean);
                         }
+                    }
+
+                    let matched = false;
+
+                    // match by subcategory ids first
+                    if (!matched && couponSubIds.length > 0 && elemSubIds.length > 0) {
+                        for (let cs of couponSubIds) {
+                            if (elemSubIds.includes(cs)) { matched = true; break; }
+                        }
+                    }
+
+                    // match by top-level category ids
+                    if (!matched && couponCatIds.length > 0 && elemCatIds.length > 0) {
+                        for (let cc of couponCatIds) {
+                            if (elemCatIds.includes(cc)) { matched = true; break; }
+                        }
+                    }
+
+                    // match by top-level category names (legacy)
+                    if (!matched && couponCatNames.length > 0 && elemCatNames.length > 0) {
+                        for (let cn of couponCatNames) {
+                            if (elemCatNames.includes(cn)) { matched = true; break; }
+                        }
+                    }
+
+                    if (matched) {
+                        orderTotal += (GetProductPriceWithSize(element.price, element.product_type, element.size) * 1 * element.product_quantity);
                     }
                 }
             } catch (error) {
