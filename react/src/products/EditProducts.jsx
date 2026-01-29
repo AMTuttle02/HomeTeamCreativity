@@ -18,6 +18,9 @@ function EditProducts() {
   const [hColors, setHColors] = useState("");
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [currentSubcategories, setCurrentSubcategories] = useState("");
+  const [allCategories, setAllCategories] = useState([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+  const [selectedSubcategoryIds, setSelectedSubcategoryIds] = useState([]);
   const [style, setStyle] = useState("tshirt");
   const [location, setLocation] = useState("front");
   const [productIsSet, setProductIsSet] = useState(false);
@@ -42,7 +45,17 @@ function EditProducts() {
     fetch("/api/category/getProductCats.php")
       .then((response) => response.json())
       .then((data) => {
-        setCurrentSubcategories(data.categories);
+        if (data && typeof data === 'object') {
+          // data.categories and data.subcategories expected as semicolon-separated id lists
+          if (data.categories) setSelectedCategoryIds(String(data.categories).split(';').map(s => s.trim()).filter(Boolean));
+          if (data.subcategories) setSelectedSubcategoryIds(String(data.subcategories).split(';').map(s => s.trim()).filter(Boolean));
+        }
+      });
+
+    fetch("/api/category/getCategories.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setAllCategories(data || []);
       });
     
     console.log(productId);
@@ -125,13 +138,14 @@ function EditProducts() {
   }
 
   const toggleSubcategory = (category) => {
-    if (currentSubcategories.includes(category)) {
-      const removedCat = currentSubcategories.replace(category, "");
-      setCurrentSubcategories(removedCat);
-      
-    } else {
-      setCurrentSubcategories(currentSubcategories + ' ' + category);
-    }
+    // category is expected to be subcategory id
+    const sid = String(category);
+    setSelectedSubcategoryIds(prev => prev.includes(sid) ? prev.filter(x => x !== sid) : [...prev, sid]);
+  }
+
+  const toggleCategory = (id) => {
+    const sid = String(id);
+    setSelectedCategoryIds(prev => prev.includes(sid) ? prev.filter(x => x !== sid) : [...prev, sid]);
   }
 
   const handleSubmit = async (event) => {
@@ -153,7 +167,9 @@ function EditProducts() {
       formData.append('lColors', lColors);
       formData.append('cColors', cColors);
       formData.append('hColors', hColors);
-      formData.append('subcategories', currentSubcategories);
+      // send semicolon-separated id lists for categories and subcategories
+      formData.append('categories', selectedCategoryIds.join(';'));
+      formData.append('subcategories', selectedSubcategoryIds.join(';'));
       formData.append('default_style', style);
       formData.append('default_style_location', location);
       formData.append('customFieldRequired', customFieldRequired);
@@ -378,52 +394,18 @@ function EditProducts() {
                 </div>
                 <h3><b>Categories</b></h3>
                 <div className="containerRow">
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Faith" name="cats" checked={currentSubcategories.includes("Faith")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Faith*</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Family" name="cats" checked={currentSubcategories.includes("Family")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Family*</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Health" name="cats" checked={currentSubcategories.includes("Health")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Health</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Holiday" name="cats" checked={currentSubcategories.includes("Holiday")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Holiday</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Ohio" name="cats" checked={currentSubcategories.includes("Ohio")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Ohio*</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Other" name="cats" checked={currentSubcategories.includes("Other")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Other</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Patriotic" name="cats" checked={currentSubcategories.includes("Patriotic")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Patriotic*</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="School" name="cats" checked={currentSubcategories.includes("School")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;School</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Seasons" name="cats" checked={currentSubcategories.includes("Seasons")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Seasons</label>
-                  </div>
-                  <div className="default-checkbox">
-                    <input type="checkbox" value="Sports" name="cats" checked={currentSubcategories.includes("Sports")} onChange={(event) => toggleSubcategory(event.target.value)}/>
-                    <label>&nbsp;Sports</label>
-                  </div>
+                  {allCategories.map((cat) => (
+                    <div className="default-checkbox" key={cat.id}>
+                      <input type="checkbox" value={cat.id} name="cats" checked={selectedCategoryIds.includes(String(cat.id))} onChange={() => toggleCategory(cat.id)}/>
+                      <label>&nbsp;{cat.category}</label>
+                    </div>
+                  ))}
                 </div>
                 <h3><b>Subcategories</b></h3>
                 <div className="containerRow">
                   {allSubcategories.map((subcategory) => (
-                    <div className="default-checkbox">
-                      <input type="checkbox" value={subcategory.name} name="subcats" checked={currentSubcategories.includes(subcategory.name)} onChange={(event) => toggleSubcategory(event.target.value)}/>
+                    <div className="default-checkbox" key={subcategory.id}>
+                      <input type="checkbox" value={subcategory.id} name="subcats" checked={selectedSubcategoryIds.includes(String(subcategory.id))} onChange={() => toggleSubcategory(subcategory.id)}/>
                       <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
                     </div>
                   ))}
