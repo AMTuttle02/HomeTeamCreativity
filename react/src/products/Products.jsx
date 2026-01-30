@@ -259,16 +259,6 @@ function Products() {
     window.scrollTo(0, 0);
   }, [filteredProducts, page, sortMethod, popularity]);
 
-  // Helper to construct product paths preserving category/subcategory and page
-  const buildProductsPath = (cat, sub, pg) => {
-    const params = {};
-    if (cat) params.category = cat;
-    if (sub) params.subcategory = sub;
-    if (pg && pg > 1) params.page = String(pg);
-    const qs = new URLSearchParams(params).toString();
-    return '/products' + (qs ? ('?' + qs) : '');
-  }
-
   // Helper to build search params object including sort
   const buildParams = (cat, sub, pg, sort) => {
     const params = {};
