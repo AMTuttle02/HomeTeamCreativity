@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
 import "./products.css";
 import { GetProductPrice } from "./GetProductPrice";
@@ -14,9 +14,20 @@ function Products() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
   const amountPerPage = 20;
   const [page, setPage] = useState(1);
-  const { category, subcategory } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const subcategoryParam = searchParams.get('subcategory');
+  const pageParam = searchParams.get('page');
+  const sortParam = searchParams.get('sort');
   const [displayProducts, setDisplayProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [sortMethod, setSortMethod] = useState('recent');
+  const [popularity, setPopularity] = useState({});
+  const [dropdownCategory, setDropdownCategory] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortRef = useRef(null);
 
   // Mobile Check
   useEffect(() => {
@@ -42,6 +53,14 @@ function Products() {
       setProducts(data);
     });
 
+    // Fetch popularity counts for products
+    fetch("/api/product/getProductPopularity.php")
+      .then((response) => response.json())
+      .then((data) => {
+        setPopularity(data || {});
+      })
+      .catch(() => setPopularity({}));
+
     fetch("/api/admin/session.php")
     .then((response) => response.json())
     .then((data) => {
@@ -61,56 +80,90 @@ function Products() {
     })
   }, []);
 
-  // Page setup based on category and subcategory in link
+  // Page setup based on category and subcategory in query params
   useEffect(() => {
+    const category = categoryParam;
+    const subcategory = subcategoryParam;
+
     if (subcategory) {
       if (subcategories.length > 0) {
         let valid = 0;
         for (let i = 0; i < subcategories.length; i++) {
           if ((subcategories[i].name).toLowerCase() === subcategory.toLowerCase()) {
             setDisplay(subcategories[i].name);
-            localStorage.setItem('lastProductCategory', '/products/' + category + '/' + subcategories[i].name);
+            localStorage.setItem('lastProductCategory', '/products?category=' + (category || '') + '&subcategory=' + subcategories[i].name);
             i = subcategories.length + 1;
             valid = 1;
           }
         }
         if (!valid) {
-          navigate("/products");
-          setDisplay("All");
+          navigate('/products');
+          setDisplay('All');
         }
       }
     }
     else if (category) {
       if (categories.length > 0) {
-        console.log(categories);
         let valid = 0;
         for (let i = 0; i < categories.length; i++) {
           if ((categories[i].category).toLowerCase() === category.toLowerCase()) {
             setDisplay(categories[i].category);
-            localStorage.setItem('lastProductCategory', '/products/' + categories[i].category);
+            localStorage.setItem('lastProductCategory', '/products?category=' + categories[i].category);
             i = categories.length + 1;
             valid = 1;
           }
         }
         if (!valid) {
-          navigate("/products");
-          setDisplay("All");
+          navigate('/products');
+          setDisplay('All');
         }
       }
     }
     else {
       localStorage.setItem('lastProductCategory', '/products');
-      navigate("/products");
-      setDisplay("All");
+      // Preserve any page param on initial load so page number in URL is respected,
+      // and respect any existing sort param instead of overwriting it with the default
+      setSearchParams(
+        buildParams(
+          null,
+          null,
+          pageParam ? Number(pageParam) : null,
+          sortParam || sortMethod
+        )
+      );
+      setDisplay('All');
     }
-  }, [category, subcategory, subcategories, categories]);
+  }, [categoryParam, subcategoryParam, subcategories, categories]);
+
+  // Sync sortMethod with URL param
+  useEffect(() => {
+    if (sortParam) {
+      setSortMethod(sortParam);
+    } else {
+      setSortMethod('recent');
+    }
+  }, [sortParam]);
+
+  // If the URL contains a page param, use it (validate positive integer)
+  useEffect(() => {
+    if (pageParam) {
+      const p = parseInt(pageParam, 10);
+      if (!isNaN(p) && p > 0) {
+        setPage(p);
+      } else {
+        setSearchParams(buildParams(categoryParam, subcategoryParam, null, sortMethod));
+      }
+    } else {
+      setPage(1);
+    }
+  }, [pageParam]);
 
   // Displays appropriate products based on category
   useEffect(() => {
     // If showing all, include every product
     if (display === "All") {
       setFilteredProducts(products);
-      setPage(1);
+      if (!pageParam) setPage(1);
       return;
     }
 
@@ -135,7 +188,7 @@ function Products() {
         return false;
       });
       setFilteredProducts(filters);
-      setPage(1);
+      if (!pageParam) setPage(1);
       return;
     }
 
@@ -154,28 +207,67 @@ function Products() {
         return false;
       });
       setFilteredProducts(filters);
-      setPage(1);
+      if (!pageParam) setPage(1);
       return;
     }
 
     // No match found: empty result
     setFilteredProducts([]);
-    setPage(1);
+    if (!pageParam) setPage(1);
   }, [products, display]);
 
   // Displays 20 products per page and determines which to display based on page number
   useEffect(() => {
-    let temp = [];
-    let tempLocation = 0;
-    for (let i = (page * amountPerPage - 20); i < (page * amountPerPage); ++i) {
-      if (filteredProducts[i]) {
-        temp[tempLocation] = filteredProducts[i];
-        ++tempLocation;
+    // Apply sorting then paginate
+    const sorted = (() => {
+      const arr = [...filteredProducts];
+      if (sortMethod === 'alpha') {
+        arr.sort((a, b) => (a.product_name || '').localeCompare(b.product_name || ''));
+      } else if (sortMethod === 'recent') {
+        arr.sort((a, b) => (Number(b.product_id) || 0) - (Number(a.product_id) || 0));
+      } else if (sortMethod === 'price_low') {
+        arr.sort((a, b) => (GetProductPrice(a.price, a.default_style) || 0) - (GetProductPrice(b.price, b.default_style) || 0));
+      } else if (sortMethod === 'price_high') {
+        arr.sort((a, b) => (GetProductPrice(b.price, b.default_style) || 0) - (GetProductPrice(a.price, a.default_style) || 0));
+      } else if (sortMethod === 'popular') {
+        arr.sort((a, b) => {
+          const pa = Number(popularity[String(a.product_id)] || 0);
+          const pb = Number(popularity[String(b.product_id)] || 0);
+          if (pa !== pb) return pb - pa; // higher popularity first
+          // If popularity equal (including both 0), fall back to most recent
+          return (Number(b.product_id) || 0) - (Number(a.product_id) || 0);
+        });
       }
+      // Ensure product_id === 0 is first on page 1
+      if (page === 1) {
+        const idx = arr.findIndex(p => Number(p.product_id) === 0);
+        if (idx > 0) {
+          const [p0] = arr.splice(idx, 1);
+          arr.unshift(p0);
+        }
+      }
+      return arr;
+    })();
+
+    const temp = [];
+    const start = (page - 1) * amountPerPage;
+    const end = page * amountPerPage;
+    for (let i = start; i < end; ++i) {
+      if (sorted[i]) temp.push(sorted[i]);
     }
     setDisplayProducts(temp);
     window.scrollTo(0, 0);
-  }, [filteredProducts, page]);
+  }, [filteredProducts, page, sortMethod, popularity]);
+
+  // Helper to build search params object including sort
+  const buildParams = (cat, sub, pg, sort) => {
+    const params = {};
+    if (cat) params.category = cat;
+    if (sub) params.subcategory = sub;
+    if (pg && pg > 1) params.page = String(pg);
+    if (sort) params.sort = sort;
+    return params;
+  }
 
   // Navigates to order page
   const orderProduct = (productId) => {
@@ -211,53 +303,117 @@ function Products() {
     };
   }, [categories, subcategories]); 
 
+  const selectValue = subcategoryParam ? `sub:${categoryParam}|${subcategoryParam}` : (categoryParam ? `cat:${categoryParam}` : '');
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+      if (sortRef.current && !sortRef.current.contains(e.target)) {
+        setSortOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className="Products">
-      <div className="productFilterRow">
-        {categories.map((category) => (
-          <div className="button-wrapper" key={category.id}>
-            <button onClick={() => navigate("/products/" + category.category)}>
-              {category.category}{(!isMobile && useMemoizedValidSubCategories(category.category)) ? <>&#9660;</> : <></>}
+      <div className="productFilterRow" ref={dropdownRef}>
+        <div className="filterLabel">Filter:</div>
+
+        <div className="filterDropdowns" style={{flex: '0 0 auto'}}>
+          <div className="customDropdown">
+            <button className="customDropdownButton" onClick={() => setDropdownOpen((s) => !s)}>
+              {display === "All" ? 'All Categories' : display} <span style={{marginLeft:8}}>&#9662;</span>
             </button>
-            <div className="subcategories">
-            {subcategories.map((subcategory) => (
-              <span key={subcategory.id}>
-                {subcategory.category === category.category &&
-                  <span><button onClick={() => navigate("/products/" + category.category + "/" + subcategory.name)}>{subcategory.name}</button></span>
-                }
-              </span>
-            ))}
-            </div>
+            {dropdownOpen && (
+              <div className="customDropdownMenu">
+                <div className="dropdownItem" onClick={() => { setSearchParams(buildParams(null, null, null, sortMethod)); setDropdownOpen(false); }}>
+                  All Products
+                </div>
+                {categories.map((cat) => {
+                  const catId = String(cat.id);
+                  const matchedSubs = subcategories.filter((sub) => {
+                    if (!sub) return false;
+                    if (catId && String(sub.category) === catId) return true;
+                    if (typeof sub.category === 'string' && sub.category.toLowerCase() === (cat.category || '').toLowerCase()) return true;
+                    return false;
+                  });
+                  return (
+                    <div key={cat.id}>
+                      <div className="dropdownItem dropdownCategory" onClick={() => { setSearchParams(buildParams(cat.category, null, null, sortMethod)); setDropdownOpen(false); }}>
+                        {cat.category}
+                      </div>
+                      {matchedSubs.map((sub) => (
+                        <div key={sub.id} className="dropdownItem dropdownSubItem" onClick={() => { setSearchParams(buildParams(cat.category, sub.name, null, sortMethod)); setDropdownOpen(false); }}>
+                          {sub.name}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        ))}
+        </div>
+          
+          <div className="productFilterTitle">
+            <h1>Products</h1>
+          </div>
+
+        <div className="filterDropdowns right" ref={sortRef}>
+          <div className="filterLabel">Sort:</div>
+          <div className="customDropdown">
+            <button className="customDropdownButton" onClick={() => setSortOpen(s => !s)}>
+              {sortMethod === 'recent' ? 'Recently Added' : (sortMethod === 'alpha' ? 'Alphabetical' : (sortMethod === 'price_low' ? 'Price Low to High' : (sortMethod === 'price_high' ? 'Price High to Low' : 'Most Popular')))} <span style={{marginLeft:8}}>&#9662;</span>
+            </button>
+            {sortOpen && (
+              <div className="customDropdownMenu">
+                <div className="dropdownItem" onClick={() => { setSortMethod('recent'); setSortOpen(false); setPage(1); setSearchParams(buildParams(categoryParam, subcategoryParam, 1, 'recent')); }}>
+                  Recently Added
+                </div>
+                <div className="dropdownItem" onClick={() => { setSortMethod('alpha'); setSortOpen(false); setPage(1); setSearchParams(buildParams(categoryParam, subcategoryParam, 1, 'alpha')); }}>
+                  Alphabetical
+                </div>
+                <div className="dropdownItem" onClick={() => { setSortMethod('price_low'); setSortOpen(false); setPage(1); setSearchParams(buildParams(categoryParam, subcategoryParam, 1, 'price_low')); }}>
+                  Price Low to High
+                </div>
+                <div className="dropdownItem" onClick={() => { setSortMethod('price_high'); setSortOpen(false); setPage(1); setSearchParams(buildParams(categoryParam, subcategoryParam, 1, 'price_high')); }}>
+                  Price High to Low
+                </div>
+                <div className="dropdownItem" onClick={() => { setSortMethod('popular'); setSortOpen(false); setPage(1); setSearchParams(buildParams(categoryParam, subcategoryParam, 1, 'popular')); }}>
+                  Most Popular
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+      <br />
       <div className="ProductHeaderRow">
-        {/* Page Navigation */}
         <div className="productsLeft">
           {page > 1 &&
-            <span>
-              <button onClick={() => setPage(page-1)}>{'<'}{/*&#129044;*/} Previous Page</button>
-            </span>
-          }
+              <span>
+                <button onClick={() => {
+                  const newPage = page - 1;
+                  setPage(newPage);
+                  setSearchParams(buildParams(categoryParam, subcategoryParam, newPage, sortMethod));
+                }}>{'<'} Previous Page</button>
+              </span>
+            }
         </div>
-        {/* Header text to say what cateogry is being displayed */}
-        <div className="productsMain">
-          {display === ("All") ? 
-            <span>
-              <h1>Products</h1>
-            </span>
-            :
-            <span>
-              <h1>{display}</h1>
-              <button onClick={() => navigate("/products")}>See All Products</button>
-            </span>
-          }
-        </div>
+        <div className="productsMain" />
         {/* Page Navigation */}
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 
             <span>
-              <button onClick={() => setPage(page+1)}>Next Page {'>'}{/*&#129046;*/}</button>
+              <button onClick={() => {
+                const newPage = page + 1;
+                setPage(newPage);
+                setSearchParams(buildParams(categoryParam, subcategoryParam, newPage, sortMethod));
+              }}>Next Page {'>'}</button>
             </span>
           }
         </div>
@@ -287,24 +443,25 @@ function Products() {
       <div className="ProductHeaderRow">
         <div className="productsLeft">
           {page > 1 &&
-            <span>
-              <button onClick={() => setPage(page-1)}>{'<'} Previous Page</button>
-            </span>
-          }
+              <span>
+                <button onClick={() => {
+                  const newPage = page - 1;
+                  setPage(newPage);
+                  setSearchParams(buildParams(categoryParam, subcategoryParam, newPage, sortMethod));
+                }}>{'<'} Previous Page</button>
+              </span>
+            }
         </div>
-        {/* Return to all products link if in a category */}
-        <div className="productsMain">
-          {display !== ("All") &&
-            <span>
-              <button onClick={() => navigate("/products")}>See All Products</button>
-            </span>
-          }
-        </div>
+        <div className="productsMain" />
         {/* Page Navigation */}
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 
             <span>
-              <button onClick={() => setPage(page+1)}>Next Page {'>'}</button>
+              <button onClick={() => {
+                const newPage = page + 1;
+                setPage(newPage);
+                setSearchParams(buildParams(categoryParam, subcategoryParam, newPage, sortMethod));
+              }}>Next Page {'>'}</button>
             </span>
           }
         </div>
