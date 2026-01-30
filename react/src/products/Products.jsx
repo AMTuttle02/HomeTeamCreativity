@@ -151,7 +151,7 @@ function Products() {
       if (!isNaN(p) && p > 0) {
         setPage(p);
       } else {
-        setSearchParams(buildParams(null, null, null, sortMethod));
+        setSearchParams(buildParams(categoryParam, subcategoryParam, null, sortMethod));
       }
     } else {
       setPage(1);
