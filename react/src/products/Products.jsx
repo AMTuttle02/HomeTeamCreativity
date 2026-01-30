@@ -267,7 +267,7 @@ function Products() {
     if (pg && pg > 1) params.page = String(pg);
     if (sort) params.sort = sort;
     return params;
-  }
+  };
 
   // Navigates to order page
   const orderProduct = (productId) => {
