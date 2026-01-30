@@ -204,22 +204,6 @@
   background: #fff;
 }
 
-.customDropdown {
-  display: inline-flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.customDropdownButton {
-  font-size: 1.0vw;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #fff;
-  color: #000;
-  cursor: pointer;
-}
-
 /* When the dropdown trigger sits inside the blue filter row, override
    the default button rules so it appears as a white select-like control */
 .productFilterRow .customDropdownButton {
@@ -291,7 +275,7 @@
   min-width: 160px;
 }
 
-/* Custom dropdown (modern) */
+/* Custom dropdown styling */
 .customDropdown {
   position: relative;
   display: inline-block;
@@ -306,8 +290,6 @@
   cursor: pointer;
   font-weight: 700;
 }
-
-/* keep dropdown button styling consistent with productFilterRow buttons */
 
 .customDropdownMenu {
   position: absolute;
