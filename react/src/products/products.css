@@ -109,7 +109,7 @@
 }
 
 .productsLeft {
-  flex: 10%;
+  flex: 50%;
   text-align: left;
 }
 
@@ -165,7 +165,7 @@
 }
 
 .productsRight {
-  flex: 0%;
+  flex: 50%;
   text-align: right;
   vertical-align: middle;
 }

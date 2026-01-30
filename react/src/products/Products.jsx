@@ -392,6 +392,33 @@ function Products() {
           </div>
         </div>
       </div>
+      <br />
+      <div className="ProductHeaderRow">
+        <div className="productsLeft">
+          {page > 1 &&
+              <span>
+                <button onClick={() => {
+                  const newPage = page - 1;
+                  setPage(newPage);
+                  setSearchParams(buildParams(categoryParam, subcategoryParam, newPage, sortMethod));
+                }}>{'<'} Previous Page</button>
+              </span>
+            }
+        </div>
+        <div className="productsMain" />
+        {/* Page Navigation */}
+        <div className="productsRight">
+          {page < (filteredProducts.length / 20) && 
+            <span>
+              <button onClick={() => {
+                const newPage = page + 1;
+                setPage(newPage);
+                setSearchParams(buildParams(categoryParam, subcategoryParam, newPage, sortMethod));
+              }}>Next Page {'>'}</button>
+            </span>
+          }
+        </div>
+      </div>
       {/* Products */}
       <div className="productsRow">
         {displayProducts.map((product) => (
