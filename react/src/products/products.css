@@ -2,14 +2,6 @@
   z-index: 0;
 }
 
-.Products h1 {
-  color: black;
-  text-decoration: none;
-  font-weight: 100;
-  text-align: center;
-  padding: 5%;
-}
-
 .Products a {
   color: black;
 }
@@ -17,11 +9,37 @@
 .productFilterRow {
   display: flex;
   flex-wrap: nowrap;
+  align-items: center;
   background-color: #1b7bb8;
+  position: relative;
   width: 90%;
   margin-left: 5%;
   margin-right: 5%;
   border-radius: 20px;
+}
+
+.productFilterRow h1 {
+  color: #fff;
+  margin: 0;
+  text-align: center;
+  font-weight: 400;
+}
+
+/* Local title wrapper centered within the filter row */
+.productFilterTitle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.productFilterTitle h1 {
+  margin: 0;
+  color: #fff;
+  pointer-events: auto;
 }
 
 .productFilterRow button {
@@ -91,7 +109,7 @@
 }
 
 .productsLeft {
-  flex: 30%;
+  flex: 10%;
   text-align: left;
 }
 
@@ -110,8 +128,25 @@
   cursor: pointer;
 }
 
+.productsRight button {
+  color: black;
+  font-size: 1.25vw;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  transition: color 0.3s ease;
+}
+
+.productsRight button:hover {
+  color: #1A53AE;
+  cursor: pointer;
+}
+
 .productsMain {
-  flex: 30%;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%;
   text-align: center;
 }
 
@@ -130,12 +165,12 @@
 }
 
 .productsRight {
-  flex: 30%;
+  flex: 0%;
   text-align: right;
   vertical-align: middle;
 }
 
-.productsRight button {
+.pageButtons {
   color: black;
   font-size: 1.25vw;
   text-align: center;
@@ -145,9 +180,181 @@
   transition: color 0.3s ease;
 }
 
-.productsRight button:hover {
+.pageButtons:hover {
   color: #1A53AE;
   cursor: pointer;
+}
+
+.sortControl {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}
+
+.sortControl label {
+  font-size: 1.0vw;
+  color: #000;
+}
+
+.sortControl select {
+  font-size: 1.0vw;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.customDropdown {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.customDropdownButton {
+  font-size: 1.0vw;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+/* When the dropdown trigger sits inside the blue filter row, override
+   the default button rules so it appears as a white select-like control */
+.productFilterRow .customDropdownButton {
+  width: auto;
+  padding: 8px 10px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1.0vw;
+  text-align: left;
+}
+
+/* Center the dropdown within the filter row while keeping the "Filter:" label left */
+.filterDropdowns {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12px;
+}
+
+.filterDropdowns.right {
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.filterDropdowns .filterLabel {
+  font-size: 1.0vw;
+  color: #000;
+  margin-right: 8px;
+  font-weight: 700;
+}
+
+/* Ensure the right-side sort select matches filter select styling */
+.filterDropdowns.right select {
+  font-size: 1.0vw;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+  min-width: 160px;
+}
+
+/* Style sort buttons to match filter controls */
+.filterDropdowns.right .customDropdownButton {
+  min-width: 140px;
+  padding: 8px 10px;
+  font-size: 1.0vw;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+}
+
+
+
+.filterDropdowns.right .customDropdownButton + .customDropdownButton {
+  margin-left: 8px;
+}
+
+.customDropdownButton.active {
+  background: #eaf6ff;
+  border-color: #9ec9ff;
+}
+.filterDropdowns select:last-child {
+  min-width: 160px;
+}
+
+/* Custom dropdown (modern) */
+.customDropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.customDropdownButton {
+  background: #ffffff;
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* keep dropdown button styling consistent with productFilterRow buttons */
+
+.customDropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(8,35,63,0.12);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f2f5;
+  color: #0b2336;
+  background: transparent;
+}
+
+.dropdownItem:hover {
+  background: #f4f8fb;
+}
+
+.dropdownCategory {
+  font-weight: 700;
+  color: #0b5ea8;
+}
+
+.dropdownSubItem {
+  padding-left: 26px;
+  font-weight: 500;
+  color: #223241;
+}
+
+/* Left-align dropdown items (both category and sort menus) */
+.customDropdownMenu .dropdownItem {
+  text-align: left;
+}
+
+/* Make the Sort: label in the blue filter row match the Filter: styling */
+.productFilterRow .filterLabel {
+  color: #fff;
+  font-size: 1.25vw;
+  font-weight: bold;
+  margin-left: 12px;
 }
 
 .productsRow {
@@ -199,37 +406,83 @@
 
 @media screen and (max-width: 500px) {
   .productFilterRow {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: 8px 12px;
   }
 
-  .productFilterRow button {
-    font-size: 2vw;
-  }
-
-  .button-wrapper {
-    width: 50%;
-  }
-
-  .button-wrapper:hover .subcategories {
+  /* Hide the "Filter:" and "Sort:" labels on mobile (they're redundant) */
+  .productFilterRow .filterLabel {
     display: none;
   }
 
-  .ProductHeaderRow {
+  /* Keep the left and right dropdowns compact and fixed-width */
+  .filterDropdowns {
     display: flex;
-    flex-wrap: nowrap;
-    width: 90%;
+    flex: 0 0 auto;
+    gap: 8px;
+    align-items: center;
+    padding: 0;
+    margin: 0;
   }
 
-  .productsLeft button {
-    font-size: 2vw;
+  .filterDropdowns.right {
+    margin-left: auto;
   }
 
-  .productsMain button {
-    font-size: 2vw;
+  /* Make the centered title remain centered and readable on small screens */
+  .productFilterTitle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .productFilterTitle h1 {
+    font-size: 5vw;
+    margin: 0;
+    pointer-events: auto;
   }
 
-  .productsRight button {
-    font-size: 2vw;
+  .productFilterRow .customDropdownButton {
+    font-size: 3.6vw;
+    padding: 8px 10px;
+    min-width: 34vw;
+  }
+
+  /* mobile: slightly reduce filter label button, enlarge sort button */
+  .productFilterRow .filterDropdowns .customDropdownButton {
+    font-size: 3.0vw;
+    min-width: 30vw;
+  }
+  .productFilterRow .filterDropdowns.right .customDropdownButton {
+    font-size: 3.0vw;
+    min-width: 30vw;
+  }
+
+  .customDropdownMenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 6px;
+    right: 6px;
+    min-width: auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(8,35,63,0.12);
+    z-index: 60;
+    overflow: hidden;
+  }
+
+  /* If the dropdown is the right-side sort control, anchor it to the right */
+  .filterDropdowns.right .customDropdownMenu {
+    left: auto;
+    right: 6px;
+  }
+
+  .customDropdownMenu .dropdownItem {
+    font-size: 4vw;
+    padding: 12px 14px;
+    background: #fff;
+    color: #0b2336;
   }
 
   .productsCell {
@@ -237,10 +490,5 @@
     max-width: 100%;
     height: auto;
     text-align: center;
-  }
-
-  .productsCell h2 {
-    padding: 10px;
-    margin: 0px;
   }
 }
