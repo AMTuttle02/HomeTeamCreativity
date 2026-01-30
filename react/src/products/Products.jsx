@@ -267,7 +267,7 @@ function Products() {
     if (pg && pg > 1) params.page = String(pg);
     if (sort) params.sort = sort;
     return params;
-  }
+  };
 
   // Navigates to order page
   const orderProduct = (productId) => {
@@ -285,7 +285,7 @@ function Products() {
     .then(() => {
       navigate("/editProduct/" + productId);
     });
-  }
+  };
 
   // Determine whether category needs a drop down. Values are cached for faster access
   const useMemoizedValidSubCategories = useMemo(() => {
