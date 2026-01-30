@@ -121,7 +121,8 @@ function Products() {
     }
     else {
       localStorage.setItem('lastProductCategory', '/products');
-      setSearchParams(buildParams(null, null, null, sortMethod));
+      // Preserve any page param on initial load so page number in URL is respected
+      setSearchParams(buildParams(null, null, pageParam ? Number(pageParam) : null, sortMethod));
       setDisplay('All');
     }
   }, [categoryParam, subcategoryParam, subcategories, categories]);
@@ -154,7 +155,7 @@ function Products() {
     // If showing all, include every product
     if (display === "All") {
       setFilteredProducts(products);
-      setPage(1);
+      if (!pageParam) setPage(1);
       return;
     }
 
@@ -179,7 +180,7 @@ function Products() {
         return false;
       });
       setFilteredProducts(filters);
-      setPage(1);
+      if (!pageParam) setPage(1);
       return;
     }
 
@@ -198,13 +199,13 @@ function Products() {
         return false;
       });
       setFilteredProducts(filters);
-      setPage(1);
+      if (!pageParam) setPage(1);
       return;
     }
 
     // No match found: empty result
     setFilteredProducts([]);
-    setPage(1);
+    if (!pageParam) setPage(1);
   }, [products, display]);
 
   // Displays 20 products per page and determines which to display based on page number
