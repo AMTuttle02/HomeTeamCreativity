@@ -285,7 +285,7 @@ function Products() {
     .then(() => {
       navigate("/editProduct/" + productId);
     });
-  }
+  };
 
   // Determine whether category needs a drop down. Values are cached for faster access
   const useMemoizedValidSubCategories = useMemo(() => {
