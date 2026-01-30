@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DisplayProduct from "./DisplayProduct";
 import "./products.css";
@@ -11,7 +11,6 @@ function Products() {
   const [display, setDisplay] = useState("");
   const [admin, setAdmin] = useState(0);
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1199);
   const amountPerPage = 20;
   const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,27 +22,10 @@ function Products() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortMethod, setSortMethod] = useState('recent');
   const [popularity, setPopularity] = useState({});
-  const [dropdownCategory, setDropdownCategory] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef(null);
-
-  // Mobile Check
-  useEffect(() => {
-    // Function to update the isMobile state variable based on screen size
-    function handleResize() {
-      setIsMobile(window.innerWidth <= 500);
-    }
-
-    // Attach the event listener
-    window.addEventListener('resize', handleResize);
-
-    // Remove the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   // API Calls
   useEffect(() => {
@@ -251,16 +233,6 @@ function Products() {
     window.scrollTo(0, 0);
   }, [filteredProducts, page, sortMethod, popularity]);
 
-  // Helper to construct product paths preserving category/subcategory and page
-  const buildProductsPath = (cat, sub, pg) => {
-    const params = {};
-    if (cat) params.category = cat;
-    if (sub) params.subcategory = sub;
-    if (pg && pg > 1) params.page = String(pg);
-    const qs = new URLSearchParams(params).toString();
-    return '/products' + (qs ? ('?' + qs) : '');
-  }
-
   // Helper to build search params object including sort
   const buildParams = (cat, sub, pg, sort) => {
     const params = {};
@@ -288,24 +260,6 @@ function Products() {
       navigate("/editProduct/" + productId);
     });
   }
-
-  // Determine whether category needs a drop down. Values are cached for faster access
-  const useMemoizedValidSubCategories = useMemo(() => {
-    return (categoryName) => {
-      // Find category object for the given name (if present)
-      const cat = categories.find(c => (c.category || '').toLowerCase() === (categoryName || '').toLowerCase());
-      const catId = cat ? String(cat.id) : null;
-      return subcategories.some(sub => {
-        if (!sub) return false;
-        // sub.category may be a category name (legacy) or category id (new)
-        if (catId && String(sub.category) === catId) return true;
-        if (typeof sub.category === 'string' && sub.category.toLowerCase() === (categoryName || '').toLowerCase()) return true;
-        return false;
-      });
-    };
-  }, [categories, subcategories]); 
-
-  const selectValue = subcategoryParam ? `sub:${categoryParam}|${subcategoryParam}` : (categoryParam ? `cat:${categoryParam}` : '');
 
   useEffect(() => {
     function handleClickOutside(e) {
