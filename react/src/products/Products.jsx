@@ -121,8 +121,16 @@ function Products() {
     }
     else {
       localStorage.setItem('lastProductCategory', '/products');
-      // Preserve any page param on initial load so page number in URL is respected
-      setSearchParams(buildParams(null, null, pageParam ? Number(pageParam) : null, sortMethod));
+      // Preserve any page param on initial load so page number in URL is respected,
+      // and respect any existing sort param instead of overwriting it with the default
+      setSearchParams(
+        buildParams(
+          null,
+          null,
+          pageParam ? Number(pageParam) : null,
+          sortParam || sortMethod
+        )
+      );
       setDisplay('All');
     }
   }, [categoryParam, subcategoryParam, subcategories, categories]);
