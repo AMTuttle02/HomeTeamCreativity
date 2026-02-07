@@ -11,12 +11,12 @@ include '../admin/conn.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $inputs = json_decode(file_get_contents('php://input'), true);
 
-  // Insert product to users cart
+  // Insert coupon; support separate categories and subcategories columns
   $query = $conn->prepare(
-                        "INSERT INTO coupons (code, description, amount, type, minimum_required, maximum_allowed, start_time, end_time, categories)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "INSERT INTO coupons (code, description, amount, type, minimum_required, maximum_allowed, start_time, end_time, categories, subcategories)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
   $query->bind_param(
-                    "sssssssss",
+                    "ssssssssss",
                     $inputs['code'],
                     $inputs['description'],
                     $inputs['amount'],
@@ -25,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $inputs['maximum_allowed'],
                     $inputs['start_time'],
                     $inputs['end_time'],
-                    $inputs['categories']
+                    $inputs['categories'],
+                    $inputs['subcategories']
                   );
 
   if (!$query->execute()) {

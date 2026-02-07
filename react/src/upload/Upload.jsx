@@ -16,7 +16,9 @@ function Upload() {
   const [lColorsPrimary, setLColorsPrimary] = useState("None");
   const [cColorsPrimary, setCColorsPrimary] = useState("None");
   const [hColorsPrimary, setHColorsPrimary] = useState("None");
-  const [category, setCategory] = useState("All ");
+  // selected category and subcategory IDs (store as arrays, send joined by ';')
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+  const [selectedSubcategoryIds, setSelectedSubcategoryIds] = useState([]);
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
   const [location, setLocation] = useState("");
@@ -99,14 +101,14 @@ function Upload() {
     }
   };
 
-  const handleCategory = (event) => {
-    if (category.includes(event)) {
-      const removeCat = category.replace(event, "");
-      setCategory(removeCat);
-    }
-    else {
-      setCategory(category + ' ' + event);
-    }
+  const handleCategoryToggle = (id) => {
+    const sid = String(id);
+    setSelectedCategoryIds(prev => prev.includes(sid) ? prev.filter(x => x !== sid) : [...prev, sid]);
+  };
+
+  const handleSubcategoryToggle = (id) => {
+    const sid = String(id);
+    setSelectedSubcategoryIds(prev => prev.includes(sid) ? prev.filter(x => x !== sid) : [...prev, sid]);
   };
 
   const handleSubmit = async (event) => {
@@ -140,7 +142,9 @@ function Upload() {
       formData.append('lColors', longSleeveColors);
       formData.append('cColors', crewneckColors);
       formData.append('hColors', hoodieColors);
-      formData.append('subcategories', category);
+      // Send categories and subcategories as semicolon-separated id lists
+      formData.append('categories', selectedCategoryIds.join(';'));
+      formData.append('subcategories', selectedSubcategoryIds.join(';'));
       formData.append('default_style', style);
       formData.append('style_location', location);
       formData.append('customFieldRequired', customFieldRequired);
@@ -241,8 +245,8 @@ function Upload() {
             <h3 className="center">Categories</h3>
             <div className="row">
               {allCategories.map((category) => (
-                <div className="createCatCheckbox" key={category.category}>
-                  <input type="checkbox" value={category.category} name="cats" onChange={(event) => handleCategory(event.target.value)}/>
+                <div className="createCatCheckbox" key={category.id}>
+                  <input type="checkbox" value={category.id} name="cats" checked={selectedCategoryIds.includes(String(category.id))} onChange={() => handleCategoryToggle(category.id)} />
                   <label>&nbsp;{category.category}</label>
                 </div>
               ))}
@@ -250,8 +254,8 @@ function Upload() {
             <h3 className="center">Subcategories</h3>
             <div className="row">
               {allSubcategories.map((subcategory) => (
-                <div className="createSubCatCheckbox" key={subcategory.name}>
-                  <input type="checkbox" value={subcategory.name} name="subcats" onChange={(event) => handleCategory(event.target.value)}/>
+                <div className="createSubCatCheckbox" key={subcategory.id}>
+                  <input type="checkbox" value={subcategory.id} name="subcats" checked={selectedSubcategoryIds.includes(String(subcategory.id))} onChange={() => handleSubcategoryToggle(subcategory.id)} />
                   <label>&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
                 </div>
               ))}

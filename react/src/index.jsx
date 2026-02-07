@@ -36,6 +36,7 @@ import EditNavbar from "./homepage/EditNavbar.jsx";
 import EditHomepage from "./homepage/EditHomepage.jsx";
 import EditAbout from "./static/EditAbout.jsx";
 import EditHowItWorks from "./static/EditHowItWorks.jsx";
+import ProductCategoryRedirect from "./products/ProductCategoryRedirect.jsx";
 
 export default function App() {
   return (
@@ -47,8 +48,8 @@ export default function App() {
           <Route path="loggedout" element={<LogOut />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="products" element={<Products />} />
-          <Route path="products/:category" element={<Products />} />
-          <Route path="products/:category/:subcategory" element={<Products />} />
+          <Route path="products/:category" element={<ProductCategoryRedirect />} />
+          <Route path="products/:category/:subcategory" element={<ProductCategoryRedirect />} />
           <Route path="howitworks" element={<HowItWorks />} />
           <Route path="about" element={<About />} />
           <Route path="upload" element={<Upload />} />

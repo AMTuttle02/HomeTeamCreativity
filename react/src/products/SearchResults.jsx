@@ -23,10 +23,8 @@ function SearchResults() {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const filters = result.filter((product) =>
-      product.categories.includes("All")
-    );
-    setFilteredProducts(filters);
+    // Results are already filtered by the search — do not require legacy "All" tag.
+    setFilteredProducts(result || []);
     setPage(1);
   }, [result]);
 
