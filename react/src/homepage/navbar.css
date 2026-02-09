@@ -175,6 +175,10 @@
   z-index: 1;
 }
 
+.dropdown-content.show {
+  display: block;
+}
+
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
@@ -186,12 +190,14 @@
   background-color: #f1f1f1;
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
+@media screen and (min-width: 501px) {
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
 
-.dropdown:focus-within .dropdown-content {
-  display: block;
+  .dropdown:focus-within .dropdown-content {
+    display: block;
+  }
 }
 
 .searchBox {
