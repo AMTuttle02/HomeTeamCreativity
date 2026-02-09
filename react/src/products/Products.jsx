@@ -368,7 +368,6 @@ function Products() {
               </span>
             }
         </div>
-        <div className="productsMain" />
         {/* Page Navigation */}
         <div className="productsRight">
           {page < (filteredProducts.length / 20) && 

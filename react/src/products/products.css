@@ -387,9 +387,15 @@
 }
 
 @media screen and (max-width: 500px) {
+  .productsLeft button, .productsRight button, .pageButtons {
+    font-size: 4vw;
+  }
+
+
   .productFilterRow {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
     padding: 8px 12px;
   }
 
@@ -413,10 +419,22 @@
   }
 
   /* Make the centered title remain centered and readable on small screens */
+  .filterDropdowns {
+    order: 2;
+    width: auto;
+  }
+  .filterDropdowns.right {
+    order: 2;
+  }
+
   .productFilterTitle {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
+    transform: none;
+    left: auto;
+    order: 1;
+    width: 100%;
+    text-align: center;
+    margin-top: 6px;
     pointer-events: none;
   }
   .productFilterTitle h1 {
