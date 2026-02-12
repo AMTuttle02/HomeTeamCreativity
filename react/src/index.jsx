@@ -36,6 +36,7 @@ import EditNavbar from "./homepage/EditNavbar.jsx";
 import EditHomepage from "./homepage/EditHomepage.jsx";
 import EditAbout from "./static/EditAbout.jsx";
 import EditHowItWorks from "./static/EditHowItWorks.jsx";
+import EditPickupLocations from "./checkout/EditPickupLocations.jsx";
 import ProductCategoryRedirect from "./products/ProductCategoryRedirect.jsx";
 
 export default function App() {
@@ -79,6 +80,7 @@ export default function App() {
           <Route path="/editHomepage" element={<EditHomepage />} />
           <Route path="/editAbout" element={<EditAbout />} />
           <Route path="/editHowItWorks" element={<EditHowItWorks />} />
+          <Route path="/editPickupLocations" element={<EditPickupLocations />} />
           <Route path="*" element={<FourOFour />} />
         </Route>
       </Routes>
