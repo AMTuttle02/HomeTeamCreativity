@@ -446,17 +446,17 @@
   .productFilterRow .customDropdownButton {
     font-size: 3.6vw;
     padding: 8px 10px;
-    min-width: 34vw;
+    min-width: 44vw;
   }
 
   /* mobile: slightly reduce filter label button, enlarge sort button */
   .productFilterRow .filterDropdowns .customDropdownButton {
     font-size: 3.0vw;
-    min-width: 30vw;
+    min-width: 40vw;
   }
   .productFilterRow .filterDropdowns.right .customDropdownButton {
     font-size: 3.0vw;
-    min-width: 30vw;
+    min-width: 40vw;
   }
 
   .customDropdownMenu {
