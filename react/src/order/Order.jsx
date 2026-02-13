@@ -52,6 +52,107 @@ function Order() {
   const [numberOnBackDetails, setNumberOnBackDetails] = useState(0);
   const [custom, setCustom] = useState(0);
 
+  const [similarProducts, setSimilarProducts] = useState([]);
+
+  // Helper: normalize a semicolon/comma/space separated list to tokens
+  const parseTokens = (val) => {
+    if (!val) return [];
+    if (Array.isArray(val)) return val.map(v => String(v).trim().toLowerCase()).filter(Boolean);
+    return String(val).split(/[;,\s]+/).map(s => s.trim().toLowerCase()).filter(Boolean);
+  }
+
+  // Compute similar products client-side: fetch all products and popularity, score by category/subcategory/tags and popularity
+  const computeSimilarProducts = async (baseProduct) => {
+    if (!baseProduct) return;
+    try {
+      const [allRes, popRes] = await Promise.all([
+        fetch('/api/product/products.php'),
+        fetch('/api/product/getProductPopularity.php')
+      ]);
+      const all = await allRes.json();
+      const popularity = await popRes.json().catch(() => ({}));
+
+      const baseCats = parseTokens(baseProduct.categories);
+      const baseSubs = parseTokens(baseProduct.subcategories);
+      const baseTags = parseTokens(baseProduct.tag_list || baseProduct.tags || baseProduct.taglist);
+
+      const scored = (all || []).map(p => {
+        if (!p) return null;
+        if (String(p.product_id) === String(baseProduct.product_id)) return null;
+        // exclude products with exactly the same name as the base product
+        if (p.product_name && baseProduct.product_name && String(p.product_name).trim() === String(baseProduct.product_name).trim()) return null;
+        let score = 0;
+        const pCats = parseTokens(p.categories);
+        const pSubs = parseTokens(p.subcategories);
+        const pTags = parseTokens(p.tag_list || p.tags || p.taglist);
+
+        // category overlap
+        if (baseCats.length > 0 && pCats.some(pc => baseCats.includes(pc))) score += 5;
+        // subcategory overlap
+        if (baseSubs.length > 0 && pSubs.some(ps => baseSubs.includes(ps))) score += 4;
+        // tag overlap
+        if (baseTags.length > 0 && pTags.some(t => baseTags.includes(t))) score += 2;
+
+        // popularity as tiebreaker (small contribution)
+        const pop = Number(popularity[String(p.product_id)] || 0);
+        score += pop * 0.01;
+
+        return { product: p, score };
+      }).filter(Boolean);
+
+      scored.sort((a, b) => b.score - a.score || (Number(b.product.product_id) - Number(a.product.product_id)));
+      // Deduplicate by product_id and by exact product_name (normalized)
+      const seenIds = new Set();
+      const seenNames = new Set();
+      const top = [];
+      for (const s of scored) {
+        if (!s || !s.product) continue;
+        const pid = String(s.product.product_id);
+        const pname = s.product.product_name ? String(s.product.product_name).trim().toLowerCase() : '';
+        if (seenIds.has(pid)) continue;
+        if (pname && seenNames.has(pname)) continue;
+        seenIds.add(pid);
+        if (pname) seenNames.add(pname);
+        top.push(s.product);
+        if (top.length >= 4) break;
+      }
+      setSimilarProducts(top);
+    } catch (e) {
+      console.error('Failed to compute similar products', e);
+    }
+  }
+
+  const styleDisplayName = (style) => {
+    if (!style) return "Other";
+    if (style === "tshirt") return "Short Sleeve T-Shirt";
+    if (style === "longsleeve") return "Long Sleeve T-Shirt";
+    if (style === "crewneck") return "Crewneck Sweatshirt";
+    if (style === "hoodie") return "Hooded Sweatshirt";
+    return "Other";
+  }
+
+  const pickFirstColor = (product) => {
+    const regex = /\S+/;
+    if (!product) return "Black";
+    // prefer tColors, then lColors, then cColors, then hColors
+    if (product.tColors && product.tColors.trim() !== "") {
+      const m = product.tColors.match(regex);
+      if (m) return m[0];
+    }
+    if (product.lColors && product.lColors.trim() !== "") {
+      const m = product.lColors.match(regex);
+      if (m) return m[0];
+    }
+    if (product.cColors && product.cColors.trim() !== "") {
+      const m = product.cColors.match(regex);
+      if (m) return m[0];
+    }
+    if (product.hColors && product.hColors.trim() !== "") {
+      const m = product.hColors.match(regex);
+      if (m) return m[0];
+    }
+    return "Black";
+  }
   const colorMap = {
     "Black": black,
     "Gray": gray,
@@ -178,6 +279,8 @@ function Order() {
             setCColors(colors);
             colors = data.flatMap(item => item.hColors.split(/\s+/).filter(Boolean));
             setHColors(colors);
+            // compute recommendations for "You May Also Like"
+            computeSimilarProducts(data[0]);
           }
         }
       })
@@ -788,6 +891,24 @@ function Order() {
             </h1>
           </div>
         </div>
+        {similarProducts && similarProducts.length > 0 &&
+          <>
+            <h2>You May Also Like</h2>
+            <div className="productsRow">
+              {similarProducts.map((p) => (
+                <div key={p.product_id} className="productsCell">
+                  <div className="productDetails">
+                    <button onClick={() => { window.location.href = '/order/' + p.product_id; }} className="magnify">
+                      <DisplayUserProduct currentProduct={p} color={pickFirstColor(p)} style={styleDisplayName(p.default_style)} state={0} enlarge={false} />
+                      <p>{p.product_name}</p>
+                      <p>{"$" + (Number(p.price || 0)).toFixed(2)}</p>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        }
       </div>
     </div>
   );
