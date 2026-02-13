@@ -282,7 +282,11 @@ function Order() {
           }
         }
       // compute recommendations for "You May Also Like" for all product types (including 'other')
-      try { computeSimilarProducts(data[0]); } catch (e) {}
+      try {
+        computeSimilarProducts(data[0]);
+      } catch (e) {
+        console.error("Error computing similar products:", e);
+      }
       })
       .catch((error) => {
         console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
