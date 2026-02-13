@@ -279,10 +279,10 @@ function Order() {
             setCColors(colors);
             colors = data.flatMap(item => item.hColors.split(/\s+/).filter(Boolean));
             setHColors(colors);
-            // compute recommendations for "You May Also Like"
-            computeSimilarProducts(data[0]);
           }
         }
+      // compute recommendations for "You May Also Like" for all product types (including 'other')
+      try { computeSimilarProducts(data[0]); } catch (e) {}
       })
       .catch((error) => {
         console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
