@@ -30,9 +30,9 @@ function Order() {
   const [currentDesign, setCurrentDesign] = useState("");
   const [defaultDesign, setDefaultDesign] = useState("");
   const [tColors, setTColors] = useState([]);
-  const [lColors, setLColors] = useState("");
-  const [cColors, setCColors] = useState("");
-  const [hColors, setHColors] = useState("");
+  const [lColors, setLColors] = useState([]);
+  const [cColors, setCColors] = useState([]);
+  const [hColors, setHColors] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [nameOnBack, setNameOnBack] = useState(false);
   const [numberOnBack, setNumberOnBack] = useState(false);
@@ -279,10 +279,14 @@ function Order() {
             setCColors(colors);
             colors = data.flatMap(item => item.hColors.split(/\s+/).filter(Boolean));
             setHColors(colors);
-            // compute recommendations for "You May Also Like"
-            computeSimilarProducts(data[0]);
           }
         }
+      // compute recommendations for "You May Also Like" for all product types (including 'other')
+      try {
+        computeSimilarProducts(data[0]);
+      } catch (e) {
+        console.error("Error computing similar products:", e);
+      }
       })
       .catch((error) => {
         console.log("Sorry, That Path is Invalid. Think this is a mistake? Email us!")
@@ -550,6 +554,20 @@ function Order() {
     return colors.length > 0;
   }
 
+  const colorsForStyle = () => {
+    if (!currentStyle) return [];
+    if (currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") return tColors || [];
+    if (currentStyle === "Long Sleeve T-Shirt") return lColors || [];
+    if (currentStyle === "Crewneck Sweatshirt") return cColors || [];
+    if (currentStyle === "Hooded Sweatshirt") return hColors || [];
+    return [];
+  }
+
+  const hasColorsForStyle = () => {
+    const arr = colorsForStyle();
+    return Array.isArray(arr) && arr.length > 0;
+  }
+
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -646,53 +664,55 @@ function Order() {
                 Style: {currentStyle}
               </h1>
             }
-            <div className="wrapRow">
-              {(validStyle(tColors) && currentStyle !== "Other") && 
-                <button
-                  onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
-                  className="transparent-button">
-                  <img
-                    src={transparentTshirt}
-                    alt="T-Shirt"
-                    className="shirtOptions"
-                  />
-                </button>
-              }
-              {validStyle(lColors) &&
-                <button 
-                  onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
-                  className="transparent-button">
-                  <img
-                    src={transparentLongSleeve}
-                    alt="Long Sleeve"
-                    className="shirtOptions"
-                  />
-                </button>
-              }
-              {validStyle(cColors) &&
-                <button 
-                  onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
-                  className="transparent-button">
-                  <img
-                    src={transparentCrewneck}
-                    alt="Crewneck"
-                    className="shirtOptions"
-                  />
-                </button>
-              }
-              {validStyle(hColors) &&
-                <button 
-                  onClick={() => setCurrentStyle("Hooded Sweatshirt")}
-                  className="transparent-button">
-                  <img
-                    src={transparentHoodie}
-                    alt="Hoodie"
-                    className="shirtOptions"
-                  />
-                </button>
-              }
-            </div>
-            <h1>Color: {currentColor}</h1>
+            {((validStyle(tColors) && currentStyle !== "Other") || validStyle(lColors) || validStyle(cColors) || validStyle(hColors)) &&
+              <div className="wrapRow">
+                {(validStyle(tColors) && currentStyle !== "Other") && 
+                  <button
+                    onClick={() => setCurrentStyle("Short Sleeve T-Shirt")}
+                    className="transparent-button">
+                    <img
+                      src={transparentTshirt}
+                      alt="T-Shirt"
+                      className="shirtOptions"
+                    />
+                  </button>
+                }
+                {validStyle(lColors) &&
+                  <button 
+                    onClick={() => setCurrentStyle("Long Sleeve T-Shirt")}
+                    className="transparent-button">
+                    <img
+                      src={transparentLongSleeve}
+                      alt="Long Sleeve"
+                      className="shirtOptions"
+                    />
+                  </button>
+                }
+                {validStyle(cColors) &&
+                  <button 
+                    onClick={() => setCurrentStyle("Crewneck Sweatshirt")}
+                    className="transparent-button">
+                    <img
+                      src={transparentCrewneck}
+                      alt="Crewneck"
+                      className="shirtOptions"
+                    />
+                  </button>
+                }
+                {validStyle(hColors) &&
+                  <button 
+                    onClick={() => setCurrentStyle("Hooded Sweatshirt")}
+                    className="transparent-button">
+                    <img
+                      src={transparentHoodie}
+                      alt="Hoodie"
+                      className="shirtOptions"
+                    />
+                  </button>
+                }
+              </div>
+            }
+            { hasColorsForStyle() && <h1>Color: {currentColor}</h1> }
             {(currentStyle === "Short Sleeve T-Shirt" || currentStyle === "Other") &&
               <div className="wrapRow">
                 {tColors.map((color) => (
