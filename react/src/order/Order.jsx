@@ -660,7 +660,7 @@ function Order() {
                 Style: {currentStyle}
               </h1>
             }
-            {(validStyle(tColors) || validStyle(lColors) || validStyle(cColors) || validStyle(hColors)) &&
+            {((validStyle(tColors) && currentStyle !== "Other") || validStyle(lColors) || validStyle(cColors) || validStyle(hColors)) &&
               <div className="wrapRow">
                 {(validStyle(tColors) && currentStyle !== "Other") && 
                   <button
