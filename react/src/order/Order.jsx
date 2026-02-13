@@ -80,7 +80,7 @@ function Order() {
         if (!p) return null;
         if (String(p.product_id) === String(baseProduct.product_id)) return null;
         // exclude products with exactly the same name as the base product
-        if (p.product_name && baseProduct.product_name && String(p.product_name).trim() === String(baseProduct.product_name).trim()) return null;
+        if (p.product_name && baseProduct.product_name && String(p.product_name).trim().toLowerCase() === String(baseProduct.product_name).trim().toLowerCase()) return null;
         let score = 0;
         const pCats = parseTokens(p.categories);
         const pSubs = parseTokens(p.subcategories);
