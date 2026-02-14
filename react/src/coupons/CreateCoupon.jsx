@@ -15,8 +15,10 @@ function CreateCoupon() {
   const [showConfirmation, setShowConfirmation] = useState('false');
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [category, setCategory] = useState("");
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+  const [selectedSubcatIds, setSelectedSubcatIds] = useState([]);
   const navigate = useNavigate();
-  const cats = ["Faith", "Family", "Health", "Holiday", "Ohio", "Other", "Patriotic", "School", "Seasons", "Sports"];
+  const [allCategories, setAllCategories] = useState([]);
 
   useEffect(() => {
     fetch("/api/category/getSubCats.php")
@@ -25,15 +27,42 @@ function CreateCoupon() {
         setAllSubcategories(data);
       }
     );
+    fetch("/api/category/getCategories.php")
+      .then((response) => response.json())
+      .then((data) => setAllCategories(data || []))
+      .catch(() => setAllCategories([]));
   }, []);
   
   const handleCategory = (event) => {
-    if (category.includes(event)) {
-      const removeCat = category.replace(event, "");
-      setCategory(removeCat);
+    // event may be 'All' or a category id
+    if (event === 'All') {
+      setSelectedSubcatIds([]);
+      setSelectedCategoryIds([]);
+      setCategory('All');
+      return;
     }
-    else {
-      setCategory(category + ' ' + event);
+
+    // toggle category id in selectedCategoryIds
+    const id = String(event);
+    if (selectedCategoryIds.includes(id)) {
+      setSelectedCategoryIds(selectedCategoryIds.filter((c) => c !== id));
+    } else {
+      // selecting a specific category should clear any 'All' top-level selection
+      if (category.includes('All')) setCategory('');
+      setSelectedCategoryIds([...selectedCategoryIds, id]);
+    }
+  };
+
+  const toggleSubcat = (id) => {
+    const sid = id + "";
+    if (selectedSubcatIds.includes(sid)) {
+      setSelectedSubcatIds(selectedSubcatIds.filter((c) => c !== sid));
+    } else {
+      // selecting a specific subcategory should clear any 'All' top-level selection
+      if (category.includes('All')) {
+        setCategory(category.replace('All', '').trim());
+      }
+      setSelectedSubcatIds([...selectedSubcatIds, sid]);
     }
   };
 
@@ -46,7 +75,7 @@ function CreateCoupon() {
         amount === 0 ||
         type === '' ||
         startTime === '' ||
-        category === '' ||
+        (category === '' && selectedSubcatIds.length === 0) ||
         minRequired < 1) {
       setShowConfirmation('required');
       return;
@@ -55,6 +84,10 @@ function CreateCoupon() {
     const startUTC = moment.tz(startTime, moment.tz.guess()).utc().format();
     const endUTC = moment.tz(endTime, moment.tz.guess()).utc().format();
   
+    // send both top-level categories (legacy names) and subcategory id list
+    const subcatsToSend = selectedSubcatIds.length > 0 ? selectedSubcatIds.join(';') : '';
+    const catsToSend = selectedCategoryIds.length > 0 ? selectedCategoryIds.join(';') : (category || '');
+
     fetch("/api/coupon/createCoupon.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -67,7 +100,8 @@ function CreateCoupon() {
         'maximum_allowed': maxAllowed,
         'start_time': startUTC,
         'end_time': endUTC,
-        'categories': category
+        'categories': catsToSend,
+        'subcategories': subcatsToSend
       }),
     })
       .then((response) => response.json())
@@ -219,10 +253,10 @@ function CreateCoupon() {
             </div>
           </div>
           <div className="row">
-            {cats.map((category) => (
-              <div className="default-checkbox" key={category}>
-                <input type="checkbox" value={category} name="cats" onChange={(event) => handleCategory(event.target.value)}/>
-                <label>&nbsp;{category}</label>
+            {allCategories.map((cat) => (
+              <div className="default-checkbox" key={cat.id}>
+                <input type="checkbox" value={cat.id} name="cats" checked={selectedCategoryIds.includes(String(cat.id))} onChange={(event) => handleCategory(event.target.value)}/>
+                <label>&nbsp;{cat.category}</label>
               </div>
             ))}
           </div>
@@ -237,8 +271,8 @@ function CreateCoupon() {
           <br />
           <div className="row">
             {allSubcategories.map((subcategory) => (
-              <div className="default-checkbox" key={subcategory}>
-                <input type="checkbox" value={subcategory.name} name="subcats" checked={category.includes(subcategory.name)} onChange={(event) => handleCategory(event.target.value)}/>
+              <div className="default-checkbox" key={subcategory.id}>
+                <input type="checkbox" value={subcategory.id} name="subcats" checked={selectedSubcatIds.includes(String(subcategory.id))} onChange={() => toggleSubcat(subcategory.id)}/>
                 <label >&nbsp;{subcategory.name + " (" + subcategory.category + ") "}</label>
               </div>
             ))}

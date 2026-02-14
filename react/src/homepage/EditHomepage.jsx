@@ -12,7 +12,6 @@ function EditHomepage() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [featured, setFeatured] = useState("");
   const [featuredBelow, setFeaturedBelow] = useState("");
-  const [categoryLinks, setCategoryLinks] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editingRow, setEditingRow] = useState({ name: '', link: '', position: null });
   const [productsEditingIndex, setProductsEditingIndex] = useState(-1);
@@ -115,17 +114,6 @@ function EditHomepage() {
       setFeaturedBelow(response.data);
     };
     fetchFeaturedBelow();
-
-    const fetchCategoryLinks = async () => {
-      fetch("/api/category/getCategories.php", {
-        method: "GET"
-      })
-      .then((response) => response.json())
-      .then((categories) => {
-        setCategoryLinks(categories);
-      });
-    };
-    fetchCategoryLinks();
 
     const fetchWelcome = async () => {
       try {

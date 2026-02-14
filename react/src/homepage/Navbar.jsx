@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import cart from "../assets/cart.png";
@@ -20,6 +20,8 @@ function Navbar() {
   const [admin, setAdmin] = useState(0);
   const [footer, setFooter] = useState("");
   const [footerLinks, setFooterLinks] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +35,25 @@ function Navbar() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    function handleDocClick(e) {
+      if (menuOpen && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    function handleEsc(e) {
+      if (e.key === 'Escape') setMenuOpen(false);
+    }
+
+    document.addEventListener('mousedown', handleDocClick);
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('mousedown', handleDocClick);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     fetch("/api/admin/getNavbar.php", {
@@ -147,17 +168,17 @@ function Navbar() {
       <div className="HomePage">
         {isMobile ? 
           <div className="navBar">
-            <div className="dropdown">
-              <button className="dropbtn">
+            <div className="dropdown" ref={dropdownRef}>
+              <button className="dropbtn" onClick={() => setMenuOpen(prev => !prev)} aria-expanded={menuOpen}>
               <div className="dots">
                 <span className="dot"></span>
                 <span className="dot"></span>
                 <span className="dot"></span>
               </div>
               </button>
-              <div className="dropdown-content">
+              <div className={`dropdown-content ${menuOpen ? 'show' : ''}`}>
                 {navbarContent.map((item) => (
-                <Link to={item.link} key={item.id}>
+                <Link to={item.link} key={item.id} onClick={() => { setMenuOpen(false); window.scrollTo(0,0); }}>
                   {item.name}
                 </Link>
                 ))}

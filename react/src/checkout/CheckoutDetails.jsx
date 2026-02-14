@@ -99,11 +99,38 @@ function CheckoutDetails() {
     const determineDiscount = async (discount) => {
         let orderTotal = order.total_cost;
         let finalAmount = 0.00;
-    
-        if (!discount.categories.includes("All")) {
+        // New logic: coupon may have separate `categories` (top-level names or ids) and `subcategories` (ids)
+        const couponCatRaw = (discount && discount.categories) ? discount.categories : '';
+        const couponSubRaw = (discount && discount.subcategories) ? discount.subcategories : '';
+        const isAll = (typeof couponCatRaw === 'string' && couponCatRaw.indexOf('All') !== -1) || couponCatRaw === 'All' || (typeof couponSubRaw === 'string' && couponSubRaw.indexOf('All') !== -1) || couponSubRaw === 'All';
+
+        if (!isAll) {
             orderTotal = 0;
             let oID = localStorage.getItem("oID") || 0;
-    
+
+            // prepare coupon match lists
+            let couponSubIds = [];
+            let couponCatIds = [];
+            let couponCatNames = [];
+
+            // Normalize coupon subcategories and categories to support single id, semicolon lists, or legacy names
+            if (couponSubRaw != null && String(couponSubRaw).trim() !== '') {
+                couponSubIds = String(couponSubRaw).split(';').map(s => s.trim()).filter(Boolean);
+            }
+            if (couponCatRaw != null && String(couponCatRaw).trim() !== '') {
+                const parts = String(couponCatRaw).split(';').map(s => s.trim()).filter(Boolean);
+                const allNumeric = parts.length > 0 && parts.every(p => /^\d+$/.test(p));
+                if (allNumeric) {
+                    couponCatIds = parts;
+                } else {
+                    if (parts.length === 1 && parts[0].indexOf(' ') !== -1) {
+                        couponCatNames = parts[0].split(' ').map(s => s.trim()).filter(Boolean);
+                    } else {
+                        couponCatNames = parts;
+                    }
+                }
+            }
+
             try {
                 const response = await fetch("/api/cart/getCart.php", {
                     method: "POST",
@@ -111,20 +138,61 @@ function CheckoutDetails() {
                     body: JSON.stringify({ order_id: oID }),
                 });
                 const data = await response.json();
-    
+
                 for (const element of data) {
-                    let categories = element.categories
-                        .split(' ')
-                        .filter(item => item.trim().length > 0)
-                        .map(item => item.trim());
-                    
-                    console.log(categories);
-                    for (let j = 0; j < categories.length; ++j) {
-                        if (discount.categories.includes(categories[j])) {
-                            orderTotal += (GetProductPriceWithSize(element.price, element.product_type, element.size) * 1 * element.product_quantity);
-                            console.log("Order Total Updated: " + orderTotal);
-                            j = categories.length;
+                    const elemCatRaw = element.categories || '';
+                    const elemSubRaw = element.subcategories || '';
+
+                    let elemSubIds = [];
+                    let elemCatIds = [];
+                    let elemCatNames = [];
+
+                    // Normalize element subcategories: accept single id or semicolon-separated ids
+                    if (elemSubRaw != null && String(elemSubRaw).trim() !== '') {
+                        elemSubIds = String(elemSubRaw).split(';').map(s => s.trim()).filter(Boolean);
+                    }
+
+                    // Normalize element categories: accept semicolon-separated ids, single numeric id, or legacy names
+                    if (elemCatRaw != null && String(elemCatRaw).trim() !== '') {
+                        const parts = String(elemCatRaw).split(';').map(s => s.trim()).filter(Boolean);
+                        const allNumeric = parts.length > 0 && parts.every(p => /^\d+$/.test(p));
+                        if (allNumeric) {
+                            elemCatIds = parts;
+                        } else {
+                            // If a single part contains spaces, split into names; otherwise treat parts as names
+                            if (parts.length === 1 && parts[0].indexOf(' ') !== -1) {
+                                elemCatNames = parts[0].split(' ').map(s => s.trim()).filter(Boolean);
+                            } else {
+                                elemCatNames = parts;
+                            }
                         }
+                    }
+
+                    let matched = false;
+
+                    // match by subcategory ids first
+                    if (!matched && couponSubIds.length > 0 && elemSubIds.length > 0) {
+                        for (let cs of couponSubIds) {
+                            if (elemSubIds.includes(cs)) { matched = true; break; }
+                        }
+                    }
+
+                    // match by top-level category ids
+                    if (!matched && couponCatIds.length > 0 && elemCatIds.length > 0) {
+                        for (let cc of couponCatIds) {
+                            if (elemCatIds.includes(cc)) { matched = true; break; }
+                        }
+                    }
+
+                    // match by top-level category names (legacy)
+                    if (!matched && couponCatNames.length > 0 && elemCatNames.length > 0) {
+                        for (let cn of couponCatNames) {
+                            if (elemCatNames.includes(cn)) { matched = true; break; }
+                        }
+                    }
+
+                    if (matched) {
+                        orderTotal += (GetProductPriceWithSize(element.price, element.product_type, element.size) * 1 * element.product_quantity);
                     }
                 }
             } catch (error) {
@@ -163,9 +231,13 @@ function CheckoutDetails() {
             .then((response) => response.json())
             .then((data) => {
               if (data) {
-                // verify code is active
-                if (currentDateTime.toLocaleString() < formatTime(data.start_time) || currentDateTime.toLocaleString() > formatTime(data.end_time)) {
-                    throw(new Error(data.start_time + " - " + data.end_time));
+                // verify code is active by comparing Date objects (avoid locale-string comparison)
+                const startDate = new Date(data.start_time);
+                const endDate = data.end_time ? new Date(data.end_time) : null;
+                if (!isNaN(startDate.getTime())) {
+                    if (currentDateTime < startDate || (endDate && !isNaN(endDate.getTime()) && currentDateTime > endDate)) {
+                        throw(new Error(data.start_time + " - " + data.end_time));
+                    }
                 }
                 determineDiscount(data);
               }

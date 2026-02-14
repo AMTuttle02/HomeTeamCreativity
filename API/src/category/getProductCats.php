@@ -20,7 +20,7 @@ if (!$conn) {
 }
 
 if (isset($_SESSION['product_id'])) {
-  $query = $conn->prepare("SELECT categories FROM products WHERE product_id = ?;");
+  $query = $conn->prepare("SELECT categories, subcategories FROM products WHERE product_id = ?;");
   $query->bind_param("s", $_SESSION["product_id"]);
   if (!$query->execute()) {
     // If insertion fails, return error message
