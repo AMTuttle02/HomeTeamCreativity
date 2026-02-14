@@ -22,6 +22,7 @@ function EditProducts() {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [selectedSubcategoryIds, setSelectedSubcategoryIds] = useState([]);
   const [style, setStyle] = useState("tshirt");
+  const [styleSize, setStyleSize] = useState("");
   const [location, setLocation] = useState("front");
   const [productIsSet, setProductIsSet] = useState(false);
   const [customFieldRequired, setCustomFieldRequired] = useState(0);
@@ -76,6 +77,7 @@ function EditProducts() {
       setHColors(data.hColors);
       setStyle(data.default_style);
       setLocation(data.default_style_location);
+      setStyleSize(data.style_size || "");
       setProductIsSet(true);
       setCustomFieldRequired(data.CustomDetailsRequired.toString());
       setSizesAvailable(data.sizesAvailable.toString());
@@ -150,6 +152,10 @@ function EditProducts() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!styleSize || styleSize.trim() === '') {
+      setFailToUpdate(true);
+      return;
+    }
     if (style === 'tshirt' && tColors.trim() === '') {
       setFailToUpdate(true);
     } else if (style === 'longsleeve' && lColors.trim() === '') {
@@ -171,6 +177,7 @@ function EditProducts() {
       formData.append('categories', selectedCategoryIds.join(';'));
       formData.append('subcategories', selectedSubcategoryIds.join(';'));
       formData.append('default_style', style);
+      formData.append('style_size', styleSize);
       formData.append('default_style_location', location);
       formData.append('customFieldRequired', customFieldRequired);
       formData.append('sizeAvailable', sizesAvailable);
@@ -263,6 +270,21 @@ function EditProducts() {
                     <input type="radio" id="location" name="back" value="back" checked={location === "back"} onChange={(event) => setLocation(event.target.value)}/>
                       <label>&nbsp;Back</label>
                       <br />
+                  </div>
+                  <div className="default-checkbox"/>
+                  <div className="default-checkbox"/>
+                </div>
+                <h3>Style Size</h3>
+                <div className="containerRow">
+                  <div className="default-checkbox">
+                    <input type="radio" id="styleSizeFull" name="styleSize" value="full" checked={styleSize === 'full'} onChange={(event) => setStyleSize(event.target.value)}/>
+                    <label>&nbsp;Full</label>
+                    <br />
+                  </div>
+                  <div className="default-checkbox">
+                    <input type="radio" id="styleSizePocket" name="styleSize" value="pocket" checked={styleSize === 'pocket'} onChange={(event) => setStyleSize(event.target.value)}/>
+                    <label>&nbsp;Pocket</label>
+                    <br />
                   </div>
                   <div className="default-checkbox"/>
                   <div className="default-checkbox"/>
