@@ -22,6 +22,14 @@
   height: auto;
 }
 
+.design-pocket {
+  position: absolute;
+  top: 22%;
+  right: 31.5%;
+  width: 15%;
+  height: auto;
+}
+
 .productDetails {
   background-color: transparent;
   width: 100%;

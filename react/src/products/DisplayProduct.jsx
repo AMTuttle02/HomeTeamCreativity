@@ -58,6 +58,7 @@ const DisplaycurrentProduct = ({ product }) => {
   const [currentDesign, setCurrentDesign] = useState(window.location.origin + "/api/images/" + currentProduct.filename_front);
   const [currentColor, setCurrentColor] = useState(null);
   const [intervalId, setIntervalId] = useState(undefined);
+  const [showingLocation, setShowingLocation] = useState('front');
 
   // T-Shirt Color Maps
   const tShirtMap = {
@@ -150,10 +151,12 @@ const DisplaycurrentProduct = ({ product }) => {
       if (currentProduct.default_style_location === 'front') {
         setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
         setCurrentColor(getColor('front'));
+        setShowingLocation('front');
       }
       else if (currentProduct.default_style_location === 'back') {
         setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
         setCurrentColor(getColor('back'));
+        setShowingLocation('back');
       }
     }
   }
@@ -249,10 +252,12 @@ const DisplaycurrentProduct = ({ product }) => {
       setCurrentDesign(prevDesign => {
         if (prevDesign  === window.location.origin + "/api/images/" + currentProduct.filename_front) {
           setCurrentColor(getColor('back'));
+          setShowingLocation('back');
           return (window.location.origin + "/api/images/" + currentProduct.filename_back);
         }
         else {
           setCurrentColor(getColor('front'));
+          setShowingLocation('front');
           return (window.location.origin + "/api/images/" + currentProduct.filename_front);
         }
       });
@@ -269,10 +274,12 @@ const DisplaycurrentProduct = ({ product }) => {
       setCurrentDesign(prevDesign => {
         if (prevDesign  === window.location.origin + "/api/images/" + currentProduct.filename_front) {
           setCurrentColor(getColor('back'));
+          setShowingLocation('back');
           return (window.location.origin + "/api/images/" + currentProduct.filename_back);
         }
         else {
           setCurrentColor(getColor('front'));
+          setShowingLocation('front');
           return (window.location.origin + "/api/images/" + currentProduct.filename_front);
         }
       });
@@ -286,6 +293,8 @@ const DisplaycurrentProduct = ({ product }) => {
   };
 
   if (product.default_style !== 'other') {
+    const designClass = (showingLocation === 'front' && currentProduct.style_size === 'pocket') ? 'design-pocket' : 'design';
+
     return (
       <div 
         className="fullDesign"
@@ -299,7 +308,7 @@ const DisplaycurrentProduct = ({ product }) => {
         <img
           src={currentDesign}
           alt="Product Design"
-          className="design"
+          className={designClass}
         />
       </div>
     );
