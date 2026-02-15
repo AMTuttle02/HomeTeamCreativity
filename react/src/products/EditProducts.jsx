@@ -16,6 +16,10 @@ function EditProducts() {
   const [lColors, setLColors] = useState("");
   const [cColors, setCColors] = useState("");
   const [hColors, setHColors] = useState("");
+  const [frontFileName, setFrontFileName] = useState("");
+  const [backFileName, setBackFileName] = useState("");
+  const [frontFile, setFrontFile] = useState(null);
+  const [backFile, setBackFile] = useState(null);
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [currentSubcategories, setCurrentSubcategories] = useState("");
   const [allCategories, setAllCategories] = useState([]);
@@ -28,6 +32,9 @@ function EditProducts() {
   const [customFieldRequired, setCustomFieldRequired] = useState(0);
   const [sizesAvailable, setSizesAvailable] = useState(1);
   const [failToUpdate, setFailToUpdate] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [removeFront, setRemoveFront] = useState(false);
+  const [removeBack, setRemoveBack] = useState(false);
 
   // API Calls
   useEffect(() => {
@@ -77,6 +84,8 @@ function EditProducts() {
       setHColors(data.hColors);
       setStyle(data.default_style);
       setLocation(data.default_style_location);
+      setFrontFileName(data.filename_front || "");
+      setBackFileName(data.filename_back || "");
       setStyleSize(data.style_size || "");
       setProductIsSet(true);
       setCustomFieldRequired(data.CustomDetailsRequired.toString());
@@ -165,14 +174,19 @@ function EditProducts() {
     } else if (style === 'hoodie' && hColors.trim() === '') {
       setFailToUpdate(true);
     } else {
-      const formData = new FormData();
+    const formData = new FormData();
       formData.append('productName', productName);
+    formData.append('product_id', productId);
       formData.append('price', price);
       formData.append('tags', tagList);
       formData.append('tColors', tColors);
       formData.append('lColors', lColors);
       formData.append('cColors', cColors);
       formData.append('hColors', hColors);
+    if (frontFile) formData.append('frontFile', frontFile);
+    if (backFile) formData.append('backFile', backFile);
+    if (removeFront) formData.append('remove_front', '1');
+    if (removeBack) formData.append('remove_back', '1');
       // send semicolon-separated id lists for categories and subcategories
       formData.append('categories', selectedCategoryIds.join(';'));
       formData.append('subcategories', selectedSubcategoryIds.join(';'));
@@ -188,12 +202,19 @@ function EditProducts() {
       })
       .then((response) => response.json())
       .then((data) => {
-        if(data) {
-          window.location.href="/products";
+        if (data && data.success) {
+          window.location.href = "/products";
+        } else {
+          setUploadError((data && data.error) ? data.error : 'Update failed');
         }
-      });
+      })
+      .catch((err) => setUploadError('Update failed'));
     }
   };
+
+  const uploadImage = async (side) => {
+    // removed: uploadImage now handled on form submit
+  }
 
   if (admin) {
     return (
@@ -464,6 +485,36 @@ function EditProducts() {
                 </div>
                 <br/>
                 <br/>
+                <h3><b>Front Design</b> <small>Current: {frontFileName ? frontFileName : 'None'}</small></h3>
+                <div className="containerRow">
+                  <input type="file" accept="image/*" disabled={removeFront} onChange={(e) => setFrontFile(e.target.files[0])} />
+                  {!removeFront ? (
+                    location === 'front' ? (
+                      <button type="button" className="delete-button" disabled title="Cannot delete the default-style image">Delete Front</button>
+                    ) : (
+                      <button type="button" className="delete-button" onClick={() => setRemoveFront(true)}>Delete Front</button>
+                    )
+                  ) : (
+                    <button type="button" className="default-button" onClick={() => setRemoveFront(false)}>Undo Delete</button>
+                  )}
+                </div>
+                <br/>
+                <br/>
+                <h3><b>Back Design</b> <small>Current: {backFileName ? backFileName : 'None'}</small></h3>
+                <div className="containerRow">
+                  <input type="file" accept="image/*" disabled={removeBack} onChange={(e) => setBackFile(e.target.files[0])} />
+                  {!removeBack ? (
+                    location === 'back' ? (
+                      <button type="button" className="delete-button" disabled title="Cannot delete the default-style image">Delete Back</button>
+                    ) : (
+                      <button type="button" className="delete-button" onClick={() => setRemoveBack(true)}>Delete Back</button>
+                    )
+                  ) : (
+                    <button type="button" className="default-button" onClick={() => setRemoveBack(false)}>Undo Delete</button>
+                  )}
+                </div>
+                <br/>
+                <br/>
                 <button type="submit" className="default-button">Update Product</button>
               </form>
               {failToUpdate &&
@@ -473,6 +524,17 @@ function EditProducts() {
                     <p>Please review the form and try agin.</p>
                     <div className="confirmation-buttons">
                       <button className="delete-button" onClick={() => setFailToUpdate(false)}>Review</button>
+                    </div>
+                  </div>
+                </div>
+              }
+              {uploadError &&
+                <div className="confirmation-modal">
+                  <div className="confirmation-dialog">
+                    <h3>Upload Error</h3>
+                    <p>{uploadError}</p>
+                    <div className="confirmation-buttons">
+                      <button className="delete-button" onClick={() => setUploadError("")}>Close</button>
                     </div>
                   </div>
                 </div>
