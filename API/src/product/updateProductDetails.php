@@ -21,6 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $categories = isset($_POST['categories']) ? $_POST['categories'] : (isset($_POST['subcategories']) ? $_POST['subcategories'] : '');
   $subcategories = isset($_POST['subcategories']) && isset($_POST['categories']) ? $_POST['subcategories'] : '';
   $defaultStyle = $_POST["default_style"];
+  $styleSize = isset($_POST['style_size']) ? $_POST['style_size'] : '';
+  if (empty($styleSize)) {
+    echo json_encode("ERR: style_size required");
+    exit();
+  }
   $styleLocation = $_POST["default_style_location"];
   $customDetailsRequired = $_POST["customFieldRequired"];
   // prefer explicit product_id from POST, fallback to session
@@ -131,9 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   // Update product including possible new filenames
   $query = $conn->prepare("UPDATE products 
-                          SET product_name = ?, price = ?, tag_list = ?, tColors = ?, lColors = ?, cColors = ?, hColors = ?, categories = ?, subcategories = ?, default_style = ?, default_style_location = ?, CustomDetailsRequired = ?, sizesAvailable = ?, filename_front = ?, filename_back = ?
+                          SET product_name = ?, price = ?, tag_list = ?, tColors = ?, lColors = ?, cColors = ?, hColors = ?, categories = ?, subcategories = ?, default_style = ?, style_size=?, default_style_location = ?, CustomDetailsRequired = ?, sizesAvailable = ?, filename_front = ?, filename_back = ?
                           WHERE product_id = ?;");
-  $query->bind_param("sssssssssssssssi", $productName, $price, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $subcategories, $defaultStyle, $styleLocation, $customDetailsRequired, $sizeAvailable, $newFront, $newBack, $product_id);
+  $query->bind_param("ssssssssssssssssi", $productName, $price, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $subcategories, $defaultStyle, $styleSize, $styleLocation, $customDetailsRequired, $sizeAvailable, $newFront, $newBack, $product_id);
   if (!$query->execute()) {
     // If insertion fails, return error message
     echo json_encode(array('success' => false, 'error' => 'DB update failed: ' . $query->error));

@@ -21,6 +21,7 @@ function Upload() {
   const [selectedSubcategoryIds, setSelectedSubcategoryIds] = useState([]);
   const [allSubcategories, setAllSubcategories] = useState([]);
   const [style, setStyle] = useState("");
+  const [styleSize, setStyleSize] = useState("");
   const [location, setLocation] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [customFieldRequired, setCustomFieldRequired] = useState(null);
@@ -130,7 +131,7 @@ function Upload() {
       formData.append('backFile', backFile);
     }
     
-    if (!productName || !price || !style || !location || customFieldRequired === null) {
+    if (!productName || !price || !style || !styleSize || !location || customFieldRequired === null) {
       setShowConfirmation(true);
       return;
     }
@@ -146,6 +147,7 @@ function Upload() {
       formData.append('categories', selectedCategoryIds.join(';'));
       formData.append('subcategories', selectedSubcategoryIds.join(';'));
       formData.append('default_style', style);
+      formData.append('style_size', styleSize);
       formData.append('style_location', location);
       formData.append('customFieldRequired', customFieldRequired);
       formData.append('sizeAvailable', sizesAvailable);
@@ -319,6 +321,26 @@ function Upload() {
                   </div>
                   <div className="mobileSplit20" />
                 </div>
+              <h3 className="center">Style Size<span className="red">*</span></h3>
+              <div className="row">
+                <div className="mobileSplit20" />
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="styleSizeFull" name="styleSize" value="full" className="pointer" onChange={(event) => setStyleSize(event.target.value)}/>
+                      <label>&nbsp;Full</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20" />
+                <div className="mobileSplit20">
+                  <span>
+                    <input type="radio" id="styleSizePocket" name="styleSize" value="pocket" className="pointer" onChange={(event) => setStyleSize(event.target.value)}/>
+                      <label>&nbsp;Pocket</label>
+                      <br />
+                  </span>
+                </div>
+                <div className="mobileSplit20" />
+              </div>
               <h3 className="center">Color Options</h3>
               <div className="topAlignRow">
                 <div className="mobileSplit25">

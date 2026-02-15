@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import editIcon from "../assets/editIcon.svg";
 import "./checkout.css";
 import { GetProductPriceWithSize } from "../products/GetProductPriceWithSize";
 
@@ -12,6 +13,14 @@ function CheckoutDetails() {
     const [shipping, setShipping] = useState(0);
     const [paying, setPaying] = useState(1);
     const [location, setLocation] = useState("");
+    const DEFAULT_PICKUP_OPTIONS = [
+        "Dollar General (OH-309, Iberia, OH)",
+        "Northmor School (Galion, OH)",
+        "St. Joseph Catholic Church (Galion, OH)",
+        "St. Joseph Catholic School (Galion, OH)"
+    ];
+    const [pickupOptions, setPickupOptions] = useState(DEFAULT_PICKUP_OPTIONS);
+    const [isAdmin, setIsAdmin] = useState(null);
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
@@ -31,6 +40,12 @@ function CheckoutDetails() {
 
     // API Calls
     useEffect(() => {
+                // fetch admin status for showing edit button
+                fetch("/api/admin/admin.php")
+                    .then((response) => response.json())
+                    .then((data) => setIsAdmin(data.admin))
+                    .catch((err) => { console.error("Failed to fetch admin status", err); setIsAdmin(0); });
+
         let oID = 0;
 
         fetch("/api/admin/session.php")
@@ -86,6 +101,48 @@ function CheckoutDetails() {
                 setCustomHighTotal(total);
             }
         });
+
+        // fetch pickup locations from static text (expects a semicolon-separated string)
+        (async () => {
+            try {
+                const formData = new FormData();
+                formData.append('page', 'checkout');
+                formData.append('location', 'pickupLocations');
+                        const resp = await fetch('/api/admin/getStaticText.php', {
+                            method: 'POST',
+                            body: formData,
+                        });
+                        const data = await resp.json();
+                        let items = [];
+                        if (Array.isArray(data)) {
+                            if (data.every(d => typeof d === 'string')) {
+                                items = data.map(s => s.trim()).filter(Boolean);
+                            } else if (data.every(d => d && typeof d === 'object' && 'text' in d)) {
+                                items = data.map(d => String(d.text).trim()).filter(Boolean);
+                            } else {
+                                items = data.map(d => String(d).trim()).filter(Boolean);
+                            }
+                        } else if (data && typeof data === 'object') {
+                            if ('text' in data) {
+                                items = String(data.text).split(';').map(s => s.trim()).filter(Boolean);
+                            } else {
+                                items = Object.values(data).map(v => String(v).trim()).filter(Boolean);
+                            }
+                        } else if (typeof data === 'string') {
+                            items = data.split(';').map(s => s.trim()).filter(Boolean);
+                        }
+
+                        if (items.length > 0) {
+                            items.sort((a,b) => a.localeCompare(b));
+                            setPickupOptions(items);
+                        } else {
+                            setPickupOptions(DEFAULT_PICKUP_OPTIONS);
+                        }
+            } catch (err) {
+                console.error('Failed to load pickup locations:', err);
+                setPickupOptions(DEFAULT_PICKUP_OPTIONS);
+            }
+        })();
     }, []);
 
     useEffect(() => {
@@ -495,7 +552,19 @@ function CheckoutDetails() {
                         </div>
                         <div className="containerRow">
                             <div className="mobileSplit100">
-                                <input type="text" id="adr" name="address" className="default-input" placeholder="Iberia Dollar General" onChange={(event) => setLocation(event.target.value)}/>
+                                    <select id="pickupLocation" name="pickupLocation" className="default-input" value={location} onChange={(event) => setLocation(event.target.value)}>
+                                        <option value="">Select a pickup location</option>
+                                        {pickupOptions && pickupOptions.length > 0 ? pickupOptions.map((opt, idx) => (
+                                            <option key={idx} value={opt}>{opt}</option>
+                                        )) : null}
+                                    </select>
+                                    {isAdmin > 0 && (
+                                        <div style={{ marginTop: 8 }}>
+                                            <Link to="/editPickupLocations" className="editLink">
+                                                <img src={editIcon} alt="Edit Icon" className="editIcon" />
+                                            </Link>
+                                        </div>
+                                    )}
                             </div>
                         </div>
                         <br /><br />

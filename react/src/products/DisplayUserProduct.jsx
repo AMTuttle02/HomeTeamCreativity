@@ -58,6 +58,7 @@ const DisplayUserProduct = (props) => {
   const [currentDesign, setCurrentDesign] = useState('');
   const [currentColor, setCurrentColor] = useState(null);
   const [intervalId, setIntervalId] = useState(undefined);
+  const [showingLocation, setShowingLocation] = useState('front');
 
   // T-Shirt Color Maps
   const tShirtMap = {
@@ -140,20 +141,24 @@ const DisplayUserProduct = (props) => {
       if (default_location === 'front') {
         setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
         setCurrentColor(getColor('front'));
+        setShowingLocation('front');
       }
       else if (default_location === 'back') {
         setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
         setCurrentColor(getColor('back'));
+        setShowingLocation('back');
       }
     } 
     else if (state === 1) {
       if (default_location === 'front') {
         setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
         setCurrentColor(getColor('back'));
+        setShowingLocation('back');
       }
       else if (default_location === 'back') {
         setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
         setCurrentColor(getColor('front'));
+        setShowingLocation('front');
       }
     }
   }, [currentProduct, color, style, state]);
@@ -198,10 +203,12 @@ const DisplayUserProduct = (props) => {
       setCurrentDesign(prevDesign => {
         if (prevDesign  === window.location.origin + "/api/images/" + currentProduct.filename_front) {
           setCurrentColor(getColor('back'));
+          setShowingLocation('back');
           return (window.location.origin + "/api/images/" + currentProduct.filename_back);
         }
         else {
           setCurrentColor(getColor('front'));
+          setShowingLocation('front');
           return (window.location.origin + "/api/images/" + currentProduct.filename_front);
         }
       });
@@ -228,20 +235,24 @@ const DisplayUserProduct = (props) => {
         if (default_location === 'front') {
           setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
           setCurrentColor(getColor('front'));
+          setShowingLocation('front');
         }
         else if (default_location === 'back') {
           setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
           setCurrentColor(getColor('back'));
+          setShowingLocation('back');
         }
       } 
       else if (state === 1) {
         if (default_location === 'front') {
           setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_back);
           setCurrentColor(getColor('back'));
+          setShowingLocation('back');
         }
         else if (default_location === 'back') {
           setCurrentDesign(window.location.origin + "/api/images/" + currentProduct.filename_front);
           setCurrentColor(getColor('front'));
+          setShowingLocation('front');
         }
       }
     }
@@ -257,10 +268,12 @@ const DisplayUserProduct = (props) => {
       setCurrentDesign(prevDesign => {
         if (prevDesign  === window.location.origin + "/api/images/" + currentProduct.filename_front) {
           setCurrentColor(getColor('back'));
+          setShowingLocation('back');
           return (window.location.origin + "/api/images/" + currentProduct.filename_back);
         }
         else {
           setCurrentColor(getColor('front'));
+          setShowingLocation('front');
           return (window.location.origin + "/api/images/" + currentProduct.filename_front);
         }
       });
@@ -274,24 +287,26 @@ const DisplayUserProduct = (props) => {
   };
 
   if (style !== "Other") {
+    const designClass = (showingLocation === 'front' && currentProduct.style_size === 'pocket') ? 'design-pocket' : 'design';
+
     if (enlarge) {
-    return (
-      <div 
-        className="fullDesign"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
-        <img
-          src={currentColor}
-          alt="Product Style"
-          className="tshirt"
-        />
-        <img
-          src={currentDesign}
-          alt="Product Design"
-          className="design"
-        />
-      </div>
-    );
+      return (
+        <div 
+          className="fullDesign"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}>
+          <img
+            src={currentColor}
+            alt="Product Style"
+            className="tshirt"
+          />
+          <img
+            src={currentDesign}
+            alt="Product Design"
+            className={designClass}
+          />
+        </div>
+      );
     }
     else {
       return (
@@ -305,7 +320,7 @@ const DisplayUserProduct = (props) => {
           <img
             src={currentDesign}
             alt="Product Design"
-            className="design"
+            className={designClass}
           />
         </div>
       );

@@ -22,6 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $categories = isset($_POST['categories']) ? $_POST['categories'] : (isset($_POST['subcategories']) ? $_POST['subcategories'] : '');
   $subcategories = isset($_POST['subcategories']) && isset($_POST['categories']) ? $_POST['subcategories'] : '';
   $defaultStyle = $_POST["default_style"];
+  $styleSize = isset($_POST['style_size']) ? $_POST['style_size'] : '';
+  if (empty($styleSize)) {
+    die(json_encode("ERR: style_size required"));
+  }
   $styleLocation = $_POST["style_location"];
   $customFieldRequired = $_POST['customFieldRequired'];
   $sizeAvailable = $_POST['sizeAvailable'];
@@ -52,9 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   // Attempt to insert new design into table
-  $query = $conn->prepare("INSERT INTO products (product_name, price, filename_front, filename_back, tag_list, tColors, lColors, cColors, hColors, categories, subcategories, default_style, default_style_location, CustomDetailsRequired, sizesAvailable)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-  $query->bind_param("sssssssssssssss", $productName, $price, $frontFileName, $backFileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $subcategories, $defaultStyle, $styleLocation, $customFieldRequired, $sizeAvailable);
+  $query = $conn->prepare("INSERT INTO products (product_name, price, filename_front, filename_back, tag_list, tColors, lColors, cColors, hColors, categories, subcategories, default_style, style_size, default_style_location, CustomDetailsRequired, sizesAvailable)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+  $query->bind_param("ssssssssssssssss", $productName, $price, $frontFileName, $backFileName, $tags, $tColors, $lColors, $cColors, $hColors, $categories, $subcategories, $defaultStyle, $styleSize, $styleLocation, $customFieldRequired, $sizeAvailable);
   if (!$query->execute()) {
     // If insertion fails, return error message
     die(json_encode("ERR: Insertion failed to execute" . $query->error));
