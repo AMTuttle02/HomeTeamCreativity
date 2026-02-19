@@ -18,7 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query = $conn->prepare(
             "SELECT *
             FROM orders
-            WHERE status = 'processing'"
+            WHERE status != 'active'
+            ORDER BY order_date DESC;"
         );
 
         if (!$query->execute()) {

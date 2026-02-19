@@ -76,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   else if ($orderId == 1) {
     $uID = NAU_ID;
     $query = $conn->prepare(
-      "INSERT INTO orders (user_id, total_cost, is_cart)
-      VALUES ($uID, 0, 1);");
+      "INSERT INTO orders (user_id, total_cost, is_cart, order_date)
+      VALUES ($uID, 0, 1, UTC_TIMESTAMP());");
     if (!$query->execute()) {
       die("Query failed: " . $query->error);
     }
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $totalCost = $totalCost + $productCost;
   $query = $conn->prepare(
                         "UPDATE orders 
-                        SET total_cost = $totalCost 
+                        SET total_cost = $totalCost, order_date = UTC_TIMESTAMP() 
                         WHERE orders.order_id = $orderId");
   if (!$query->execute()) {
     // If insertion fails, return error message

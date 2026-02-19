@@ -34,9 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result['status'] == 'active') {
         $query = $conn->prepare(
-                            "UPDATE orders
-                            SET is_cart = 0, paid = ?, status = 'processing'
-                            WHERE order_id = ? AND stripeId = ?");
+                    "UPDATE orders
+                    SET is_cart = 0, paid = ?, status = 'processing', order_date = UTC_TIMESTAMP()
+                    WHERE order_id = ? AND stripeId = ?");
         $query->bind_param(
                         "sss",
                         $paid,
@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_SESSION["order_id"]) {}
         else if (isset($_SESSION["userId"])) {
             $query = $conn->prepare(
-                                    "INSERT INTO orders (user_id, total_cost, is_cart)
-                                    VALUES (?, 0, 1);");
+                            "INSERT INTO orders (user_id, total_cost, is_cart, order_date)
+                            VALUES (?, 0, 1, UTC_TIMESTAMP());");
             $query->bind_param(
                                 "s",
                                 $_SESSION["userId"]);
