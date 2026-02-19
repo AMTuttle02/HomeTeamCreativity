@@ -23,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orderId = $inputs["order_id"];
 
         $query = $conn->prepare(
-                            "UPDATE orders
-                            SET location = ?, shipped = ?, email = ?, first_name = ?, last_name = ?
-                            WHERE order_id = ?");
+                    "UPDATE orders
+                    SET location = ?, shipped = ?, email = ?, first_name = ?, last_name = ?, order_date = UTC_TIMESTAMP()
+                    WHERE order_id = ?");
         $query->bind_param(
                         "ssssss",
                         $location,
@@ -61,9 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $orderId = $result['order_id'];
 
         $query = $conn->prepare(
-                            "UPDATE orders
-                            SET location = ?, shipped = ?, email = ?, first_name = ?, last_name = ?
-                            WHERE order_id = ?");
+                    "UPDATE orders
+                    SET location = ?, shipped = ?, email = ?, first_name = ?, last_name = ?, order_date = UTC_TIMESTAMP()
+                    WHERE order_id = ?");
         $query->bind_param(
                         "ssssss",
                         $location,

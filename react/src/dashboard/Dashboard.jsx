@@ -7,6 +7,7 @@ function Dashboard() {
   const [firstName, setFirstName] = useState("");
   const [admin, setAdmin] = useState(0);
   const [orders, setOrders] = useState([]);
+  const [showAllOrders, setShowAllOrders] = useState(false);
   const [products, setProducts] = useState([]);
 
   // API Calls
@@ -105,6 +106,53 @@ function Dashboard() {
     }
   };
 
+  const escapeCSV = (str) => {
+    if (str === null || str === undefined) return '""';
+    return '"' + String(str).replace(/"/g, '""') + '"';
+  }
+
+  const exportOrdersCSV = () => {
+    const headers = ['Order ID','Order Date','First Name','Last Name','Email','Location','Status','Paid','Shipped','Total Cost','Products'];
+    const rows = [headers.join(',')];
+    orders.forEach(order => {
+      const prods = products.filter(p => p.order_id === order.order_id)
+        .map(p => {
+          const name = p.product_name || (p.product_id === 0 ? 'Custom' : 'Unknown');
+          const qty = p.product_quantity || '';
+          const details = [p.product_type, p.size, p.color, p.product_details].filter(Boolean).join(' ');
+          return `${qty}x ${name}${details ? ' (' + details + ')' : ''} [id:${p.product_id}]`;
+        }).join(' | ');
+      const row = [order.order_id, order.order_date, order.first_name, order.last_name, order.email, order.location, order.status, order.paid, order.shipped, order.total_cost, prods].map(escapeCSV).join(',');
+      rows.push(row);
+    });
+    const csv = rows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `orders_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+  const displayedOrders = showAllOrders ? orders : orders.filter(o => o.status === 'processing');
+
+  const formatUTCToLocal = (utcString) => {
+    if (!utcString) return '';
+    let s = String(utcString);
+    // If MySQL DATETIME like 'YYYY-MM-DD HH:MM:SS', treat as UTC by appending 'Z'
+    if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) {
+      s = s.replace(' ', 'T') + 'Z';
+    } else if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(s)) {
+      // If 'YYYY-MM-DDTHH:MM:SS' without timezone, append Z
+      s = s + 'Z';
+    }
+    const d = new Date(s);
+    if (isNaN(d.getTime())) return utcString;
+    return d.toLocaleString();
+  }
+
   return (
     <div className='Dashboard'>
       <br />
@@ -140,7 +188,11 @@ function Dashboard() {
                 <button className="default-button" onClick={() => navigate("/categories")}>Edit Categories</button>
               </div>
             </div>
-            <div className="mobileSplit20" />
+            <div className="mobileSplit20">
+              <div className="default-width">
+                <button className="default-button" onClick={() => setShowAllOrders(prev => !prev)}>{showAllOrders ? 'Show Processing Orders' : 'View All Orders'}</button>
+              </div>
+            </div>
             <div className="gap" />
             <div className="mobileSplit20">
               <div className="default-width">
@@ -153,15 +205,29 @@ function Dashboard() {
                 <button className="default-button" onClick={() => navigate("/coupons")}>Manage Coupons</button>
               </div>
             </div>
+            <div className="mobileSplit20">
+              <div className="default-width">
+                <button className="default-button" onClick={exportOrdersCSV}>Export Orders</button>
+              </div>
+            </div>
           </div>
         }
         <br />
         <div className="default-width">
         <div className="blackLine" />
         </div>
-        {orders.map((order) => (
+        {displayedOrders.map((order) => (
           <div key={order.order_id}>
             <br />
+            {admin > 0 && order.status !== 'complete' &&
+              <div className="row">
+                <div className="mobileSplit33" />
+                <div className="mobileSplit33">
+                  <button className="default-button" onClick={() => completeOrder(order.order_id)}>Complete Order</button>
+                </div>
+                <div className="mobileSplit33" />
+              </div>
+            }
             <div className="row">
                 <div className="mobileSplit33">
                   <h3 className="mobileCenter">Order No. {order.order_id}</h3>
@@ -169,19 +235,13 @@ function Dashboard() {
                 <div className="mobileSplit33">
                   <h3 className="center">Name: {order.first_name} {order.last_name}</h3>
                 </div>
-                {admin > 0 ?
-                  <div className="mobileSplit33">
-                    <button className="default-button" onClick={() => completeOrder(order.order_id)}>Complete Order</button>
-                  </div>
-                :
-                  <div className="mobileSplit33">
+                <div className="mobileSplit33">
                     <h3 className="rightMobileCenter">
                       {order.status === 'processing' && <span>Status: Processing</span>}
                       {order.status === 'active' && <span>Status: Active</span>}
                       {order.status === 'complete' && <span>Status: Complete</span>}
                     </h3>
                   </div>
-                }
             </div>
             {order.shipped > 0 ?
               <div className="row">
@@ -229,6 +289,13 @@ function Dashboard() {
                 </div>
               </div>
             }
+            <div className="row">
+              <div className="mobileSplit33">
+                <h3 className="mobileCenter">Order Date: {formatUTCToLocal(order.order_date)}</h3>
+              </div>
+              <div className="mobileSplit33" />
+              <div className="mobileSplit33" />
+            </div>
             {products.map((product) => {
               if (product.order_id === order.order_id) {
                 return (

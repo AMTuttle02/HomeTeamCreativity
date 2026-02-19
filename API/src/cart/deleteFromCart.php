@@ -76,9 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price = $input['price'];
 
         $query = $conn->prepare(
-                                "UPDATE orders
-                                SET total_cost = total_cost - $price
-                                WHERE order_id = ?");
+              "UPDATE orders
+              SET total_cost = total_cost - $price, order_date = UTC_TIMESTAMP()
+              WHERE order_id = ?");
         $query->bind_param(
             "s",
             $input['order_id']);
@@ -118,9 +118,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $price = $input['price'];
 
       $query = $conn->prepare(
-                              "UPDATE orders
-                              SET total_cost = total_cost - $price
-                              WHERE order_id = ?");
+              "UPDATE orders
+              SET total_cost = total_cost - $price, order_date = UTC_TIMESTAMP()
+              WHERE order_id = ?");
       $query->bind_param(
                         "s",
                         $input['order_id']);
