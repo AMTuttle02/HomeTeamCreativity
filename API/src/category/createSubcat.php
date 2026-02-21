@@ -9,19 +9,31 @@ include '../admin/conn.php';
 
 // Create new user account
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $input = json_decode(file_get_contents('php://input'), true);
+  // support either JSON body or form-data
+  $raw = file_get_contents('php://input');
+  $input = json_decode($raw, true);
+  $subcategory = '';
+  $category = '';
+  if (!empty($_POST['subcategory'])) {
+    $subcategory = trim($_POST['subcategory']);
+  } elseif (is_array($input) && isset($input['subcategory'])) {
+    $subcategory = trim($input['subcategory']);
+  }
+  if (!empty($_POST['category'])) {
+    $category = trim($_POST['category']);
+  } elseif (is_array($input) && isset($input['category'])) {
+    $category = trim($input['category']);
+  }
 
-  // Insert product to users cart
   $query = $conn->prepare(
                         "INSERT INTO subcategories (name, category)
                         VALUES (?, ?)");
   $query->bind_param(
                     "ss",
-                    $input['subcategory'],
-                    $input['category']);
+                    $subcategory,
+                    $category);
 
   if (!$query->execute()) {
-    // If insertion fails, return error message
     echo json_encode(0);
   }
   else {
