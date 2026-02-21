@@ -7,7 +7,12 @@ header('Content-Type: application/json');
 
 include '../admin/conn.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (session_status() === PHP_SESSION_ACTIVE) {
+} else {
+    session_start();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_SESSION['admin'])) {
   $input = json_decode(file_get_contents('php://input'), true);
   $id = 0;
   $cat = '';
