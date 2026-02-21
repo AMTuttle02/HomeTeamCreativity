@@ -23,13 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
   }
 
-  // determine next position
-  $res = mysqli_query($conn, "SELECT MAX(position) AS maxpos FROM categories");
-  $pos = 1;
-  if ($res) {
-    $row = mysqli_fetch_assoc($res);
-    if ($row && isset($row['maxpos'])) {
-      $pos = intval($row['maxpos']) + 1;
+  // use provided position or fall back to MAX(position)+1; positions must be >= 1
+  $pos = null;
+  if (isset($_POST['position']) && $_POST['position'] !== '') {
+    $pos = intval($_POST['position']);
+  } elseif (is_array($input) && isset($input['position'])) {
+    $pos = intval($input['position']);
+  }
+  if ($pos === null || $pos <= 0) {
+    $res = mysqli_query($conn, "SELECT MAX(position) AS maxpos FROM categories");
+    $pos = 1;
+    if ($res) {
+      $row = mysqli_fetch_assoc($res);
+      if ($row && isset($row['maxpos'])) {
+        $pos = intval($row['maxpos']) + 1;
+      }
     }
   }
 
