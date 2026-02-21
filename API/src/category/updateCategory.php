@@ -7,7 +7,11 @@ header('Content-Type: application/json');
 
 include '../admin/conn.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['admin']) && $_SESSION['admin']) {
   $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
   $cat = isset($_POST['category']) ? trim($_POST['category']) : '';
   $position = isset($_POST['position']) ? intval($_POST['position']) : null;
@@ -31,6 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } else {
     echo json_encode(1);
   }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  http_response_code(403);
+  echo json_encode(array('error' => 'Unauthorized'));
 }
 
 mysqli_close($conn);
