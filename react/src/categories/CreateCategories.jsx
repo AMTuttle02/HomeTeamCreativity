@@ -5,53 +5,47 @@ import { reportError } from "../errorPages/errorHandling";
 import "./categories.css";
 
 function CreateCategories() {
-  const navigate = useNavigate();
-  const [admin, setAdmin] = useState("");
+    const navigate = useNavigate();
+    const [admin, setAdmin] = useState("");
     const [target, setTarget] = useState("Subcategory");
-  const [category, setCategory] = useState("");
     const [editableSubcategories, setEditableSubcategories] = useState([]);
-    const [originalSubcategories, setOriginalSubcategories] = useState([]);
-  const [allCategories, setAllCategories] = useState([]);
+    const [allCategories, setAllCategories] = useState([]);
     const [editableCategories, setEditableCategories] = useState([]);
-    const [originalCategories, setOriginalCategories] = useState([]);
 
-  // API Calls
-  useEffect(() => {
-    fetch("/api/admin/admin.php")
-        .then((response) => response.json())
-        .then((data) => {
-        setAdmin(data.admin);
-        }
-    );
+    // API Calls
+    useEffect(() => {
+        fetch("/api/admin/admin.php")
+            .then((response) => response.json())
+            .then((data) => {
+            setAdmin(data.admin);
+            }
+        );
 
-    fetch("/api/category/getSubCats.php")
-        .then((response) => response.json())
-        .then((data) => {
-            setOriginalSubcategories(data);
-            const editable = Array.isArray(data) ? data.map(s => ({ id: s.id, name: s.name, category: s.category })) : [];
-            setEditableSubcategories(editable);
-        }
-    );
+        fetch("/api/category/getSubCats.php")
+            .then((response) => response.json())
+            .then((data) => {
+                const editable = Array.isArray(data) ? data.map(s => ({ id: s.id, name: s.name, category: s.category })) : [];
+                setEditableSubcategories(editable);
+            }
+        );
 
-    fetch("/api/category/getCategories.php")
-        .then((response) => response.json())
-        .then((data) => {
-            setAllCategories(data);
-            setOriginalCategories(data);
-            // initialize editable list from fetched categories
-            const editable = Array.isArray(data) ? data.map(c => ({ id: c.id, category: c.category, position: c.position })) : [];
-            setEditableCategories(editable);
-            const posMap = {};
-            let maxPos = 0;
-            data.forEach((c) => {
-                if (c.id !== undefined) posMap[c.id] = c.position ?? 0;
-                const p = c.position ? Number(c.position) : 0;
-                if (p > maxPos) maxPos = p;
-            });
-            setCategoryPositions(posMap);
-        }
-    );
-  }, []);
+        fetch("/api/category/getCategories.php")
+            .then((response) => response.json())
+            .then((data) => {
+                setAllCategories(data);
+                // initialize editable list from fetched categories
+                const editable = Array.isArray(data) ? data.map(c => ({ id: c.id, category: c.category, position: c.position })) : [];
+                setEditableCategories(editable);
+                const posMap = {};
+                let maxPos = 0;
+                data.forEach((c) => {
+                    if (c.id !== undefined) posMap[c.id] = c.position ?? 0;
+                    const p = c.position ? Number(c.position) : 0;
+                    if (p > maxPos) maxPos = p;
+                });
+            }
+        );
+    }, []);
 
     // Inline edit helpers for category table
     const updateEditable = (index, key, value) => {
@@ -73,10 +67,6 @@ function CreateCategories() {
     const addNewRowEditable = () => {
         const max = editableCategories.reduce((m, c) => Math.max(m, Number(c.position) || 0), 0);
         setEditableCategories((prev) => ([...prev, { id: 0, category: '', position: max + 1 }]));
-    }
-
-    const cancelEditableChanges = () => {
-        setEditableCategories(originalCategories.map((c) => ({ id: c.id, category: c.category, position: c.position })));
     }
 
     const handleSaveAll = async () => {
@@ -102,7 +92,7 @@ function CreateCategories() {
             });
 
             const results = await Promise.all(requests);
-            const ok = results.every(r => r && (r.data === 1 || r.status === 200));
+            const ok = results.every(r => r && r.data === 1);
             if (ok) location.reload();
             else throw('One or more saves failed');
         } catch (err) {
@@ -131,10 +121,6 @@ function CreateCategories() {
         setEditableSubcategories((prev) => ([...prev, { id: 0, name: '', category: allCategories.length ? allCategories[0].category : '' }]));
     }
 
-    const cancelSubChanges = () => {
-        setEditableSubcategories(originalSubcategories.map((s) => ({ id: s.id, name: s.name, category: s.category })));
-    }
-
     const handleSaveAllSubs = async () => {
         try {
             const requests = [];
@@ -158,7 +144,7 @@ function CreateCategories() {
             });
 
             const results = await Promise.all(requests);
-            const ok = results.every(r => r && (r.data === 1 || r.status === 200));
+            const ok = results.every(r => r && r.data === 1);
             if (ok) location.reload();
             else throw('One or more subcategory saves failed');
         } catch (err) {
@@ -221,10 +207,10 @@ function CreateCategories() {
                     </table>
                     <br />
                     <div className="row">
-                        <button className="default-button" onClick={addNewRowEditable}>Add Row</button>
+                        <button className="default-button" onClick={addNewRowSub}>Add Row</button>
                     </div>
                     <div className="row">
-                            <button className="default-button" onClick={handleSaveAll}>Save Changes</button>
+                            <button className="default-button" onClick={handleSaveAllSubs}>Save Changes</button>
                     </div>
                 </>
             ) : (
