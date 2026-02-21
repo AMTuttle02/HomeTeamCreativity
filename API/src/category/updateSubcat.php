@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 
 include '../admin/conn.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['admin']) {
   // accept form-data or json
   $raw = file_get_contents('php://input');
   $input = json_decode($raw, true);
