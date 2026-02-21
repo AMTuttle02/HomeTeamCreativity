@@ -8,6 +8,12 @@ header('Content-Type: application/json');
 include '../admin/conn.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!isset($_SESSION['admin']) || !$_SESSION['admin']) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Unauthorized']);
+    mysqli_close($conn);
+    exit();
+  }
   // support either JSON body or form-data
   $raw = file_get_contents('php://input');
   $input = json_decode($raw, true);
