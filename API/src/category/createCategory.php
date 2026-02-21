@@ -7,31 +7,39 @@ header('Content-Type: application/json');
 
 include '../admin/conn.php';
 
-// Create new user account
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // support either JSON body or form-data
   $raw = file_get_contents('php://input');
   $input = json_decode($raw, true);
-  $subcategory = '';
-  $category = '';
-  if (!empty($_POST['subcategory'])) {
-    $subcategory = trim($_POST['subcategory']);
-  } elseif (is_array($input) && isset($input['subcategory'])) {
-    $subcategory = trim($input['subcategory']);
-  }
+  $cat = '';
   if (!empty($_POST['category'])) {
-    $category = trim($_POST['category']);
+    $cat = trim($_POST['category']);
   } elseif (is_array($input) && isset($input['category'])) {
-    $category = trim($input['category']);
+    $cat = trim($input['category']);
+  }
+  if ($cat === '') {
+    echo json_encode(0);
+    mysqli_close($conn);
+    exit();
+  }
+
+  // determine next position
+  $res = mysqli_query($conn, "SELECT MAX(position) AS maxpos FROM categories");
+  $pos = 1;
+  if ($res) {
+    $row = mysqli_fetch_assoc($res);
+    if ($row && isset($row['maxpos'])) {
+      $pos = intval($row['maxpos']) + 1;
+    }
   }
 
   $query = $conn->prepare(
-                        "INSERT INTO subcategories (name, category)
+                        "INSERT INTO categories (category, position)
                         VALUES (?, ?)");
   $query->bind_param(
-                    "ss",
-                    $subcategory,
-                    $category);
+                    "si",
+                    $cat,
+                    $pos);
 
   if (!$query->execute()) {
     echo json_encode(0);

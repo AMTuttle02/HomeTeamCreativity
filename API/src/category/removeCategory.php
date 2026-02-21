@@ -7,28 +7,27 @@ header('Content-Type: application/json');
 
 include '../admin/conn.php';
 
-// Create new user account
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $input = json_decode(file_get_contents('php://input'), true);
   $id = 0;
-  $name = '';
+  $cat = '';
   if (!empty($_POST['id'])) {
     $id = intval($_POST['id']);
   } elseif (is_array($input) && isset($input['id'])) {
     $id = intval($input['id']);
   }
-  if (!empty($_POST['subcategory'])) {
-    $name = trim($_POST['subcategory']);
-  } elseif (is_array($input) && isset($input['subcategory'])) {
-    $name = trim($input['subcategory']);
+  if (!empty($_POST['category'])) {
+    $cat = trim($_POST['category']);
+  } elseif (is_array($input) && isset($input['category'])) {
+    $cat = trim($input['category']);
   }
 
   if ($id > 0) {
-    $query = $conn->prepare("DELETE FROM subcategories WHERE id = ?");
+    $query = $conn->prepare("DELETE FROM categories WHERE id = ?");
     $query->bind_param("i", $id);
-  } elseif ($name !== '') {
-    $query = $conn->prepare("DELETE FROM subcategories WHERE name = ?");
-    $query->bind_param("s", $name);
+  } elseif ($cat !== '') {
+    $query = $conn->prepare("DELETE FROM categories WHERE category = ?");
+    $query->bind_param("s", $cat);
   } else {
     echo json_encode(0);
     mysqli_close($conn);
