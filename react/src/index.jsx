@@ -23,7 +23,6 @@ import LogOut from "./login/LogOut.jsx";
 import NoResults from "./products/NoResults.jsx";
 import Order from "./order/Order";
 import Products from "./products/Products";
-import PayLater from "./static/PayLater.jsx";
 import SearchResults from "./products/SearchResults";
 import SignUp from "./login/SignUp.jsx";
 import ResetPassword from "./login/ResetPassword.jsx";
@@ -63,7 +62,6 @@ export default function App() {
           <Route path="ordercomplete/:orderId/:paid/:stripe/:complete" element={<Checkout />} />
           <Route path="returnpolicy" element={<ReturnPolicy />} />
           <Route path="checkout" element={<CheckoutDetails />} />
-          <Route path="paylater" element={<PayLater />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="categories" element={<CreateCategories />} />
           <Route path="editproduct/:productId" element={<EditProducts />} />
