@@ -148,7 +148,7 @@ function callBaseRates($originZip, $destZip, $weightOz) {
         'width' => 10,
         'height' => 4,
         'mailClass' => 'USPS_GROUND_ADVANTAGE',
-        'processingCategory' => 'MACHINABLE',
+        'processingCategory' => 'NONSTANDARD',
         'destinationEntryFacilityType' => 'NONE',
         'rateIndicator' => 'DR',
         'priceType' => 'COMMERCIAL'
