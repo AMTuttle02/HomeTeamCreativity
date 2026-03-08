@@ -432,7 +432,7 @@ function CheckoutDetails() {
             const resp = await fetch('/api/order/getShippingEstimate.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order_id: oID, dbLocation })
+                body: JSON.stringify({ order_id: oID, dbLocation, user_id: userId})
             });
             const data = await resp.json();
             if (data && data.shipping_cost) {

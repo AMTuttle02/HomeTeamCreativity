@@ -31,19 +31,64 @@ if (!$destZip) {
     exit;
 }
 
-// count quantity
-$qty = 0;
-if ($orderId) {
-    $pq = $conn->prepare("SELECT COALESCE(SUM(product_quantity),0) AS qty FROM product_orders WHERE order_id = ?");
-    $pq->bind_param("i", $orderId);
+if ($orderId === 0) {
+    // Use userId to get active order
+    $userId = isset($inputs['user_id']) ? intval($inputs['user_id']) : null;
+    if (!$userId) {
+        echo json_encode(["error" => "No order_id or user_id provided"]);
+        exit;
+    }
+    $pq = $conn->prepare("SELECT order_id FROM orders WHERE user_id = ? AND status = 'active' LIMIT 1");
+    $pq->bind_param("i", $userId);
     if ($pq->execute()) {
-        $r = mysqli_fetch_assoc($pq->get_result());
-        $qty = intval($r['qty']);
+        $res = $pq->get_result();
+        if ($res->num_rows > 0) {
+            $row = $res->fetch_assoc();
+            $orderId = intval($row['order_id']);
+        } else {
+            echo json_encode(["error" => "No active order found for user"]);
+            exit;
+        }
     }
 }
 
-// at least 1 ounce per order item assumed
-$weightOz = max(1, $qty * 16);
+// calculate weight based on product_type and quantity
+$weightOz = 0;
+if ($orderId) {
+    $pq = $conn->prepare("SELECT product_type, COALESCE(SUM(product_quantity),0) AS qty FROM product_orders WHERE order_id = ? GROUP BY product_type");
+    $pq->bind_param("i", $orderId);
+    if ($pq->execute()) {
+        $res = $pq->get_result();
+
+        // weights per item in ounces (adjust as needed)
+        $weightsOzMap = [
+            'short sleeve t shirt' => 6,
+            'long sleeve t shirt' => 8,
+            'hooded sweatshirt' => 16,
+            'crewneck sweatshirt' => 14
+        ];
+
+        while ($row = $res->fetch_assoc()) {
+            $type = isset($row['product_type']) ? $row['product_type'] : '';
+            $qtyType = intval($row['qty']);
+
+            // normalize product_type for robust matching
+            $key = preg_replace('/[^a-z0-9 ]/', '', strtolower(trim($type)));
+
+            if (isset($weightsOzMap[$key])) {
+                $itemOz = $weightsOzMap[$key];
+            } else {
+                // Other (and unknown) defaults to 1 lb = 16 oz
+                $itemOz = 16;
+            }
+
+            $weightOz += $itemOz * $qtyType;
+        }
+    }
+}
+
+// ensure at least 1 ounce total
+$weightOz = max(1, intval(round($weightOz)));
 
 function getOAuthToken() {
     $tokenUrl = USPS_API_BASE . '/oauth2/v3/token';
@@ -93,7 +138,7 @@ function callBaseRates($originZip, $destZip, $weightOz) {
     $baseRatesEndpoint = USPS_API_BASE . '/prices/v3/base-rates/search';
 
     // convert ounces to pounds for the prices API (approximately)
-    $weightLbs = max(0.0, round($weightOz / 16, 3));
+    $weightLbs = round($weightOz / 16, 1);
 
     $payload = [
         'originZIPCode' => $originZip,
