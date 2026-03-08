@@ -9,6 +9,7 @@ session_start();
 
 include '../admin/conn.php';
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputs = json_decode(file_get_contents('php://input'), true);
     $email = $inputs['email'];
@@ -18,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $location = $inputs['dbLocation'];
     $total = $inputs['total'];
     $discount = $inputs['discount'];
+    $shippingCost = $inputs['shippingCost'];
 
     if ($inputs["order_id"]) {
         $orderId = $inputs["order_id"];
@@ -79,8 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     mysqli_close($conn);
 
+    // keep session values as provided by caller; shipping will be calculated separately
     $_SESSION['total'] = floatval($total);
     $_SESSION['discount'] = floatval($discount);
+    $_SESSION['shippingCost'] = floatval($shippingCost);
 
     echo $orderId;
 }
