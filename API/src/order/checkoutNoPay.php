@@ -50,8 +50,8 @@ if (!$query->execute()) {
 if ($_SESSION["order_id"]) {}
 else {
     $query = $conn->prepare(
-                            "INSERT INTO orders (user_id, total_cost, is_cart)
-                            VALUES (?, 0, 1);");
+                            "INSERT INTO orders (user_id, total_cost, is_cart, order_date)
+                            VALUES (?, 0, 1, UTC_TIMESTAMP());");
     if ($_SESSION["order_id"]) {
         $userId = NAU_ID;
         $query->bind_param(

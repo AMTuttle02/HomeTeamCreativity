@@ -10,7 +10,7 @@ function CheckoutDetails() {
     const [last, setLast] = useState("");
     const [order, setOrder] = useState([]);
     const [email, setEmail] = useState("");
-    const [shipping, setShipping] = useState(0);
+    const [shipping, setShipping] = useState(1);
     const [paying, setPaying] = useState(1);
     const [location, setLocation] = useState("");
     const DEFAULT_PICKUP_OPTIONS = [
@@ -33,6 +33,10 @@ function CheckoutDetails() {
     const [processingFee, setProcessingFee] = useState(0);
     const [tax, setTax] = useState(0);
     const [discount, setDiscount] = useState((0.00).toFixed(2));
+    const [shippingCost, setShippingCost] = useState(0);
+    const [shippingCalculated, setShippingCalculated] = useState(false);
+    const [shippingOverlayVisible, setShippingOverlayVisible] = useState(false);
+    const [forcePayLaterAfterShippingError, setForcePayLaterAfterShippingError] = useState(false);
     const [code, setCode] = useState("");
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
     const [customHighTotal, setCustomHighTotal] = useState(0);
@@ -304,17 +308,7 @@ function CheckoutDetails() {
                 setCouponError("Sorry, that discount is invalid.");
                 setDiscount((0.00).toFixed(2));
             });
-    }
-
-    const formatTime = (timeString) => {
-        const date = new Date(timeString);
-        if (isNaN(date.getTime())) {
-          // Check if date is invalid
-          return "No End Date";
-        } else {
-          return date.toLocaleString();
-        }
-    };    
+    }  
 
     const handleValidation = () => {
         if (!first || !last) {
@@ -361,7 +355,7 @@ function CheckoutDetails() {
             fetch("/api/order/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount}),
+                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount, shippingCost}),
             })
             .then((response) => response.json())
             .then((data) => {
@@ -396,7 +390,7 @@ function CheckoutDetails() {
             fetch("/api/order/updateOrderInfo.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount}),
+                body: JSON.stringify({ first, last, email, shipping, dbLocation, order_id: oID, total, discount, shippingCost}),
             })
             .then((response) => response.json())
             .then((data) => {
@@ -419,36 +413,98 @@ function CheckoutDetails() {
         }
     };
 
+    const calculateShipping = async () => {
+        // validate address fields minimally
+        if (handleValidation == false) {
+            return;
+        }
+
+        let dbLocation = address + " " + city + ", " + state + " " + zip;
+
+        let oID = 0;
+        if (localStorage.getItem("oID")) {
+            oID = localStorage.getItem("oID");
+        } else if (userId) {
+            oID = 0;
+        }
+
+        try {
+            const resp = await fetch('/api/order/getShippingEstimate.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id: oID, dbLocation, user_id: userId})
+            });
+            const data = await resp.json();
+            if (data && data.shipping_cost) {
+                setShippingCost(data.shipping_cost);
+                setShippingCalculated(true);
+                setForcePayLaterAfterShippingError(false);
+            } else {
+                setShippingOverlayVisible(true);
+            }
+        } catch (err) {
+            console.error(err);
+            setShippingOverlayVisible(true);
+        }
+    }
+
     useEffect(() => {
         setLocationError("");
         setNameError("");
         setEmailError("");
     }, [shipping, paying, first, last, email]);
 
+    // reset shipping calculation whenever shipping method or address changes
+    useEffect(() => {
+        setShippingCalculated(false);
+        setShippingCost(0);
+        setDiscount((0.00).toFixed(2));
+        setCode("");
+    }, [paying, shipping, address, city, state, zip]);
+
     useEffect(() => {
         if (!notCustomOrder) {
             setProcessingFee((0.00).toFixed(2));
             setTax(0);
+            return;
         }
-        else if (!paying) {
+
+        if (!paying) {
             setProcessingFee((0.00).toFixed(2));
             setTax((order.total_cost * 0.0725).toFixed(2));
+            return;
         }
-        else {
-            setProcessingFee(((order.total_cost * 1 - discount * 1) * 0.029 + 0.31).toFixed(2));
-            let temp = ((order.total_cost * 1 - discount * 1) + ((order.total_cost * 1 - discount * 1) * 0.029 + 0.31)).toFixed(2);
-            // sales tax
-            setTax((temp * 0.0725).toFixed(2));
+
+        // For online payments, include shipping in the processing fee when shipping is selected and calculated
+        let base = (order.total_cost * 1 - discount * 1);
+        if (shipping === 1 && shippingCalculated) {
+            base += (parseFloat(shippingCost) || 0);
         }
-    }, [paying, notCustomOrder, order, discount])
+
+        const proc = (base * 1 * 0.029 + 0.31);
+        setProcessingFee(proc.toFixed(2));
+        const temp = (base + proc);
+        setTax((temp * 0.0725).toFixed(2));
+    }, [paying, notCustomOrder, order, discount, shipping, shippingCalculated, shippingCost])
 
     const onlineTotalCost = (subtotal) => {
-        let total = (subtotal * 1 - discount * 1 + tax * 1 + processingFee * 1);
+        let total = (subtotal * 1 - discount * 1 + shippingCost * 1 + tax * 1 + processingFee * 1);
         return (total);
     }
 
   return (
     <div className="CheckoutDetails">
+        {shippingOverlayVisible && (
+            <div style={{position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999}} onClick={() => { setShippingOverlayVisible(false); setForcePayLaterAfterShippingError(true); setShippingCalculated(false); }}>
+                <div style={{background: '#fff', padding: 20, borderRadius: 6, maxWidth: 600, width: '90%'}} onClick={(e) => e.stopPropagation()}>
+                    <h3>Shipping Unavailable</h3>
+                    <p>Shipping cannot be used for this address. Please contact admin@hometeamcreativity.com for more information.</p>
+                    <div style={{textAlign: 'right'}}>
+                        <button className="default-button" onClick={() => { setShippingOverlayVisible(false); setForcePayLaterAfterShippingError(true); setShippingCalculated(false); }}>OK</button>
+                    </div>
+                </div>
+            </div>
+        )}
         <div className="mycart">
             <br />
             <div className="container">
@@ -481,14 +537,14 @@ function CheckoutDetails() {
                     <div className="split50">
                         <div className="center">
                             <div className="default-checkbox">
-                                <input type="radio" checked={shipping === 0} onChange={() => setShipping(0)}/> Pickup
+                                <input type="radio" checked={shipping === 1} onChange={() => setShipping(1)}/> Shipping
                             </div>
                         </div>
                     </div>
                     <div className="split50">
                         <div className="center">
                             <div className="default-checkbox">
-                                <input type="radio" checked={shipping === 1} onChange={() => setShipping(1)}/> Shipping
+                                <input type="radio" checked={shipping === 0} onChange={() => setShipping(0)}/> Pickup
                             </div>
                         </div>
                     </div>
@@ -521,27 +577,7 @@ function CheckoutDetails() {
                                 <input type="text" id="zip" name="zip" placeholder="10001" className="default-input" onChange={(event) => setZip(event.target.value)}/>
                             </div>
                         </div>
-                        <div className="topAlignContainerRow">
-                            <div className="mobileSplit50">
-                                <p className="red">Total Cost May Vary Based On Shipping Cost.</p>
-                                <p className="red">Total will be sent via email.</p>
-                                <p><a href="/payLater">Learn More</a></p>
-                            </div>
-                            <div className="mobileSplit50">
-                                <div className="rightMobileCenter">
-                                    <p> Subtotal: ${order.total_cost}{!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>}</p>
-                                    <p> Shipping: TBD</p>
-                                    <p> Online Processing Fee: $0.00</p>
-                                    <p> Estimated Tax: TBD</p>
-                                    <h3> Total: ${order.total_cost}{!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>}</h3>
-                                    <h3> Due Now: $0.00</h3>
-                                </div>
-                            </div>
-                        </div>
                         <br/>
-                        <div className="containerRow">
-                            <button className="default-button" onClick={payLater}>Complete Order</button>
-                        </div>
                     </div>
                 : 
                     <div>
@@ -568,91 +604,96 @@ function CheckoutDetails() {
                             </div>
                         </div>
                         <br /><br />
-                        {notCustomOrder ?
-                            <div className="containerRow">
-                                <div className="split50">
-                                    <div className="center">
-                                        <div className="default-checkbox">
-                                            <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="split50">
-                                    <div className="center">
-                                        <div className="default-checkbox">
-                                            <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        : 
-                            <div />
-                        }
-                        {paying && notCustomOrder ?
-                            <div>
-                                <div className="rightMobileCenter">
-                                    <div className="containerRow">
-                                        <div className="mobileSplit50"/>
-                                        <div className="mobileSplit50">
-                                            <input type="text" className="couponCodeInput" placeholder="Discount Code" onChange={(event) => setCode(event.target.value)}></input>
-                                            <button className="couponCodeButton" onClick={validateCoupon}>Apply</button>
-                                        </div>
-                                    </div>
-                                    <div className="red">
-                                        {couponError}
-                                    </div>
-                                    <p> Subtotal: ${order.total_cost}</p>
-                                    <p> Discount: ${discount}</p>
-                                    <p> Shipping: $0.00</p>
-                                    <p> Online Processing Fee: ${processingFee}</p>
-                                    <p> Estimated Tax: ${tax}</p>
-                                    <h3> Total: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
-                                    <h3> Due Now: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
-                                </div>
-                                <br/>
-                                <div className="containerRow">
-                                    <button className="default-button" onClick={payNow}>Go To Payment</button>
-                                </div>
-                            </div>
-                        :
-                            <div className="containerRow">
-                                {notCustomOrder ?
-                                    <div className="mobileSplit50" />
-                                :
-                                    <div className="mobileSplit50">
-                                        <p style={{color: 'red'}}>Total Cost May Vary Based On Custom Mockup.</p>
-                                        <p className="red">Total will be sent via email.</p>
-                                        <p><a href="/payLater">Learn More</a></p>
-                                    </div>
-                                }
-                                <div className="mobileSplit50">
-                                    <div className="rightMobileCenter">
-                                        <p> Subtotal: ${order.total_cost} {!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>} </p>
-                                        <p> Shipping: $0.00</p>
-                                        <p> Online Processing Fee: $0.00</p>
-                                        {notCustomOrder ? 
-                                            <div>
-                                                <p> Estimated Tax: ${(order.total_cost * 0.0725).toFixed(2)}</p>
-                                                <h3> Total: {onlineTotalCost(order.total_cost).toFixed(2)}</h3>
-                                                <h3> Due Now : $0.00</h3>
-                                            </div>
-                                        :
-                                            <div>
-                                                <p> Estimated Tax: TBD</p>
-                                                <h3> Total: ${order.total_cost} - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</h3>
-                                                <h3> Due Now: $0.00</h3>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                                <br/>
-                                <div className="containerRow">
-                                    <button className="default-button" onClick={payLater}>Complete Order</button>
-                                </div>
-                            </div>
-                        }
                     </div>
                 }
+                <div>
+                    {notCustomOrder ?
+                        <div className="containerRow">
+                            <div className="split50">
+                                <div className="center">
+                                    <div className="default-checkbox">
+                                        <input type="radio" checked={paying === 1} onChange={() => setPaying(1)}/> Pay Now
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="split50">
+                                <div className="center">
+                                    <div className="default-checkbox">
+                                        <input type="radio" checked={paying === 0} onChange={() => setPaying(0)}/> Pay Later
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    : 
+                        <div />
+                    }
+                    {paying && notCustomOrder ?
+                        <div>
+                            <div className="rightMobileCenter">
+                                <div className="containerRow">
+                                    <div className="mobileSplit50"/>
+                                    <div className="mobileSplit50">
+                                        <input type="text" className="couponCodeInput" placeholder="Discount Code" onChange={(event) => setCode(event.target.value)}></input>
+                                        <button className="couponCodeButton" onClick={validateCoupon}>Apply</button>
+                                    </div>
+                                </div>
+                                <div className="red">
+                                    {couponError}
+                                </div>
+                                <p> Subtotal: ${order.total_cost}</p>
+                                <p> Discount: ${discount}</p>
+                                <p> Shipping: ${shippingCost.toFixed(2)}</p>
+                                <p> Online Processing Fee: ${processingFee}</p>
+                                <p> Estimated Tax: ${tax}</p>
+                                <h3> Total: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
+                                <h3> Due Now: ${onlineTotalCost(order.total_cost).toFixed(2)}</h3>
+                            </div>
+                            <br/>
+                            {shipping && !shippingCalculated && !forcePayLaterAfterShippingError ? (
+                                <button className="default-button" onClick={calculateShipping}>Calculate Shipping Cost</button>
+                            ) : !shipping || (shipping && shippingCalculated && !forcePayLaterAfterShippingError) ? (
+                                <button className="default-button" onClick={payNow}>Pay Now</button>
+                            ) : (
+                                <button className="default-button">Currently Unavailable. Try Another Option Above</button>
+                            )}
+                        </div>
+                    :
+                        <div className="containerRow">
+                            {notCustomOrder ?
+                                <div className="mobileSplit50" />
+                            :
+                                <div className="mobileSplit50">
+                                    <p style={{color: 'red'}}>Total Cost May Vary Based On Custom Mockup.</p>
+                                    <p className="red">Total will be sent via email.</p>
+                                </div>
+                            }
+                            <div className="mobileSplit50">
+                                <div className="rightMobileCenter">
+                                    <p> Subtotal: ${order.total_cost} {!notCustomOrder ? <> - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</>:<div/>} </p>
+                                    <p> Shipping: {shipping ? "TBD" : (0).toFixed(2)}</p>
+                                    <p> Online Processing Fee: $0.00</p>
+                                    {notCustomOrder ? 
+                                        <div>
+                                            <p> Estimated Tax: ${(order.total_cost * 0.0725).toFixed(2)}</p>
+                                            <h3> Total: {onlineTotalCost(order.total_cost).toFixed(2)}</h3>
+                                            <h3> Due Now : $0.00</h3>
+                                        </div>
+                                    :
+                                        <div>
+                                            <p> Estimated Tax: TBD</p>
+                                            <h3> Total: ${order.total_cost} - ${(order.total_cost * 1 +customHighTotal).toFixed(2)}</h3>
+                                            <h3> Due Now: $0.00</h3>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <br/>
+                            <div className="containerRow">
+                                <button className="default-button" onClick={payLater}>Complete Order</button>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>

@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             FROM orders o
             JOIN product_orders po ON o.order_id = po.order_id
             JOIN products p ON p.product_id = po.product_id
-            WHERE o.status = 'processing'"
+            WHERE o.status != 'active'"
         );
 
         if (!$query->execute()) {

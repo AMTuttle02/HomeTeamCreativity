@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_SESSION['admin']) {
         $query = $conn->prepare(
             "UPDATE orders
-            SET status = 'complete'
+            SET status = 'complete', order_date = UTC_TIMESTAMP()
             WHERE order_id = $orderId"
         );
 

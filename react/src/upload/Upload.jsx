@@ -135,6 +135,21 @@ function Upload() {
       setShowConfirmation(true);
       return;
     }
+
+    // Ensure a color is selected for the chosen default style (other doesn't require colors)
+    const tColors = tshirtColors.trim();
+    const lColors = longSleeveColors.trim();
+    const cColors = crewneckColors.trim();
+    const hColors = hoodieColors.trim();
+
+    if ((style === 'tshirt' && tColors === '') ||
+        (style === 'longsleeve' && lColors === '') ||
+        (style === 'crewneck' && cColors === '') ||
+        (style === 'hoodie' && hColors === '')) {
+      setShowConfirmation(true);
+      return;
+    }
+
     else {
       formData.append('productName', productName);
       formData.append('price', price);

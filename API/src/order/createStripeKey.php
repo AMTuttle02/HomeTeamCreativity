@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $query = $conn->prepare(
                       "UPDATE orders
-                      SET stripeId = ?
+                      SET stripeId = ?, order_date = UTC_TIMESTAMP()
                       WHERE order_id = ?");
 
   $query->bind_param(
