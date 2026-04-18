@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import About from "./static/AboutUs.jsx";
+import ScrollToTop from "./ScrollToTop.jsx";
 import AllCoupons from "./coupons/AllCoupons.jsx";
 import Cart from "./cart/Cart";
 import Checkout from "./checkout/CheckoutComplete.jsx";
@@ -41,6 +42,7 @@ import ProductCategoryRedirect from "./products/ProductCategoryRedirect.jsx";
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navbar />}>
           <Route index element={<HomeContents />} />
