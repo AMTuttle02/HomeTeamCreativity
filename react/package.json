@@ -1,7 +1,7 @@
 {
   "name": "hometeamcreativity-website",
   "homepage": "https://hometeamcreativity.com",
-  "version": "4.4.2",
+  "version": "4.4.3",
   "description": "Website for Home Team Creativity",
   "scripts": {
     "dev": "vite",
