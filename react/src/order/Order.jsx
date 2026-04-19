@@ -18,6 +18,7 @@ import purple from "../assets/purple.png";
 import white from "../assets/white.png";
 import navy from "../assets/navy.png";
 import "./order.css";
+import { GetProductPrice } from "../products/GetProductPrice";
 
 function Order() {
   const [currentColor, setCurrentColor] = useState("");
@@ -921,7 +922,7 @@ function Order() {
                     <button onClick={() => { window.location.href = '/order/' + p.product_id; }} className="magnify">
                       <DisplayUserProduct currentProduct={p} color={pickFirstColor(p)} style={styleDisplayName(p.default_style)} state={0} enlarge={false} />
                       <p>{p.product_name}</p>
-                      <p>{"$" + (Number(p.price || 0)).toFixed(2)}</p>
+                      <p>{"$" + (GetProductPrice(p.price, p.default_style)).toFixed(2)}</p>
                     </button>
                   </div>
                 </div>
