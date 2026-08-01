@@ -111,6 +111,22 @@ function Dashboard() {
     return '"' + String(str).replace(/"/g, '""') + '"';
   }
 
+  const getDeliveryLabel = (order) => order.shipped > 0 ? 'Shipping' : 'Pickup';
+
+  const getPaymentLabel = (order) => order.paid > 0 ? 'Paid!' : 'Pay Later';
+
+  const getDisplayTotal = (order) => {
+    if (order.shipped > 0) {
+      return isCustom(order.order_id) ? `$${order.total_cost} - $${findHighEndCost(order)}` : `$${order.total_cost}`;
+    }
+
+    if (order.paid > 0) {
+      return `$${onlineTotalCost(order.total_cost)}`;
+    }
+
+    return isCustom(order.order_id) ? `$${order.total_cost} - $${findHighEndCost(order)}` : `$${taxCost(order.total_cost)}`;
+  };
+
   const exportOrdersCSV = () => {
     const headers = ['Order ID','Order Date','First Name','Last Name','Email','Location','Status','Paid','Shipped','Total Cost','Products'];
     const rows = [headers.join(',')];
@@ -243,52 +259,20 @@ function Dashboard() {
                     </h3>
                   </div>
             </div>
-            {order.shipped > 0 ?
-              <div className="row">
-                <div className="mobileSplit33">
-                    <h3 className="mobileCenter">Shipping: </h3>
-                    <p className="mobileCenter">{order.location}</p>
-                </div>
-                <div className="mobileSplit33">
-                  <h3 className="center">Total: ${isCustom(order.order_id) ? 
-                              <span>{order.total_cost} - ${findHighEndCost(order)} </span>
-                              :
-                              <span>{order.total_cost}</span>
-                              }</h3>
-                  <h3 className="center">Pay Later</h3>
-                </div>
-                <div className="mobileSplit33">
-                  <h3 className="right">Email: </h3>
-                  <p>{order.email}</p>
-                </div>
+            <div className="row">
+              <div className="mobileSplit33">
+                <h3 className="mobileCenter">{getDeliveryLabel(order)}: </h3>
+                <p className="mobileCenter">{order.location}</p>
               </div>
-            :
-              <div className="row">
-                <div className="mobileSplit33">
-                  <h3 className="mobileCenter">Location: </h3>
-                  <p className="mobileCenter">{order.location}</p>
-                </div>
-                {order.paid > 0 ?
-                  <div className="mobileSplit33">
-                    <h3 className="center">Total: ${onlineTotalCost(order.total_cost)}</h3>
-                    <h3 className="center">Paid!</h3>
-                  </div>
-                : 
-                  <div className="mobileSplit33">
-                    <h3 className="center">Total: ${isCustom(order.order_id) ? 
-                              <span>{order.total_cost} - ${findHighEndCost(order)} </span>
-                              :
-                              <span>{taxCost(order.total_cost)}</span>
-                              }</h3>
-                    <h3 className="center">Pay Later</h3>
-                  </div>
-                }
-                <div className="mobileSplit33">
-                  <h3 className="rightMobileCenter">Email: </h3>
-                  <p className="rightMobileCenter">{order.email}</p>
-                </div>
+              <div className="mobileSplit33">
+                <h3 className="center">Total: {getDisplayTotal(order)}</h3>
+                <h3 className="center">{getPaymentLabel(order)}</h3>
               </div>
-            }
+              <div className="mobileSplit33">
+                <h3 className="rightMobileCenter">Email: </h3>
+                <p className="rightMobileCenter">{order.email}</p>
+              </div>
+            </div>
             <div className="row">
               <div className="mobileSplit33">
                 <h3 className="mobileCenter">Order Date: {formatUTCToLocal(order.order_date)}</h3>
