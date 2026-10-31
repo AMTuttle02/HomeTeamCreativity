@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 function EditPickupLocations() {
   const file = "checkout/EditPickupLocations.jsx";
   const [items, setItems] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(-1);
-  const [editingValue, setEditingValue] = useState("");
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
   const [showSaveError, setShowSaveError] = useState(false);
   const [saveErrorMessage, setSaveErrorMessage] = useState("");
@@ -18,15 +16,8 @@ function EditPickupLocations() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const formData = new FormData();
-        formData.append('page', 'checkout');
-        formData.append('location', 'pickupLocations');
-        const response = await axios.post('/api/admin/getStaticText.php', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        const text = response.data ?? '';
-        const arr = String(text).split(';').map(s => s.trim()).filter(Boolean);
-        setItems(arr);
+        const response = await axios.get('/api/admin/getPickupLocations.php');
+        setItems(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
         reportError(err, file);
         setItems([]);
@@ -54,36 +45,21 @@ function EditPickupLocations() {
   if (isAdmin !== 1) navigate("/404");
 
   const handleAdd = () => {
-    setItems([...items, ""]);
-    setEditingIndex(items.length);
-    setEditingValue("");
+    setItems([...items, { location: "", charge_sales_tax: 0 }]);
   };
 
-  const handleEdit = (idx) => {
-    setEditingIndex(idx);
-    setEditingValue(items[idx] || "");
+  const handleChange = (idx, key, value) => {
+    setItems(items.map((item, index) => index === idx ? { ...item, [key]: value } : item));
   };
 
   const handleDelete = (idx) => {
-    const updated = items.filter((_, i) => i !== idx);
-    setItems(updated);
-    if (editingIndex === idx) {
-      setEditingIndex(-1);
-      setEditingValue("");
-    }
+    setItems(items.filter((_, i) => i !== idx));
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const text = items.map(i => (i || '').toString().replace(/;/g, '')).join(';');
-      const formData = new FormData();
-      formData.append('page', 'checkout');
-      formData.append('location', 'pickupLocations');
-      formData.append('text', text);
-      const response = await axios.post('/api/admin/updateStaticText.php', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const response = await axios.post('/api/admin/savePickupLocations.php', { locations: items });
       if (response.data !== 1) throw new Error('Save failed: ' + JSON.stringify(response.data));
       setShowSaveSuccess(true);
       setTimeout(() => setShowSaveSuccess(false), 2000);
@@ -104,7 +80,7 @@ function EditPickupLocations() {
             <thead>
               <tr>
                 <th>Location</th>
-                <th>Edit</th>
+                <th>Charge 9.75% Tax</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -113,48 +89,20 @@ function EditPickupLocations() {
                 items.map((it, idx) => (
                   <tr key={idx}>
                     <td>
-                      {editingIndex === idx ? (
-                        <input
-                          type="text"
-                          value={editingValue}
-                          onChange={(e) => setEditingValue(e.target.value)}
-                          onBlur={() => {
-                            const updated = [...items];
-                            updated[idx] = editingValue;
-                            setItems(updated);
-                            setEditingIndex(-1);
-                            setEditingValue("");
-                          }}
-                          className="formInput"
-                        />
-                      ) : (
-                        it
-                      )}
+                      <input
+                        type="text"
+                        value={it.location}
+                        onChange={(e) => handleChange(idx, 'location', e.target.value)}
+                        className="formInput"
+                      />
                     </td>
                     <td>
-                      {editingIndex === idx ? (
-                        <button
-                          onClick={() => {
-                            const updated = [...items];
-                            updated[idx] = editingValue;
-                            setItems(updated);
-                            setEditingIndex(-1);
-                            setEditingValue("");
-                          }}
-                          type="button"
-                          className="default-button"
-                        >
-                          Save
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleEdit(idx)}
-                          type="button"
-                          className="default-button"
-                        >
-                          Edit
-                        </button>
-                      )}
+                      <input
+                        type="checkbox"
+                        checked={Boolean(Number(it.charge_sales_tax))}
+                        onChange={(e) => handleChange(idx, 'charge_sales_tax', e.target.checked ? 1 : 0)}
+                        aria-label={`Charge sales tax at ${it.location || 'new pickup location'}`}
+                      />
                     </td>
                     <td>
                       <button
