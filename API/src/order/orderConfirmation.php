@@ -105,18 +105,23 @@ $first = $result['first_name'];
 $last = $result['last_name'];
 $email = $result['email'];
 
-if (!$result['shipped']) {
-    $subTotal = number_format($result['total_cost'], 2);
-    $total_cost = number_format(($result['total_cost'] * 1) + ($result['total_cost'] * 0.0725), 2);
-    $tax = '$'.number_format(($result['total_cost'] * 0.0725), 2);
-    $shipping = '$00.00';
+$subTotal = number_format($result['total_cost'], 2);
+$shippingLocation = trim((string)$result['location']);
+$lastComma = strrpos($shippingLocation, ',');
+$shippingState = $lastComma === false ? '' : trim(substr($shippingLocation, $lastComma + 1));
+$isTennesseeShipping = !empty($result['shipped']) && preg_match('/^(?:TN|Tennessee)\b/i', $shippingState);
+$isTaxablePickup = false;
+if (empty($result['shipped']) && $shippingLocation !== '') {
+    $pickupTaxQuery = $conn->prepare("SELECT charge_sales_tax FROM pickupLocations WHERE location = ? LIMIT 1");
+    $pickupTaxQuery->bind_param("s", $shippingLocation);
+    $pickupTaxQuery->execute();
+    $pickupTaxResult = $pickupTaxQuery->get_result()->fetch_assoc();
+    $isTaxablePickup = !empty($pickupTaxResult['charge_sales_tax']);
 }
-else {
-    $subTotal = number_format($result['total_cost'], 2);
-    $total_cost = number_format($result['total_cost'], 2);
-    $tax = "TBD";
-    $shipping = "TBD";
-}
+$taxAmount = ($isTennesseeShipping || $isTaxablePickup) ? round($result['total_cost'] * 0.0975, 2) : 0;
+$tax = '$'.number_format($taxAmount, 2);
+$shipping = !empty($result['shipped']) ? "TBD" : '$00.00';
+$total_cost = number_format($result['total_cost'] + $taxAmount, 2);
 
 $query = $conn->prepare(
     "SELECT *

@@ -14,10 +14,10 @@ function CheckoutDetails() {
     const [paying, setPaying] = useState(1);
     const [location, setLocation] = useState("");
     const DEFAULT_PICKUP_OPTIONS = [
-        "Dollar General (OH-309, Iberia, OH)",
-        "Northmor School (Galion, OH)",
-        "St. Joseph Catholic Church (Galion, OH)",
-        "St. Joseph Catholic School (Galion, OH)"
+        { location: "Dollar General (OH-309, Iberia, OH)", charge_sales_tax: 0 },
+        { location: "Northmor School (Galion, OH)", charge_sales_tax: 0 },
+        { location: "St. Joseph Catholic Church (Galion, OH)", charge_sales_tax: 0 },
+        { location: "St. Joseph Catholic School (Galion, OH)", charge_sales_tax: 0 }
     ];
     const [pickupOptions, setPickupOptions] = useState(DEFAULT_PICKUP_OPTIONS);
     const [isAdmin, setIsAdmin] = useState(null);
@@ -106,42 +106,18 @@ function CheckoutDetails() {
             }
         });
 
-        // fetch pickup locations from static text (expects a semicolon-separated string)
+        // Load pickup locations with their tax settings.
         (async () => {
             try {
-                const formData = new FormData();
-                formData.append('page', 'checkout');
-                formData.append('location', 'pickupLocations');
-                        const resp = await fetch('/api/admin/getStaticText.php', {
-                            method: 'POST',
-                            body: formData,
-                        });
-                        const data = await resp.json();
-                        let items = [];
-                        if (Array.isArray(data)) {
-                            if (data.every(d => typeof d === 'string')) {
-                                items = data.map(s => s.trim()).filter(Boolean);
-                            } else if (data.every(d => d && typeof d === 'object' && 'text' in d)) {
-                                items = data.map(d => String(d.text).trim()).filter(Boolean);
-                            } else {
-                                items = data.map(d => String(d).trim()).filter(Boolean);
-                            }
-                        } else if (data && typeof data === 'object') {
-                            if ('text' in data) {
-                                items = String(data.text).split(';').map(s => s.trim()).filter(Boolean);
-                            } else {
-                                items = Object.values(data).map(v => String(v).trim()).filter(Boolean);
-                            }
-                        } else if (typeof data === 'string') {
-                            items = data.split(';').map(s => s.trim()).filter(Boolean);
-                        }
-
-                        if (items.length > 0) {
-                            items.sort((a,b) => a.localeCompare(b));
-                            setPickupOptions(items);
-                        } else {
-                            setPickupOptions(DEFAULT_PICKUP_OPTIONS);
-                        }
+                const resp = await fetch('/api/admin/getPickupLocations.php');
+                const data = await resp.json();
+                if (!resp.ok) throw new Error('Failed to load pickup locations');
+                if (Array.isArray(data) && data.length > 0) {
+                    data.sort((a, b) => a.location.localeCompare(b.location));
+                    setPickupOptions(data);
+                } else {
+                    setPickupOptions(DEFAULT_PICKUP_OPTIONS);
+                }
             } catch (err) {
                 console.error('Failed to load pickup locations:', err);
                 setPickupOptions(DEFAULT_PICKUP_OPTIONS);
@@ -463,6 +439,11 @@ function CheckoutDetails() {
     }, [paying, shipping, address, city, state, zip]);
 
     useEffect(() => {
+        const selectedPickup = pickupOptions.find(option => option.location === location);
+        const taxablePickup = shipping === 0 && Boolean(Number(selectedPickup?.charge_sales_tax));
+        const taxableTennesseeShipping = shipping === 1 && ["tn", "tennessee"].includes(state.trim().toLowerCase());
+        const taxRate = taxablePickup || taxableTennesseeShipping ? 0.0975 : 0;
+
         if (!notCustomOrder) {
             setProcessingFee((0.00).toFixed(2));
             setTax(0);
@@ -471,7 +452,7 @@ function CheckoutDetails() {
 
         if (!paying) {
             setProcessingFee((0.00).toFixed(2));
-            setTax((order.total_cost * 0.0725).toFixed(2));
+            setTax((Math.max(0, order.total_cost * 1 - discount * 1) * taxRate).toFixed(2));
             return;
         }
 
@@ -483,9 +464,8 @@ function CheckoutDetails() {
 
         const proc = (base * 1 * 0.029 + 0.31);
         setProcessingFee(proc.toFixed(2));
-        const temp = (base + proc);
-        setTax((temp * 0.0725).toFixed(2));
-    }, [paying, notCustomOrder, order, discount, shipping, shippingCalculated, shippingCost])
+        setTax((Math.max(0, order.total_cost * 1 - discount * 1) * taxRate).toFixed(2));
+    }, [paying, notCustomOrder, order, discount, shipping, shippingCalculated, shippingCost, state, location, pickupOptions])
 
     const onlineTotalCost = (subtotal) => {
         let total = (subtotal * 1 - discount * 1 + shippingCost * 1 + tax * 1 + processingFee * 1);
@@ -590,8 +570,8 @@ function CheckoutDetails() {
                             <div className="mobileSplit100">
                                     <select id="pickupLocation" name="pickupLocation" className="default-input" value={location} onChange={(event) => setLocation(event.target.value)}>
                                         <option value="">Select a pickup location</option>
-                                        {pickupOptions && pickupOptions.length > 0 ? pickupOptions.map((opt, idx) => (
-                                            <option key={idx} value={opt}>{opt}</option>
+                                        {pickupOptions && pickupOptions.length > 0 ? pickupOptions.map((opt) => (
+                                            <option key={opt.location} value={opt.location}>{opt.location}</option>
                                         )) : null}
                                     </select>
                                     {isAdmin > 0 && (
@@ -674,7 +654,7 @@ function CheckoutDetails() {
                                     <p> Online Processing Fee: $0.00</p>
                                     {notCustomOrder ? 
                                         <div>
-                                            <p> Estimated Tax: ${(order.total_cost * 0.0725).toFixed(2)}</p>
+                                            <p> Estimated Tax: ${tax}</p>
                                             <h3> Total: {onlineTotalCost(order.total_cost).toFixed(2)}</h3>
                                             <h3> Due Now : $0.00</h3>
                                         </div>
